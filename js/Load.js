@@ -1,17 +1,20 @@
+//Global properties
+var whichStory = "story_2"; // the ID of the story in the JSON file
+var currStoryData = null;
+var numOfPages = 0;
+var currPage = 0;
+var languages = [];
+var chosenLanguage = "";
+var signLanguages = ['FSL: Luzon', 'FSL: Visayas', 'FSL: Mindanao']; // placeholder for now
+var chosenSignLanguage = "FSL: Luzon";
 
-    /**************************** LOAD DATA FROM TEMPORARY JSON DATABASE ****************************/
 
-    var whichStory = "story_2"; // the ID of the story in the JSON file
-    var currStoryData = null;
-    var numOfPages = 0;
-    var currPage = 0;
-    var languages = [];
-    var chosenLanguage = "";
-    var signLanguages = ['FSL: Luzon', 'FSL: Visayas', 'FSL: Mindanao']; // placeholder for now
-    var chosenSignLanguage = "FSL: Luzon";
+    
+/**************************** LOAD DATA FROM TEMPORARY JSON DATABASE ****************************/
+window.onload = function(){
+       
     loadStory(whichStory);
-
-     
+}
 
     // Load JSON file for one story
     function loadStory(storyId) {

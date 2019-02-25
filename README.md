@@ -23,7 +23,12 @@ All dependencies are included. This prototype can run offline.
     |_ icons — all icons used on the page
     |_ story_2 — photos from sample story "Malakas and Maganda" 
 |
-|_ js — scripts, including all dependencies (e.g. jQuery)
+|_ js (scripts, including all dependencies (e.g. jQuery))
+    |_ Load.js - starting point of js, initalizes verything an dhooks up features to page elements
+    |_ NavigationBar.js - functionality for the nav bar at the top
+    |_ viewer.js - video player and all assoctiated fucntions (video, text, slider bar, language buttons)
+    |_ ButtonHandlers.js - Left/Right arrow button functionality (will be upadted to general reuseable button funcs later maybe)
+    |_ Carousel.js - carousel scrolling functionality
 |
 |_ readme_gifs — gifs for this README
 |
