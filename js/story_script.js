@@ -1,5 +1,5 @@
 
-window.onload = function() {
+
     
     /**************************** LOAD DATA FROM TEMPORARY JSON DATABASE ****************************/
 
@@ -361,7 +361,7 @@ window.onload = function() {
     }
 
     /**************************** SLIDER BAR ****************************/
-    
+    /*
     // Create slider bar for pagination
     function createSlider() {
         $("#slider").slider({
@@ -563,7 +563,7 @@ window.onload = function() {
     }
 
     /**************************** FULL SCREEN ****************************/
-    
+    /*
     // Set up full screen 
     function setupFullScreen() {
         // If browser enables Fullscreen API
@@ -618,5 +618,6 @@ window.onload = function() {
             // If browser doesn't have the API, make only movie fullscreen
         }
     }
+    */
 
-}
+
