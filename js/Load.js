@@ -1,5 +1,5 @@
 //Global properties
-var whichStory = "story_2"; // the ID of the story in the JSON file
+var whichStory = "Malakas_Maganda"; // the ID of the story in the JSON file
 var currStoryData = null;
 var numOfPages = 0;
 var currPage = 0;
@@ -27,7 +27,7 @@ window.onload = function(){
                     currStoryData = JSON.parse(this.responseText);
                     languages = parseLanguageChoices();
                     chosenLanguage = languages[0]; // placeholder, user will set later
-                    numOfPages = Object.keys(currStoryData.languages[chosenLanguage]).length;  // -1 due to title 
+                    numOfPages = currStoryData.length;  // -1 due to title 
                     parseTitle();
                     parsePage(currPage);
                     createSlider();
@@ -45,21 +45,23 @@ window.onload = function(){
     }
 
     /**************************** PARSE DATA INTO HTML ELEMENTS ****************************/
-
+//-------------------------------------------------------------------------------!! will be in database not json
     // Get title from JSON data
-    function parseTitle() {
-        var title = currStoryData["languages"][chosenLanguage][0].glossary[0].text;
+    function parseTitle() {  
+        var title = whichStory;
         var titleElement = document.getElementById('title');
         titleElement.textContent = title;
     }
 
     // Get available language choices from JSON file
     function parseLanguageChoices() {
-        return Object.keys(currStoryData.languages);
+        return Object.keys(currStoryData[currPage].text);
     }
 
     // Parse story JSON by page into components
     function parsePage(pageNum) {
+        var page = currStoryData[currPage];
+        
         // Set the picture component
         var picComponent = document.getElementsByClassName('component')[0];
         picComponent.src = 'img/' + whichStory + '/' + pageNum + '.png';
@@ -69,11 +71,14 @@ window.onload = function(){
         vidComponent = document.getElementsByClassName('component')[1];
         vidComponent.src = vidPath;
 
-        // Set the glossary component according to chosen language, first removing current text
-        storyText = document.getElementById('storyText');
+        // build story text for this page
+        var storyText = document.getElementById('storyText');
         while (storyText.firstChild) {
-            storyText.removeChild(storyText.firstChild);
+            storyText.removeChild(storyText.firstChild); //clear text   
         }
+        
+        //replace with this pages text
+        var story = page.text[chosenLanguage];
 
         // Add video and picture to first row of text component
         var textComponent = document.getElementsByClassName('parent')[2]; // third parent
@@ -83,32 +88,51 @@ window.onload = function(){
         textVid.src = vidPath;
         textPic.src = textPicPath;
 
-        // Add glossary
-        var glossary = currStoryData["languages"][chosenLanguage][pageNum].glossary;
-        glossary.forEach(function(phrase) {
-            var timestamp = phrase.timestamp;
-            var text = phrase.text;
-            // If the phrase contains timestamp, identify as glossary word
-            if (timestamp) {
-                $('<span></span>')
-                    .addClass('glossary')
-                    .appendTo($(storyText))
-                    .text(text) // need to fix so that it sets these time stamp onto the trigger & featherlight can read
-                    .on('click', function() {
-                        // Change out picture
-                        textPic.src = 'img/glossary/' + text.toLowerCase() + '.png';
-                        // Loop video if timestamp is provided
-                        if (timestamp.length > 0) {
-                            playVideoInterval(timestamp[0], timestamp[1]);
-                        }
-                    });
-            } else {
-                // If the phrase contains no time stamp, add it as plain text
-                $('<span></span>')
+        // Add glossary functionality
+        if(page.hasOwnProperty('glossary')) //check if we even have glossary items
+        { 
+            var glossary = currStoryData[currPage].glossary[chosenLanguage]; //get all glossary object for this lang
+            
+            //build glossary regex
+            var glossaryRegex = "";
+            Object.keys(glossary).forEach(function(term){ //terms
+                glossaryRegex += term + "|";
+             });
+            
+            glossaryRegex = new RegExp(glossaryRegex); //convert to actual regular expression
+           
+
+            //replace found regex terms with functional glossary items in the html
+            story.replace(glossaryRegex, function(match){
+                //var timestamp = term.video[chosenSignLanguage]; //get video timestaps (for this lang) - for looping purposes
+                var formattedTerm = "<span class=\"glossary\">" + match + "</span>";
+                
+                var titleElement = document.getElementById('title');
+            titleElement.textContent = formattedTerm;
+                
+                return formattedTerm;
+            });
+            
+            
+            
+        }
+        
+        //give story to viewer
+         $('<span></span>')
                     .appendTo('#storyText')
-                    .text(text);
-            }
-        });
+                    .text(story);
+        
+
+        $('.glossary').on('click', function() { //add on click event
+                    // Change out picture
+                    textPic.src = 'img/glossary/' + text.toLowerCase() + '.png';
+
+                    // Loop video if timestamp is provided
+                    if (timestamp.length > 0) {
+                        playVideoInterval(timestamp[0], timestamp[1]);
+                    }
+                });
+       
 
         // Set event listener to component so that if user clicks anywhere and it is not glossary word, the video will stop looping
         $('.panel').on('click', function(e) {
