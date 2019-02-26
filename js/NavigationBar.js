@@ -1,4 +1,5 @@
-    // Bind event handler to menu buttons to show text 
+
+// Bind event handler to menu buttons to show text 
     function bindMenuButtons() {
         // Get all menu buttons
         var menuBtns = document.getElementsByClassName('menuBtn');
