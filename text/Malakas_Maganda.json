@@ -1,10 +1,10 @@
 {
     "0":{
-        "image": "file",
+        "image": "img/Malakas_Maganda/0.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/0.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "Malakas and Maganda",
@@ -13,11 +13,11 @@
 
     },
     "1":{
-        "image": "file",
+        "image": "img/Malakas_Maganda/1.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/1.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "When the world  first began, there was no land. There was only the Sea and the Sky. A huge beautiful Kite (a bird similar to a hawk) flew between them.",
@@ -28,18 +28,18 @@
             "English": {
                 "world": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/world.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -47,18 +47,18 @@
                 },
                 "sea": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/sea.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -66,18 +66,18 @@
                 },
                 "sky": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/sky.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -85,18 +85,18 @@
                 },
                 "huge": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/huge.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -108,18 +108,18 @@
             "Tagalong": {
                 "world": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/world.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -127,18 +127,18 @@
                 },
                 "sea": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/sea.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -146,18 +146,18 @@
                 },
                 "sky": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/sky.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -165,18 +165,18 @@
                 },
                 "huge": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/huge.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -192,11 +192,11 @@
 
 
     "2":{
-        "image": "file",
+        "image": "img/Malakas_Maganda/2.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/2.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "One day, the Kite grew tired of flying around as there was nowhere to land and rest. The Kite became frustrated and pushed the Sky to get in a quarrel against the Sea.",
@@ -207,18 +207,18 @@
             "English": {
                 "kite": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -226,18 +226,18 @@
                 },
                 "grew tired": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -245,18 +245,18 @@
                 },
                 "nowhere": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -264,18 +264,18 @@
                 },
                 "frustrated": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -283,18 +283,18 @@
                 },
                 "sky": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/sky.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -302,18 +302,18 @@
                 },
                 "quarrel": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -321,18 +321,18 @@
                 },
                 "sea": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/sea.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -344,18 +344,18 @@
             "Tagalong": {
                 "kite": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -363,18 +363,18 @@
                 },
                 "grew tired": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -382,18 +382,18 @@
                 },
                 "nowhere": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -401,18 +401,18 @@
                 },
                 "frustrated": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -420,18 +420,18 @@
                 },
                 "sky": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/sky.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -439,18 +439,18 @@
                 },
                 "quarrel": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -458,18 +458,18 @@
                 },
                 "sea": {
                     "definition": "Extremely large; enormous.",
-                    "image": "file",
+                    "image": "img/glossary/sea.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 8.2,
                             "end": 9
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 8.2,
                             "end": 9
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 8.2,
                             "end": 9
                         }
@@ -483,11 +483,11 @@
         }
     },
     "3":{
-        "image": "file",
+        "image": "img/Malakas_Maganda/3.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/3.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "The Sky threw rain, thunder, and lightning that reached the Sea. The Sea rose up and threw waves and hurricanes that reached the Sky.",
@@ -498,18 +498,18 @@
             "English": {
                 "rain": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -517,18 +517,18 @@
                 },
                 "thunder": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -536,18 +536,18 @@
                 },
                 "lightning": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -559,18 +559,18 @@
             "Tagalong": {
                 "rain": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -578,18 +578,18 @@
                 },
                 "thunder": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -597,18 +597,18 @@
                 },
                 "lightning": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -621,11 +621,11 @@
         }
     },
    "4": {
-        "image": "file",
+        "image": "img/Malakas_Maganda/4.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/4.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "The Sky showered a large number of huge boulders down upon the Sea. They became the islands that formed the Philippines. These islands prevented the waters from rising any more by causing them to flow back and forth. This created the tides.",
@@ -636,18 +636,18 @@
             "English": {
                 "boulders": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -655,18 +655,18 @@
                 },
                 "islands": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -674,18 +674,18 @@
                 },
                 "philippines": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -693,18 +693,18 @@
                 },
                 "rising": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -712,18 +712,18 @@
                 },
                 "created": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -735,18 +735,18 @@
             "Tagalong": {
                 "boulders": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -754,18 +754,18 @@
                 },
                 "islands": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -773,18 +773,18 @@
                 },
                 "philippines": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -792,18 +792,18 @@
                 },
                 "rising": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -811,18 +811,18 @@
                 },
                 "created": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -834,11 +834,11 @@
         }
     },
     "5":{
-        "image": "file",
+        "image": "img/Malakas_Maganda/5.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/5.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "Afterwards, the Sky ordered the Kite to find one of the newly-formed islands to build her nest, and to leave the Sea and the Sky in peace.",
@@ -849,18 +849,18 @@
             "English": {
                 "afterwards": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -868,18 +868,18 @@
                 },
                 "find": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -887,18 +887,18 @@
                 },
                 "build": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -906,18 +906,18 @@
                 },
                 "peace": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -930,18 +930,18 @@
 
                 "afterwards": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -949,18 +949,18 @@
                 },
                 "find": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -968,18 +968,18 @@
                 },
                 "build": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -987,18 +987,18 @@
                 },
                 "peace": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1008,11 +1008,11 @@
         }
     },
    "6": {
-        "image": "file",
+        "image": "img/Malakas_Maganda/6.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/6.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "At this same time the Land Breeze and the Sea Breeze were married, and they had a child named Bamboo.",
@@ -1023,18 +1023,18 @@
             "English": {
                 "land breeze": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1042,18 +1042,18 @@
                 },
                 "sea breeze": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1061,18 +1061,18 @@
                 },
                 "married": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1080,18 +1080,18 @@
                 },
                 "child": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1099,18 +1099,18 @@
                 },
                 "bamboo": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1123,18 +1123,18 @@
 
                 "land breeze": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1142,18 +1142,18 @@
                 },
                 "sea breeze": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1161,18 +1161,18 @@
                 },
                 "married": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1180,18 +1180,18 @@
                 },
                 "child": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1199,18 +1199,18 @@
                 },
                 "bamboo": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1220,11 +1220,11 @@
         }
     },
    "7": {
-        "image": "file",
+        "image": "img/Malakas_Maganda/7.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/7.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "One day, when Bamboo was floating against the sea, it struck the feet of the Kite. Shocked, and angry that anything would strike it, the bird pecked at the bamboo hard until it split in half.",
@@ -1235,18 +1235,18 @@
             "English": {
                 "one day": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1254,18 +1254,18 @@
                 },
                 "find": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1273,18 +1273,18 @@
                 },
                 "shocked": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1292,18 +1292,18 @@
                 },
                 "bird": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1311,18 +1311,18 @@
                 },
                 "pecked": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1335,18 +1335,18 @@
 
                 "one day": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1354,18 +1354,18 @@
                 },
                 "find": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1373,18 +1373,18 @@
                 },
                 "shocked": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1392,18 +1392,18 @@
                 },
                 "bird": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1411,18 +1411,18 @@
                 },
                 "pecked": {
                     "definition": "The region of the atmosphere and outer space seen from the earth.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 3,
                             "end": 3.7
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 3,
                             "end": 3.7
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 3,
                             "end": 3.7
                         }
@@ -1432,11 +1432,11 @@
         }
     },
    "8":  {
-        "image": "file",
+        "image": "img/Malakas_Maganda/8.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/8.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "Out of one part came a golden-bronze colored man, named Malakas (strong One) and from the other half came a similarly shaded woman, named Maganda (Beautiful One).",
@@ -1447,18 +1447,18 @@
             "English": {
                 "malakas": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1466,18 +1466,18 @@
                 },
                 "maganda": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1489,18 +1489,18 @@
 
                 "malakas": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1508,18 +1508,18 @@
                 },
                 "maganda": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1530,11 +1530,11 @@
         }
     },
      "9": {
-        "image": "file",
+        "image": "img/Malakas_Maganda/9.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/9.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "All of the birds of the sky and the fish of the sea were called to see what should be done with these two persons, and the animals decided that they should marry each other.",
@@ -1545,18 +1545,18 @@
             "English": {
                 "fish": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1564,18 +1564,18 @@
                 },
                 "persons": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1584,18 +1584,18 @@
 
                 "animals": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1603,18 +1603,18 @@
                 },
                 "marry": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1627,18 +1627,18 @@
 
                 "fish": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1646,18 +1646,18 @@
                 },
                 "persons": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1666,18 +1666,18 @@
 
                 "animals": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1685,18 +1685,18 @@
                 },
                 "marry": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1707,11 +1707,11 @@
         }
     },
    "10":  {
-        "image": "file",
+        "image": "img/Malakas_Maganda/10.png",
         "video": {
-            "Luzon": "video.file",
-            "Visayas": "video.file",
-            "Mindanao": "video.file"
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/10.mp4",
+            "fsl_visayas": "video.file",
+            "fsl_mindanao": "video.file"
         },
         "text": {
             "English": "Together, Malakas and Maganda had many children, and from them came all the different races of people in the Philippines.",
@@ -1722,18 +1722,18 @@
             "English": {
                 "together": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1741,18 +1741,18 @@
                 },
                 "many": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1761,18 +1761,18 @@
 
                 "races": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1785,18 +1785,18 @@
 
                 "together": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 1,
                             "end": 1.465
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 1,
                             "end": 1.465
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 1,
                             "end": 1.465
                         }
@@ -1804,18 +1804,18 @@
                 },
                 "many": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
@@ -1824,18 +1824,18 @@
 
                 "races": {
                     "definition": "The expanse of salt water that covers most of the earth's surface and surrounds its landmasses.",
-                    "image": "file",
+                    "image": "img/glossary/default.png",
                     "video": {
-                        "Luzon": {
+                        "fsl_luzon": {
                             "start": 4,
                             "end": 6
                         },
 
-                        "Visayas": {
+                        "fsl_visayas": {
                             "start": 4,
                             "end": 6
                         },
-                        "Mindanao": {
+                        "fsl_mindanao": {
                             "start": 4,
                             "end": 6
                         }
