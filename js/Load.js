@@ -89,49 +89,47 @@ window.onload = function(){
         textPic.src = textPicPath;
 
         // Add glossary functionality
+        var glossary = {};
         if(page.hasOwnProperty('glossary')) //check if we even have glossary items
         { 
-            var glossary = currStoryData[currPage].glossary[chosenLanguage]; //get all glossary object for this lang
+            glossary = currStoryData[currPage].glossary[chosenLanguage]; //get all glossary object for this lang
             
             //build glossary regex
             var glossaryRegex = "";
+            var terms = 1;
             Object.keys(glossary).forEach(function(term){ //terms
                 glossaryRegex += term + "|";
+                terms++;
              });
             
-            glossaryRegex = new RegExp(glossaryRegex); //convert to actual regular expression
-           
+            glossaryRegex = glossaryRegex.slice(0, glossaryRegex.length - 1); //clean off last '|'
+            glossaryRegex = new RegExp(glossaryRegex, 'gi'); //convert to actual regular expression - gi is global (g) and not case sensitive(i)
 
             //replace found regex terms with functional glossary items in the html
-            story.replace(glossaryRegex, function(match){
-                //var timestamp = term.video[chosenSignLanguage]; //get video timestaps (for this lang) - for looping purposes
-                var formattedTerm = "<span class=\"glossary\">" + match + "</span>";
-                
-                var titleElement = document.getElementById('title');
-            titleElement.textContent = formattedTerm;
-                
+             story = story.replace(glossaryRegex, function(match){
+                var formattedTerm = '<span class=\"glossary\">' + match + '</span>';
                 return formattedTerm;
             });
-            
-            
-            
+           
         }
         
         //give story to viewer
          $('<span></span>')
-                    .appendTo('#storyText')
-                    .text(story);
+            .appendTo('#storyText')
+            .replaceWith(story);
         
 
-        $('.glossary').on('click', function() { //add on click event
-                    // Change out picture
-                    textPic.src = 'img/glossary/' + text.toLowerCase() + '.png';
+        $('.glossary').on('click', function(e) { //add on click event
+            //get term from cliked item, and its glossary object
+            var term = $(e.target).text().toLowerCase();
+            var termObject = glossary[term];
 
-                    // Loop video if timestamp is provided
-                    if (timestamp.length > 0) {
-                        playVideoInterval(timestamp[0], timestamp[1]);
-                    }
-                });
+            // Change out picture
+            textPic.src = 'img/glossary/' + term + '.png';
+            
+            // Loop video if timestamp is provided
+            playVideoInterval(termObject.video[chosenSignLanguageFormatted].start, termObject.video[chosenSignLanguageFormatted].end);
+        });
        
 
         // Set event listener to component so that if user clicks anywhere and it is not glossary word, the video will stop looping
