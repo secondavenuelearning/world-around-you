@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    
+    <!-- Bootstrap-->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="css/fontawesome-all.css">
+    
+    <!-- jQuery UI stylesheet -->
+    <link rel="stylesheet" href="css/jquery-ui.css">
+    
+    <!-- My stylesheet -->
+    <link rel="stylesheet" type="text/css" href="css/zeplin.css">
+    
+    <!-- jQuery 3.3.1 -->
+    <script src="js/jquery-min.js"></script> 
+    
+    <!-- jQuery UI https://code.jquery.com/ui/1.12.1/jquery-ui.min.js -->
+    <script src="js/jquery-ui.min.js"></script>
+    
+    <!-- Load data from JSON and parse to page -->
+    <script src="js/Load.js" type="text/javascript" charset="utf-8"></script>
+    
+    <!-- Nav Bar -->
+    <script src="js/NavigationBar.js"></script>
+    
+    <!-- Viewer Features -->
+    <script src="js/viewer.js"></script>
+    <script src="js/ButtonHandlers.js"></script>
+    
+    <!-- Thumbnail Carousel -->
+    <script src="js/slick.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/Carousel.js" type="text/javascript" charset="utf-8"></script>
+    
+</head>
+
+<body>
+    <!-- The story -->
+    <nav class="container-fluid">
+        <div class="row vertical-align">
+            <div class="col-md-2 col-xs-2">
+                <img src="img/icons/logo.png" />
+            </div>
+            <div class="col-md-5">
+                <div class="input-group md-form form-sm">
+                    <input class="form-control" placeholder="" type="text" aria-label="Search">
+                    <div class="input-group-append">
+                        <button class="input-group-text"><img src="img/icons/filter.png"/></button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="menuBtn" data="Story"><img src="img/icons/story.png"/></div>
+                <div class="menuBtn" data="Games"><img src="img/icons/games.png"/></div>
+                <div class="menuBtn" data="Edit"><img src="img/icons/edit.png"/></div>
+                <div class="menuBtn" data="Upload"><img src="img/icons/upload.png"/></div>
+                <div class="menuBtn" data="Massimo V."><img src="img/icons/user.png"/></div>
+                <div id="btnDesc">Story</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <!-- Panel -->
+        <div class="row panel vertical-align">
+            <div class="col-md-2 col-xs-2">
+                <img class="leftArrow arrow" src="img/icons/prev.png"/>
+                <!--<div class="leftArrow arrow"><i class="fa fa-angle-left" aria-hidden="true"></i></div>-->
+            </div>
+
+            <div class="col-md-8 col-xs-8 component-container">
+                <!-- Picture -->
+                <div class="parent">
+                    <img class="component" src="" />
+                </div>
+
+                <!-- Video -->
+                <div class="parent">
+                    <video id="mainVid" class="component">
+                        <source src="" type="video/mp4">
+                        Your browser does not support HTML5 video.
+                        <!-- Add custom seek bar https://stackoverflow.com/questions/41953604/html5-video-custom-additional-seek-bar -->
+                    </video>
+                    <div id="videoOverlay">
+                        <img src="img/icons/replay.png"/>
+                    </div>
+                </div>
+
+                <!-- Glossary -->
+                <div class="parent">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <video id="glossaryVid">
+                                <source src="" type="video/mp4">
+                                Your browser does not support HTML5 video.
+                            </video>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="" />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="component col-md-12" id="storyText"></div>
+                    </div>
+                </div>
+
+                <div class="controls row">
+                    <div class="col-md-9">
+                        <div id="slider"></div>
+                    </div>
+                    <div class="col-md-3 vertical-align">
+                            <div id="languages">
+                            </div>
+                            <div id="changeTextLang" class="controlsIconParent">
+                                <img src="img/icons/language.png"/>
+                            </div>
+                            <div id="changeSignLang" class="controlsIconParent">
+                                <i class="fas fa-sign-language"></i>
+                            </div>
+                            <div id="fullscreenTrigger" class="controlsIconParent">
+                                <i class="fas fa-arrows-alt"></i>
+                                <img src="img/icons/minimize.png"/>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2 col-xs-2">
+                <img class="rightArrow arrow" src="img/icons/next.png"/>
+            </div>
+        </div>
+
+        <!-- Title and little bits of info -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h1 id="title"></h1>
+                    </div>
+                </div>
+                <!-- Icons -->
+                <div class="row vertical-align titleIcons">
+                    <div class="col-md-2">
+                        <div><img src="img/icons/eye.png"/><span>1,345 views</span></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div><img src="img/icons/heart.png"/><span>179 likes</span></div>
+                        <div><img src="img/icons/save.png"/><span>save</span></div>
+                        <div><img src="img/icons/share.png"/><span>share</span></div>
+                    </div>
+                    <div class="col-md-2">
+                         <div><img src="img/icons/edit2.png"/><span>edit</span></div>
+                    </div>
+                    <div class="col-md-4"></div><!--unused-->
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <!-- Story description -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <p><img class="icon" src="img/icons/user.png"/><span class="bold">Massimo V.</span></p>
+                <p>Long ago, the Filipinos believed that men and women were created in a bamboo tree. This is a story about how the Philippines and their diverse people appeared on the Earth. There is a huge bird that splits a giant bamboo, and Malakas and Maganda emerge from the halves.</p>
+                <p><span class="bold">Genres:</span> Folk, Fable</p>
+                <p><span class="bold">Tags:</span> <a>#creation</a>, <a>#firstpersons</a> <a>#philippines</a> <a>#bird</a> <a>#bamboo</a> <a>#folktale</a> <a>#mythology</a></p>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+
+        <!-- Similar stories swipe gallery -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-8">
+                <h2>up next</h2>
+                    <section id="upNextCarousel" class="regular slider">
+                        <div>
+                            <img src="img/carousel/up_next/1.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/2.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/3.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/4.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/5.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/6.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/7.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/8.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/up_next/9.png">
+                        </div>
+                  </section>
+
+                  <h2 id="fromCarouselTitle">from Massimo V.</h2>
+                    <section id="fromThisAuthorCarousel" class="regular slider">
+                        <div>
+                            <img src="img/carousel/from_this_author/1.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/from_this_author/2.png">
+                        </div>
+                        <div>
+                            <img src="img/carousel/from_this_author/3.png">
+                        </div>
+                  </section>
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+</body>
+
