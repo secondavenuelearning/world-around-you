@@ -27,7 +27,7 @@ window.onload = function(){
                     currStoryData = JSON.parse(this.responseText);
                     languages = parseLanguageChoices();
                     chosenLanguage = languages[0]; // placeholder, user will set later
-                    numOfPages = currStoryData.length;  // -1 due to title 
+                    numOfPages = Object.keys(currStoryData).length;
                     parseTitle();
                     parsePage(currPage);
                     createSlider();
