@@ -84,7 +84,7 @@ window.onload = function(){
         var textComponent = document.getElementsByClassName('parent')[2]; // third parent
         var textVid = textComponent.getElementsByTagName('video')[0];
         var textPic = textComponent.getElementsByTagName('img')[0];
-        textPicPath = 'img/' + whichStory + '/' + pageNum + '.png';
+        textPicPath = page.image;
         textVid.src = vidPath;
         textPic.src = textPicPath;
 
@@ -118,14 +118,14 @@ window.onload = function(){
             .appendTo('#storyText')
             .replaceWith(story);
         
-
-        $('.glossary').on('click', function(e) { //add on click event
+        //add on click event to glossary items
+        $('.glossary').on('click', function(e) { 
             //get term from cliked item, and its glossary object
             var term = $(e.target).text().toLowerCase();
             var termObject = glossary[term];
 
             // Change out picture
-            textPic.src = 'img/glossary/' + term + '.png';
+            textPic.src = termObject.image;
             
             // Loop video if timestamp is provided
             playVideoInterval(termObject.video[chosenSignLanguageFormatted].start, termObject.video[chosenSignLanguageFormatted].end);
