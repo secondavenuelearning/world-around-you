@@ -64,12 +64,12 @@ window.onload = function(){
         
         // Set the picture component
         var picComponent = document.getElementsByClassName('component')[0];
-        picComponent.src = 'img/' + whichStory + '/' + pageNum + '.png';
+        picComponent.src = page.image;
+        
         // Set the video component according to language
         var chosenSignLanguageFormatted = chosenSignLanguage.replace(": ", "_").toLowerCase();
-        var vidPath = 'videos/' + whichStory + '/' + chosenSignLanguageFormatted + '/' + pageNum + '.mp4';
         vidComponent = document.getElementsByClassName('component')[1];
-        vidComponent.src = vidPath;
+        vidComponent.src = page.video[chosenSignLanguageFormatted];
 
         // build story text for this page
         var storyText = document.getElementById('storyText');
@@ -84,9 +84,8 @@ window.onload = function(){
         var textComponent = document.getElementsByClassName('parent')[2]; // third parent
         var textVid = textComponent.getElementsByTagName('video')[0];
         var textPic = textComponent.getElementsByTagName('img')[0];
-        textPicPath = page.image;
-        textVid.src = vidPath;
-        textPic.src = textPicPath;
+        textVid.src = page.video[chosenSignLanguageFormatted];
+        textPic.src = page.image;
 
         // Add glossary functionality
         var glossary = {};
@@ -142,8 +141,8 @@ window.onload = function(){
                 }
                 
                 // If picture is a glossary pic, return it to story pic
-                if (textPic.src != textPicPath) {
-                    textPic.src = textPicPath;
+                if (textPic.src != page.image) {
+                    textPic.src = page.image;
                 }
             }
         })

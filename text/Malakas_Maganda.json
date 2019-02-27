@@ -2,7 +2,7 @@
     "0":{
         "image": "img/Malakas_Maganda/0.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/0.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -15,7 +15,7 @@
     "1":{
         "image": "img/Malakas_Maganda/1.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/1.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -194,7 +194,7 @@
     "2":{
         "image": "img/Malakas_Maganda/2.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/2.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -485,7 +485,7 @@
     "3":{
         "image": "img/Malakas_Maganda/3.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/3.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -623,7 +623,7 @@
    "4": {
         "image": "img/Malakas_Maganda/4.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/4.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -836,7 +836,7 @@
     "5":{
         "image": "img/Malakas_Maganda/5.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/5.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -1010,7 +1010,7 @@
    "6": {
         "image": "img/Malakas_Maganda/6.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/6.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -1222,7 +1222,7 @@
    "7": {
         "image": "img/Malakas_Maganda/7.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/7.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -1434,7 +1434,7 @@
    "8":  {
         "image": "img/Malakas_Maganda/8.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/8.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -1532,7 +1532,7 @@
      "9": {
         "image": "img/Malakas_Maganda/9.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/9.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
@@ -1709,7 +1709,7 @@
    "10":  {
         "image": "img/Malakas_Maganda/10.png",
         "video": {
-            "fsl_luzon": "video.file",
+            "fsl_luzon": "videos/Malakas_Maganda/fsl_luzon/10.mp4",
             "fsl_visayas": "video.file",
             "fsl_mindanao": "video.file"
         },
