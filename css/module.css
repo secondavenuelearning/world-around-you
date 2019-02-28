@@ -1,13 +1,19 @@
 /* Filter */
+main
+{
+    
+}
+
 .filterBar {
-    width: 90%;
+    width: 80%;
     background-color: lightblue;
-    display: block;
+    display: block; 
 }
 
 .filter{
-    width: 12%;
+    width: 20%;
     display: inline-block;
+    vertical-align: top;
 }
 
 .filter button{
@@ -17,4 +23,5 @@
 #options
 {
     display: none;
+    width: 100%;
 }
