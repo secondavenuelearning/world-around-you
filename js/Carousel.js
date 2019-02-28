@@ -38,8 +38,14 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder) {
 
         for (var x = startIndex; x < endIndex + 1; x++) {
             if (x >= pictures.length) {
+                var imageTagRepeat = document.createElement("IMG");
+                imageTagRepeat.style.height = "152px";
+                imageTagRepeat.style.width = "280px";
+                  holder.appendChild(imageTagRepeat);
 
-            } else {
+                panels[x] = imageTagRepeat;
+            }
+            else {
                 var imageTagRepeat = document.createElement("IMG");
                 imageTagRepeat.setAttribute("id", "test");
                 imageTagRepeat.setAttribute("src", pictures[x]);
