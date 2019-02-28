@@ -1,15 +1,30 @@
+import _ from 'underscore';
+export default FiltersBar
+
 /* ----------------------- Filter Building ----------------------- */
-function BuildFiltersBar()
+/*
+Builds out filters bar for web pages that already have a div witht he "FIltersBar" id
+*/
+function FiltersBar()
 {
     //make filter section in html
     //$('.FilterBar')
     
-    //get possible sign languages
+    //get possible sign languages and build filter for signs
     var signs = ["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
+    var signsHTML = BuildMultiSelectFilter("SignLauageFilter", "Sign Language", signs);
+    $('#filterBar').append(signsHTML);
+    
     
 }
 
-function BuildFilter(filterID, filterName, filterOptions)
+/*
+Returns HTML as string for a filter field
+>filterID: tag to be used for divs id
+>filterName: text on the filter dropdown button, also for checkbox name
+>filterOptions: array of strings that define the values and text for each checkbox int he filter
+*/
+function BuildMultiSelectFilter(filterID, filterName, filterOptions)
 {
     //build base filter div
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
@@ -32,7 +47,7 @@ function BuildFilter(filterID, filterName, filterOptions)
     
     //close divs and the like
     filterHTML += "</div>";
-    filterHTML += "/n";
+    filterHTML += "\n";
     filterHTML += "</div>";
     
     //give back final built html
@@ -72,4 +87,3 @@ function FilterSortBy(type)
 {
 
 }
-
