@@ -13,11 +13,13 @@ function FiltersBar()
     //get possible sign languages and build filter for signs
     var signs = ["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
     var signsHTML = BuildMultiSelectFilter("SignLauageFilter", "Sign Language", signs); //build out html for signs filter
-    $('#filterBar').append(signsHTML); //apend filter bar to have signs html
+    $('.filterBar').append(signsHTML); //apend filter bar to have signs html
+    $('#SignLauageFilter > button').on('click', function() {ToggleOptionsVisible("SignLauageFilter")});
     
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
     var sortByHTML = BuildSelectFilter("SortByFilter", "Sort By", sortByFields);
-    $('#filterBar').append(sortByHTML);
+    $('.filterBar').append(sortByHTML);
+    $('#SortByFilter > button').on('click', function() {ToggleOptionsVisible("SortByFilter")});
 }
 
 /*
@@ -75,7 +77,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     //build options
     for(var i = 0; i < filterOptions.length; i++)
     {
-        filterHTML += "<option type = \"checkbox\" ";
+        filterHTML += "<option ";
         filterHTML += "value = \"" + filterOptions[i] + "\">";
         filterHTML += filterOptions[i];
         filterHTML += "</option>";
@@ -88,6 +90,27 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     
     //give back final built html
     return filterHTML;
+}
+
+/* ----------------------- Fake DropDown ----------------------- */
+function ToggleOptionsVisible(target)
+{
+    //get proper options object
+    var options = $('#' + target + '> #options');
+    
+    //get current mode
+    var currentMode = options.css("display");
+    
+    //check if showing or not
+    if(currentMode.toString() === "none")
+    {
+        options.css("display", "block");
+    }
+    else
+    {
+        options.css("display", "none");
+    }
+    
 }
 
 /* ----------------------- Filter Functionality ----------------------- */

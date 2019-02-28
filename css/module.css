@@ -1,0 +1,20 @@
+/* Filter */
+.filterBar {
+    width: 90%;
+    background-color: lightblue;
+    display: block;
+}
+
+.filter{
+    width: 12%;
+    display: inline-block;
+}
+
+.filter button{
+    width: 100%;
+}
+
+#options
+{
+    display: none;
+}
