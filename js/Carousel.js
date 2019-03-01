@@ -29,7 +29,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder) {
         imageTag.setAttribute("id", "test");
         imageTag.setAttribute("src", pictures[startIndex]);
         imageTag.style.height = "152px";
-        imageTag.style.width = "280px";
+        imageTag.style.width = "30%px";
         holder.appendChild(imageTag);
 
         panels[0] = imageTag;
@@ -40,7 +40,8 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder) {
             if (x >= pictures.length) {
                 var imageTagRepeat = document.createElement("IMG");
                 imageTagRepeat.style.height = "152px";
-                imageTagRepeat.style.width = "280px";
+                imageTagRepeat.style.width = "30%";
+                imageTagRepeat.style.backgroundColor = "gray";
                   holder.appendChild(imageTagRepeat);
 
                 panels[x] = imageTagRepeat;
@@ -50,7 +51,8 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder) {
                 imageTagRepeat.setAttribute("id", "test");
                 imageTagRepeat.setAttribute("src", pictures[x]);
                 imageTagRepeat.style.height = "152px";
-                imageTagRepeat.style.width = "280px";
+                imageTagRepeat.style.width = "30%";
+                imageTagRepeat.style.backgroundColor = "gray";
                 holder.appendChild(imageTagRepeat);
 
                 panels[x] = imageTagRepeat;
@@ -97,7 +99,11 @@ function Carousel(id, imageList, showing) {
     var tempIndex = index - 1;
 
     parent = document.getElementById("carousel-" + tempIndex.toString());
-    parent.style.display = "inline-block"
+  
+    parent.parentElement.style.backgroundColor = "blue";
+  parent.parentElement.style.paddingLeft = "10%";
+    parent.parentElement.style.paddingRight = "10%";
+    parent.parentElement.style.textAlign = "center";
     console.log(parent);
     holder = parent.querySelector("div");
     
@@ -132,6 +138,7 @@ function Carousel(id, imageList, showing) {
     };
 
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder);
+     
     console.log("Panels " + panels);
 
 }
