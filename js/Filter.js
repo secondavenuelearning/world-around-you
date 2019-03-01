@@ -3,6 +3,8 @@ export default FiltersBar
 
 /* ----------------------- Global variables ----------------------- */
 var filters = {};
+var filterRegex;
+var fullResults;
 
 /* ----------------------- Filter Building ----------------------- */
 /*
@@ -10,6 +12,9 @@ Builds out filters bar for web pages that already have a div witht he "FIltersBa
 */
 function FiltersBar()
 {
+    //save full possible results
+    fullResults = $('.results').text();
+    
 //---SIGN LANGUAGE FILTER
     //build html for filter
     var signID = "SignLanguageFilter";
@@ -57,7 +62,10 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions)
     {
         Data: [],
         ID: filterID,
-        Name: filterName
+        Name: filterName,
+        Regex: "",
+        Type: "Multi"
+        
     }
     
     //build base filter div
@@ -103,6 +111,20 @@ Returns HTML as string for a filter field
 */
 function BuildSelectFilter(filterID, filterName, filterOptions)
 {
+    //varibles for this filters data
+    var thisFilter = 
+    {
+        Data:
+        {
+            Current: 0,
+            Options: filterOptions
+        },
+        ID: filterID,
+        Name: filterName,
+        Regex: "",
+        Type: "Single"
+    }
+    
     //build base filter div
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
@@ -114,6 +136,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     //build options
     for(var i = 0; i < filterOptions.length; i++)
     {
+        //build html
         filterHTML += "<option ";
         filterHTML += "value = \"" + filterOptions[i] + "\">";
         filterHTML += filterOptions[i];
@@ -124,6 +147,9 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     filterHTML += "</select>";
     filterHTML += "\n";
     filterHTML += "</div>";
+    
+    //add this fully built filter to array of filters
+    filters[thisFilter.ID] = thisFilter;
     
     //give back final built html
     return filterHTML;
@@ -158,25 +184,57 @@ function UpdateMultiSelectFilter(filterData, target)
     var obj = $(target.target)[0];
     filters[filterData].Data[obj.value] = obj.checked;
     
+    //create regex string out fo active filters
+    var thisFiltersRegex = "";
+    Object.keys(filters[filterData].Data).forEach(function(option)
+    {
+        if(filters[filterData].Data[option] == true)
+        {
+            thisFiltersRegex += option + "|";
+        }
+    });
+    
+    //set this filters regex with this regex object (or "" for nothing)
+    filters[filterData].Regex = thisFiltersRegex;
+    
+    //filter data
+    Filter();
 }
 
-//variable to hold current sort by type- my attempt at a javascript enum
-var SortBy = 
+function Filter()
 {
-    Current: 0,
-    
-    Type:
+    var results = fullResults;
+ 
+    //build regex object for all filters
+    var filterKeys = Object.keys(filters);
+    var finalRegex = "";
+    filterKeys.forEach(function(key)
     {
-        Title: 0,
-        Author: 1,
-        PublishDate: 2,
-        LastUpdated: 3,
-        Relevance: 4 
+        finalRegex += filters[key].Regex;
+        
+    });
+ 
+    //legwork for actual filtering (build regex object and use it to cull results)
+    if(finalRegex != "")
+    {
+        //remove extra |
+        finalRegex = finalRegex.slice(0, finalRegex.length - 1);
+        
+        //build rgegx obj
+        finalRegex = new RegExp(finalRegex, 'gi');
+        
+        //filter data through this regex
+        var currentResults = "";
+        results.replace(finalRegex, function(match)
+        {
+            currentResults += match;
+            return;
+        });
+        results = currentResults;
+
     }
-};
+    
+    
 
-//Changes what videos users get based on the sortby type given (filtered against SortBy variable)
-function FilterSortBy(type)
-{
-
+    $('.results').text(results);
 }
