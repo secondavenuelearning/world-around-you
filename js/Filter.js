@@ -6,6 +6,34 @@ var filters = {};
 var filterRegex;
 var fullResults;
 
+var database = //placeholder data obj
+[
+    {
+        Title: "Harry Potter and the Half Blood Prince",
+        Sign: ["fsl_luzon", "asl"],
+        Written: ["English", "British"],
+        Author: "JK Rowling",
+        Published: "7/16/2005",
+        Updated: "7/19/2009"
+    },
+    {
+        Title: "Harry Potter and the Cursed Child",
+        Sign: ["fsl_luzon", "asl", "fsl_visayas"],
+        Written: ["English", "British", "Tagalog"],
+        Author: "Jack Thorne",
+        Published: "7/30/2016",
+        Updated: "7/30/2016"
+    },
+    {
+        Title: "Joy of Cooking",
+        Sign: ["fsl_mindanao", "fsl_visayas"],
+        Written: ["English", "Tagalog"],
+        Author: "Irma S. Rombauer",
+        Published: "1/1/1931",
+        Updated: "1/1/2006"
+    }
+];
+
 /* ----------------------- Filter Building ----------------------- */
 /*
 Builds out filters bar for web pages that already have a div witht he "FIltersBar" id
@@ -18,7 +46,7 @@ function FiltersBar()
 //---SIGN LANGUAGE FILTER
     //build html for filter
     var signID = "SignLanguageFilter";
-    var signs = ["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
+    var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
     var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs); //build out html for signs filter
     
     //update pahe html to ahve this filter
@@ -51,9 +79,9 @@ function FiltersBar()
 
 /*
 Returns HTML as string for a filter field
->filterID: tag to be used for divs id
->filterName: text on the filter dropdown button, also for checkbox name
->filterOptions: array of strings that define the values and text for each checkbox int he filter
+(filterID: tag to be used for divs id)
+(filterName: text on the filter dropdown button, also for checkbox name)
+(filterOptions: array of strings that define the values and text for each checkbox int he filter)
 */
 function BuildMultiSelectFilter(filterID, filterName, filterOptions)
 {
@@ -155,7 +183,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     return filterHTML;
 }
 
-/* ----------------------- Fake DropDown ----------------------- */
+/* ----------------------- Options ----------------------- */
 function ToggleOptionsVisible(target)
 {
     //get proper options object
@@ -174,6 +202,48 @@ function ToggleOptionsVisible(target)
         options.css("display", "none");
     }
     
+}
+
+function GetValues(type, sourcedb)
+{
+    //instanitate variable to return and initla setup junk
+    var source = sourcedb;
+    var options = [];
+    
+    //loop through database for the givne type and add data as options
+    var index = 0;
+    source.forEach(function(val)
+    {
+        //check if value is an array itself- then get data points within array
+        if(Array.isArray(val[type]))
+        { 
+            val[type].forEach(function(childVal)
+            {
+                //check if its a unique value
+                if(!options.includes(childVal))
+                {
+                    //if so add to array of options
+                    options[index] = childVal;
+                    index++;
+                }
+            });
+        }
+        else
+        {
+            //check if its a unique value
+            if(!options.includes(val[type]))
+            {
+                //if so add to array of options
+                options[index] = val[type];
+                index++;
+            }
+        }
+        
+        
+    });
+    
+    //give back array of options
+    return options;
 }
 
 /* ----------------------- Filter Functionality ----------------------- */
@@ -198,12 +268,12 @@ function UpdateMultiSelectFilter(filterData, target)
     filters[filterData].Regex = thisFiltersRegex;
     
     //filter data
-    Filter();
+    Filter(fullResults);
 }
 
-function Filter()
+function Filter(input)
 {
-    var results = fullResults;
+    var results = input;
  
     //build regex object for all filters
     var filterKeys = Object.keys(filters);
@@ -227,14 +297,25 @@ function Filter()
         var currentResults = "";
         results.replace(finalRegex, function(match)
         {
-            currentResults += match;
+            currentResults += match + ',';
             return;
         });
         results = currentResults;
 
     }
-    
-    
-
+    results = Sort(results);
+    //end point
     $('.results').text(results);
+}
+
+function Sort(input)
+{
+    //convert string to array
+    var results = input.split(',');
+    
+    //sort alphabetically
+    results.sort();
+    
+    //give back sorted input
+    return results;
 }
