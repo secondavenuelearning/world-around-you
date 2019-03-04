@@ -4,7 +4,7 @@ export default FiltersBar
 /* ----------------------- Global variables ----------------------- */
 var filters = {};
 var filterRegex;
-var fullResults;
+var finalResults;
 
 var database = //placeholder data obj
 [
@@ -41,7 +41,8 @@ Builds out filters bar for web pages that already have a div witht he "FIltersBa
 function FiltersBar()
 {
     //save full possible results
-    fullResults = $('.results').text();
+    finalResults = database;
+    console.log(finalResults);
     
 //---SIGN LANGUAGE FILTER
     //build html for filter
@@ -73,8 +74,11 @@ function FiltersBar()
     var sortID = "SortByFilter";
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
     var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields);
+    
     $('.filterBar').append(sortByHTML);
+    
     $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
+    $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e)});
 }
 
 /*
@@ -143,11 +147,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     //varibles for this filters data
     var thisFilter = 
     {
-        Data:
-        {
-            Current: 0,
-            Options: filterOptions
-        },
+        Data: filterOptions,
         ID: filterID,
         Name: filterName,
         Regex: "",
@@ -284,8 +284,7 @@ function Filter(input)
         ////checking if actually need to filter
         var regexObj = filters[key].Regex;
         if(regexObj != "") 
-        {
-            
+        {    
             //we do- build regex and clear results
             regexObj = regexObj.slice(0, regexObj.length - 1);
             regexObj = new RegExp(regexObj, 'gi');
@@ -328,20 +327,47 @@ function Filter(input)
                 }
             });
         }
+        else
+        {
+            results = input;
+        }
         
     });
         
+    finalResults = Sort(results);
     console.log(results);
 }
 
-function Sort(input)
+/* ----------------------- Sort Functionality ----------------------- */
+
+function UpdateSort(filterKey, target)
 {
-    //convert string to array
-    var results = input.split(',');
+    //change current sorting field
+    filters[filterKey].FilterAgainst = target.target.value;
     
+    //update the data to be sorted by this new target
+    finalResults = Sort(finalResults);
+    console.log(finalResults);
+}
+
+function Sort(input)
+{ 
     //sort alphabetically
-    results.sort();
-    
+    input.sort(function(a, b)
+    {
+        //sort based on sortBy field selected
+        var currentSort = filters["SortByFilter"].FilterAgainst;
+
+        if(a[currentSort] < b[currentSort])
+        {
+            return -1;
+        }
+        else
+        {
+            return 1;
+        }
+    });
+
     //give back sorted input
-    return results;
+    return input;
 }
