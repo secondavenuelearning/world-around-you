@@ -28,7 +28,7 @@ var database = //placeholder data obj
         Title: "Joy of Cooking",
         Sign: ["fsl_mindanao", "fsl_visayas"],
         Written: ["English", "Tagalog"],
-        Author: "Irma S. Rombauer",
+        Author: "A",
         DatePublished: "1/1/1931",
         LastUpdated: "1/1/2006"
     }
@@ -78,7 +78,7 @@ function FiltersBar()
     $('.filterBar').append(sortByHTML);
     
     $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
-    $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e)});
+    $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e, sortID)});
 }
 
 /*
@@ -343,21 +343,20 @@ function Filter(input)
 function UpdateSort(filterKey, target)
 {
     //change current sorting field
-    filters[filterKey].FilterAgainst = target.target.value;
+    filters[filterKey].FilterAgainst = target.target.value; console.log(filters[filterKey].FilterAgainst);
     
     //update the data to be sorted by this new target
-    finalResults = Sort(finalResults);
+    finalResults = Sort(finalResults, filterKey);
     console.log(finalResults);
 }
 
-function Sort(input)
+function Sort(input, filterKey)
 { 
     //sort alphabetically
     input.sort(function(a, b)
     {
         //sort based on sortBy field selected
-        var currentSort = filters["SortByFilter"].FilterAgainst;
-
+        var currentSort = filters[filterKey].FilterAgainst;
         if(a[currentSort] < b[currentSort])
         {
             return -1;
