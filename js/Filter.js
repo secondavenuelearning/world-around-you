@@ -13,24 +13,24 @@ var database = //placeholder data obj
         Sign: ["fsl_luzon", "asl"],
         Written: ["English", "British"],
         Author: "JK Rowling",
-        Published: "7/16/2005",
-        Updated: "7/19/2009"
+        DatePublished: "7/16/2005",
+        LastUpdated: "7/19/2009"
     },
     {
         Title: "Harry Potter and the Cursed Child",
         Sign: ["fsl_luzon", "asl", "fsl_visayas"],
         Written: ["English", "British", "Tagalog"],
         Author: "Jack Thorne",
-        Published: "7/30/2016",
-        Updated: "7/30/2016"
+        DatePublished: "7/30/2016",
+        LastUpdated: "7/30/2016"
     },
     {
         Title: "Joy of Cooking",
         Sign: ["fsl_mindanao", "fsl_visayas"],
         Written: ["English", "Tagalog"],
         Author: "Irma S. Rombauer",
-        Published: "1/1/1931",
-        Updated: "1/1/2006"
+        DatePublished: "1/1/1931",
+        LastUpdated: "1/1/2006"
     }
 ];
 
@@ -47,7 +47,7 @@ function FiltersBar()
     //build html for filter
     var signID = "SignLanguageFilter";
     var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
-    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs); //build out html for signs filter
+    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign"); //build out html for signs filter
     
     //update pahe html to ahve this filter
     $('.filterBar').append(signsHTML); //apend filter bar to have signs html
@@ -59,8 +59,8 @@ function FiltersBar()
 //---WRITTEN LANGUAGE FILTER
     //build html for filter
     var writtenID = "WrittenLanguageFilter";
-    var written = ["English", "Tagalog"]; //note: hardcoded for now - later will get from json files or database
-    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written); //build out html for signs filter
+    var written = GetValues("Written", database); //note: hardcoded for now - later will get from json files or database
+    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written"); //build out html for signs filter
     
     //update page html to have this filter
     $('.filterBar').append(writtenHTML); //apend filter bar to have signs html
@@ -83,7 +83,7 @@ Returns HTML as string for a filter field
 (filterName: text on the filter dropdown button, also for checkbox name)
 (filterOptions: array of strings that define the values and text for each checkbox int he filter)
 */
-function BuildMultiSelectFilter(filterID, filterName, filterOptions)
+function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarget)
 {
     //varibles for this filters data
     var thisFilter = 
@@ -92,6 +92,7 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions)
         ID: filterID,
         Name: filterName,
         Regex: "",
+        FilterAgainst: filterTarget,
         Type: "Multi"
         
     }
@@ -150,6 +151,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
         ID: filterID,
         Name: filterName,
         Regex: "",
+        FilterAgainst: filterOptions[0],
         Type: "Single"
     }
     
@@ -268,44 +270,68 @@ function UpdateMultiSelectFilter(filterData, target)
     filters[filterData].Regex = thisFiltersRegex;
     
     //filter data
-    Filter(fullResults);
+    Filter(database);
 }
 
 function Filter(input)
 {
-    var results = input;
- 
-    //build regex object for all filters
-    var filterKeys = Object.keys(filters);
-    var finalRegex = "";
-    filterKeys.forEach(function(key)
+    var results = [];
+    var resultIndex = 0;
+    
+    
+    Object.keys(filters).forEach(function(key)
     {
-        finalRegex += filters[key].Regex;
+        ////checking if actually need to filter
+        var regexObj = filters[key].Regex;
+        if(regexObj != "") 
+        {
+            
+            //we do- build regex and clear results
+            regexObj = regexObj.slice(0, regexObj.length - 1);
+            regexObj = new RegExp(regexObj, 'gi');
+            
+             //loop through each entry to check for matches to the inplace filters
+            input.forEach(function(entry)
+            {
+                var match = false;
+
+                //get relevant data and compare
+                var data = entry[filters[key].FilterAgainst];
+                if(Array.isArray(data)) //extra check for data being array as we need to iterate through its entires
+                { 
+                    data.forEach(function(dataPoint)
+                    {
+                        //check if data fits the regex model
+                        if(regexObj.test(dataPoint))
+                        {
+                            match = true;
+                        }
+                    });
+
+                }
+                else //single line piece of data
+                {
+                    //check if data fits the regex model
+                    if(regexObj.test(data))
+                    {
+                        match = true;
+                    }
+                }
+                
+                //check if the search reuslts in any matches - if so update results!
+                if(match)
+                {
+                    //it does- at the whole entry to the results
+                    results[resultIndex] = entry;
+                    resultIndex++; //prep for next result
+                    input = results; //set input to results so next run uses updated data set
+                }
+            });
+        }
         
     });
- 
-    //legwork for actual filtering (build regex object and use it to cull results)
-    if(finalRegex != "")
-    {
-        //remove extra |
-        finalRegex = finalRegex.slice(0, finalRegex.length - 1);
         
-        //build rgegx obj
-        finalRegex = new RegExp(finalRegex, 'gi');
-        
-        //filter data through this regex
-        var currentResults = "";
-        results.replace(finalRegex, function(match)
-        {
-            currentResults += match + ',';
-            return;
-        });
-        results = currentResults;
-
-    }
-    results = Sort(results);
-    //end point
-    $('.results').text(results);
+    console.log(results);
 }
 
 function Sort(input)
