@@ -112,7 +112,7 @@ function Carousel(id, imageList, showing) {
     parent.parentElement.style.backgroundColor = "#0098ba";
     parent.parentElement.style.paddingLeft = "10%";
     parent.parentElement.style.paddingRight = "10%";
-    parent.parentElement.style.textAlign = "center";
+   // parent.parentElement.style.textAlign = "center";
 
     holder = parent.querySelector("div");
 
