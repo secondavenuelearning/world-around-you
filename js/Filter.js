@@ -1,3 +1,4 @@
+import '../css/Filter.css!';
 import _ from 'underscore';
 export default FiltersBar
 
