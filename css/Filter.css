@@ -1,0 +1,159 @@
+/* Filter */
+.filterBar{
+    width: 100%;
+    background-color: #a0eaf7;
+}
+
+.filters {
+    width: 49%;
+    
+    display: block; 
+    
+    color: white;
+    
+    padding: 1%;
+    
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.filter{
+    width: 200px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.filter button{
+    border: none;
+    border-radius: 18px;
+    border-color: #004e74;
+    
+    font-size: 110%;
+    
+    background-color: #004e74;
+    color: white;
+    
+    width: 100%;
+    height: 150%;
+    
+    padding: 5%;
+}
+
+#options
+{
+    
+    display: none;
+    
+    width: 77%;
+    height: 200%;
+    
+    background-color: #195f81;
+    
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: none;
+    
+    padding: 5px;
+    
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Checkbox filters css 
+Thanks: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.container input /* Hide the browser's default checkbox */
+{
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark { /* Create a custom checkbox */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    margin-left: 8px;
+}
+
+.container:hover input ~ .checkmark { /* On mouse-over, add a grey background color */
+  background-color: #ccc;
+}
+
+.container input:checked ~ .checkmark { /* When the checkbox is checked, add a blue background */
+  background-color: #004e74;
+}
+
+.checkmark:after { /* Create the checkmark/indicator (hidden when not checked) */
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after { /* Show the checkmark when checked */
+  display: block;
+}
+
+.container .checkmark:after { /* Show the checkmark when checked */
+  left: 5.5px;
+  top: 2.5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Sorty By Filter css */
+select#options
+{
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+select#options:focus-within
+{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+select#options option
+{
+    cursor: pointer;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+select#options:hover
+{
+    border-bottom-left-radius: none;
+    border-bottom-right-radius: none;
+}
+
+
+
