@@ -1,51 +1,77 @@
 .carousel div {
-    align-content: center;
-   
+
+
+  
+    display: inline-block;
+    vertical-align: middle;
+    border-radius: 5px;
 }
 
-.right{
-    background-color: blue;
+.right {
+    background-color: #0098ba;
     border-color: blue;
     display: inline-block;
     width: 12%;
-    text-align: center;
+   
+    height: 100%;
     border-width: 0;
+
+
+
+
  
     
-    
    
+  
+ 
+
+
+
+
 }
-.left{
-    background-color: blue;
+
+.left {
+
+    height: 100%;
+    background-color: #0098ba;
+
     border-color: blue;
     display: inline-block;
     width: 12%;
-    
-    text-align: center;
+
     border-width: 0;
     
-    
+
+
+
+
 }
 
 .imageHolder {
     display: inline-block;
     width: 70%;
     overflow: hidden;
-   
     left: 15%;
     right: 15%;
     height: 152px;
     white-space: nowrap;
- 
-   
+
+
+
+
+
+}
+
+#test {
+    display: block;
     
-   
-  
 }
-#test{
-   display: block;
-}
-.carousel .carouselNav{
-     height: 50%; width: 50%; padding-bottom: 80%; border-style: none; border: 0;
-   
+
+.carousel .carouselNav {
+    height: 50%;
+    width: 50%;
+    border-style: none;
+    border: 0;
+    
+
 }
