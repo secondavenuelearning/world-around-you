@@ -9,7 +9,7 @@ $(document).ready(function(){
                                      'img/carousel/from_this_author/1.png', 'img/carousel/from_this_author/1.png', 'img/carousel/from_this_author/2.png', 'img/carousel/from_this_author/2.png', 
                                      'img/carousel/from_this_author/2.png',
                                      'img/carousel/from_this_author/3.png', 'img/carousel/from_this_author/3.png', 
-                                     'img/carousel/from_this_author/3.png' ], 4);
+                                     'img/carousel/from_this_author/3.png' ], 1);
    new Carousel("#templateResultTwo", ['img/carousel/from_this_author/1.png', 
                                      'img/carousel/from_this_author/1.png', 'img/carousel/from_this_author/1.png', 'img/carousel/from_this_author/2.png', 'img/carousel/from_this_author/2.png', 
                                      'img/carousel/from_this_author/2.png',
