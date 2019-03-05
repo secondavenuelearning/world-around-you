@@ -29,3 +29,14 @@ footer{
 	background-color: #0098ba;
 	bottom: 0px;
 }
+
+#sectionHead
+{
+    background-color: #a0eaf7;
+    color: #004e74;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 10px;
+}
