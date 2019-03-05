@@ -78,7 +78,7 @@ function FiltersBar()
     $('.filterBar').append(sortByHTML);
     
     $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
-    $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e, sortID)});
+    $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
 }
 
 /*
