@@ -1,3 +1,4 @@
+
 import 'style/Main.css!';
 import Carousel from 'js/Carousel';
 import StoryPreview from 'js/StoryPreview';
@@ -25,3 +26,6 @@ $(document).ready(function(){
         sp.appendTo('stories');
     }
 })
+
+import FiltersBar from 'js/Filter.js';
+FiltersBar();

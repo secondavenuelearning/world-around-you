@@ -15,7 +15,7 @@ header, footer{
 }
 header{
 	height: 75px;
-	background-color: #F00000;
+	background-color: #ffffff;
 	top: 0px;
 }
 main{
@@ -26,6 +26,6 @@ main{
 }
 footer{
 	height: 25px;
-	background-color: #F00000;
+	background-color: #0098ba;
 	bottom: 0px;
 }
