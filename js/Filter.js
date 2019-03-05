@@ -322,7 +322,7 @@ function Filter(input)
                 }
                 
                 //check if the search reuslts in any matches - if so update results!
-                if(match)
+                if(match && !results.includes(entry))
                 {
                     //it does- at the whole entry to the results
                     results[resultIndex] = entry;
