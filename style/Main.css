@@ -25,7 +25,7 @@ main{
 }
 footer{
 	height: 25px;
-	background-color: #F00000;
+	background-color: #0098ba;
 	bottom: 0px;
 	padding: 5px 15px;
 }
@@ -38,4 +38,15 @@ header #language-selector{
 
 *[lang]:not(html){
 	display: none;
+}
+
+#sectionHead
+{
+    background-color: #a0eaf7;
+    color: #004e74;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    padding-top: 10px;
 }

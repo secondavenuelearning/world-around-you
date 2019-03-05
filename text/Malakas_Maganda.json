@@ -8,7 +8,7 @@
         },
         "text": {
             "English": "Malakas and Maganda",
-            "Tagalong": "Malakas and Maganda"
+            "Tagalog": "Malakas and Maganda"
         }
 
     },
@@ -21,7 +21,7 @@
         },
         "text": {
             "English": "When the world  first began, there was no land. There was only the Sea and the Sky. A huge beautiful Kite (a bird similar to a hawk) flew between them.",
-            "Tagalong": "Nang unang likhain ang mundo, ay walang lupain. Nagkaroon lamang ng dagat at kalangitan. Lumipad isang malaking at magandang saranggola (isang ibon katulad ng isang Lawin) pagitan ng mga ito."
+            "Tagalog": "Nang unang likhain ang mundo, ay walang lupain. Nagkaroon lamang ng dagat at kalangitan. Lumipad isang malaking at magandang saranggola (isang ibon katulad ng isang Lawin) pagitan ng mga ito."
         },
         "glossary": {
 
@@ -105,7 +105,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
                 "world": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
                     "image": "img/glossary/world.png",
@@ -200,7 +200,7 @@
         },
         "text": {
             "English": "One day, the Kite grew tired of flying around as there was nowhere to land and rest. The Kite became frustrated and pushed the Sky to get in a quarrel against the Sea.",
-            "Tagalong": "Isang araw, ang mga saranggola lumaki pagod ng lumilipad sa paligid dahil wala sa lupa at magpahinga. Ang saranggola ay naging bigo at itinulak ang kalangitan upang makakuha ng sa isang sumbong laban sa dagat."
+            "Tagalog": "Isang araw, ang mga saranggola lumaki pagod ng lumilipad sa paligid dahil wala sa lupa at magpahinga. Ang saranggola ay naging bigo at itinulak ang kalangitan upang makakuha ng sa isang sumbong laban sa dagat."
         },
         "glossary": {
 
@@ -341,7 +341,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
                 "kite": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
                     "image": "img/glossary/default.png",
@@ -491,7 +491,7 @@
         },
         "text": {
             "English": "The Sky threw rain, thunder, and lightning that reached the Sea. The Sea rose up and threw waves and hurricanes that reached the Sky.",
-            "Tagalong": "Ang kalangitan ay itinapon ng ulan, kulog at kidlat na naabot ng dagat. Ang dagat na ito 'y nagtindig at inihagis ng mga alon at bagyo na marating ang kalangitan."
+            "Tagalog": "Ang kalangitan ay itinapon ng ulan, kulog at kidlat na naabot ng dagat. Ang dagat na ito 'y nagtindig at inihagis ng mga alon at bagyo na marating ang kalangitan."
         },
         "glossary": {
 
@@ -556,7 +556,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
                 "rain": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
                     "image": "img/glossary/default.png",
@@ -629,7 +629,7 @@
         },
         "text": {
             "English": "The Sky showered a large number of huge boulders down upon the Sea. They became the islands that formed the Philippines. These islands prevented the waters from rising any more by causing them to flow back and forth. This created the tides.",
-            "Tagalong": "Naligo ng kalangitan ang isang malaking bilang ng malaking boulders pababa sa dagat. Sila ay naging mga pulo na nabuo ng mga Philippines. These islands pinigilan ito ng tubig mula pagsikat pa ng naging dahilan upang dumaloy balik. Lumikha ito ng pagtaas."
+            "Tagalog": "Naligo ng kalangitan ang isang malaking bilang ng malaking boulders pababa sa dagat. Sila ay naging mga pulo na nabuo ng mga Philippines. These islands pinigilan ito ng tubig mula pagsikat pa ng naging dahilan upang dumaloy balik. Lumikha ito ng pagtaas."
         },
         "glossary": {
 
@@ -732,7 +732,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
                 "boulders": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
                     "image": "img/glossary/default.png",
@@ -842,7 +842,7 @@
         },
         "text": {
             "English": "Afterwards, the Sky ordered the Kite to find one of the newly-formed islands to build her nest, and to leave the Sea and the Sky in peace.",
-            "Tagalong": "Naligo ng kalangitan ang isang malaking bilang ng malaking boulders pababa sa dagat. Sila ay naging mga pulo na nabuo ng mga Philippines. These islands pinigilan ito ng tubig mula pagsikat pa ng naging dahilan upang dumaloy balik. Lumikha ito ng pagtaas."
+            "Tagalog": "Naligo ng kalangitan ang isang malaking bilang ng malaking boulders pababa sa dagat. Sila ay naging mga pulo na nabuo ng mga Philippines. These islands pinigilan ito ng tubig mula pagsikat pa ng naging dahilan upang dumaloy balik. Lumikha ito ng pagtaas."
         },
         "glossary": {
 
@@ -926,7 +926,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "afterwards": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
@@ -1016,7 +1016,7 @@
         },
         "text": {
             "English": "At this same time the Land Breeze and the Sea Breeze were married, and they had a child named Bamboo.",
-            "Tagalong": "Kasabay nito ang simoy ng hangin sa lupa at ang dagat simoy nagpakasal, at nagkaroon sila ng isang anak na pinangalanan ng kawayan."
+            "Tagalog": "Kasabay nito ang simoy ng hangin sa lupa at ang dagat simoy nagpakasal, at nagkaroon sila ng isang anak na pinangalanan ng kawayan."
         },
         "glossary": {
 
@@ -1119,7 +1119,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "land breeze": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
@@ -1228,7 +1228,7 @@
         },
         "text": {
             "English": "One day, when Bamboo was floating against the sea, it struck the feet of the Kite. Shocked, and angry that anything would strike it, the bird pecked at the bamboo hard until it split in half.",
-            "Tagalong": "Kasabay nito ang simoy ng hangin sa lupa at ang dagat simoy nagpakasal, at nagkaroon sila ng isang anak na pinangalanan ng kawayan."
+            "Tagalog": "Kasabay nito ang simoy ng hangin sa lupa at ang dagat simoy nagpakasal, at nagkaroon sila ng isang anak na pinangalanan ng kawayan."
         },
         "glossary": {
 
@@ -1331,7 +1331,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "one day": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
@@ -1440,7 +1440,7 @@
         },
         "text": {
             "English": "Out of one part came a golden-bronze colored man, named Malakas (strong One) and from the other half came a similarly shaded woman, named Maganda (Beautiful One).",
-            "Tagalong": "Mula sa isang bahagi ay isang ginintuang-bronze kulay lalaking, nagngangalang Malakas (isang malakas) at mula sa isa pang kalahati ay isang gayundin shaded na babae, na nagngangalang Maganda (isang magandang)."
+            "Tagalog": "Mula sa isang bahagi ay isang ginintuang-bronze kulay lalaking, nagngangalang Malakas (isang malakas) at mula sa isa pang kalahati ay isang gayundin shaded na babae, na nagngangalang Maganda (isang magandang)."
         },
         "glossary": {
 
@@ -1485,7 +1485,7 @@
                 }
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "malakas": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
@@ -1538,7 +1538,7 @@
         },
         "text": {
             "English": "All of the birds of the sky and the fish of the sea were called to see what should be done with these two persons, and the animals decided that they should marry each other.",
-            "Tagalong": "Lahat ng mga ibon ng langit at mga isda sa dagat ay tinatawag na upang makita kung ano ang dapat gawin sa mga dalawang tao, at nagpasiya ang mga hayop na dapat silang magpakasal ang isa 't isa."
+            "Tagalog": "Lahat ng mga ibon ng langit at mga isda sa dagat ay tinatawag na upang makita kung ano ang dapat gawin sa mga dalawang tao, at nagpasiya ang mga hayop na dapat silang magpakasal ang isa 't isa."
         },
         "glossary": {
 
@@ -1623,7 +1623,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "fish": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",
@@ -1715,7 +1715,7 @@
         },
         "text": {
             "English": "Together, Malakas and Maganda had many children, and from them came all the different races of people in the Philippines.",
-            "Tagalong": "Sama-sama, Malakas at Maganda, nagkaroon ng maraming anak, at mula sa kanila ay ang lahat ng iba 't ibang lahi ng tao sa Pilipinas."
+            "Tagalog": "Sama-sama, Malakas at Maganda, nagkaroon ng maraming anak, at mula sa kanila ay ang lahat ng iba 't ibang lahi ng tao sa Pilipinas."
         },
         "glossary": {
 
@@ -1781,7 +1781,7 @@
 
 
             },
-            "Tagalong": {
+            "Tagalog": {
 
                 "together": {
                     "definition": "The earth, together with all of its countries, peoples, and natural features.",

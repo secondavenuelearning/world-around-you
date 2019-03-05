@@ -1,3 +1,4 @@
+
 import 'style/Main.css!';
 import LanguageSelector from 'js/LanguageSelector';
 import Carousel from 'js/Carousel';
@@ -28,3 +29,6 @@ $(document).ready(function(){
 
     LanguageSelector.appendTo($('header')[0]);
 });
+
+import FiltersBar from 'js/Filter.js';
+FiltersBar();

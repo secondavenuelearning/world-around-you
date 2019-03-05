@@ -1,0 +1,40 @@
+div.carousel{
+    border-radius: 5px;
+    height: 175px;
+}
+
+div.carousel button {
+    display: inline-block;
+    vertical-align: middle;
+    
+    background-color: #0098ba;
+    border-color: blue;
+    width: 12%;
+    border-width: 0;
+}
+
+.imageHolder {
+    display: inline-block;
+    width: 70%;
+    overflow: hidden;
+    left: 15%;
+    right: 15%;
+    height: 152px;
+    white-space: nowrap;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#test {
+    display: block;
+    
+}
+
+.carousel .carouselNav {
+    height: 50%;
+    width: 50%;
+    border-style: none;
+    border: 0;
+    
+
+}

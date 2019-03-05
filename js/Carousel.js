@@ -7,60 +7,68 @@ var imageLink = 'img/carousel/1.jpg';
 
 var index = 0;
 
-function clearPanels(panels) {
-    console.log("Panels " + panels);
-    for (var x = 0; x < panels.length; x++) {
-        if (panels[x] == null) {
 
+var numberToShow = 0;
+
+function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder) {
+    for (var x = 0; x < pictures.length; x++) {
+        var imageTagRepeat = document.createElement("IMG");
+        imageTagRepeat.setAttribute("id", "test");
+        imageTagRepeat.setAttribute("src", pictures[x]);
+        imageTagRepeat.style.height = "152px";
+
+
+        var percentage = 100 / showCount;
+        var leftStart = (180 * (percentage / 100)) * x;
+        imageTagRepeat.style.left = leftStart.toString() + "px";
+        imageTagRepeat.style.width = percentage.toString() + "%";
+
+        if (showCount == 1) {
+           
+            imageTagRepeat.style.paddingLeft = "25%";
+            imageTagRepeat.style.paddingRight = "25%";
+            imageTagRepeat.style.backgroundColor = "#0098ba";
         } else {
-            console.log("Removed");
-            panels[x].remove();
+            imageTagRepeat.style.backgroundColor = "gray";
         }
 
+        holder.appendChild(imageTagRepeat);
+
+        panels[x] = imageTagRepeat;
     }
-    panels = [];
 
 }
 
-function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder) {
-    clearPanels(panels);
-    if (showCount <= 1) {
-        var imageTag = document.createElement("IMG");
-        imageTag.setAttribute("id", "test");
-        imageTag.setAttribute("src", pictures[startIndex]);
-        imageTag.style.height = "152px";
-        imageTag.style.width = "30%px";
-        holder.appendChild(imageTag);
+function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset) {
 
-        panels[0] = imageTag;
+    for (var x = 0; x < panels.length; x++) {
+        if (x >= startIndex && x <= endIndex) {
+            panels[x].style.display = "inline-block";
+        } else {
+            panels[x].style.display = "inline-block";
+        }
+        var amountToTranslate = -100 * offset;
 
-    } else {
+        if (direction == "right") {
 
-        for (var x = startIndex; x < endIndex + 1; x++) {
-            if (x >= pictures.length) {
-                var imageTagRepeat = document.createElement("IMG");
-                imageTagRepeat.style.height = "152px";
-                imageTagRepeat.style.width = "30%";
-                imageTagRepeat.style.backgroundColor = "gray";
-                  holder.appendChild(imageTagRepeat);
+            panels[x].style.transform = "translateX(" + amountToTranslate + "%)";
+            panels[x].style.transition = "all 2s";
+        } else if (direction == "left") {
 
-                panels[x] = imageTagRepeat;
-            }
-            else {
-                var imageTagRepeat = document.createElement("IMG");
-                imageTagRepeat.setAttribute("id", "test");
-                imageTagRepeat.setAttribute("src", pictures[x]);
-                imageTagRepeat.style.height = "152px";
-                imageTagRepeat.style.width = "30%";
-                imageTagRepeat.style.backgroundColor = "gray";
-                holder.appendChild(imageTagRepeat);
-
-                panels[x] = imageTagRepeat;
-            }
+            panels[x].style.transform = "translateX(" + amountToTranslate.toString() + "%)";
+            panels[x].style.transition = "all 2s";
+        } else {
 
         }
+
+
+
+
+
     }
+
 }
+
 
 function Carousel(id, imageList, showing) {
     // this.id = index++;
@@ -73,7 +81,8 @@ function Carousel(id, imageList, showing) {
     var endIndex;
     var showCount;
     var holder;
-
+    var offset = 0;
+    numberToShow = showing;
     var parent;
     var test = 0;
     endIndex = showing - 1;
@@ -99,47 +108,52 @@ function Carousel(id, imageList, showing) {
     var tempIndex = index - 1;
 
     parent = document.getElementById("carousel-" + tempIndex.toString());
-  
-    parent.parentElement.style.backgroundColor = "blue";
-  parent.parentElement.style.paddingLeft = "10%";
+
+    parent.parentElement.style.backgroundColor = "#0098ba";
+    parent.parentElement.style.paddingLeft = "10%";
     parent.parentElement.style.paddingRight = "10%";
-    parent.parentElement.style.textAlign = "center";
-    console.log(parent);
+   // parent.parentElement.style.textAlign = "center";
+
     holder = parent.querySelector("div");
-    
+
 
     var buttonRight = parent.getElementsByClassName("right")[0];
-    console.log(buttonRight);
+
 
     buttonRight.onclick = function () {
+
         if (endIndex >= imageList.length - 1) {
 
         } else {
+            offset += showing;
             startIndex = startIndex + showing;
             endIndex = endIndex + showing;
+            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset);
         }
 
-        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder);
+
+
 
 
     };
     var buttonLeft = parent.getElementsByClassName("left")[0];
     buttonLeft.onclick = function () {
+
         if (startIndex <= 0) {
 
         } else {
+            offset -= showing;
             startIndex = startIndex - showing;
             endIndex = endIndex - showing;
         }
-        console.log("Running left");
-        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder);
+
+        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset);
 
 
     };
 
-    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder);
-     
-    console.log("Panels " + panels);
+    createPanelList(panels, showCount, startIndex, endIndex, pictures, holder);
+    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
 
 }
 
