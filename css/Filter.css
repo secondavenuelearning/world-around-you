@@ -5,13 +5,13 @@
 }
 
 .filters {
-    width: 49%;
+    width: 770px;
     
     display: block; 
     
     color: white;
     
-    padding: 1%;
+    padding: 10px;
     
     position: relative;
     margin-left: auto;
@@ -19,12 +19,11 @@
 }
 
 .filter{
-    width: 200px;
+    width: 250px;
     height: 100%;
     display: inline-block;
     vertical-align: top;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding: 10px;
 }
 
 .filter button{
