@@ -27,7 +27,7 @@
 }
 
 .filter button{
-    border: none;
+    border: solid;
     border-radius: 18px;
     border-color: #004e74;
     
@@ -40,6 +40,12 @@
     height: 150%;
     
     padding: 5%;
+}
+
+.filter button:hover
+{
+    cursor: pointer;
+    border-color: white;
 }
 
 #options
@@ -97,8 +103,9 @@ Thanks: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_che
     margin-left: 8px;
 }
 
+
 .container:hover input ~ .checkmark { /* On mouse-over, add a grey background color */
-  background-color: #ccc;
+  background-color: #99b8c7;
 }
 
 .container input:checked ~ .checkmark { /* When the checkbox is checked, add a blue background */
