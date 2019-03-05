@@ -58,7 +58,7 @@ function FiltersBar()
     
     //add click events for filter functionality
     $('#' + signID + ' > button').on('click', function() {ToggleOptionsVisible(signID)}); //toggle showing filter options
-    $('#' + signID + ' > #options > input').on('click', function(e) {UpdateMultiSelectFilter(signID, e)}); //update filter
+    $('#' + signID + ' > #options > label > input').on('click', function(e) {UpdateMultiSelectFilter(signID, e)}); //update filter
     
 //---WRITTEN LANGUAGE FILTER
     //build html for filter
@@ -71,7 +71,7 @@ function FiltersBar()
     
     //add click events for filter functionality
     $('#' + writtenID + ' > button').on('click', function() {ToggleOptionsVisible(writtenID)});
-    $('#' + writtenID + ' > #options > input').on('click', function(e) {UpdateMultiSelectFilter(writtenID, e)});
+    $('#' + writtenID + ' > #options > label > input').on('click', function(e) {UpdateMultiSelectFilter(writtenID, e)});
     
 //---SORTING FILTER
     var sortID = "SortByFilter";
@@ -117,11 +117,12 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarge
     {
         //build html
         var optionName = filterName + i.toString();
+        filterHTML += "<label class = \"container\">" + filterOptions[i];
         filterHTML += "<input type = \"checkbox\" ";
         filterHTML += "name = \"" + optionName + "\"";
         filterHTML += "value = \"" + filterOptions[i] + "\">";
-        filterHTML += filterOptions[i];
-        filterHTML += "<br>";
+        filterHTML += "<span class=\"checkmark\"></span>";
+        filterHTML += "</label>";
         
         //update this filters data
         thisFilter.Data[filterOptions[i]] = false;
@@ -337,7 +338,7 @@ function Filter(input)
         
     });
         
-    finalResults = Sort(results);
+    finalResults = Sort(results, "SortByFilter");
     console.log(results);
 }
 
