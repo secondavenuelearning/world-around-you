@@ -52,7 +52,7 @@ function FiltersBar()
     //build html for filter
     var signID = "SignLanguageFilter";
     var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
-    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign"); //build out html for signs filter
+    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "../img/icons/language.png"); //build out html for signs filter
     
     //update pahe html to ahve this filter
     $('.filters').append(signsHTML); //apend filter bar to have signs html
@@ -65,7 +65,7 @@ function FiltersBar()
     //build html for filter
     var writtenID = "WrittenLanguageFilter";
     var written = GetValues("Written", database); //note: hardcoded for now - later will get from json files or database
-    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written"); //build out html for signs filter
+    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "../img/icons/language.png"); //build out html for signs filter
     
     //update page html to have this filter
     $('.filters').append(writtenHTML); //apend filter bar to have signs html
@@ -77,7 +77,7 @@ function FiltersBar()
 //---SORTING FILTER
     var sortID = "SortByFilter";
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
-    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields);
+    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "../img/icons/language.png");
     
     $('.filters').append(sortByHTML);
     
@@ -91,7 +91,7 @@ Returns HTML as string for a filter field
 (filterName: text on the filter dropdown button, also for checkbox name)
 (filterOptions: array of strings that define the values and text for each checkbox int he filter)
 */
-function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarget)
+function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarget, icon)
 {
     //varibles for this filters data
     var thisFilter = 
@@ -108,7 +108,8 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarge
     //build base filter div
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
-    filterHTML += "<button>" + filterName + "</button>";
+    filterHTML += "<button><img src=\"" + icon + "\">"
+    filterHTML += filterName + "</button>";
     filterHTML += "\n";
     filterHTML += "<div id = \"options\">";
     filterHTML += "\n";
@@ -147,7 +148,7 @@ Returns HTML as string for a filter field
 >filterName: text on the filter dropdown button
 >filterOptions: array of strings that define the values and text for each select option
 */
-function BuildSelectFilter(filterID, filterName, filterOptions)
+function BuildSelectFilter(filterID, filterName, filterOptions, icon)
 {
     //varibles for this filters data
     var thisFilter = 
@@ -163,7 +164,8 @@ function BuildSelectFilter(filterID, filterName, filterOptions)
     //build base filter div
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
-    filterHTML += "<button>" + filterName + "</button>";
+    filterHTML += "<button><img src=\"" + icon + "\">"
+    filterHTML += filterName + "</button>";
     filterHTML += "\n";
     filterHTML += "<select id = \"options\">";
     filterHTML += "\n";
