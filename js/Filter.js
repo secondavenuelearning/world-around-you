@@ -52,7 +52,7 @@ function FiltersBar()
     //build html for filter
     var signID = "SignLanguageFilter";
     var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
-    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "../img/icons/language.png"); //build out html for signs filter
+    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "img/icons/language.png"); //build out html for signs filter
     
     //update pahe html to ahve this filter
     $('.filters').append(signsHTML); //apend filter bar to have signs html
@@ -65,7 +65,7 @@ function FiltersBar()
     //build html for filter
     var writtenID = "WrittenLanguageFilter";
     var written = GetValues("Written", database); //note: hardcoded for now - later will get from json files or database
-    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "../img/icons/language.png"); //build out html for signs filter
+    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "img/icons/language.png"); //build out html for signs filter
     
     //update page html to have this filter
     $('.filters').append(writtenHTML); //apend filter bar to have signs html
@@ -77,7 +77,7 @@ function FiltersBar()
 //---SORTING FILTER
     var sortID = "SortByFilter";
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
-    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "../img/icons/language.png");
+    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/language.png");
     
     $('.filters').append(sortByHTML);
     
