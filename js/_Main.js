@@ -1,5 +1,6 @@
 
 import 'style/Main.css!';
+import LanguageSelector from 'js/LanguageSelector';
 import Carousel from 'js/Carousel';
 import StoryPreview from 'js/StoryPreview';
 
@@ -25,7 +26,9 @@ $(document).ready(function(){
         });
         sp.appendTo('stories');
     }
-})
+
+    LanguageSelector.appendTo($('header')[0]);
+});
 
 import FiltersBar from 'js/Filter.js';
 FiltersBar();

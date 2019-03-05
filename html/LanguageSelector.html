@@ -1,0 +1,7 @@
+<div id="language-selector">
+	<select id="language-select">
+		<% _.each(languages, function(language){ %>
+			<option value="<%- language.code %>"><%- language.text %></option>
+		<% }) %>
+	</select>
+</div>

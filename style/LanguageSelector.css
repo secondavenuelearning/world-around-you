@@ -1,0 +1,15 @@
+#language-selector select{
+	background-color: #004E74;
+	color: #FFFFFF;
+	height: 30px;
+	width: 200px;
+	padding: 5px 25px;
+	text-align: center;
+	border: none;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	-webkit-appearance: none;
+	text-align-last:center;
+	-ms-text-align-last: center;
+	-moz-text-align-last: center;
+}
