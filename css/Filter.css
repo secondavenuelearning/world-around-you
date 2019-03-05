@@ -1,26 +1,91 @@
 /* Filter */
-.filterBar {
-    width: 80%;
-    display: block; 
+.filterBar{
+    width: 100%;
+    background-color: #a0eaf7;
 }
 
-.filter{
-    width: 20%;
-    display: inline-block;
-    vertical-align: top;
-    background-color: lightblue;
+.filters {
+    width: 49%;
+    
+    display: block; 
+    
+    color: white;
+    
+    padding: 1%;
+    
     position: relative;
     margin-left: auto;
     margin-right: auto;
-    
+}
+
+.filter{
+    width: 200px;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .filter button{
+    border: none;
+    border-radius: 18px;
+    border-color: #004e74;
+    
+    font-size: 110%;
+    
+    background-color: #004e74;
+    color: white;
+    
     width: 100%;
+    height: 150%;
+    
+    padding: 5%;
 }
 
 #options
 {
+    
     display: none;
-    width: 100%;
+    
+    width: 77%;
+    height: 200%;
+    
+    background-color: #195f81;
+    
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border: none;
+    
+    padding: 5px;
+    
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+select#options
+{
+    color: white;
+}
+
+select#options:focus-within
+{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+select#options option
+{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+select#options:hover
+{
+    border-bottom-left-radius: none;
+    border-bottom-right-radius: none;
+}
+
+
+

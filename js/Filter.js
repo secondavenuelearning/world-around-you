@@ -44,6 +44,9 @@ function FiltersBar()
     finalResults = database;
     console.log(finalResults);
     
+    //add child
+    $('.filterBar').append("<div class=\"filters\"></div>");
+    
 //---SIGN LANGUAGE FILTER
     //build html for filter
     var signID = "SignLanguageFilter";
@@ -51,7 +54,7 @@ function FiltersBar()
     var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign"); //build out html for signs filter
     
     //update pahe html to ahve this filter
-    $('.filterBar').append(signsHTML); //apend filter bar to have signs html
+    $('.filters').append(signsHTML); //apend filter bar to have signs html
     
     //add click events for filter functionality
     $('#' + signID + ' > button').on('click', function() {ToggleOptionsVisible(signID)}); //toggle showing filter options
@@ -64,7 +67,7 @@ function FiltersBar()
     var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written"); //build out html for signs filter
     
     //update page html to have this filter
-    $('.filterBar').append(writtenHTML); //apend filter bar to have signs html
+    $('.filters').append(writtenHTML); //apend filter bar to have signs html
     
     //add click events for filter functionality
     $('#' + writtenID + ' > button').on('click', function() {ToggleOptionsVisible(writtenID)});
@@ -75,7 +78,7 @@ function FiltersBar()
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
     var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields);
     
-    $('.filterBar').append(sortByHTML);
+    $('.filters').append(sortByHTML);
     
     $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
     $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
