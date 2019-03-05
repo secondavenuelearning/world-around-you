@@ -10,13 +10,12 @@ header, footer, main{
 	position: fixed;
 	width: 100%;
 }
-header, footer{
-	padding: 15px;
-}
 header{
 	height: 75px;
-	background-color: #F00000;
+	background-color: #FFFFFF;
 	top: 0px;
+	padding: 15px;
+	border-bottom: 3px solid #004E74;
 }
 main{
 	height: calc(100% - 100px);
@@ -28,4 +27,15 @@ footer{
 	height: 25px;
 	background-color: #F00000;
 	bottom: 0px;
+	padding: 5px 15px;
+}
+
+header #language-selector{
+	position: absolute;
+	top: 0px;
+	right: 15px;
+}
+
+*[lang]:not(html){
+	display: none;
 }
