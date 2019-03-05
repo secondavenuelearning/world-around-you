@@ -39,7 +39,7 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 }
 
 function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset) {
-      console.log("called on right");
+      
         for (var x = 0; x < pictures.length; x++) {
             if(x >= startIndex && x <=endIndex){
                 panels[x].style.display = "inline-block";
@@ -50,14 +50,12 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
             var amountToTranslate = -100 * offset;
             
             if(direction == "right"){
-                console.log("right called");
-                console.log(amountToTranslate);
+              
                 panels[x].style.transform = "translateX(" + amountToTranslate + "%)";
                 panels[x].style.transition = "all 2s";
             }
             else if(direction == "left"){
-                console.log("Left called");
-                console.log(amountToTranslate);
+       
                     panels[x].style.transform = "translateX(" + amountToTranslate.toString() + "%)";
                 panels[x].style.transition = "all 2s";
                     }
@@ -117,7 +115,7 @@ function Carousel(id, imageList, showing) {
     parent.parentElement.style.paddingLeft = "10%";
     parent.parentElement.style.paddingRight = "10%";
     parent.parentElement.style.textAlign = "center";
-    console.log(parent);
+    
     holder = parent.querySelector("div");
 
 
