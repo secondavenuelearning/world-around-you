@@ -10,31 +10,33 @@ var index = 0;
 
 var numberToShow = 0;
 
-function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder) {
-    for (var x = 0; x < pictures.length; x++) {
-        var imageTagRepeat = document.createElement("IMG");
-        imageTagRepeat.setAttribute("id", "test");
-        imageTagRepeat.setAttribute("src", pictures[x]);
-        imageTagRepeat.style.height = "152px";
+function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
+    if (justImage == true) {
+        for (var x = 0; x < pictures.length; x++) {
+            var imageTagRepeat = document.createElement("IMG");
+            imageTagRepeat.setAttribute("id", "test");
+            imageTagRepeat.setAttribute("src", pictures[x]);
+            imageTagRepeat.style.height = "152px";
 
 
-        var percentage = 100 / showCount;
-        var leftStart = (180 * (percentage / 100)) * x;
-        imageTagRepeat.style.left = leftStart.toString() + "px";
-        imageTagRepeat.style.width = percentage.toString() + "%";
+            var percentage = 100 / showCount;
+            var leftStart = (180 * (percentage / 100)) * x;
+            imageTagRepeat.style.left = leftStart.toString() + "px";
+            imageTagRepeat.style.width = percentage.toString() + "%";
 
-        if (showCount == 1) {
-           
-            imageTagRepeat.style.paddingLeft = "25%";
-            imageTagRepeat.style.paddingRight = "25%";
-            imageTagRepeat.style.backgroundColor = "#0098ba";
-        } else {
-            imageTagRepeat.style.backgroundColor = "gray";
+            if (showCount == 1) {
+
+                imageTagRepeat.style.paddingLeft = "25%";
+                imageTagRepeat.style.paddingRight = "25%";
+                imageTagRepeat.style.backgroundColor = "#0098ba";
+            } else {
+                imageTagRepeat.style.backgroundColor = "gray";
+            }
+
+            holder.appendChild(imageTagRepeat);
+
+            panels[x] = imageTagRepeat;
         }
-
-        holder.appendChild(imageTagRepeat);
-
-        panels[x] = imageTagRepeat;
     }
 
 }
@@ -70,7 +72,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 }
 
 
-function Carousel(id, imageList, showing) {
+function Carousel(id, imageList, showing, justimage) {
     // this.id = index++;
     //var templateRawText = $("#template").html();
     var panelCount;
@@ -112,7 +114,7 @@ function Carousel(id, imageList, showing) {
     parent.parentElement.style.backgroundColor = "#0098ba";
     parent.parentElement.style.paddingLeft = "10%";
     parent.parentElement.style.paddingRight = "10%";
-   // parent.parentElement.style.textAlign = "center";
+    // parent.parentElement.style.textAlign = "center";
 
     holder = parent.querySelector("div");
 
@@ -152,7 +154,7 @@ function Carousel(id, imageList, showing) {
 
     };
 
-    createPanelList(panels, showCount, startIndex, endIndex, pictures, holder);
+    createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
 
 }
