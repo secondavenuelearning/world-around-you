@@ -27,9 +27,6 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 
 
             if (showCount == 1) {
-
-                imageTagRepeat.style.paddingLeft = "10px";
-                imageTagRepeat.style.paddingRight = "10px";
                 imageTagRepeat.style.backgroundColor = "#0098ba";
             } else {
                 imageTagRepeat.style.backgroundColor = "gray";
@@ -129,10 +126,15 @@ function Carousel(id, imageList, showing, justimage) {
         if (endIndex >= imageList.length - 1) {
 
         } else {
+            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+            
             offset += showing;
             startIndex = startIndex + showing;
             endIndex = endIndex + showing;
             drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset);
+            
+            //update indicator
+            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
 
@@ -146,9 +148,13 @@ function Carousel(id, imageList, showing, justimage) {
         if (startIndex <= 0) {
 
         } else {
+            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+            
             offset -= showing;
             startIndex = startIndex - showing;
             endIndex = endIndex - showing;
+            
+            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
         drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset);
@@ -158,7 +164,32 @@ function Carousel(id, imageList, showing, justimage) {
 
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
+    
+    var itemsID = "carousel-" + tempIndex.toString();
+    BuildIndexIndicator(true, holder, panelCount / showing);
+    $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
 
+}
+
+/*Builds indicator for where in carousel pages user is
+(isOverlay: bool for is this indicator acts as an overlay ontop of carousel items, or exists in the space round items)
+(carouselItemID: html id of the holder for this carousels items)
+(pages: number of pages - should be total items / number showing)
+*/
+function BuildIndexIndicator(isOverlay, carouselItemID, pages)
+{
+    //build html
+    var indicatorHTML = "<div class = \"pageIndicator\">";
+    indicatorHTML += "<div class = \"dots\"";
+    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">";
+    for(var i = 0; i < pages; i++)
+    {
+        indicatorHTML += "<div class = \"dot\"> </div>";
+    }
+    indicatorHTML += "</div></div>";
+    
+    //add built html to page
+    $(carouselItemID).append(indicatorHTML);
 }
 
 export default Carousel
