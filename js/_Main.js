@@ -42,5 +42,5 @@ for (var i = 0; i < 9; i++) {
     LanguageSelector.appendTo($('header')[0]);
 });
 
-import FiltersBar from 'js/Filter.js';
+import FiltersBar from 'js/client/Filter.js';
 FiltersBar();
