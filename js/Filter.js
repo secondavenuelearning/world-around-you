@@ -377,3 +377,18 @@ function Sort(input, filterKey)
     //give back sorted input
     return input;
 }
+
+/* ----------------------- Array extra functions ----------------------- */
+//Adds includes method for browsers that dont support
+// thanks: https://stackoverflow.com/questions/31221341/ie-does-not-support-includes-method
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, "includes", {
+    enumerable: false,
+    value: function(obj) {
+        var newArr = this.filter(function(el) {
+          return el == obj;
+        });
+        return newArr.length > 0;
+      }
+  });
+}

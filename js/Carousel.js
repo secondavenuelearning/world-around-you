@@ -10,13 +10,14 @@ var index = 0;
 
 var numberToShow = 0;
 
+
 function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
     if (justImage == true) {
         for (var x = 0; x < pictures.length; x++) {
             var imageTagRepeat = document.createElement("IMG");
             imageTagRepeat.setAttribute("id", "test");
             imageTagRepeat.setAttribute("src", pictures[x]);
-            imageTagRepeat.style.height = "152px";
+           
 
 
             var percentage = 100 / showCount;
@@ -24,10 +25,11 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
             imageTagRepeat.style.left = leftStart.toString() + "px";
             imageTagRepeat.style.width = percentage.toString() + "%";
 
+
             if (showCount == 1) {
 
-                imageTagRepeat.style.paddingLeft = "25%";
-                imageTagRepeat.style.paddingRight = "25%";
+                imageTagRepeat.style.paddingLeft = "10px";
+                imageTagRepeat.style.paddingRight = "10px";
                 imageTagRepeat.style.backgroundColor = "#0098ba";
             } else {
                 imageTagRepeat.style.backgroundColor = "gray";
