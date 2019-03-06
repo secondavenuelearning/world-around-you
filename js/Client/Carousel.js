@@ -13,11 +13,12 @@ var numberToShow = 0;
 
 function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
     if (justImage == true) {
+        console.log(pictures);
         for (var x = 0; x < pictures.length; x++) {
             var imageTagRepeat = document.createElement("IMG");
             imageTagRepeat.setAttribute("id", "test");
-            imageTagRepeat.setAttribute("src", pictures[x]);
-           
+            imageTagRepeat.setAttribute("src", pictures[x].story.coverImage);
+
 
 
             var percentage = 100 / showCount;
@@ -39,6 +40,60 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 
             panels[x] = imageTagRepeat;
         }
+    } 
+    else {
+        for (var x = 0; x < pictures.length; x++) {
+            var imageTagRepeat = document.createElement("div");
+           // imageTagRepeat.setAttribute("id", "test");
+            //imageTagRepeat.setAttribute("src", pictures[x].story.coverImage);
+
+
+
+            /*  var percentage = 100 / showCount;
+            var leftStart = (180 * (percentage / 100)) * x;
+            $(pictures[x]).attr("left", '"' + leftStart.toString() + '"px'); // = leftStart.toString() + "px";
+            //imageTagRepeat.$element[0].width(percentage);
+           
+
+            //= percentage.toString() + "%";
+
+
+            if (showCount == 1) {
+                $(pictures[x]).attr("paddingLeft", "10px");
+                $(pictures[x]).attr("paddingRight", "10px");
+                $(pictures[x]).attr("backgroundColor", "#0098ba");
+                /*
+                imageTagRepeat.style.paddingLeft = "10px";
+                imageTagRepeat.style.paddingRight = "10px";
+                imageTagRepeat.style.backgroundColor = "#0098ba";
+               
+            } else {
+
+                $(pictures[x]).attr("backgroundColor", "gray");
+            }
+ */
+
+            var percentage = 100 / showCount;
+            var leftStart = (180 * (percentage / 100)) * x;
+            imageTagRepeat.style.left = leftStart.toString() + "px";
+            imageTagRepeat.style.width = percentage.toString() + "%";
+            $(pictures[x]).attr("width", "100%");
+
+            if (showCount == 1) {
+                imageTagRepeat.style.paddingLeft = "10px";
+                imageTagRepeat.style.paddingRight = "10px";
+                imageTagRepeat.style.height = "100%";
+
+                imageTagRepeat.style.backgroundColor = "#0098ba";
+            } else {
+                imageTagRepeat.style.backgroundColor = "gray";
+            }
+            console.log($(imageTagRepeat));
+            $(imageTagRepeat).append($(pictures[x].$element));
+       
+            holder.appendChild(imageTagRepeat);
+            panels[x] = imageTagRepeat;
+        }
     }
 
 }
@@ -47,18 +102,22 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 
     for (var x = 0; x < panels.length; x++) {
         if (x >= startIndex && x <= endIndex) {
+            //            $(panels[x]).attr("display", "inline-block");
             panels[x].style.display = "inline-block";
         } else {
             panels[x].style.display = "inline-block";
+            //            $(panels[x]).attr("display", "inline-block");
         }
         var amountToTranslate = -100 * offset;
 
         if (direction == "right") {
-
+            //           // $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
+            //            $(panels[x]).attr("transition", "all 2s");
             panels[x].style.transform = "translateX(" + amountToTranslate + "%)";
             panels[x].style.transition = "all 2s";
         } else if (direction == "left") {
-
+            //            $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
+            //            $(panels[x]).attr("transition", "all 2s");
             panels[x].style.transform = "translateX(" + amountToTranslate.toString() + "%)";
             panels[x].style.transition = "all 2s";
         } else {

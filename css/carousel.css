@@ -20,7 +20,7 @@ div.carousel button {
     overflow: hidden;
     left: 15%;
     right: 15%;
-  
+    height: 100%;
     white-space: nowrap;
     display: inline-block;
     vertical-align: middle;
@@ -31,10 +31,7 @@ div.carousel button {
     display: inline-block;
 }
 
-#test {
-    display: block;
-    
-}
+
 
 .carousel .carouselNav {
     height: 50%;
@@ -43,4 +40,22 @@ div.carousel button {
     border: 0;
     
 
+}
+.imageHolder .story-preview{
+    width: 100%;
+    
+    background-color: #0098ba;
+}
+.imageHolder .story-preview .cover-image-container{
+    width: 100%;
+    background-color: #0098ba;
+}
+.hovereable{
+    display: inline-block;
+ 
+    height: 100%;
+}
+.imageHolder .meta-data-container{
+     white-space: normal;
+  
 }
