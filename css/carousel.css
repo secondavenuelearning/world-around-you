@@ -10,7 +10,7 @@ div.carousel button {
     
     background-color: #0098ba;
     border-color: blue;
-    width: 12%;
+   
     border-width: 0;
 }
 
@@ -37,8 +37,8 @@ div.carousel button {
 }
 
 .carousel .carouselNav {
-    height: 50%;
-    width: 50%;
+    height: 30%;
+    width: 30%;
     border-style: none;
     border: 0;
     
