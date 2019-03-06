@@ -1,6 +1,8 @@
 mdb = require('mariadb');
 moment = require('moment');
 
+const Settings = require('./Settings');
+
 function UsertypeDB() {
 }
 
@@ -10,13 +12,13 @@ UsertypeDB.db_add_usertype = function(name) {
     tim=tim/1000;
     //console.log("[time]["+tim+"]");
 
-    const pool = mdb.createPool({host: 'localhost', user:'root', password:'7l8n6OF#',connectionLimit: 1});
+    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO way.usertype (name,datecreated) VALUES ('"+name+"',"+tim+")").then((res) => {
+	    conn.query("INSERT INTO usertype (name,datecreated) VALUES ('"+name+"',"+tim+")").then((res) => {
 		//console.log("[db_add_usertype][success]");
 		//console.log(res);
 		conn.end();
@@ -46,7 +48,7 @@ UsertypeDB.db_get_usertype = function(name) {
     return new Promise(function(resolve,reject) {
 
         pool.getConnection().then(conn => {
-            conn.query("SELECT id FROM way.usertype WHERE(name='"+name+"')").then(res => {
+            conn.query("SELECT id FROM usertype WHERE(name='"+name+"')").then(res => {
                 //console.log("[db_get_usertype][success]");
                 //console.log(res);
                 conn.end();

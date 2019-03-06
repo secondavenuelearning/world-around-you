@@ -1,6 +1,8 @@
 mdb = require('mariadb');
 moment = require('moment');
 
+const Settings = require('./Settings');
+
 function UserDB() {
 }
 
@@ -10,13 +12,13 @@ UserDB.db_add_user = function(email,password,firstname,lastname,usertypeId) {
     tim=tim/1000;
     //console.log("[time]["+tim+"]");
 
-    const pool = mdb.createPool({host: 'localhost', user:'root', password:'7l8n6OF#',connectionLimit: 1});
+    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO way.user (email,password,firstname,lastname,usertypeId,datecreated) VALUES ('"+email+"','"+password+"','"+firstname+"','"+lastname+"',"+usertypeId+","+tim+")").then((res) => {
+	    conn.query("INSERT INTO user (email,password,firstname,lastname,usertypeId,datecreated) VALUES ('"+email+"','"+password+"','"+firstname+"','"+lastname+"',"+usertypeId+","+tim+")").then((res) => {
 		//console.log("[db_add_user][success]");
 		//console.log(res);
 		conn.end();
@@ -47,7 +49,7 @@ UserDB.db_get_user = function(email,password) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("SELECT * FROM way.user WHERE(email='"+email+"' AND password='"+password+"')").then(res => {
+	    conn.query("SELECT * FROM user WHERE(email='"+email+"' AND password='"+password+"')").then(res => {
 		//console.log("[db_get_user][success]");
 		//console.log(res);
 		conn.end();
@@ -80,7 +82,7 @@ UserDB.db_get_user2 = function(email) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("SELECT * FROM way.user WHERE(email='"+email+"')").then(res => {
+	    conn.query("SELECT * FROM user WHERE(email='"+email+"')").then(res => {
 		//console.log("[db_get_user][success]");
 		//console.log(res);
 		conn.end();

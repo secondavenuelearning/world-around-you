@@ -1,37 +1,73 @@
+const fs = require('fs');
+const express = require('express');
+const bodyParser = require('body-parser');
+const decode = require('urldecode');
+const encode = require('urlencode');
+const _ = require('underscore');
 
-express = require('express');
-bodyParser = require('body-parser');
-decode = require('urldecode');
-encode = require('urlencode');
+let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
+let PageTemplate = _.template(PageHTML);
 
-GenreDB = require('/root/way_db_test/GenreDB.js');
-DescriptionDB = require('/root/way_db_test/DescriptionDB.js');
-LikedDB = require('/root/way_db_test/LikedDB.js');
-SignlanguageDB = require('/root/way_db_test/SignlanguageDB.js');
-StoryDB = require('/root/way_db_test/StoryDB.js');
-Story_to_genreDB = require('/root/way_db_test/Story_to_genreDB.js');
-Story_to_signlanguageDB = require('/root/way_db_test/Story_to_signlanguageDB.js');
-Story_to_tagDB = require('/root/way_db_test/Story_to_tagDB.js');
-Story_to_writtenlanguageDB = require('/root/way_db_test/Story_to_writtenlanguageDB.js');
-TagDB = require('/root/way_db_test/TagDB.js');
-TitleDB = require('/root/way_db_test/TitleDB.js');
-UserDB = require('/root/way_db_test/UserDB.js');
-UsertypeDB = require('/root/way_db_test/UsertypeDB.js');
-ViewDB = require('/root/way_db_test/ViewDB.js');
-WrittenlanguageDB = require('/root/way_db_test/WrittenlanguageDB.js');
+
+const GenreDB = require('./js/Server/GenreDB.js');
+const DescriptionDB = require('./js/Server/DescriptionDB.js');
+const LikedDB = require('./js/Server/LikedDB.js');
+const SignlanguageDB = require('./js/Server/SignlanguageDB.js');
+const StoryDB = require('./js/Server/StoryDB.js');
+const Story_to_genreDB = require('./js/Server/Story_to_genreDB.js');
+const Story_to_signlanguageDB = require('./js/Server/Story_to_signlanguageDB.js');
+const Story_to_tagDB = require('./js/Server/Story_to_tagDB.js');
+const Story_to_writtenlanguageDB = require('./js/Server/Story_to_writtenlanguageDB.js');
+const TagDB = require('./js/Server/TagDB.js');
+const TitleDB = require('./js/Server/TitleDB.js');
+const UserDB = require('./js/Server/UserDB.js');
+const UsertypeDB = require('./js/Server/UsertypeDB.js');
+const ViewDB = require('./js/Server/ViewDB.js');
+const WrittenlanguageDB = require('./js/Server/WrittenlanguageDB.js');
 
 app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 port = 3000;
+
+app.use(express.static(__dirname));
+
+app.get('/', function(req, res){
+	res.redirect('/Stories');
+});
+app.get('/Stories', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Stories'
+	}));
+});
+app.get('/Games', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Games'
+	}));
+});
+app.get('/Login', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Login'
+	}));
+});
+app.get('/Search', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Search'
+	}));
+});
+app.get('/Edit', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Edit'
+	}));
+});
 
 // ***************
 // * GENRE - ADD *
 // ***************
 app.post('/add_genre',function(req,res) {
 
-        //res.send(req.body);
+        // res.send(req.body);
 
-        //show_body_stuff(req.body);
+        // show_body_stuff(req.body);
 
 	genrename=get_body_stuff(req.body,"genrename");
 	if((genrename==null)||(genrename=="")) {
