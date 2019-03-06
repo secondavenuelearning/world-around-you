@@ -47,5 +47,5 @@ $(document).ready(function () {
     LanguageSelector.appendTo($('header')[0]);
 });
 
-import FiltersBar from 'js/Filter.js';
+import FiltersBar from 'js/client/Filter.js';
 FiltersBar();
