@@ -179,7 +179,15 @@ function Carousel(id, imageList, showing, justimage) {
 function BuildIndexIndicator(isOverlay, carouselItemID, pages)
 {
     //build html
-    var indicatorHTML = "<div class = \"pageIndicator\">";
+    var indicatorHTML = "<div class = \"pageIndicator";
+    if(isOverlay) 
+    {
+        indicatorHTML += " overlay\">";
+    }
+    else
+    {
+        indicatorHTML += "\">";
+    }
     indicatorHTML += "<div class = \"dots\"";
     indicatorHTML += "style=\"width: " + (pages*30) + "px;\">";
     for(var i = 0; i < pages; i++)
