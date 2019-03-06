@@ -15,9 +15,7 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
         var imageTagRepeat = document.createElement("IMG");
         imageTagRepeat.setAttribute("id", "test");
         imageTagRepeat.setAttribute("src", pictures[x]);
-        imageTagRepeat.style.height = "152px";
-
-
+        
         var percentage = 100 / showCount;
         var leftStart = (180 * (percentage / 100)) * x;
         imageTagRepeat.style.left = leftStart.toString() + "px";
@@ -25,8 +23,8 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 
         if (showCount == 1) {
            
-            imageTagRepeat.style.paddingLeft = "25%";
-            imageTagRepeat.style.paddingRight = "25%";
+            imageTagRepeat.style.paddingLeft = "10px";
+            imageTagRepeat.style.paddingRight = "10px";
             imageTagRepeat.style.backgroundColor = "#0098ba";
         } else {
             imageTagRepeat.style.backgroundColor = "gray";
