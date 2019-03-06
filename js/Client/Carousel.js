@@ -82,10 +82,11 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
             if (showCount == 1) {
                 imageTagRepeat.style.paddingLeft = "10px";
                 imageTagRepeat.style.paddingRight = "10px";
-                imageTagRepeat.style.height = "100%";
-
+    
+                imageTagRepeat.style.height = "600px";
                 imageTagRepeat.style.backgroundColor = "#0098ba";
             } else {
+                imageTagRepeat.style.height = "252px";
                 imageTagRepeat.style.backgroundColor = "gray";
             }
             console.log($(imageTagRepeat));
@@ -173,8 +174,8 @@ function Carousel(id, imageList, showing, justimage) {
     parent = document.getElementById("carousel-" + tempIndex.toString());
 
     parent.parentElement.style.backgroundColor = "#0098ba";
-    parent.parentElement.style.paddingLeft = "10%";
-    parent.parentElement.style.paddingRight = "10%";
+  //  parent.parentElement.style.paddingLeft = "10%";
+    //parent.parentElement.style.paddingRight = "10%";
     // parent.parentElement.style.textAlign = "center";
 
     holder = parent.querySelector("div");
