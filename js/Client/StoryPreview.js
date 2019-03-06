@@ -1,6 +1,6 @@
 import 'style/StoryPreview.css!';
 import _ from 'underscore';
-import html from 'html/StoryPreview.html!text';
+import html from 'html/Client/StoryPreview.html!text';
 
 var index = 0,
 	template = _.template(html);

@@ -1,8 +1,8 @@
 
 import 'style/Main.css!';
-import LanguageSelector from 'js/LanguageSelector';
+import LanguageSelector from 'js/Client/LanguageSelector';
 import Carousel from 'js/Carousel';
-import StoryPreview from 'js/StoryPreview';
+import StoryPreview from 'js/Client/StoryPreview';
 
 
 $(document).ready(function(){

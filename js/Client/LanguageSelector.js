@@ -1,7 +1,7 @@
 import 'style/LanguageSelector.css!';
 import _ from 'underscore';
-import languages from 'js/LanguageSelector_Languages';
-import html from 'html/LanguageSelector.html!text';
+import languages from 'js/Client/LanguageSelector_Languages';
+import html from 'html/Client/LanguageSelector.html!text';
 
 
 languages.sort(function(a, b) {
