@@ -37,10 +37,23 @@ div.carousel button {
 }
 
 .carousel .carouselNav {
-    height: 30%;
-    width: 30%;
-    border-style: none;
-    border: 0;
+    height: 40%;
+    width: 40%;
     
+    padding: 5px;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: #0098ba;
+    background-color: #0098ba;
 
+}
+
+.carouselNav:hover
+{
+    transition: background-color .6s, border-color .6s, width .3s, height .3s;
+    border-color: #004e74;
+    background-color: #004e74;
+    
+    width: 45%;
+    height: 45%;
 }
