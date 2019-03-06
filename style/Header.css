@@ -1,0 +1,74 @@
+nav{
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	padding: 3px 15px;
+}
+nav > div{
+	position: relative;
+	float: right;
+	margin-left: 10px;
+	height: 35px;
+}
+nav > div:not(#nav-search):not(.active):hover{
+	top: 2px;
+}
+nav .nav-icon{
+	display: block;
+	height: 35px;
+	width: 35px;
+	border-radius: 50%;
+	background-color: #0098BA;
+}
+#user-links{
+	position: absolute;
+	width: 100px;
+	background-color: #0098BA;
+	left: 0px;
+    border-radius: 0px 15px 15px;
+    padding: 5px;
+    display: none;
+}
+#user-links div{
+	padding: 2px 5px;
+}
+#user-links a{
+	color: #FFFFFF;
+}
+#nav-user{
+	margin-left: 25px;
+}
+#nav-user:hover .nav-icon, #nav-user:focus .nav-icon{
+	border-radius: 50% 50% 0px 0px;
+}
+#nav-user:hover #user-links, #nav-user:focus #user-links{
+	display: block;
+}
+#nav-search{
+	margin-left: 25px;
+}
+#nav-search form{
+	height: 100%;
+	width: 250px;
+}
+#nav-search #serach, #nav-search #submit{
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+	height: 30px;
+	width: 35px;
+}
+#nav-search #serach{
+	width: 250px;
+	border: 2px solid #0098BA;
+	border-radius: 35px;
+	padding: 5px 7px;
+	padding-right: 40px;
+}
+#nav-search #submit{
+	position: absolute;
+	background-color: #0098BA;
+	border: none;
+	color: #FFFFFF;
+	border-radius: 0px 35px 35px 0px;
+}
