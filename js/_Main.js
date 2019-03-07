@@ -30,8 +30,8 @@ $(document).ready(function () {
         
     }
     console.log(storyOne);
-   new Carousel("#templateResult", storyOne, 1, false, true);
-    new Carousel("#templateResultTwo", storyTwo, 3, false, false);
+   new Carousel("#templateResult", storyOne, 1, false, true, "One");
+    new Carousel("#templateResultTwo", storyTwo, 3, false, false, "Two");
 
     for (var i = 0; i < 9; i++) {
         let sp = new StoryPreview({

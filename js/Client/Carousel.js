@@ -129,7 +129,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 }
 
 
-function Carousel(id, imageList, showing, justimage, isOverlay) {
+function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     // this.id = index++;
     //var templateRawText = $("#template").html();
     var panelCount;
@@ -219,7 +219,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay) {
 
 
     };
-    BuildTitle(isOverlay, holder, "Test");
+    BuildTitle(isOverlay, holder, titleText);
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
     
