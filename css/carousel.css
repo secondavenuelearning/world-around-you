@@ -73,6 +73,7 @@ carousel #multi
     height: 30px;
     
     opacity: .7;
+    transition: opacity .5s;
     
     position: relative;
     top: -49px;
@@ -92,6 +93,7 @@ carousel #multi
     z-index: 1;
     width: calc(100% - 50px);
     opacity: .7;
+    transition: opacity .5s;
     color: White;
     top: 55px;
     left: 25px;

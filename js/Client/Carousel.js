@@ -219,6 +219,19 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     var itemsID = "carousel-" + tempIndex.toString();
     BuildIndexIndicator(isOverlay, holder, panelCount / showing);
     $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
+    
+    //add special functionality for overlays
+    if(isOverlay)
+    {
+        //on hover hide title and index indicator
+        $(holder).hover(function()
+        {
+            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '0');
+        }, function()
+        {
+            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '.7');
+        });
+    }
 
 }
 
