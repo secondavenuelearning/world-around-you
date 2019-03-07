@@ -87,6 +87,27 @@ carousel #multi
     
     position: relative;
 }
+.pageTitle.overlay{
+      background-color: #004e74;
+    z-index: 1;
+    width: 100%;
+    height: 30px;
+    font-size: 30px;
+    opacity: .7;
+    color: White;
+    top: 20px;
+   
+    
+}
+.pageTitle{
+     background-color: #004e74;
+    width: 100%;
+    height: 100%;
+    font-size: 24px;
+    color: White;
+    position: relative;
+    
+}
 
 .outerIndicator
 {
@@ -97,7 +118,7 @@ carousel #multi
     border-style: solid;
     border-color: #004e74;
     background-color: #004e74;
-    
+  
     margin: 15px;
 }
 
