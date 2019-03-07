@@ -1,5 +1,5 @@
 import 'style/Stories.css!';
-import Carousel from 'js/Client/Carousel';
+import Carousel from 'js/Client/Carousel.js';
 import FiltersBar from 'js/Client/Filter.js';
 import StoryPreview from 'js/Client/StoryPreview';
 
@@ -21,7 +21,7 @@ $(document).ready(function () {
         storyOne.push(sp);
         
     }
-    new Carousel("#new-stories", storyOne, 1, false);
+    new Carousel("#new-stories", storyOne, 1, false,  false, "New Stories");
 
 
     FiltersBar('filter-bar');
