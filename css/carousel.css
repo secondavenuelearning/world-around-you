@@ -69,13 +69,14 @@ carousel #multi
 {
     background-color: #004e74;
     z-index: 1;
-    width: 100%;
+    width: calc(100% - 47px);
     height: 30px;
     
     opacity: .7;
     
     position: relative;
-    top: -34px; 
+    top: -48px;
+    left: 24px;
 }
 
 .pageIndicator

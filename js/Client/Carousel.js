@@ -119,17 +119,12 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
         } else {
 
         }
-
-
-
-
-
     }
 
 }
 
 
-function Carousel(id, imageList, showing, justimage) {
+function Carousel(id, imageList, showing, justimage, isOverlay) {
     // this.id = index++;
     //var templateRawText = $("#template").html();
     var panelCount;
@@ -224,7 +219,7 @@ function Carousel(id, imageList, showing, justimage) {
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
     
     var itemsID = "carousel-" + tempIndex.toString();
-    BuildIndexIndicator(false, holder, panelCount / showing);
+    BuildIndexIndicator(isOverlay, holder, panelCount / showing);
     $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
 
 }
@@ -249,11 +244,11 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
         //give holder tag for a makeover if its not an aoverlay
         $(carouselItemID).addClass("outerIndicator");
     }
-    indicatorHTML += "<div class = \"dots\"";
-    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">";
+    indicatorHTML += "<div class = \"dots\""; // dots bar
+    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">"; //size of each dot, multipled by dots
     for(var i = 0; i < pages; i++)
     {
-        indicatorHTML += "<div class = \"dot\"> </div>";
+        indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot
     }
     indicatorHTML += "</div></div>";
     
