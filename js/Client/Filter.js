@@ -144,9 +144,9 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarge
 
 /*
 Returns HTML as string for a filter field
->filterID: tag to be used for divs id
->filterName: text on the filter dropdown button
->filterOptions: array of strings that define the values and text for each select option
+(filterID: tag to be used for divs id)
+(filterName: text on the filter dropdown button)
+(filterOptions: array of strings that define the values and text for each select option)
 */
 function BuildSelectFilter(filterID, filterName, filterOptions, icon)
 {
@@ -193,6 +193,11 @@ function BuildSelectFilter(filterID, filterName, filterOptions, icon)
 }
 
 /* ----------------------- Options ----------------------- */
+
+/*
+Toggles filters options to be visible(display block, or none) based on parent filter
+(target: options parent object)
+*/
 function ToggleOptionsVisible(target)
 {
     //get proper options object
@@ -213,6 +218,11 @@ function ToggleOptionsVisible(target)
     
 }
 
+/*
+Gets unique values from database source, used for filling filter options
+(type: js object field name to select data from)
+(sourcedb: array of objects to look through)
+*/
 function GetValues(type, sourcedb)
 {
     //instanitate variable to return and initla setup junk
@@ -256,7 +266,12 @@ function GetValues(type, sourcedb)
 }
 
 /* ----------------------- Filter Functionality ----------------------- */
-//Changes what vidoe results user gets based on sign
+
+/*
+Changes what video results user gets based on sign
+(filterData: property of filter in filters object to update)
+(target: html checkbox being clicked)
+*/
 function UpdateMultiSelectFilter(filterData, target)
 {
     //update filter data obj
@@ -280,6 +295,10 @@ function UpdateMultiSelectFilter(filterData, target)
     Filter(database);
 }
 
+/*
+Culls results that dont match filter perameters, if no filter then all results are returned. 
+(input: data source to be filtered)
+*/
 function Filter(input)
 {
     var results = [];
@@ -347,6 +366,11 @@ function Filter(input)
 
 /* ----------------------- Sort Functionality ----------------------- */
 
+/*
+Updates sorting filters in filter object to be newly selected field
+(filterKey: parameter name in filters to update)
+(target: select dropdown to get new sorting field)
+*/
 function UpdateSort(filterKey, target)
 {
     //change current sorting field
@@ -357,6 +381,11 @@ function UpdateSort(filterKey, target)
     console.log(finalResults);
 }
 
+/*
+Organizes results in alphabetical/date order by sorting filter (like by title, author)
+(input: data source to sort)
+(filterKey: parameter name of sorting filter in filters to sort by)
+*/
 function Sort(input, filterKey)
 { 
     //sort alphabetically
