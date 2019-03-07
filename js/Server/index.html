@@ -1,0 +1,155 @@
+
+<form action="http://192.168.1.22:3000/add_genre" method="post">
+<span>genre.genrename</span>
+<input type="text" id="genrename" name="genrename" value="horror"/>
+<span>genre.writtenlanguageId</span>
+<input type="text" id="writtenlanguageId" name="writtenlanguageId" value="17"/>
+<input type="submit" value="ADD GENRE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_description" method="post">
+<span>description.descriptionname</span>
+<input type="text" id="descriptionname" name="descriptionname" value="action"/>
+<span>description.writtenlanguageId</span>
+<input type="text" id="writtenlanguageId" name="writtenlanguageId" value="5"/>
+<span>description.storyId</span>
+<input type="text" id="storyId" name="storyId" value="39"/>
+<input type="submit" value="ADD DESCRIPTION"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_liked" method="post">
+<span>liked.storyId</span>
+<input type="text" id="storyId" name="storyId" value="62"/>
+<input type="submit" value="ADD LIKED"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_signlanguage" method="post">
+<span>signlangauge.name</span>
+<input type="text" id="name1" name="name1" value="french"/>
+<input type="submit" value="ADD SIGN LANGUAGE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_story" method="post">
+<span>story.author</span>
+<input type="text" id="author" name="author" value="Rodger Kipling"/>
+<span>story.descriptionId</span>
+<input type="text" id="descriptionId" name="descriptionId" value="15"/>
+<span>story.coverimage</span>
+<input type="text" id="coverimage" name="coverimage" value="coverimage.img"/>
+<span>story.visible</span>
+<input type="text" id="visible" name="visible" value="1"/>
+<span>story.data</span>
+<input type="text" id="data" name="data" value="{json:yes}"/>
+<input type="submit" value="ADD STORY"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_story_to_genre" method="post">
+<span>story_to_genre.storyId</span>
+<input type="text" id="storyId" name="storyId" value="75"/>
+<span>story_to_genre.genreId</span>
+<input type="text" id="genreId" name="genreId" value="32"/>
+<input type="submit" value="ADD STORY TO GENRE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_story_to_signlanguage" method="post">
+<span>story_to_signlanguage.storyId</span>
+<input type="text" id="storyId" name="storyId" value="71"/>
+<span>story_to_signlanguage.signlanguageId</span>
+<input type="text" id="signlanguageId" name="signlanguageId" value="37"/>
+<input type="submit" value="ADD STORY TO SIGN LANGUAGE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_story_to_tag" method="post">
+<span>story_to_tag.storyId</span>
+<input type="text" id="storyId" name="storyId" value="43"/>
+<span>story_to_tag.tagId</span>
+<input type="text" id="tagId" name="tagId" value="89"/>
+<input type="submit" value="ADD STORY TO TAG"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_story_to_writtenlanguage" method="post">
+<span>story_to_writtenlanguage.storyId</span>
+<input type="text" id="storyId" name="storyId" value="22"/>
+<span>story_to_writtenlanguage.writtenlanguageId</span>
+<input type="text" id="writtenlanguageId" name="writtenlanguageId" value="5"/>
+<input type="submit" value="ADD STORY TO WRITTEN LANGUAGE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_tag" method="post">
+<span>tag.tagname</span>
+<input type="text" id="tagname" name="tagname" value="tagalog"/>
+<span>tag.writtenlanguageId</span>
+<input type="text" id="writtenlanguageId" name="writtenlanguageId" value="66"/>
+<input type="submit" value="ADD TAG"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_title" method="post">
+<span>title.titlename</span>
+<input type="text" id="titlename" name="titlename" value="Jonah and the whale"/>
+<span>title.writtenlanguageId</span>
+<input type="text" id="writtenlanguageId" name="writtenlanguageId" value="666"/>
+<span>title.storyId</span>
+<input type="text" id="storyId" name="storyId" value="777"/>
+<input type="submit" value="ADD TITLE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_user" method="post">
+<span>user.email</span>
+<input type="text" id="email" name="email" value="first_one@fir_stone.edu"/>
+<span>user.password</span>
+<input type="text" id="password" name="password" value="secret"/>
+<span>user.firstname</span>
+<input type="text" id="firstname" name="firstname" value="Alexandria"/>
+<span>user.lastname</span>
+<input type="text" id="lastname" name="lastname" value="Squarepants"/>
+<span>user.usertypeId</span>
+<input type="text" id="usertypeId" name="usertypeId" value="200"/>
+<input type="submit" value="ADD USER"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_usertype" method="post">
+<span>usertype.usertypename</span>
+<input type="text" id="usertypename" name="usertypename" value="fraud"/>
+<input type="submit" value="ADD USERTYPE"/>
+</form>
+<form action="http://192.168.1.22:3000/add_view" method="post">
+<span>view.storyId</span>
+<input type="text" id="storyId" name="storyId" value="808"/>
+<input type="submit" value="ADD VIEW"/>
+</form>
+
+<form action="http://192.168.1.22:3000/add_writtenlanguage" method="post">
+<span>writtenlanguage.writtenlanguagename</span>
+<input type="text" id="writtenlanguagename" name="writtenlanguagename" value="spanish"/>
+<input type="submit" value="ADD WRITTEN LANGUAGE"/>
+</form>
+
+<form action="http://192.168.1.22:3000/get_user" method="post">
+<span>user.email</span>
+<input type="text" id="email" name="email" value="first_one@fir_stone.edu"/>
+<span>user.password</span>
+<input type="text" id="password" name="password" value="secret"/>
+<input type="submit" value="GET USER"/>
+</form>
+
+<form action="http://192.168.1.22:3000/verify_login" method="post">
+<span>user.email</span>
+<input type="text" id="email" name="email" value="first_one@fir_stone.edu"/>
+<span>user.password</span>
+<input type="text" id="password" name="password" value="secret"/>
+<input type="submit" value="VERIFY LOGIN"/>
+</form>
+
+<form action="http://192.168.1.22:3000/register_user" method="post">
+<span>user.email</span>
+<input type="text" id="email" name="email" value="first_one@fir_stone.edu"/>
+<span>user.password1</span>
+<input type="text" id="password1" name="password1" value="secret"/>
+<span>user.password2</span>
+<input type="text" id="password2" name="password2" value="secret"/>
+<span>user.firstname</span>
+<input type="text" id="firstname" name="firstname" value="Alexandria"/>
+<span>user.lastname</span>
+<input type="text" id="lastname" name="lastname" value="Squarepants"/>
+<input type="submit" value="REGISTER USER"/>
+</form>

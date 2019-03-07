@@ -17,8 +17,14 @@
   },
   "homepage": "https://github.com/Slatterychase/world-around-you#readme",
   "dependencies": {
+    "express": "^4.16.4",
     "jspm": "^0.16.53",
-    "tar": "^4.0.0"
+    "mariadb": "^2.0.3",
+    "moment": "^2.24.0",
+    "tar": "^4.0.0",
+    "underscore": "^1.9.1",
+    "urldecode": "^1.0.1",
+    "urlencode": "^1.1.0"
   },
   "jspm": {
     "dependencies": {

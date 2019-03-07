@@ -1,13 +1,14 @@
 div.carousel{
     border-radius: 5px;
     height: 100%;
-    padding: 20px;
+
+    width: 100%;
 }
 
 div.carousel button {
     display: inline-block;
     vertical-align: middle;
-    
+    width: 12%;
     background-color: #0098ba;
     border-color: blue;
    
@@ -20,7 +21,7 @@ div.carousel button {
     overflow: hidden;
     left: 15%;
     right: 15%;
-  
+    height: 40%;
     white-space: nowrap;
     display: inline-block;
     vertical-align: middle;
@@ -32,10 +33,7 @@ div.carousel button {
     /*padding: 10px;*/
 }
 
-carousel #single {
-    display: block;
-    
-}
+
 
 carousel #multi
 {
@@ -66,6 +64,7 @@ carousel #multi
     height: 45%;
 }
 
+/* Page Indicator */
 .pageIndicator.overlay
 {
     background-color: #004e74;
@@ -90,13 +89,15 @@ carousel #multi
 
 .outerIndicator
 {
-    border-left-width: 30px;
-    border-right-width: 30px;
-    border-top-width: 30px;
+    border-left-width: 15px;
+    border-right-width: 15px;
+    border-top-width: 15px;
     border-radius: 15px;
     border-style: solid;
     border-color: #004e74;
     background-color: #004e74;
+    
+    margin: 15px;
 }
 
 .dots
@@ -132,4 +133,26 @@ carousel #multi
     background-color: white;
     
     transition: background-color 2s, border-color 2s;
+}
+
+/* carousel tiles */
+.imageHolder .story-preview{
+    width: 100%;
+    height: 100%;
+    /*background-color: #004e74;*/
+}
+.imageHolder .story-preview .cover-image-container{
+    width: calc(100%-30px);
+    background-color: #0098ba;
+    background-size: 100% 100%;
+    
+}
+.hovereable{
+    display: inline-block;
+ 
+    height: 100%;
+}
+.imageHolder .meta-data-container{
+     white-space: normal;
+    width: 100%;
 }
