@@ -1,8 +1,13 @@
 import Carousel from 'js/Carousel';
+import FiltersBar from 'js/Client/Filter.js';
 import StoryPreview from 'js/Client/StoryPreview';
+
+import html from 'html/Client/Stories.html!text';
 
 
 $(document).ready(function () {
+	$('main').html(html);
+
     var storyOne = [];
 for (var i = 0; i < 9; i++) {
     let sp = new StoryPreview({
@@ -37,7 +42,5 @@ for (var i = 0; i < 9; i++) {
         });
         sp.appendTo('stories');
     }
+	FiltersBar();
 });
-
-import FiltersBar from 'js/client/Filter.js';
-FiltersBar();

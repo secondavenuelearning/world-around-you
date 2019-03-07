@@ -26,6 +26,7 @@ StoryPreview.prototype.appendTo = function(elementOrId) {
 
 	// append the story preview element
 	$elementOrId.append(this.$element);
+	console.log(elementOrId);
 };
 
 export default StoryPreview;
