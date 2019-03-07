@@ -43,7 +43,8 @@ UserDB.db_add_user = function(email,password,firstname,lastname,usertypeId) {
 
 UserDB.db_get_user = function(email,password) {
 
-    const pool = mdb.createPool({host: 'localhost', user:'root', password:'7l8n6OF#',connectionLimit: 1});
+    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+
 
     return new Promise(function(resolve,reject) {
 
@@ -76,7 +77,8 @@ UserDB.db_get_user = function(email,password) {
 
 UserDB.db_get_user2 = function(email) {
 
-    const pool = mdb.createPool({host: 'localhost', user:'root', password:'7l8n6OF#',connectionLimit: 1});
+    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+
 
     return new Promise(function(resolve,reject) {
 

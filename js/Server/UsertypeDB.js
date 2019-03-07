@@ -43,7 +43,8 @@ UsertypeDB.db_add_usertype = function(name) {
 
 UsertypeDB.db_get_usertype = function(name) {
 
-    const pool = mdb.createPool({host: 'localhost', user:'root', password:'7l8n6OF#',connectionLimit: 1});
+const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+
 
     return new Promise(function(resolve,reject) {
 
