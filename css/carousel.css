@@ -69,14 +69,14 @@ carousel #multi
 {
     background-color: #004e74;
     z-index: 1;
-    width: calc(100% - 47px);
+    width: calc(100% - 50px);
     height: 30px;
     
     opacity: .7;
     
     position: relative;
     top: -49px;
-    left: 24px;
+    left: 25px;
 }
 
 .pageIndicator
@@ -90,11 +90,11 @@ carousel #multi
 .pageTitle.overlay{
       background-color: #004e74;
     z-index: 1;
-    width: calc(100% - 47px);
+    width: calc(100% - 50px);
     opacity: .7;
     color: White;
     top: 55px;
-    left: 24px;
+    left: 25px;
     
 }
 .pageTitle{
