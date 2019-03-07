@@ -39,14 +39,14 @@ var database = //placeholder data obj
 /*
 Builds out filters bar for web pages that already have a div witht he "FIltersBar" id
 */
-function FiltersBar()
+function FiltersBar(id)
 {
     //save full possible results
     finalResults = database;
     console.log(finalResults);
     
     //add child
-    $('.filterBar').append("<div class=\"filters\"></div>");
+    $(`#${id}`).append("<div class=\"filters\"></div>");
     
 //---SIGN LANGUAGE FILTER
     //build html for filter

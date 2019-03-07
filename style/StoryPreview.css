@@ -2,7 +2,7 @@
 	position: relative;
 	display: inline-block;
 	float: left;
-	width: 33%;
+	width: calc(100% / 3);
 	height: 200px;
 	padding: 15px;
 }
@@ -21,9 +21,6 @@
 	padding: 10px;
 	color: #FFFFFF;
 	overflow: auto;
-}
-.story-preview:hover .cover-image-container{
-	background-color: #FFFFFF;
 }
 .story-preview:hover .meta-data-container{
 	display: block;

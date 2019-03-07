@@ -1,8 +1,7 @@
+import 'style/Carousel.css!';
 import _ from "underscore";
-import templateRawText from "html/carouselTemplate.html!text";
-//$(document).ready(function() {
-//    
-//});
+import html from "html/Client/Carousel.html!text";
+
 var imageLink = 'img/carousel/1.jpg';
 
 var index = 0;
@@ -40,55 +39,27 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
     } 
     else {
         for (var x = 0; x < pictures.length; x++) {
-            var imageTagRepeat = document.createElement("div");
-           // imageTagRepeat.setAttribute("id", "test");
-            //imageTagRepeat.setAttribute("src", pictures[x].story.coverImage);
+            var pannel = $(`<div class="carousel-panel" style="width: ${100 / showCount}%"></div>`);
 
-
-
-            /*  var percentage = 100 / showCount;
-            var leftStart = (180 * (percentage / 100)) * x;
-            $(pictures[x]).attr("left", '"' + leftStart.toString() + '"px'); // = leftStart.toString() + "px";
-            //imageTagRepeat.$element[0].width(percentage);
-           
-
-            //= percentage.toString() + "%";
-
+            // var percentage = 100 / showCount;
+            // var leftStart = (180 * (percentage / 100)) * x;
+            // imageTagRepeat.style.left = leftStart.toString() + "px";
+            // imageTagRepeat.style.width = percentage.toString() + "%";
+            // $(pictures[x]).attr("width", "100%");
 
             if (showCount == 1) {
-                $(pictures[x]).attr("paddingLeft", "10px");
-                $(pictures[x]).attr("paddingRight", "10px");
-                $(pictures[x]).attr("backgroundColor", "#0098ba");
-                /*
-                imageTagRepeat.style.paddingLeft = "10px";
-                imageTagRepeat.style.paddingRight = "10px";
-                imageTagRepeat.style.backgroundColor = "#0098ba";
-               
-            } else {
-
-                $(pictures[x]).attr("backgroundColor", "gray");
-            }
- */
-
-            var percentage = 100 / showCount;
-            var leftStart = (180 * (percentage / 100)) * x;
-            imageTagRepeat.style.left = leftStart.toString() + "px";
-            imageTagRepeat.style.width = percentage.toString() + "%";
-            $(pictures[x]).attr("width", "100%");
-
-            if (showCount == 1) {
-                imageTagRepeat.style.paddingLeft = "10px";
-                imageTagRepeat.style.paddingRight = "10px";
+                // imageTagRepeat.style.paddingLeft = "10px";
+                // imageTagRepeat.style.paddingRight = "10px";
     
-                imageTagRepeat.style.height = "600px";
+                // imageTagRepeat.style.height = "600px";
             } else {
-                imageTagRepeat.style.height = "252px";
+                // imageTagRepeat.style.height = "252px";
             }
             console.log($(imageTagRepeat));
-            $(imageTagRepeat).append($(pictures[x].$element));
+            pannel.append($(pictures[x].$element));
        
-            holder.appendChild(imageTagRepeat);
-            panels[x] = imageTagRepeat;
+            holder.appendChild(pannel[0]);
+            panels[x] = pannel[0];
         }
     }
 
@@ -108,14 +79,10 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 
         if (direction == "right") {
             //           // $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
-            //            $(panels[x]).attr("transition", "all 2s");
             panels[x].style.transform = "translateX(" + amountToTranslate + "%)";
-            panels[x].style.transition = "all 2s";
         } else if (direction == "left") {
             //            $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
-            //            $(panels[x]).attr("transition", "all 2s");
             panels[x].style.transform = "translateX(" + amountToTranslate.toString() + "%)";
-            panels[x].style.transition = "all 2s";
         } else {
 
         }
@@ -131,7 +98,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 
 function Carousel(id, imageList, showing, justimage) {
     // this.id = index++;
-    //var templateRawText = $("#template").html();
+    //var html = $("#template").html();
     var panelCount;
     var panels = [, , ];
     var pictures = [];
@@ -153,9 +120,9 @@ function Carousel(id, imageList, showing, justimage) {
 
     identifier = id;
 
-    var compiledTemplate = _.template(templateRawText);
+    var template = _.template(html);
 
-    var templateResult = compiledTemplate({
+    var templateResult = template({
         name: "George",
         second: "Chase",
         image1: imageLink,
@@ -184,7 +151,7 @@ function Carousel(id, imageList, showing, justimage) {
         if (endIndex >= imageList.length - 1) {
 
         } else {
-            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
             
             offset += showing;
             startIndex = startIndex + showing;
@@ -192,7 +159,7 @@ function Carousel(id, imageList, showing, justimage) {
             drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset);
             
             //update indicator
-            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
+            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
 
@@ -206,13 +173,13 @@ function Carousel(id, imageList, showing, justimage) {
         if (startIndex <= 0) {
 
         } else {
-            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
             
             offset -= showing;
             startIndex = startIndex - showing;
             endIndex = endIndex - showing;
             
-            $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
+            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
         drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset);
@@ -225,7 +192,7 @@ function Carousel(id, imageList, showing, justimage) {
     
     var itemsID = "carousel-" + tempIndex.toString();
     BuildIndexIndicator(false, holder, panelCount / showing);
-    $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
+    $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(0).attr('id', 'current');
 
 }
 
@@ -237,7 +204,7 @@ function Carousel(id, imageList, showing, justimage) {
 function BuildIndexIndicator(isOverlay, carouselItemID, pages)
 {
     //build html
-    var indicatorHTML = "<div class = \"pageIndicator";
+    var indicatorHTML = "<div class = \"page-indicator";
     if(isOverlay) 
     {
         indicatorHTML += " overlay\">";
