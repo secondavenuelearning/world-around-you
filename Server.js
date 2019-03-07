@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
 const _ = require('underscore');
+const Settings = require('./js/Server/Settings.js')
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -637,8 +638,8 @@ app.post('/add_writtenlanguage',function(req,res) {
 // ******************
 // * LISTEN TO PORT *
 // ******************
-app.listen(port,function(){
-        console.log('Listening on port '+port);
+app.listen(Settings.port,function(){
+	console.log(`Listening on port ${Settings.port}`);
 });
 
 // *******************

@@ -1,0 +1,150 @@
+.carousel{
+    height: 100%;
+    width: 100%;
+}
+.carousel .carousel-nav{
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 10%;
+    border: none;    
+    background: none;
+}
+.carousel .image-holder{
+    position: relative;
+    float: left;
+    height: 100%;
+    width: 80%;
+    overflow: hidden;
+    white-space: nowrap;
+    display: inline-block;
+}
+.carousel .carousel-panel{
+    height: 100%;
+    transition: all 2s ease 0s;
+}
+.carousel .image-holder.outerIndicator
+{
+    margin: 15px;
+    height: calc(100% - 30px);
+    width: calc(80% - 30px);
+    border: 15px solid #004e74;
+    border-bottom-width: 0px;
+    padding-bottom: 40px;
+    border-radius: 25px;
+    background-color: #004e74;
+}
+
+.image-holder img
+{
+    display: inline-block;
+    /*padding: 10px;*/
+}
+
+
+
+carousel #multi
+{
+    display: block;
+    padding: 10px;
+    background-color: #004e74;
+}
+
+.carousel .carousel-nav-img {
+    width: 50%;
+    transition: background-color .6s, border-color .6s, width .3s, height .3s;
+    
+    padding: 5px;
+    border-style: solid;
+    border-radius: 50%;
+    border-color: #0098ba;
+    background-color: #0098ba;
+
+}
+
+.carousel .carousel-nav:hover .carousel-nav-img
+{
+    width: 55%;
+    border-color: #004e74;
+    background-color: #004e74;
+}
+
+/* Page Indicator */
+.page-indicator.overlay
+{
+    background-color: #004e74;
+    z-index: 1;
+    width: 100%;
+    height: 30px;
+    
+    opacity: .7;
+    
+    position: relative;
+    top: -34px; 
+}
+
+.page-indicator
+{
+    background-color: #004e74;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+.dots
+{
+    display: block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.dot
+{
+    display: inline-block;
+    
+    border-style: solid;
+    border-radius: 50%;
+    border-color: #0098ba;
+    background-color: #0098ba;
+    
+    height: 20px;
+    width: 20px;
+    
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+}
+
+.dot#current
+{
+    border-color: white;
+    background-color: white;
+    
+    transition: background-color 2s, border-color 2s;
+}
+
+/* carousel tiles */
+.image-holder .story-preview{
+    width: 100%;
+    height: 100%;
+    /*background-color: #004e74;*/
+}
+.image-holder .story-preview .cover-image-container{
+    width: calc(100% - 30px);
+    /*background-color: #0098ba;*/
+    /*background-size: 100% 100%;*/
+    
+}
+.hovereable{
+    display: inline-block;
+ 
+    height: 100%;
+}
+.image-holder .meta-data-container{
+     white-space: normal;
+    width: 100%;
+}
