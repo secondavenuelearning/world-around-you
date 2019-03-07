@@ -12,7 +12,6 @@ var numberToShow = 0;
 
 function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
     if (justImage == true) {
-        console.log(pictures);
         for (var x = 0; x < pictures.length; x++) {
             var imageTagRepeat = document.createElement("IMG");
             imageTagRepeat.setAttribute("id", "test");
@@ -55,7 +54,6 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
             } else {
                 // imageTagRepeat.style.height = "252px";
             }
-            console.log($(imageTagRepeat));
             pannel.append($(pictures[x].$element));
        
             holder.appendChild(pannel[0]);
@@ -86,17 +84,12 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
         } else {
 
         }
-
-
-
-
-
     }
 
 }
 
 
-function Carousel(id, imageList, showing, justimage) {
+function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     // this.id = index++;
     //var html = $("#template").html();
     var panelCount;
@@ -186,13 +179,26 @@ function Carousel(id, imageList, showing, justimage) {
 
 
     };
-
+    BuildTitle(isOverlay, holder, titleText);
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
     
     var itemsID = "carousel-" + tempIndex.toString();
-    BuildIndexIndicator(false, holder, panelCount / showing);
+    BuildIndexIndicator(isOverlay, holder, panelCount / showing);
     $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(0).attr('id', 'current');
+    
+    //add special functionality for overlays
+    if(isOverlay)
+    {
+        //on hover hide title and index indicator
+        $(holder).hover(function()
+        {
+            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '0');
+        }, function()
+        {
+            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '.7');
+        });
+    }
 
 }
 
@@ -216,13 +222,34 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
         //give holder tag for a makeover if its not an aoverlay
         $(carouselItemID).addClass("outerIndicator");
     }
-    indicatorHTML += "<div class = \"dots\"";
-    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">";
+    indicatorHTML += "<div class = \"dots\""; // dots bar
+    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">"; //size of each dot, multipled by dots
     for(var i = 0; i < pages; i++)
     {
-        indicatorHTML += "<div class = \"dot\"> </div>";
+        indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot
     }
     indicatorHTML += "</div></div>";
+    
+    //add built html to page
+    $(carouselItemID).append(indicatorHTML);
+}
+function BuildTitle(isOverlay, carouselItemID, title)
+{
+    //build html
+    var indicatorHTML = "<div class = \"pageTitle";
+    if(isOverlay) 
+    {
+        indicatorHTML += " overlay\">" + " " + title;
+    }
+    else
+    {
+        indicatorHTML += "\">" + " " + title;
+        
+        //give holder tag for a makeover if its not an aoverlay
+        $(carouselItemID).addClass("outerIndicator");
+    }
+   
+    indicatorHTML += "</div>";
     
     //add built html to page
     $(carouselItemID).append(indicatorHTML);
