@@ -166,7 +166,7 @@ function Carousel(id, imageList, showing, justimage) {
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
     
     var itemsID = "carousel-" + tempIndex.toString();
-    BuildIndexIndicator(true, holder, panelCount / showing);
+    BuildIndexIndicator(false, holder, panelCount / showing);
     $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
 
 }
@@ -187,6 +187,9 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
     else
     {
         indicatorHTML += "\">";
+        
+        //give holder tag for a makeover if its not an aoverlay
+        $(carouselItemID).addClass("outerIndicator");
     }
     indicatorHTML += "<div class = \"dots\"";
     indicatorHTML += "style=\"width: " + (pages*30) + "px;\">";

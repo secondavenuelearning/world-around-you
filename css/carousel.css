@@ -83,7 +83,20 @@ carousel #multi
 {
     background-color: #004e74;
     width: 100%;
-    height: 30px;
+    height: 100%;
+    
+    position: relative;
+}
+
+.outerIndicator
+{
+    border-left-width: 30px;
+    border-right-width: 30px;
+    border-top-width: 30px;
+    border-radius: 15px;
+    border-style: solid;
+    border-color: #004e74;
+    background-color: #004e74;
 }
 
 .dots
