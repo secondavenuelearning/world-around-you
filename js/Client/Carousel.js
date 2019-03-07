@@ -129,7 +129,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 }
 
 
-function Carousel(id, imageList, showing, justimage) {
+function Carousel(id, imageList, showing, justimage, isOverlay) {
     // this.id = index++;
     //var templateRawText = $("#template").html();
     var panelCount;
@@ -219,12 +219,12 @@ function Carousel(id, imageList, showing, justimage) {
 
 
     };
-
+    BuildTitle(isOverlay, holder, "Test");
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
     
     var itemsID = "carousel-" + tempIndex.toString();
-    BuildIndexIndicator(false, holder, panelCount / showing);
+    BuildIndexIndicator(isOverlay, holder, panelCount / showing);
     $('#' + itemsID + ' > .imageHolder > .pageIndicator > .dots').children().eq(0).attr('id', 'current');
 
 }
@@ -256,6 +256,27 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
         indicatorHTML += "<div class = \"dot\"> </div>";
     }
     indicatorHTML += "</div></div>";
+    
+    //add built html to page
+    $(carouselItemID).append(indicatorHTML);
+}
+function BuildTitle(isOverlay, carouselItemID, title)
+{
+    //build html
+    var indicatorHTML = "<div class = \"pageTitle";
+    if(isOverlay) 
+    {
+        indicatorHTML += " overlay\">" + " " + title;
+    }
+    else
+    {
+        indicatorHTML += "\">" + " " + title;
+        
+        //give holder tag for a makeover if its not an aoverlay
+        $(carouselItemID).addClass("outerIndicator");
+    }
+   
+    indicatorHTML += "</div>";
     
     //add built html to page
     $(carouselItemID).append(indicatorHTML);
