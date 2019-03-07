@@ -75,7 +75,7 @@ carousel #multi
     opacity: .7;
     
     position: relative;
-    top: -48px;
+    top: -49px;
     left: 24px;
 }
 
@@ -90,30 +90,31 @@ carousel #multi
 .pageTitle.overlay{
       background-color: #004e74;
     z-index: 1;
-    width: 100%;
-    height: 30px;
-    font-size: 30px;
+    width: calc(100% - 47px);
     opacity: .7;
     color: White;
-    top: 20px;
-   
+    top: 55px;
+    left: 24px;
     
 }
 .pageTitle{
      background-color: #004e74;
+    padding-left: 15px;
+    padding-top: 5px;
+
     width: 100%;
-    height: 100%;
-    font-size: 24px;
+    height: 40px;
+    font-size: 30px;
     color: White;
     position: relative;
     
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .outerIndicator
 {
     border-left-width: 15px;
     border-right-width: 15px;
-    border-top-width: 15px;
     border-radius: 15px;
     border-style: solid;
     border-color: #004e74;

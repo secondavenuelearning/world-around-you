@@ -13,7 +13,6 @@ var numberToShow = 0;
 
 function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
     if (justImage == true) {
-        console.log(pictures);
         for (var x = 0; x < pictures.length; x++) {
             var imageTagRepeat = document.createElement("IMG");
             imageTagRepeat.setAttribute("id", "test");
@@ -84,7 +83,6 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
             } else {
                 imageTagRepeat.style.height = "252px";
             }
-            console.log($(imageTagRepeat));
             $(imageTagRepeat).append($(pictures[x].$element));
        
             holder.appendChild(imageTagRepeat);
