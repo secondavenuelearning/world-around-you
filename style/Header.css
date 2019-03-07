@@ -2,7 +2,7 @@ nav{
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
-	padding: 3px 15px;
+	padding: 2px 15px;
 }
 nav > div{
 	position: relative;
@@ -20,19 +20,21 @@ nav .nav-icon{
 	border-radius: 50%;
 	background-color: #0098BA;
 }
-#user-links{
+#nav-user-links{
 	position: absolute;
 	width: 100px;
 	background-color: #0098BA;
 	left: 0px;
-    border-radius: 0px 15px 15px;
+    border-radius: 0px 0px 15px 15px;
     padding: 5px;
     display: none;
+	border: 3px solid #004E74;
+	border-top: none;
 }
-#user-links div{
+#nav-user-links div{
 	padding: 2px 5px;
 }
-#user-links a{
+#nav-user-links a{
 	color: #FFFFFF;
 }
 #nav-user{
@@ -41,7 +43,7 @@ nav .nav-icon{
 #nav-user:hover .nav-icon, #nav-user:focus .nav-icon{
 	border-radius: 50% 50% 0px 0px;
 }
-#nav-user:hover #user-links, #nav-user:focus #user-links{
+#nav-user:hover #nav-user-links, #nav-user:focus #nav-user-links{
 	display: block;
 }
 #nav-search{
@@ -51,21 +53,21 @@ nav .nav-icon{
 	height: 100%;
 	width: 250px;
 }
-#nav-search #serach, #nav-search #submit{
+#nav-search #nav-serach-input, #nav-search #nav-submit-input{
 	position: absolute;
 	bottom: 0px;
 	right: 0px;
 	height: 30px;
 	width: 35px;
 }
-#nav-search #serach{
+#nav-search #nav-serach-input{
 	width: 250px;
 	border: 2px solid #0098BA;
 	border-radius: 35px;
 	padding: 5px 7px;
 	padding-right: 40px;
 }
-#nav-search #submit{
+#nav-search #nav-submit-input{
 	position: absolute;
 	background-color: #0098BA;
 	border: none;
