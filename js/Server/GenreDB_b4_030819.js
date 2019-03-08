@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -7,13 +8,17 @@ function GenreDB() {
 
 GenreDB.db_add_genre = function(name,writtenlanguageId) {
 
+    tim=moment().valueOf();
+    tim=tim/1000;
+    //console.log("[time]["+tim+"]");
+
     const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO genre (name,writtenlanguageId) VALUES ('"+name+"',"+writtenlanguageId+")").then((res) => {
+	    conn.query("INSERT INTO genre (name,writtenlanguageId,datecreated) VALUES ('"+name+"',"+writtenlanguageId+","+tim+")").then((res) => {
 		//console.log("[db_add_genre][success]");
 		//console.log(res);
 		conn.end();

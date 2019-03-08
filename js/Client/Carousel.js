@@ -63,9 +63,12 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 
 }
 
-function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset) {
+function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset, isOverlay) {
 
     for (var x = 0; x < panels.length; x++) {
+        var adjust = 0;
+        if(isOverlay) { adjust = 2.5; }
+        
         if (x >= startIndex && x <= endIndex) {
             //            $(panels[x]).attr("display", "inline-block");
             panels[x].style.display = "inline-block";
@@ -73,7 +76,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
             panels[x].style.display = "inline-block";
             //            $(panels[x]).attr("display", "inline-block");
         }
-        var amountToTranslate = -100 * offset;
+        var amountToTranslate = (-100 * offset) - adjust;
 
         if (direction == "right") {
             //           // $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
@@ -127,6 +130,8 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     var tempIndex = index - 1;
 
     parent = document.getElementById("carousel-" + tempIndex.toString());
+    
+    if(showing == 1) { $(parent).addClass("single"); }
 
     parent.parentElement.style.backgroundColor = "#0098ba";
   //  parent.parentElement.style.paddingLeft = "10%";
@@ -149,7 +154,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             offset += showing;
             startIndex = startIndex + showing;
             endIndex = endIndex + showing;
-            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset);
+            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset, isOverlay);
             
             //update indicator
             $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
@@ -175,13 +180,13 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
-        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset);
+        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset, isOverlay);
 
 
     };
     BuildTitle(isOverlay, holder, titleText);
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
-    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
+    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", 0, isOverlay);
     
     var itemsID = "carousel-" + tempIndex.toString();
     BuildIndexIndicator(isOverlay, holder, panelCount / showing);
@@ -193,10 +198,10 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
         //on hover hide title and index indicator
         $(holder).hover(function()
         {
-            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '0');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
         });
     }
 
@@ -223,7 +228,7 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
         $(carouselItemID).addClass("outerIndicator");
     }
     indicatorHTML += "<div class = \"dots\""; // dots bar
-    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">"; //size of each dot, multipled by dots
+    indicatorHTML += "style=\"width: " + (pages*20) + "px;\">"; //size of each dot, multipled by dots
     for(var i = 0; i < pages; i++)
     {
         indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot

@@ -1,12 +1,10 @@
 const fs = require('fs');
 const express = require('express');
-const session = require('express-session');
-const LokiStore = require('connect-loki')(session);
 const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
 const _ = require('underscore');
-const Settings = require('./js/Server/Settings.js');
+const Settings = require('./js/Server/Settings.js')
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -34,72 +32,43 @@ port = 3000;
 
 app.use(express.static(__dirname));
 
-// ****************************************************************************
-// * CREATE SESSION STUFF - BELOW THIS LINE                                   *
-// ****************************************************************************
-app.CreateSessions = function(options){
-    var options = typeof options == "object" ? options : {};
-    options.secret = options.secret || "salNodeBB"; // the secret is used as the id for the session cookie
-    options.resave = options.resave || false;     // automatically save sessions whenever they are grabbed even if they arent modified
-    options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
-    options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
-    options.cookie = {};
-    options.cookie.maxAge = options.maxAge || 10 * 60 * 1000; // 10 min max age
-    options.cookie.secure = options.secure || false;
-   
-    var storeOptions = {}
-    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
-    storeOptions.ttlInterval = storeOptions.ttl;
-    options.store = new LokiStore(storeOptions);
-    // options.store = new FileStore();
-
-    app.use(session(options));
-}
-app.CreateSessions({});
-var sess=null;
-// ****************************************************************************
-// * CREATE SESSION STUFF - ABOVE THIS LINE                                   *
-// ****************************************************************************
-
-	app.get('/', function(req, res){
-		res.redirect('/Stories');
-	});
-	app.get('/Stories', function(req, res){
-		res.send(PageTemplate({
-			Page: 'Stories'
-		}));
-	});
-	app.get('/Games', function(req, res){
-		res.send(PageTemplate({
-			Page: 'Games'
-		}));
-	});
-	app.get('/Login', function(req, res){
-	sess=req.session;
-	console.log("[/Login][Sess.Email]["+sess.email+"]");
-		res.send(PageTemplate({
-			Page: 'Login'
-		}));
-	});
-	app.get('/Search', function(req, res){
-		res.send(PageTemplate({
-			Page: 'Search'
-		}));
-	});
-	app.get('/Edit', function(req, res){
-		res.send(PageTemplate({
-			Page: 'Edit'
-		}));
-	});
-
-// ******************************************************
-// Get Requests
-// ******************************************************
+app.get('/', function(req, res){
+	res.redirect('/Stories');
+});
+app.get('/Stories', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Stories'
+	}));
+});
+app.get('/Games', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Games'
+	}));
+});
+app.get('/Login', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Login'
+	}));
+});
+app.get('/Search', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Search'
+	}));
+});
+app.get('/Edit', function(req, res){
+	res.send(PageTemplate({
+		Page: 'Edit'
+	}));
+});
 
 // ***************
 // * GENRE - ADD *
 // ***************
 app.post('/add_genre',function(req,res) {
+
+        // res.send(req.body);
+
+        // show_body_stuff(req.body);
 
 	genrename=get_body_stuff(req.body,"genrename");
 	if((genrename==null)||(genrename=="")) {
@@ -125,6 +94,10 @@ app.post('/add_genre',function(req,res) {
 // * DESCRIPTION - ADD *
 // *********************
 app.post('/add_description',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	descriptionname=get_body_stuff(req.body,"descriptionname");
 	if((descriptionname==null)||(descriptionname=="")) {
@@ -156,6 +129,10 @@ app.post('/add_description',function(req,res) {
 // ***************
 app.post('/add_liked',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad liked-storyId<b/>");
@@ -175,6 +152,10 @@ app.post('/add_liked',function(req,res) {
 // **********************
 app.post('/add_signlanguage',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	name1=get_body_stuff(req.body,"name1");
 	if((name1==null)||(name1=="")) {
 		res.send("<b>bad signlanguage-name<b/>");
@@ -192,6 +173,10 @@ app.post('/add_signlanguage',function(req,res) {
 // * STORY - ADD *
 // ***************
 app.post('/add_story',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	author=get_body_stuff(req.body,"author");
 	if((author==null)||(author=="")) {
@@ -236,6 +221,10 @@ app.post('/add_story',function(req,res) {
 // ************************
 app.post('/add_story_to_genre',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad story_to_genre-storyId<b/>");
@@ -259,6 +248,10 @@ app.post('/add_story_to_genre',function(req,res) {
 // * STORY_TO_SIGNLANGUAGE - ADD *
 // *******************************
 app.post('/add_story_to_signlanguage',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
@@ -284,6 +277,10 @@ app.post('/add_story_to_signlanguage',function(req,res) {
 // **********************
 app.post('/add_story_to_tag',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad story_to_tag-storyId<b/>");
@@ -307,6 +304,10 @@ app.post('/add_story_to_tag',function(req,res) {
 // * STORY_TO_WRITTENLANGUAGE - ADD *
 // **********************************
 app.post('/add_story_to_writtenlanguage',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
@@ -333,6 +334,10 @@ app.post('/add_story_to_writtenlanguage',function(req,res) {
 // *************
 app.post('/add_tag',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	tagname=get_body_stuff(req.body,"tagname");
 	if((tagname==null)||(tagname=="")) {
 		res.send("<b>bad tag-name<b/>");
@@ -357,6 +362,10 @@ app.post('/add_tag',function(req,res) {
 // * TITLE - ADD *
 // ***************
 app.post('/add_title',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	titlename=get_body_stuff(req.body,"titlename");
 	if((titlename==null)||(titlename=="")) {
@@ -387,6 +396,10 @@ app.post('/add_title',function(req,res) {
 // * USER - ADD *
 // **************
 app.post('/add_user',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
@@ -430,6 +443,10 @@ app.post('/add_user',function(req,res) {
 // **************
 app.post('/get_user',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
 		res.send("<b>bad user-email<b/>");
@@ -454,6 +471,10 @@ app.post('/get_user',function(req,res) {
 // *********************
 app.post('/verify_login',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
 		res.send("<div>Fail-1<div/>");
@@ -471,7 +492,6 @@ app.post('/verify_login',function(req,res) {
 			res.send("<div>Fail-3</div>");
 		}
 		else {
-			keep_email_in_session(req,email);
 			res.send("<div>Success</div>");
 		}
 	}).catch(err => {
@@ -483,6 +503,10 @@ app.post('/verify_login',function(req,res) {
 // REGISTER_USER *
 // ***************
 app.post('/register_user',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
@@ -549,6 +573,10 @@ app.post('/register_user',function(req,res) {
 // ******************
 app.post('/add_usertype',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	usertypename=get_body_stuff(req.body,"usertypename");
 	if((usertypename==null)||(usertypename=="")) {
 		res.send("<b>bad usertype-usertypename<b/>");
@@ -568,6 +596,10 @@ app.post('/add_usertype',function(req,res) {
 // **************
 app.post('/add_view',function(req,res) {
 
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
+
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad view-storyId<b/>");
@@ -585,6 +617,10 @@ app.post('/add_view',function(req,res) {
 // * WRITTENLANGUAGE - ADD *
 // *************************
 app.post('/add_writtenlanguage',function(req,res) {
+
+        //res.send(req.body);
+
+        //show_body_stuff(req.body);
 
 	writtenlanguagename=get_body_stuff(req.body,"writtenlanguagename");
 	if((writtenlanguagename==null)||(writtenlanguagename=="")) {
@@ -610,25 +646,25 @@ app.listen(Settings.port,function(){
 // * SHOW BODY STUFF *
 // *******************
 function show_body_stuff(body) {
-		ii = 0;
-		for(key in body) {
-				ii++;
-				//console.log("[DEBUG]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
-		}
+        ii = 0;
+        for(key in body) {
+                ii++;
+                //console.log("[DEBUG]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
+        }
 }
 
 // ******************
 // * GET BODY STUFF *
 // ******************
 function get_body_stuff(body,name) {
-		ii = 0;
-		for(key in body) {
-				ii++;
-				//console.log("[GET]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
+        ii = 0;
+        for(key in body) {
+                ii++;
+                //console.log("[GET]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
 		if(key==name) {
 			return body[key];
 		}
-		}
+        }
 	return null;
 }
 
@@ -659,15 +695,5 @@ function register_user_part3(email,password,firstname,lastname,usertypeId,res)  
 	}).catch(err => {
 		res.send("<div>Fail-8c</div>");
 	});
-}
-
-function keep_email_in_session(req,email) {
-	sess=req.session;
-	if(sess.email) {
-		return;
-	}
-	else {
-		sess.email=email;
-	}
 }
 

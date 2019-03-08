@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -6,6 +7,9 @@ function Story_to_genreDB() {
 }
 
 Story_to_genreDB.db_add_story_to_genre = function(storyId,genreId) {
+
+    tim=moment().valueOf();
+    tim=tim/1000;
 
     console.log("[db_add_story_to_genre][storyId]["+storyId+"][genreId]["+genreId+"]");
 
@@ -15,7 +19,7 @@ Story_to_genreDB.db_add_story_to_genre = function(storyId,genreId) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO story_to_genre (storyId,genreId) VALUES ("+storyId+","+genreId+")").then((res) => {
+	    conn.query("INSERT INTO story_to_genre (storyId,genreId,datecreated) VALUES ("+storyId+","+genreId+","+tim+")").then((res) => {
 		conn.end();
 		resolve("[db_add_story_to_genre][success]");
 		return;
