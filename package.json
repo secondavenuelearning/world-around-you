@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/Slatterychase/world-around-you#readme",
   "dependencies": {
+    "connect-loki": "^1.1.0",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "jspm": "^0.16.53",
     "mariadb": "^2.0.3",
     "moment": "^2.24.0",
