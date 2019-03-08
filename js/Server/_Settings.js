@@ -3,5 +3,6 @@ module.exports = {
 	dbHost: 'localhost', 
 	dbUser: 'root', 
 	dbPassword: '',
-	dbName: 'worldaroundyou'
+	dbName: 'worldaroundyou',
+	dbPoolConnectionLimit: 10
 }

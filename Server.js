@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
 const _ = require('underscore');
-const Settings = require('./js/Server/Settings.js')
+const Settings = require('./js/Server/Settings.js');
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -32,43 +32,47 @@ port = 3000;
 
 app.use(express.static(__dirname));
 
-app.get('/', function(req, res){
-	res.redirect('/Stories');
-});
-app.get('/Stories', function(req, res){
-	res.send(PageTemplate({
-		Page: 'Stories'
-	}));
-});
-app.get('/Games', function(req, res){
-	res.send(PageTemplate({
-		Page: 'Games'
-	}));
-});
-app.get('/Login', function(req, res){
-	res.send(PageTemplate({
-		Page: 'Login'
-	}));
-});
-app.get('/Search', function(req, res){
-	res.send(PageTemplate({
-		Page: 'Search'
-	}));
-});
-app.get('/Edit', function(req, res){
-	res.send(PageTemplate({
-		Page: 'Edit'
-	}));
-});
+
+// ******************************************************
+// Pages
+// ******************************************************
+	app.get('/', function(req, res){
+		res.redirect('/Stories');
+	});
+	app.get('/Stories', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Stories'
+		}));
+	});
+	app.get('/Games', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Games'
+		}));
+	});
+	app.get('/Login', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Login'
+		}));
+	});
+	app.get('/Search', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Search'
+		}));
+	});
+	app.get('/Edit', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Edit'
+		}));
+	});
+
+// ******************************************************
+// Get Requests
+// ******************************************************
 
 // ***************
 // * GENRE - ADD *
 // ***************
 app.post('/add_genre',function(req,res) {
-
-        // res.send(req.body);
-
-        // show_body_stuff(req.body);
 
 	genrename=get_body_stuff(req.body,"genrename");
 	if((genrename==null)||(genrename=="")) {
@@ -94,10 +98,6 @@ app.post('/add_genre',function(req,res) {
 // * DESCRIPTION - ADD *
 // *********************
 app.post('/add_description',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	descriptionname=get_body_stuff(req.body,"descriptionname");
 	if((descriptionname==null)||(descriptionname=="")) {
@@ -129,10 +129,6 @@ app.post('/add_description',function(req,res) {
 // ***************
 app.post('/add_liked',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad liked-storyId<b/>");
@@ -152,10 +148,6 @@ app.post('/add_liked',function(req,res) {
 // **********************
 app.post('/add_signlanguage',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	name1=get_body_stuff(req.body,"name1");
 	if((name1==null)||(name1=="")) {
 		res.send("<b>bad signlanguage-name<b/>");
@@ -173,10 +165,6 @@ app.post('/add_signlanguage',function(req,res) {
 // * STORY - ADD *
 // ***************
 app.post('/add_story',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	author=get_body_stuff(req.body,"author");
 	if((author==null)||(author=="")) {
@@ -221,10 +209,6 @@ app.post('/add_story',function(req,res) {
 // ************************
 app.post('/add_story_to_genre',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad story_to_genre-storyId<b/>");
@@ -248,10 +232,6 @@ app.post('/add_story_to_genre',function(req,res) {
 // * STORY_TO_SIGNLANGUAGE - ADD *
 // *******************************
 app.post('/add_story_to_signlanguage',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
@@ -277,10 +257,6 @@ app.post('/add_story_to_signlanguage',function(req,res) {
 // **********************
 app.post('/add_story_to_tag',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad story_to_tag-storyId<b/>");
@@ -304,10 +280,6 @@ app.post('/add_story_to_tag',function(req,res) {
 // * STORY_TO_WRITTENLANGUAGE - ADD *
 // **********************************
 app.post('/add_story_to_writtenlanguage',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
@@ -334,10 +306,6 @@ app.post('/add_story_to_writtenlanguage',function(req,res) {
 // *************
 app.post('/add_tag',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	tagname=get_body_stuff(req.body,"tagname");
 	if((tagname==null)||(tagname=="")) {
 		res.send("<b>bad tag-name<b/>");
@@ -362,10 +330,6 @@ app.post('/add_tag',function(req,res) {
 // * TITLE - ADD *
 // ***************
 app.post('/add_title',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	titlename=get_body_stuff(req.body,"titlename");
 	if((titlename==null)||(titlename=="")) {
@@ -396,10 +360,6 @@ app.post('/add_title',function(req,res) {
 // * USER - ADD *
 // **************
 app.post('/add_user',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
@@ -443,10 +403,6 @@ app.post('/add_user',function(req,res) {
 // **************
 app.post('/get_user',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
 		res.send("<b>bad user-email<b/>");
@@ -470,10 +426,6 @@ app.post('/get_user',function(req,res) {
 // * VERIFY USER LOGIN *
 // *********************
 app.post('/verify_login',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
@@ -503,10 +455,6 @@ app.post('/verify_login',function(req,res) {
 // REGISTER_USER *
 // ***************
 app.post('/register_user',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	email=get_body_stuff(req.body,"email");
 	if((email==null)||(email=="")) {
@@ -573,10 +521,6 @@ app.post('/register_user',function(req,res) {
 // ******************
 app.post('/add_usertype',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	usertypename=get_body_stuff(req.body,"usertypename");
 	if((usertypename==null)||(usertypename=="")) {
 		res.send("<b>bad usertype-usertypename<b/>");
@@ -596,10 +540,6 @@ app.post('/add_usertype',function(req,res) {
 // **************
 app.post('/add_view',function(req,res) {
 
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
-
 	storyId=get_body_stuff(req.body,"storyId");
 	if((storyId==null)||(storyId==0)) {
 		res.send("<b>bad view-storyId<b/>");
@@ -617,10 +557,6 @@ app.post('/add_view',function(req,res) {
 // * WRITTENLANGUAGE - ADD *
 // *************************
 app.post('/add_writtenlanguage',function(req,res) {
-
-        //res.send(req.body);
-
-        //show_body_stuff(req.body);
 
 	writtenlanguagename=get_body_stuff(req.body,"writtenlanguagename");
 	if((writtenlanguagename==null)||(writtenlanguagename=="")) {
@@ -646,25 +582,25 @@ app.listen(Settings.port,function(){
 // * SHOW BODY STUFF *
 // *******************
 function show_body_stuff(body) {
-        ii = 0;
-        for(key in body) {
-                ii++;
-                //console.log("[DEBUG]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
-        }
+		ii = 0;
+		for(key in body) {
+				ii++;
+				//console.log("[DEBUG]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
+		}
 }
 
 // ******************
 // * GET BODY STUFF *
 // ******************
 function get_body_stuff(body,name) {
-        ii = 0;
-        for(key in body) {
-                ii++;
-                //console.log("[GET]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
+		ii = 0;
+		for(key in body) {
+				ii++;
+				//console.log("[GET]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
 		if(key==name) {
 			return body[key];
 		}
-        }
+		}
 	return null;
 }
 
