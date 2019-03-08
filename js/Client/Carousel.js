@@ -127,6 +127,8 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     var tempIndex = index - 1;
 
     parent = document.getElementById("carousel-" + tempIndex.toString());
+    
+    if(showing == 1) { $(parent).addClass("single"); }
 
     parent.parentElement.style.backgroundColor = "#0098ba";
   //  parent.parentElement.style.paddingLeft = "10%";
@@ -193,10 +195,10 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
         //on hover hide title and index indicator
         $(holder).hover(function()
         {
-            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '0');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .imageHolder > .overlay').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
         });
     }
 
@@ -223,7 +225,7 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
         $(carouselItemID).addClass("outerIndicator");
     }
     indicatorHTML += "<div class = \"dots\""; // dots bar
-    indicatorHTML += "style=\"width: " + (pages*30) + "px;\">"; //size of each dot, multipled by dots
+    indicatorHTML += "style=\"width: " + (pages*20) + "px;\">"; //size of each dot, multipled by dots
     for(var i = 0; i < pages; i++)
     {
         indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot

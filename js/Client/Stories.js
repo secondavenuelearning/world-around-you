@@ -21,7 +21,7 @@ $(document).ready(function () {
         storyOne.push(sp);
         
     }
-    new Carousel("#new-stories", storyOne, 1, false,  false, "New Stories");
+    new Carousel("#new-stories", storyOne, 1, false,  true, "New Stories");
 
 
     FiltersBar('filter-bar');

@@ -10,20 +10,11 @@
     border: none;    
     background: none;
 }
-
-.carousel .left{
-    margin-left: 17.5%;
-}
-
-.carousel .right{
-    margin-right: 17.5%;
-}
-
 .carousel .image-holder{
     position: relative;
     float: left;
-    height: 100%;
-    width: 45%;
+    height: calc(100% - 30px);
+    width: 80%;
     overflow: hidden;
     white-space: nowrap;
     display: inline-block;
@@ -37,13 +28,31 @@
 {
     margin: 15px;
     height: calc(100% - 30px);
-    width: calc(45% - 30px);
+    width: calc(80% - 30px);
     border: 15px solid #004e74;
     border-bottom-width: 0px;
     border-top-width: 0px;
     padding-bottom: 40px;
     border-radius: 25px;
     background-color: #004e74;
+}
+
+.carousel.single .left{
+    margin-left: 20%;
+}
+
+.carousel.single .right{
+    margin-right: 20%;
+}
+
+.carousel.single .image-holder
+{
+    width: 40%;
+}
+
+.carousel.single .image-holder.outerIndicator
+{
+    width: calc(40% - 30px);
 }
 
 .image-holder img
@@ -72,17 +81,44 @@
 }
 
 /* Page Indicator */
+.pageTitle.overlay{
+      background-color: #004e74;
+    z-index: 1;
+    width: calc(100% - 30px);
+    opacity: .7;
+    transition: opacity .5s;
+    color: White;
+    top: 40px;
+    left: 15px;
+    
+}
+.pageTitle{
+     background-color: #004e74;
+    padding-top: 5px;
+
+    width: 100%;
+    height: 25px;
+    font-size: 25px;
+    color: White;
+    position: relative;
+    
+    text-align: center;
+    
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .page-indicator.overlay
 {
     background-color: #004e74;
     z-index: 1;
-    width: 100%;
-    height: 30px;
+    width: calc(100% - 30px);
+    height: 25px;
     
     opacity: .7;
     
     position: relative;
-    top: -34px; 
+    top: -54px; 
+    left: 15px;
 }
 
 .page-indicator
@@ -101,36 +137,7 @@
     margin-left: auto;
     margin-right: auto;
 }
-
-.pageTitle.overlay{
-      background-color: #004e74;
-    z-index: 1;
-    width: calc(100% - 50px);
-    opacity: .7;
-    transition: opacity .5s;
-    color: White;
-    top: 55px;
-    left: 25px;
-    
-}
-.pageTitle{
-     background-color: #004e74;
-    padding-top: 5px;
-
-    width: 100%;
-    height: 25px;
-    font-size: 25px;
-    color: White;
-    position: relative;
-    
-    text-align: center;
-    
-    font-family: Arial, Helvetica, sans-serif;
-}
    
-
-
-
 .dot
 {
     display: inline-block;
@@ -140,8 +147,8 @@
     border-color: #0098ba;
     background-color: #0098ba;
     
-    height: 20px;
-    width: 20px;
+    height: 10px;
+    width: 10px;
     
     margin-left: 5px;
     margin-right: 5px;
