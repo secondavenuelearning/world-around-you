@@ -171,7 +171,8 @@
 
 .carousel.single .overlay ~ .carousel-panel .meta-data-container
 {
-    transform: : translate 0;
+    transform:translate(0px);
+    width: 100%;
 }
 
 .image-holder .story-preview{
