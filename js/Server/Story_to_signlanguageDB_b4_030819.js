@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -6,6 +7,9 @@ function Story_to_signlanguageDB() {
 }
 
 Story_to_signlanguageDB.db_add_story_to_signlanguage = function(storyId,signlanguageId) {
+
+    tim=moment().valueOf();
+    tim=tim/1000;
 
     console.log("[db_add_story_to_signlanguage][storyId]["+storyId+"][signlanguageId]["+signlanguageId+"]");
 
@@ -15,7 +19,7 @@ Story_to_signlanguageDB.db_add_story_to_signlanguage = function(storyId,signlang
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO story_to_signlanguage (storyId,signlanguageId) VALUES ("+storyId+","+signlanguageId+")").then((res) => {
+	    conn.query("INSERT INTO story_to_signlanguage (storyId,signlanguageId,datecreated) VALUES ("+storyId+","+signlanguageId+","+tim+")").then((res) => {
 		conn.end();
 		resolve("[db_add_story_to_signlanguage][success]");
 		return;

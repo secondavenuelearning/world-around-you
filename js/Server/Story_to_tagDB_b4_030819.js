@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -6,6 +7,9 @@ function Story_to_tagDB() {
 }
 
 Story_to_tagDB.db_add_story_to_tag = function(storyId,tagId) {
+
+    tim=moment().valueOf();
+    tim=tim/1000;
 
     console.log("[db_add_story_to_tag][storyId]["+storyId+"][tagId]["+tagId+"]");
 
@@ -15,7 +19,7 @@ Story_to_tagDB.db_add_story_to_tag = function(storyId,tagId) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO story_to_tag (storyId,tagId) VALUES ("+storyId+","+tagId+")").then((res) => {
+	    conn.query("INSERT INTO story_to_tag (storyId,tagId,datecreated) VALUES ("+storyId+","+tagId+","+tim+")").then((res) => {
 		conn.end();
 		resolve("[db_add_story_to_tag][success]");
 		return;
