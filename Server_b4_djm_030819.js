@@ -1,7 +1,5 @@
 const fs = require('fs');
 const express = require('express');
-const session = require('express-session');
-const LokiStore = require('connect-loki')(session);
 const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
@@ -34,33 +32,6 @@ port = 3000;
 
 app.use(express.static(__dirname));
 
-// ****************************************************************************
-// * CREATE SESSION STUFF - BELOW THIS LINE                                   *
-// ****************************************************************************
-app.CreateSessions = function(options){
-    var options = typeof options == "object" ? options : {};
-    options.secret = options.secret || "salNodeBB"; // the secret is used as the id for the session cookie
-    options.resave = options.resave || false;     // automatically save sessions whenever they are grabbed even if they arent modified
-    options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
-    options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
-    options.cookie = {};
-    options.cookie.maxAge = options.maxAge || 10 * 60 * 1000; // 10 min max age
-    options.cookie.secure = options.secure || false;
-   
-    var storeOptions = {}
-    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
-    storeOptions.ttlInterval = storeOptions.ttl;
-    options.store = new LokiStore(storeOptions);
-    // options.store = new FileStore();
-
-    app.use(session(options));
-}
-app.CreateSessions({});
-var sess=null;
-// ****************************************************************************
-// * CREATE SESSION STUFF - ABOVE THIS LINE                                   *
-// ****************************************************************************
-
 app.get('/', function(req, res){
 	res.redirect('/Stories');
 });
@@ -75,8 +46,6 @@ app.get('/Games', function(req, res){
 	}));
 });
 app.get('/Login', function(req, res){
-	sess=req.session;
-	console.log("[/Login][Sess.Email]["+sess.email+"]");
 	res.send(PageTemplate({
 		Page: 'Login'
 	}));
@@ -523,7 +492,6 @@ app.post('/verify_login',function(req,res) {
 			res.send("<div>Fail-3</div>");
 		}
 		else {
-			keep_email_in_session(req,email);
 			res.send("<div>Success</div>");
 		}
 	}).catch(err => {
@@ -727,15 +695,5 @@ function register_user_part3(email,password,firstname,lastname,usertypeId,res)  
 	}).catch(err => {
 		res.send("<div>Fail-8c</div>");
 	});
-}
-
-function keep_email_in_session(req,email) {
-	sess=req.session;
-	if(sess.email) {
-		return;
-	}
-	else {
-		sess.email=email;
-	}
 }
 
