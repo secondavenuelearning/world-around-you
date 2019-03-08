@@ -63,9 +63,12 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 
 }
 
-function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset) {
+function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset, isOverlay) {
 
     for (var x = 0; x < panels.length; x++) {
+        var adjust = 0;
+        if(isOverlay) { adjust = 2.5; }
+        
         if (x >= startIndex && x <= endIndex) {
             //            $(panels[x]).attr("display", "inline-block");
             panels[x].style.display = "inline-block";
@@ -73,7 +76,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
             panels[x].style.display = "inline-block";
             //            $(panels[x]).attr("display", "inline-block");
         }
-        var amountToTranslate = -100 * offset;
+        var amountToTranslate = (-100 * offset) - adjust;
 
         if (direction == "right") {
             //           // $(panels[x]).attr("transform", "translateX(" + amountToTranslate + "%)");
@@ -151,7 +154,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             offset += showing;
             startIndex = startIndex + showing;
             endIndex = endIndex + showing;
-            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset);
+            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset, isOverlay);
             
             //update indicator
             $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
@@ -177,13 +180,13 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
 
-        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset);
+        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset, isOverlay);
 
 
     };
     BuildTitle(isOverlay, holder, titleText);
     createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justimage);
-    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, null);
+    drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", 0, isOverlay);
     
     var itemsID = "carousel-" + tempIndex.toString();
     BuildIndexIndicator(isOverlay, holder, panelCount / showing);

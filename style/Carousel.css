@@ -84,12 +84,11 @@
 .pageTitle.overlay{
       background-color: #004e74;
     z-index: 1;
-    width: calc(100% - 30px);
+    width: 100%;
     opacity: .7;
     transition: opacity .5s;
     color: White;
     top: 40px;
-    left: 15px;
     
 }
 .pageTitle{
@@ -111,14 +110,13 @@
 {
     background-color: #004e74;
     z-index: 1;
-    width: calc(100% - 30px);
+    width: 100%;
     height: 25px;
     
     opacity: .7;
     
     position: relative;
     top: -54px; 
-    left: 15px;
 }
 
 .page-indicator
@@ -166,6 +164,16 @@
 }
 
 /* carousel tiles */
+.carousel.single .overlay ~ .carousel-panel .story-preview .cover-image-container
+{
+    width: 100%;
+}
+
+.carousel.single .overlay ~ .carousel-panel .meta-data-container
+{
+    transform: : translate 0;
+}
+
 .image-holder .story-preview{
     width: 100%;
     height: 100%;
@@ -183,6 +191,6 @@
     height: 100%;
 }
 .image-holder .meta-data-container{
-     white-space: normal;
+    white-space: normal;
     width: 100%;
 }
