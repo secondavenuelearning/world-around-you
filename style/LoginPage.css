@@ -5,7 +5,7 @@
         color: #ffffff}
 
 /* Full-width input fields */
-input[type=text], input[type=password], input[type=usr], input[type=email] {
+input[type=password], input[type=usr], input[type=email] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -115,6 +115,12 @@ span.psw {
 .close:focus {
   color: red;
   cursor: pointer;
+}
+#containedButton{
+    margin-top: 10px;
+}
+#containedCancel{
+    margin-top: -20px;
 }
 input.register{
          display: block;
