@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -7,13 +8,17 @@ function UserDB() {
 
 UserDB.db_add_user = function(email,password,firstname,lastname,usertypeId) {
 
+    tim=moment().valueOf();
+    tim=tim/1000;
+    //console.log("[time]["+tim+"]");
+
     const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO user (email,password,firstname,lastname,usertypeId) VALUES ('"+email+"','"+password+"','"+firstname+"','"+lastname+"',"+usertypeId+")").then((res) => {
+	    conn.query("INSERT INTO user (email,password,firstname,lastname,usertypeId,datecreated) VALUES ('"+email+"','"+password+"','"+firstname+"','"+lastname+"',"+usertypeId+","+tim+")").then((res) => {
 		//console.log("[db_add_user][success]");
 		//console.log(res);
 		conn.end();

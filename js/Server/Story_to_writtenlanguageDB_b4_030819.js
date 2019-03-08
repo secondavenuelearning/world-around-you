@@ -1,4 +1,5 @@
 mdb = require('mariadb');
+moment = require('moment');
 
 const Settings = require('./Settings');
 
@@ -6,6 +7,9 @@ function Story_to_writtenlanguageDB() {
 }
 
 Story_to_writtenlanguageDB.db_add_story_to_writtenlanguage = function(storyId,writtenlanguageId) {
+
+    tim=moment().valueOf();
+    tim=tim/1000;
 
     console.log("[db_add_story_to_writtenlanguage][storyId]["+storyId+"][writtenlanguageId]["+writtenlanguageId+"]");
 
@@ -15,7 +19,7 @@ Story_to_writtenlanguageDB.db_add_story_to_writtenlanguage = function(storyId,wr
 
 	pool.getConnection().then(conn => {
 
-	    conn.query("INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId) VALUES ("+storyId+","+writtenlanguageId+")").then((res) => {
+	    conn.query("INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId,datecreated) VALUES ("+storyId+","+writtenlanguageId+","+tim+")").then((res) => {
 		conn.end();
 		resolve("[db_add_story_to_writtenlanguage][success]");
 		return;
