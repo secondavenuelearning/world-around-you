@@ -7,3 +7,130 @@ main
     background-color: #004e74;
     width: 100%;
 }
+#details{
+    width: 50%;
+    margin-left: 25%;
+    margin-right: 25%;
+    text-align: left;
+}
+.social{
+    display: inline-block;
+    height: 40px;
+    border-style: solid;
+    border-radius: 25px;
+    border: 2px;
+    
+    color: #0098ba;
+    border-color: #0098ba;
+    border-style: solid;
+    padding-left: 10px;
+
+    right: 10px;
+   
+    
+    vertical-align: middle;
+   
+    
+    
+}
+.social span{
+
+    top: -6px;
+    left: -7px;
+    position: relative;
+}
+.socialExport span{
+
+
+    top: -6px;
+    position: relative;
+
+}
+#social{
+    padding-top: 10px;
+}
+#title{
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    
+    display: block;
+   
+}
+#uploader{
+    
+    height: 30px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: inline-block;
+    
+}
+#uploader img{
+    height: 30px;
+    width: 30px;
+    position: relative;
+    top: 7px;
+    padding-right: 5px;
+}
+.socialExport{
+     display: inline-block;
+    height: 40px;
+    border-style: solid;
+    border-radius: 25px;
+    border: 2px;
+    
+    color: white;
+    background-color: #0098ba;
+    border-color: #0098ba;
+    border-style: solid;
+    padding-left: 10px;
+    overflow: hidden;
+    
+    width: 110px;
+    
+    vertical-align: middle;
+ 
+}
+    
+#uploader{
+    
+}
+#tags{
+    padding-top: 10px;
+    color: #004e74;
+    
+}
+#genres{
+    padding-top: 10px;
+    color: #004e74;
+    
+}
+.category{
+     border-style: solid;
+    border-radius: 25px;
+    border: 2px;
+    border-color: #004e74;
+    border-style: solid;
+    text-align: center;
+    padding-right: 10px;
+    margin-right: 10px;
+     padding-left: 10px;
+    background-color: #004e74;
+    display: inline-block;
+    color: white;
+}
+.social img{
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+}
+.socialExport img{
+   
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    position: relative;
+    top: 3px;
+}
