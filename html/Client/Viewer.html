@@ -1,23 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>World Around You</title>
-    <link rel="stylesheet" href="style/Main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>    
-    <script type="text/javascript" src="./jspm_packages/system.js"></script>
-    <script type="text/javascript" src="./config.js"></script>
-    <script type="text/javascript">
-        System.import('./js/Client/Header.js');
-        System.import('./js/Client/<%- Page %>.js');
-    </script>
-</head>
-<body>
-    <header>
-    </header>
-    <main>
-        <div id ="viewer"></div>
-
- <div id ="details">
+       <div id ="viewer">
+            <div class="viewerNav">
+                <button  id="back">
+                    <img id="btn">
+                    <img id="icon">
+                    <span id ="num"></span>
+                </button>
+            </div>
+            <div id="content">
+                <div id="currentOverlay"></div>
+                <div id="video"></div>
+                <div id="story"></div>
+                <button id="storyToggle"></button>
+            </div>
+            <div class="viewerNav">
+                 <button id="forward">
+                    <img id="icon">
+                    <span id ="num"></span>
+                    <img id="btn">
+                </button>
+            </div>
+        </div>
+        <div id="viewerBar"></div>
+         <div id ="details">
             
         <h2 id = "title"> Video Name</h2>
         <img />
@@ -46,9 +50,5 @@
             <div id="tags"> Tags: </div>
             
         </div>
+
         <div id ="more-stories"></div>
-    </main>
-    <footer>
-    </footer>
-</body>
-</html>

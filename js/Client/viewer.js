@@ -1,4 +1,4 @@
-import 'style/LoginPage.css!';
+import 'style/viewer.css!';
 import html from 'html/Client/Viewer.html!text';
 
 $(document).ready(function () {
