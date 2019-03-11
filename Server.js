@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
 const _ = require('underscore');
+
 const Settings = require('./js/Server/Settings.js');
+const ApiRoutes = require('./js/Server/ApiRoutes.js');
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -95,7 +97,7 @@ var sess=null;
 // ******************************************************
 // Get Requests
 // ******************************************************
-
+	ApiRoutes(app);
 // ***************
 // * GENRE - ADD *
 // ***************

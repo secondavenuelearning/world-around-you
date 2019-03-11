@@ -10,6 +10,7 @@ languages.sort(function(a, b) {
 
 var template = _.template(html),
 	currentLanguage = $('html').attr('lang'),
+	currentLanguageText,
 	$el = $(template({
 		languages,
 		currentLanguage
@@ -27,13 +28,21 @@ var appendTo = function(elementOrId) {
 	$('#language-select').off('change');
 	$('#language-select').on('change', function(evt){
 		currentLanguage = $(evt.currentTarget).val();
-
-		$('*[lang]:not(html)').hide();
-		$(`*[lang="${currentLanguage}"]:not(html)`).show();
-		$('html').attr('lang', currentLanguage);
+		$('#language-select option').each((i, el) => {
+			if($(el).prop('selected')) currentLanguageText = $(el).html().toLowerCase();
+		});
+		updateLanguageDisplay();
 	});
 }
 
+var updateLanguageDisplay = function(){
+	$('*[lang]:not(html)').hide();
+	$(`*[lang="${currentLanguage}"]:not(html)`).show();
+	$(`*[lang="${currentLanguageText}"]:not(html)`).show();
+	$('html').attr('lang', currentLanguage);
+}
+
 export default {
-	appendTo
+	appendTo,
+	updateLanguageDisplay
 }

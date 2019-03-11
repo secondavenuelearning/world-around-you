@@ -1,12 +1,23 @@
-const Settings = require('./js/Server/Settings.js');
+const Settings = require('./Settings.js');
+const StoryDB = require('./StoryDB.js');
 
-function apiRoutes(app){
-	// ******************************************************
-	// Get
-	// ******************************************************
-		app.get('/api/stories', function(req, res){
-			var unpublished = req.query.unpublished;
+var apiRoutes = function(app){
+// ******************************************************
+// Get Stories
+// ******************************************************
+	app.get('/api/stories', (req, res) => {
+		var unpublished = req.query.unpublished;
 
-			new sto
+		StoryDB.getStories(unpublished).then((stories) => {
+			res.send(stories);
+		}).catch((err) => {
+			res.send(err);
 		});
+	});
+
+	app.get('/api/stories/metadata', (req, res) => {
+
+	});
 }
+
+module.exports = apiRoutes;

@@ -9,7 +9,7 @@ function StoryPreview(story){
 	// get the index for this current instance
 	this.id = `story-preview-${index++}`;
 	this.story = story;
-
+console.log(story);
 	// get the html from the template
 	var element = template({
 		id: this.id,

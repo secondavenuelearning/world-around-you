@@ -5,9 +5,13 @@
 		</div>
 
 		<div class="meta-data-container">
-			<div class="title"><%- story.title %></div>
+			<% _.each(story.metadata.title, function(title, lang){ %>
+				<div class="title" lang="<%- lang %>"><%- title %></div>
+			<% }) %>
 			<div class="author"><%- story.author %></div>
-			<div class="description"><%- story.description %></div>
+			<% _.each(story.metadata.description, function(description, lang){ %>
+				<div class="description" lang="<%- lang %>"><%- description %></div>
+			<% }) %>
 		</div>
 	</a>
 </div>
