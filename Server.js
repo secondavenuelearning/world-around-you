@@ -91,6 +91,12 @@ var sess=null;
 			Page: 'Edit'
 		}));
 	});
+    app.get('/View', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Viewer'
+		}));
+	});
+
 
 // ******************************************************
 // Get Requests
