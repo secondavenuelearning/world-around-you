@@ -1,9 +1,59 @@
-main
-{
-    width: 100%;
-}
-.viewer
+/* Viewer */
+#viewer
 {
     background-color: #004e74;
     width: 100%;
+    height: 700px;
+}
+
+#viewerBar
+{
+    background-color: #0098ba;
+    width: 100%;
+    height: 100px;
+}
+
+.viewerNav
+{
+    display: inline-block;
+    float: left;
+    
+    margin-top: calc((700px / 2) - 50px);
+}
+
+.viewerNav#back
+{
+    margin-left: calc(20% - 60px);
+    margin-right: 10px;
+}
+
+.viewerNav#forward
+{
+     margin-right: calc(20% - 60px);
+    margin-left: 10px;
+}
+
+.viewerNav button
+{
+    height: 50px; 
+    width: 50px;
+    vertical-align: middle;
+}
+
+/* Viewer content */
+#viewer .content
+{
+    display: inline-block;
+    float: left;
+    
+    width: 60%;
+    height: 92%;
+    
+    margin-top: 2%;
+    margin-bottom: 2%;
+    
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    /* not extact color */ background-color: #002e45;
 }
