@@ -6,9 +6,13 @@
     height: 700px;
     padding: 20px;
 }
+
 #Description{
     font-size: 20px;
 }
+
+
+/* Viewer options an index bar */
 #viewerBar
 {
     background-color: #0098ba;
@@ -119,6 +123,7 @@
     padding: 5px;
 }
 
+/* viewer forward/backward buttons */
 .viewerNav
 {
     display: inline-block;
@@ -144,6 +149,84 @@
     height: 100px; 
     width: 100px;
     vertical-align: middle;
+    background-color: #004e74;
+    padding: 5px;
+    
+    border-style: none;
+}
+
+.viewerNav button:hover
+{
+    padding: 0px;
+}
+
+.viewerNav #btn
+{
+    height: 100%;
+    width: 30%;
+    
+    padding-top: 25%;
+    padding-bottom: 25%;
+}
+
+.viewerNav#back #btn
+{
+    position: relative;
+    float: left;
+}
+
+.viewerNav#forward #btn
+{
+    position: relative;
+    float: right;
+}
+
+.viewerNav #icon
+{
+    height: 60%;
+    width: 70%;
+    
+    padding: 10px;
+    padding-bottom: 2px;
+    padding-top: 8px;
+}
+
+.viewerNav#back #icon
+{
+    position: relative;
+    float: right;
+}
+
+.viewerNav#forward #icon
+{
+    position: relative;
+    float: left;
+}
+
+.viewerNav #num
+{
+    display: inline-block;
+    width: 70%;
+    
+    color: #0098ba;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 40px;
+    
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.viewerNav#back #num
+{
+    position: relative;
+    float: right;
+}
+
+.viewerNav#forward #num
+{
+    position: relative;
+    float: left;
 }
 
 /* Viewer content */
@@ -257,6 +340,8 @@
     padding: 5px;
 
 }
+
+/* details and social */
 #details{
     width: 50%;
     margin-left: 25%;
