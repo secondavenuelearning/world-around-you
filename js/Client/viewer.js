@@ -1,5 +1,10 @@
 import 'style/viewer.css!';
 import html from 'html/Client/Viewer.html!text';
+import StoryPreview from 'js/Client/StoryPreview';
+import Carousel from 'js/Client/Carousel.js';
+
+var totalLikes;
+var canLike = true;
 
 function SetVideoTitle(titleName) {
     var title = document.getElementById("title");
@@ -12,27 +17,53 @@ function SetAuthorInfo(authorName, authorImage) {
 
 }
 
+function updateLikes() {
+ 
+    if (canLike) {
+        totalLikes++;
+        document.getElementById("likes").innerHTML = "Likes: " + totalLikes;
+        canLike = false;
+    }
+
+}
+
 function SetViewLikeCounts(viewCount, likeCount) {
     document.getElementById("likes").innerHTML = "Likes: " + likeCount;
+    totalLikes = likeCount;
+    document.getElementById("likeClick").onclick = function () {
+      
+        if (canLike) {
+            totalLikes++;
+            document.getElementById("likes").innerHTML = "Likes: " + totalLikes;
+            canLike = false;
+        }
+
+    }
+ 
+    console.log(canLike);
+
     document.getElementById("views").innerHTML = "Views: " + viewCount;
 }
-function SetDescriptionText(description){
+
+function SetDescriptionText(description) {
     document.getElementById("Description").innerHTML = description;
 }
-function GenerateGenres(Genres){
+
+function GenerateGenres(Genres) {
     var holder = document.getElementById("genres");
-    for(var x = 0; x<Genres.length; x++){
-       var innerText = "<div class = 'category'>" + Genres[x] + "</div>";
+    for (var x = 0; x < Genres.length; x++) {
+        var innerText = "<div class = 'category'>" + Genres[x] + "</div>";
         holder.innerHTML += innerText;
-        
+
     }
 }
-function GenerateTage(Tags){
-      var holder = document.getElementById("tags");
-    for(var x = 0; x<Tags.length; x++){
-       var innerText = "<div class = 'category'>#" + Tags[x] + "</div>";
+
+function GenerateTage(Tags) {
+    var holder = document.getElementById("tags");
+    for (var x = 0; x < Tags.length; x++) {
+        var innerText = "<div class = 'category'>#" + Tags[x] + "</div>";
         holder.innerHTML += innerText;
-        
+
     }
 }
 $(document).ready(function () {
@@ -45,4 +76,31 @@ $(document).ready(function () {
     SetDescriptionText("  Chicken buffalo biltong, corned beef frankfurter tenderloin leberkas ball tip chuck. Beef ribs turducken pancetta spare ribs ham. Sirloin meatloaf tri-tip shank strip steak, short loin ground round shoulder fatback. Shoulder prosciutto beef, ham short loin picanha pork chop fatback short ribs. Short ribs prosciutto tri-tip, chuck landjaeger sirloin strip steak jowl bresaola fatback picanha kevin. Ground round cupim andouille, pastrami burgdoggen beef jerky beef ribs fatback porchetta. Biltong ground round tri-tip landjaeger, meatball tenderloin shoulder turkey capicola.");
     GenerateGenres(["Folk", "Fantasy"]);
     GenerateTage(["folktale", "fantasy"]);
+    var storyOne = [];
+    for (var i = 0; i < 9; i++) {
+        let sp = new StoryPreview({
+            id: i + 1,
+            title: 'Aesop Fables: The Clever Donkey',
+            author: 'Massimo V.',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.',
+            coverImage: 'img/carousel/from_this_author/1.png'
+        });
+        storyOne.push(sp);
+
+    }
+    new Carousel("#more-stories", storyOne, 4, false, false, "More Stories");
+    var storyTwo = [];
+    for (var i = 0; i < 9; i++) {
+        let sp = new StoryPreview({
+            id: i + 1,
+            title: 'Aesop Fables: The Clever Donkey',
+            author: 'Massimo V.',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.',
+            coverImage: 'img/carousel/from_this_author/1.png'
+        });
+        storyTwo.push(sp);
+
+    }
+    new Carousel("#more-author", storyTwo, 4, false, false, "More Stories");
+
 });
