@@ -7,7 +7,12 @@
     padding: 20px;
 }
 
-/* Viewer options and index bar */
+#Description{
+    font-size: 20px;
+}
+
+
+/* Viewer options an index bar */
 #viewerBar
 {
     background-color: #0098ba;
@@ -71,7 +76,20 @@
     
 }
 
-
+#more-stories{
+    height:  30%;
+    
+    
+    
+}
+#more-author{
+    height: 30%;
+}
+.carousel{
+    width: 100%;
+    
+    
+}
 #viewerBar #optionBtns
 {
     width: calc(93px * 3);
@@ -415,6 +433,7 @@
 #tags{
     padding-top: 10px;
     color: #004e74;
+    padding-bottom: 10px;
     
 }
 #genres{
