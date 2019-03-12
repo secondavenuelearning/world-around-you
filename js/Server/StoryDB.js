@@ -207,7 +207,17 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 				var stories = {};
 				for(let i=0; i<storyResults.length; i++){
 					var story = storyResults[i];
-					story.metadata = {}
+					story.metadata = {
+						title: {},
+						description: {},
+						writtenLanguages: [],
+						signLanguages: [],
+						genres: {},
+						tags: {},
+						views: 0,
+						likes: 0
+
+					}
 					stories[story.id] = story;
 				}
 
@@ -222,18 +232,15 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 
 					var dataPromises = [];
 
-					// Load the descriptions
+					// Load the titles
 					dataPromises.push(new Promise((_resolve, _reject) => {
-						let query = "SELECT * from description";
+						let query = "SELECT * from title";
 						conn.query(query).then(res => {
 							for(let i = 0; i < res.length; i++){
 								let storyId = res[i].storyId,
 									lang = writtenLanguages[res[i].writtenlanguageId].name;
 
-								if(!stories[storyId].metadata.description)
-									stories[storyId].metadata.description = {};
-
-								stories[storyId].metadata.description[lang] = res[i].name;
+								stories[storyId].metadata.title[lang] = res[i].name;
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
 							}
 
@@ -244,18 +251,15 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 						});
 					}));
 
-					// Load the titles
+					// Load the descriptions
 					dataPromises.push(new Promise((_resolve, _reject) => {
-						let query = "SELECT * from title";
+						let query = "SELECT * from description";
 						conn.query(query).then(res => {
 							for(let i = 0; i < res.length; i++){
 								let storyId = res[i].storyId,
 									lang = writtenLanguages[res[i].writtenlanguageId].name;
 
-								if(!stories[storyId].metadata.title)
-									stories[storyId].metadata.title = {};
-
-								stories[storyId].metadata.title[lang] = res[i].name;
+								stories[storyId].metadata.description[lang] = res[i].name;
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
 							}
 
@@ -273,9 +277,6 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 							for(let i = 0; i < res.length; i++){
 								let storyId = res[i].storyId,
 									lang = writtenLanguages[res[i].writtenlanguageId].name;
-
-								if(!stories[storyId].metadata.writtenLanguages)
-									stories[storyId].metadata.writtenLanguages = [];
 
 								stories[storyId].metadata.writtenLanguages.push(lang);
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
@@ -296,9 +297,6 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 								let storyId = res[i].storyId,
 									lang = signLanguages[res[i].signlanguageId].name;
 
-								if(!stories[storyId].metadata.signLanguages)
-									stories[storyId].metadata.signLanguages = [];
-
 								stories[storyId].metadata.signLanguages.push(lang);
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
 							}
@@ -318,13 +316,10 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 								let storyId = res[i].storyId,
 									lang = writtenLanguages[res[i].writtenlanguageId].name;
 
-								if(!stories[storyId].metadata.genre)
-									stories[storyId].metadata.genre = {};
+								if(!stories[storyId].metadata.genres[lang])
+									stories[storyId].metadata.genres[lang] = [];
 
-								if(!stories[storyId].metadata.genre[lang])
-									stories[storyId].metadata.genre[lang] = [];
-
-								stories[storyId].metadata.genre[lang].push(res[i].name);
+								stories[storyId].metadata.genres[lang].push(res[i].name);
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
 							}
 
@@ -343,14 +338,45 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 								let storyId = res[i].storyId,
 									lang = writtenLanguages[res[i].writtenlanguageId].name;
 
-								if(!stories[storyId].metadata.tag)
-									stories[storyId].metadata.tag = {};
+								if(!stories[storyId].metadata.tags[lang])
+									stories[storyId].metadata.tags[lang] = [];
 
-								if(!stories[storyId].metadata.tag[lang])
-									stories[storyId].metadata.tag[lang] = [];
-
-								stories[storyId].metadata.tag[lang].push(res[i].name);
+								stories[storyId].metadata.tags[lang].push(res[i].name);
 								if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+							}
+
+							_resolve();
+						}).catch(err => {
+							_reject(err);
+							return;
+						});
+					}));
+
+					// Load the views
+					dataPromises.push(new Promise((_resolve, _reject) => {
+						let query = "SELECT * from view";
+						conn.query(query).then(res => {
+							for(let i = 0; i < res.length; i++){
+								let storyId = res[i].storyId;
+
+								stories[storyId].metadata.views++;
+							}
+
+							_resolve();
+						}).catch(err => {
+							_reject(err);
+							return;
+						});
+					}));
+
+					// Load the likes
+					dataPromises.push(new Promise((_resolve, _reject) => {
+						let query = "SELECT * from liked";
+						conn.query(query).then(res => {
+							for(let i = 0; i < res.length; i++){
+								let storyId = res[i].storyId;
+
+								stories[storyId].metadata.likes++;
 							}
 
 							_resolve();

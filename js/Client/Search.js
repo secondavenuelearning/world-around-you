@@ -15,6 +15,7 @@ $(document).ready(function () {
     		RunSearch();
     });
     $('#submit-search').on('click', RunSearch);
+    FiltersBar('filter-bar');
     RunSearch();
 });
 
@@ -25,6 +26,10 @@ function RunSearch(){
         method: 'get',
         url: `./api/search/${search}`
     }).done((stories) => {
-    	console.log(stories);
+    	$('#stories').html('');
+        for (var i = 0; i < stories.length; i++) {
+            let sp = new StoryPreview(stories[i]);
+            sp.appendTo('stories');
+        }
     });
 }

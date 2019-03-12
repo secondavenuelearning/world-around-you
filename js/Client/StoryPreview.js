@@ -5,11 +5,34 @@ import html from 'html/Client/StoryPreview.html!text';
 var index = 0,
 	template = _.template(html);
 
+var interval = 0;
+function resizePrviews(){
+	clearInterval(interval);
+	interval = setTimeout(() => {
+		$('.story-preview').each((i, el) => {
+			let $el = $(el);
+			
+			$el.css('width', '');
+			var width = parseFloat($el.width());
+
+			$el.css('height', `${9/16 * width}px`);
+			// var height = parseFloat($el.height());
+
+			// if(height != (9/16 * width)){
+			// 	$el.css('width', `${16/9 * height}px`);				
+			// }
+
+
+		});
+	}, 40);	
+}
+$(window).resize(resizePrviews);
+
 function StoryPreview(story){
 	// get the index for this current instance
 	this.id = `story-preview-${index++}`;
 	this.story = story;
-console.log(story);
+
 	// get the html from the template
 	var element = template({
 		id: this.id,
@@ -26,7 +49,7 @@ StoryPreview.prototype.appendTo = function(elementOrId) {
 
 	// append the story preview element
 	$elementOrId.append(this.$element);
-	console.log(elementOrId);
+	resizePrviews();
 };
 
 export default StoryPreview;
