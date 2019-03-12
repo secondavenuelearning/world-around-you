@@ -1,5 +1,4 @@
 mdb = require('mariadb');
-moment = require('moment');
 
 const Settings = require('./Settings');
 const pool = mdb.createPool({
@@ -15,40 +14,95 @@ function StoryDB(){
 }
 
 StoryDB.prototype.addStory = function(author,descriptionId,coverimage,visible,data) {
-	let time = moment().valueOf();
-	time = time / 1000;
-
 	return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query('INSERT INTO story (author, descriptionId, coverimage, visible, data, datecreated) VALUES (?, ?, ?, ?, ?, ?)', [author, descriptionId, coverimage, visible, data, time]).then((res) => {
+			conn.query('INSERT INTO story (author, descriptionId, coverimage, visible, data) VALUES (?, ?, ?, ?, ?)', [author, descriptionId, coverimage, visible, data]).then((res) => {
 				conn.end();
 				resolve(res);
 				return;
 			}).catch(err => {
 				//handle error
 				conn.end();
-				reject(false);
+				reject(err);
 				return;
 			});
 
 		}).catch(err => {
-			reject(false);
+			reject(err);
 			return;
 		});
 	});
 }
-StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
-	let time = moment().valueOf();
-	time = time / 1000;
 
+StoryDB.prototype.addEmptyStory = function() {
 
 	return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_genre (storyId, genreId, datecreated) VALUES (?, ?, ?)", [storyId, genreId, time]).then((res) => {
+			conn.query('INSERT INTO story (author, descriptionId, coverimage, visible, data) VALUES (?, ?, ?, ?, ?)', ["", 0, "", 0, ""]).then((res) => {
+				console.log(res.insertId);
+				conn.end();
+				resolve('{id:'+res.insertId+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+// ****************************************************************************
+// GET A STORY - BELOW THIS LINE                                              *
+// ****************************************************************************
+StoryDB.prototype.getStory = function(id) {
+
+	return new Promise(function(resolve,reject) {
+
+		pool.getConnection().then(conn => {
+
+			conn.query('SELECT * FROM story WHERE (id='+id+')').then((res) => {
+				//console.log(res);
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+// ****************************************************************************
+// GET A STORY - ABOVE THIS LINE                                              *
+// ****************************************************************************
+
+// ****************************************************************************
+// GET A STORY                                                                *
+// ****************************************************************************
+
+StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
+
+	return new Promise(function(resolve,reject) {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("INSERT INTO story_to_genre (storyId, genreId) VALUES (?, ?)", [storyId, genreId, time]).then((res) => {
 				conn.end();
 				resolve(res);
 				return;
@@ -67,15 +121,12 @@ StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
 	});
 }
 StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
-	let time = moment().valueOf();
-	time = time / 1000;
-
 
 	return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId, datecreated) VALUES (?, ?, ?)", [storyId, signlanguageId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId, time]).then((res) => {
 				conn.end();
 				resolve(res);
 				return;
@@ -94,42 +145,35 @@ StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
 	});
 }
 StoryDB.prototype.addStoryToTag = function(storyId,tagId) {
-	let time = moment().valueOf();
-	time = time / 1000;
-
 
 	return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_tag (storyId, tagId, datecreated) VALUES (?, ?, ?)", [storyId, tagId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_tag (storyId, tagId) VALUES (?, ?)", [storyId, tagId, time]).then((res) => {
 				conn.end();
 				resolve(res);
 				return;
 			}).catch(err => {
 				//handle error
 				conn.end();
-				reject(false);
+				reject(err);
 				return;
 			});
 
 		}).catch(err => {
-			reject(false);
+			reject(err);
 			return;
 		});
 
 	});
 }
 StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
-	let time = moment().valueOf();
-	time = time / 1000;
-
-
 	return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId,datecreated) VALUES (?, ?, ?)", [storyId, writtenlanguageId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId) VALUES (?, ?)", [storyId, writtenlanguageId, time]).then((res) => {
 				conn.end();
 				resolve(res);
 				return;
