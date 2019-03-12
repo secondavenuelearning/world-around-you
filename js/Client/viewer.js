@@ -1,5 +1,6 @@
 import 'style/viewer.css!';
 import html from 'html/Client/Viewer.html!text';
+import StoryViewer from 'js/Client/StoryViewer.js';
 
 function SetVideoTitle(titleName) {
     var title = document.getElementById("title");
@@ -45,4 +46,7 @@ $(document).ready(function () {
     SetDescriptionText("  Chicken buffalo biltong, corned beef frankfurter tenderloin leberkas ball tip chuck. Beef ribs turducken pancetta spare ribs ham. Sirloin meatloaf tri-tip shank strip steak, short loin ground round shoulder fatback. Shoulder prosciutto beef, ham short loin picanha pork chop fatback short ribs. Short ribs prosciutto tri-tip, chuck landjaeger sirloin strip steak jowl bresaola fatback picanha kevin. Ground round cupim andouille, pastrami burgdoggen beef jerky beef ribs fatback porchetta. Biltong ground round tri-tip landjaeger, meatball tenderloin shoulder turkey capicola.");
     GenerateGenres(["Folk", "Fantasy"]);
     GenerateTage(["folktale", "fantasy"]);
+    
+    //add story functionality
+    StoryViewer();
 });
