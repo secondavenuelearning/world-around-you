@@ -93,6 +93,11 @@ var sess=null;
 			Page: 'Edit'
 		}));
 	});
+	app.get('/Story', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Story'
+		}));
+	});
 
 // ******************************************************
 // Get Requests
