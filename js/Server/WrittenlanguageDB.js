@@ -1,13 +1,18 @@
 mdb = require('mariadb');
 
 const Settings = require('./Settings');
+const pool = mdb.createPool({
+        host: Settings.dbHost,
+        user: Settings.dbUser,
+        password: Settings.dbPassword,
+        database: Settings.dbName ,
+        connectionLimit: Settings.dbPoolConnectionLimit
+});
 
 function WrittenlanguageDB() {
 }
 
 WrittenlanguageDB.db_add_writtenlanguage = function(name) {
-
-    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
 
     return new Promise(function(resolve,reject) {
 
@@ -30,6 +35,31 @@ WrittenlanguageDB.db_add_writtenlanguage = function(name) {
 	});
 
     });
+}
+
+WrittenlanguageDB.getwrittenlanguage = function(language) {
+
+	return new Promise(function(resolve,reject) {
+
+		pool.getConnection().then(conn => {
+
+			conn.query('SELECT * FROM writtenlanguage WHERE (name="'+language+'")').then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				console.log(err);
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
 }
 
 module.exports = WrittenlanguageDB;
