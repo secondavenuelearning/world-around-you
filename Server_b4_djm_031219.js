@@ -6,9 +6,7 @@ const bodyParser = require('body-parser');
 const decode = require('urldecode');
 const encode = require('urlencode');
 const _ = require('underscore');
-
 const Settings = require('./js/Server/Settings.js');
-const ApiRoutes = require('./js/Server/ApiRoutes.js');
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -93,11 +91,17 @@ var sess=null;
 			Page: 'Edit'
 		}));
 	});
+    app.get('/View', function(req, res){
+		res.send(PageTemplate({
+			Page: 'Viewer'
+		}));
+	});
+
 
 // ******************************************************
 // Get Requests
 // ******************************************************
-	ApiRoutes(app);
+
 // ***************
 // * GENRE - ADD *
 // ***************
@@ -226,7 +230,7 @@ app.post('/add_story',function(req,res) {
 		return;
 	}
 
-	StoryDB.addStory(author,descriptionId,coverimage,visible,data).then(function(result) {
+	StoryDB.db_add_story(author,descriptionId,coverimage,visible,data).then(function(result) {
 		res.send("<div>story '"+titleId+"' added to StoryDB["+result+"]</div>");
 	}).catch(err => {
 		res.send(err);
@@ -601,96 +605,6 @@ app.post('/add_writtenlanguage',function(req,res) {
 	});
 });
 
-// ****************************************
-// ****************************************
-// * SAVE STORY API CALLS BELOW THIS LINE *
-// ****************************************
-// ****************************************
-// **********************
-// * CREATE NEW STORY   *
-// * - RETURN - storyId *
-// **********************
-app.post('/api/story',function(req,res) {
-	StoryDB.addEmptyStory().then(function(result) {
-		//console.log("ADD EMPTY STORY");
-		res.send(result);
-	}).catch(err => {
-		res.send(err);
-	});
-});
-// ****************************
-// * SAVE LANGUAGES IN STORY  *
-// * - RETURN - true or false *
-// ****************************
-app.post('/api/story/language',function(req,res) {
-
-	obj=req.body;
-	myid=obj.id;
-	mywarr=obj['writtenlanguages[]'];
-	mysarr=obj['signlanguages[]'];
-
-	console.log("[api/story/language][id]["+myid+"]");
-	console.log("[api/story/language][written-array]["+mywarr+"]");
-	console.log("[api/story/language][sign-array]["+mysarr+"]");
-
-	// *************************
-	// * DOES THE STORY EXIST? *
-	// *************************
-	StoryDB.getStory(myid).then(function(result) {
-		if(result=="[]") {
-			// ****************************
-			// * NO, STORY DOES NOT EXIST *
-			// ****************************
-			console.log("[StoryDB.getStory][STORY NOT FOUND]");
-			console.log(result);
-			res.send(result);
-		}
-		else {
-			// *********************
-			// * YES, STORY EXISTS *
-			// *********************
-			post_api_story_language_part2(req,res,myid,mywarr,mysarr);
-		}
-	}).catch(err => {
-		res.send(err);
-	});
-});
-// ****************************
-// * DELETE STORY LANGUAGES   *
-// * - RETURN - true or false *
-// ****************************
-app.delete('/api/story/language',function(req,res) {
-});
-// ************************************
-// * SAVE STORY COVER PAGE AND AUTHOR *
-// * - RETURN - true or false         *
-// ************************************
-app.post('/api/story/cover',function(req,res) {
-});
-// ****************************
-// * SAVE STORY METADATA      *
-// * - RETURN - true or false *
-// ****************************
-app.post('/api/story/metadata',function(req,res) {
-});
-// ****************************
-// * SAVE STORY JSON DATA     *
-// * - RETURN - true or false *
-// ****************************
-app.post('/api/story/data',function(req,res) {
-});
-// ****************************
-// * PUBLISH STORY            *
-// * - RETURN - true or false *
-// ****************************
-app.post('/api/story/publish',function(req,res) {
-});
-// ****************************************
-// ****************************************
-// * SAVE STORY API CALLS ABOVE THIS LINE *
-// ****************************************
-// ****************************************
-
 // ******************
 // * LISTEN TO PORT *
 // ******************
@@ -761,29 +675,5 @@ function keep_email_in_session(req,email) {
 	else {
 		sess.email=email;
 	}
-}
-
-function post_api_story_language_part2(req,res,storyid,mywarr,mysarr) {
-
-	// *******************
-	// * STORY WAS FOUND *
-	// *******************
-	console.log("[post_api_story_language_part2][storyid]["+storyid+"]");
-	// **********************************
-	// * LOOP THROUGH WRITTEN LANGUAGES *
-	// **********************************
-	len=mywarr.length;
-	//for(var i=0;i<len;i++) {
-	var i=0;
-		console.log("["+i+"][writtenlanguage]["+mywarr[i]+"]");
-
-		WrittenlanguageDB.getwrittenlanguage(mywarr[i]).then(function(result) {
-			console.log("getwrittenlanguage");
-			console.log(result);
-			res.send(result);
-		}).catch(err => {
-			res.send(err);
-		});
-	//}
 }
 

@@ -36,6 +36,31 @@ WrittenlanguageDB.db_add_writtenlanguage = function(name) {
     });
 }
 
+WrittenlanguageDB.getwrittenlanguage = function(language) {
+
+	return new Promise(function(resolve,reject) {
+
+		pool.getConnection().then(conn => {
+
+			conn.query('SELECT * FROM writtenlanguage WHERE (name="'+language+'")').then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				console.log(err);
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
 WrittenlanguageDB.prototype.getWrittenLanguages = function(){
 	return new Promise((resolve, reject) => {
 
