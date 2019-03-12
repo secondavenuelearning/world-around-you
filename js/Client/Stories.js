@@ -11,7 +11,7 @@ $(document).ready(function () {
     $('main').html(html);
     $.ajax({
         method: 'get',
-        url: './api/stories?unpublished=true'
+        url: './api/stories'
     }).done((stories) => {
         console.log(stories);
         var storyOne = [];

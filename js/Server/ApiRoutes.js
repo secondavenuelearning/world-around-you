@@ -7,7 +7,7 @@ var apiRoutes = function(app){
 // ******************************************************
 	app.get('/api/stories', (req, res) => {
 		var unpublished = req.query.unpublished;
-
+		
 		StoryDB.getStories(unpublished).then((stories) => {
 			res.send(stories);
 		}).catch((err) => {
@@ -15,7 +15,7 @@ var apiRoutes = function(app){
 		});
 	});
 
-	app.get('/api/stories/metadata', (req, res) => {
+	app.get('/api/search', (req, res) => {
 
 	});
 }
