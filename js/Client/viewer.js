@@ -36,6 +36,7 @@ function GenerateTage(Tags){
         
     }
 }
+
 $(document).ready(function () {
     //update main section of page
 
