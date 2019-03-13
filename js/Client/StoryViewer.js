@@ -6,6 +6,7 @@ var textArea;
 var visuals;
 var fullscreen = false;
 var pageIndex = 0;
+var totalPages;
 var storyData;
 
 
@@ -26,8 +27,18 @@ export function StoryViewer(storyObj)
     //add onclick for fullscreen toggling
     $('#fullscreen').on('click', function() {ToggleFullScreen()});
     
-    //parse data from story josn to the viewers elements
+    //add onclick event for chaning pages onto the nav buttons
+    $('.viewerNav#back button').on('click', function() {changePage(pageIndex - 1)});
+    $('.viewerNav#forward button').on('click', function() {changePage(pageIndex + 1)});
+    
+    //set the total page number
+    totalPages = Object.keys(storyData).length - 1;
+    $('#total').text(totalPages);
+    
+    //parse the first page
     parsePage(pageIndex, "English", "fsl_luzon");
+    ToggleStoryText(); //hide text for cover image
+    greyOutNav(); //grey out back button bc on first item
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -61,6 +72,50 @@ function updatePageNumbers()
 }
 
 /* ----------------------- Button Functionality ----------------------- */
+function changePage(pageNum)
+{
+    //validate requested page
+    if((pageNum < 0 && ShowingCover) || (pageNum > totalPages - 2 && !ShowingCover()))
+    {
+        return;
+    }
+    
+    //check if we are on the video or img, and switch between those before changing pages
+    if(ShowingCover())
+    {
+        //change to show video
+        $('#visuals img').css("display", "none");
+        $('#visuals video').css("display", "block");
+        
+        //update icons
+        $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
+        $('.viewerNav #icon').attr('src', '../../img/icons/language.png');
+        
+        //minimize story text
+        ToggleStoryText();
+    }
+    //we saw the video we need to parse the next page
+    else
+    {
+        //change page index
+        pageIndex = pageNum;
+        
+        //update icons
+        $('#currentOverlay img').attr('src', '../../img/icons/language.png');
+        $('.viewerNav #icon').attr('src', '../../img/icons/replay.png');
+        
+        //bring story text back up
+        ToggleStoryText();
+
+        //parse data from story josn to the viewers elements
+        parsePage(pageIndex, "English", "fsl_luzon");
+    }
+    
+    //grey out nav on last and first items
+    greyOutNav();
+    
+}
+
 function ToggleStoryText()
 {
     //get current mode
@@ -69,12 +124,9 @@ function ToggleStoryText()
     //check if showing or not
     if(currentMode.toString() === "none")
     {
-        textArea.css("display", "block");
-        
-        //shrink video
-        visuals.css('height', '70%');
-        visuals.css('width', '70%');
-        visuals.css('margin', '2.5% 15% 2.5% 15%'); //top right bottom left
+        //set text and visuals back to default
+        textArea.removeAttr('style');
+        visuals.removeAttr('style');
         
     }
     else
@@ -130,4 +182,42 @@ function ToggleFullScreen()
         $('main').css('overflow', 'hidden');
     }
     
+}
+
+/* ---------------------- Button Extra Styling Functions ---------------------- */
+function greyOutNav()
+{
+    var forward = $('.viewerNav#forward button');
+    var back = $('.viewerNav#back button');
+    
+    //special events
+    if(pageIndex == 0 && ShowingCover()) //first page should hide left button
+    {
+        //get back button and "grey" it out
+        back.css('opacity', '.3');
+
+    }
+    else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
+    { console.log("max");
+        //get forward button and "grey" it out
+        forward.css('opacity', '.3');
+    }
+    else
+    {
+        $('.viewerNav button').removeAttr('style');
+        $('.viewerNav button').removeAttr('disabled');
+    }
+}
+
+/* ---------------------- Helper Functions ---------------------- */
+function ShowingCover()
+{
+    var isShowing = true;
+    
+    if($('#visuals img').css('display') == "none")
+    {
+        isShowing = false;
+    }
+    
+    return isShowing;
 }
