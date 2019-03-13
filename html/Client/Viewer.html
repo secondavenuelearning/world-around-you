@@ -34,6 +34,35 @@
         </button>
     </div>
 </div>
+  <div id="id01" class="modal">
+
+        <form class="modal-content animate" action="/action_page.php">
+         
+
+            <div class="container">
+               <div id = definitionContainer>
+                <h1 id = "definitionWord"> Test</h1>
+                <p id = "definitionText">
+                   The definition of test is a value used to see if it is working correctly.
+                   </p>
+                
+                
+                </div>
+                <div id = "mediaContainer">
+                    <div class = "media">
+                        <video id = "videoContainer" autoplay muted>
+                    <source id = "videoLoop" type="video/mp4">
+                    </video>
+                    </div>
+                 <div id = "mediaImage">
+                    <img id = "definitionImage" >
+                    </div>
+               
+                </div>
+               
+            </div>
+        </form>
+    </div>
 <div id="viewerBar">
     <div id="index">
         <div id="holder">
@@ -44,7 +73,7 @@
     </div>
     <div id="optionBtns">
         <button id ="writtenLang">
-            <img src="../../img/icons/language.png">
+            <img src="../../img/icons/language.png" onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
         </button>
         <button id ="signLang">
             <img src="../../img/icons/language.png">

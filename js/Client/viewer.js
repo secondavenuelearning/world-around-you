@@ -8,6 +8,28 @@ import StoryViewer from 'js/Client/StoryViewer.js';
 var totalLikes;
 var canLike = true;
 
+
+function setOverlayItems(word, definition, start, end, video, image)
+{
+    var videoTag = document.getElementById("videoLoop");
+    var videoContainer = document.getElementById("videoContainer")
+    var imageTag = document.getElementById("definitionImage");
+    var description = document.getElementById("definitionText");
+    var title = document.getElementById("definitionWord");
+    
+    videoTag.src = video + "#t="+start+","+end;
+    videoContainer.ontimeupdate = function(){
+        if(videoContainer.currentTime>=end){
+            videoContainer.currentTime = start;
+            videoContainer.play();
+            
+        }
+    }
+    imageTag.src = image;
+    description.innerHTML = definition;
+    title.innerHTML = word;
+    
+}
 function SetVideoTitle(titleName) {
     var title = document.getElementById("title");
     title.innerHTML = titleName;
@@ -107,9 +129,17 @@ $(document).ready(function () {
     }
     new Carousel("#more-author", storyTwo, 4, false, false, "More Stories");
 
+      var modal = document.getElementById('id01');
 
-    
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    setOverlayItems("Round Earth", "The theory the earth is round instead of the proper flat", 0,1, "../../videos/Malakas_Maganda/fsl_luzon/0.mp4","img/glossary/huge.png" );
     //add story functionality
+
     var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
     var storyObj = null;
@@ -123,5 +153,6 @@ $(document).ready(function () {
     xmlhttp.open("GET", dataURL);
     xmlhttp.send();
     
+
 
 });
