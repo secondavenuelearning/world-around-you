@@ -38,8 +38,22 @@ $(document).ready(function () {
         FiltersBar('filter-bar');
 
 
-        for (var i = 0; i < stories.length; i++) {
-            let sp = new StoryPreview(stories[i]);
+        // for (var i = 0; i < stories.length; i++) {
+        //     let sp = new StoryPreview(stories[i]);
+        for (var i = 0; i < 9; i++) {
+            let sp = new StoryPreview({
+                id: i + 1,
+                metadata: {
+                    title: {
+                        english: 'Aesop Fables: The Clever Donkey'
+                    },
+                    description: {
+                        english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
+                    }                    
+                },
+                author: 'Massimo V.',
+                coverImage: 'img/carousel/from_this_author/1.png'
+            });
             sp.appendTo('stories');
         }
 

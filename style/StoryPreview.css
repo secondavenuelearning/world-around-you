@@ -3,7 +3,7 @@
 	display: inline-block;
 	float: left;
 	width: calc(100% / 3);
-	height: 200px;
+	max-height: 100%;
 	padding: 15px;
 }
 .story-preview .meta-data-container, .story-preview .cover-image-container{
