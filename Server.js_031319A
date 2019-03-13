@@ -855,8 +855,9 @@ function post_api_story_language_part4(req,res,storyId,writtenlanguageId,mywarr,
 function post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
 	console.log("[post_api_story_language_part5][ADD RELATIONSHIP][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
 	StoryDB.addStoryToWrittenlanguage(storyId,writtenlanguageId).then(function(result) {
-		var recid=result.id;
-                console.log("[NEW RELATIONSHIP ADDED]["+recid+"]");
+		console.log(result);
+                addid=result.id;
+                console.log("[post_api_story_language_part5][NEW RELATIONSHIP ADDED - STORY TO WRITTEN LANGUAGE]["+addid+"][writtenlanguage]["+writtenlanguageId+"][story]["+storyid+"]");
 		res.send(result);
         }).catch(err => {
                 res.send(err);
