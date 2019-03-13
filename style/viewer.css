@@ -353,6 +353,25 @@
 
 }
 
+/* Glossary Terms */
+.glossary
+{
+    padding-left: 5px;
+    padding-right: 5px;
+    
+    background-color: #004e74;
+    border-color: #004e74;
+    border-style: solid;
+    border-radius: 15px;
+    
+    transition: border-color .6s;
+}
+
+.glossary:hover
+{
+    border-color: white;
+}
+
 /* details and social */
 #details {
     width: 50%;
