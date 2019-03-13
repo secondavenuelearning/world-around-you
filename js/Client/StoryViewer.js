@@ -3,25 +3,64 @@ export default StoryViewer
 
 /* ----------------------- Global Variables ----------------------- */
 var textArea;
-var video;
+var visuals;
 var fullscreen = false;
+var pageIndex = 0;
+var storyData;
 
 
-/* ----------------------- Functionalitu ----------------------- */
+/* ----------------------- Constructor ----------------------- */
 
-export function StoryViewer()
+export function StoryViewer(storyObj)
 {
+    //save passed in story json globally
+    storyData = storyObj;
+    
     //attach global vars to their element
     textArea = $('#story');
-    video = $('video');
+    visuals = $('#visuals');
     
     //add onlick for story toggle
     $('#storyToggle').on('click', function() {ToggleStoryText()});
     
     //add onclick for fullscreen toggling
     $('#fullscreen').on('click', function() {ToggleFullScreen()});
+    
+    //parse data from story josn to the viewers elements
+    parsePage(pageIndex, "English", "fsl_luzon");
 }
 
+/* ----------------------- Data parsing ----------------------- */
+function parsePage(page, writtenLang, signLang)
+{
+    //update all the page numbers
+    updatePageNumbers();
+    
+    //set story text
+    $('#story').text(storyData[pageIndex].text[writtenLang]);
+    
+    //set image
+    $('#visuals img').css('display', 'block');
+    $('#visuals img').attr('src', storyData[pageIndex].image);
+    
+    //set video
+    $('#visuals video').css('display', 'none');
+    $('#visuals video').attr('src', storyData[pageIndex].video[signLang]);
+    
+}
+
+function updatePageNumbers()
+{
+    //update current
+    $('#index #current').text(pageIndex + 1);
+    $('#currentOverlay span').text(pageIndex + 1);
+    
+    //update buttons
+    $('.viewerNav#forward #num').text(pageIndex + 2);
+    $('.viewerNav#back #num').text(pageIndex);
+}
+
+/* ----------------------- Button Functionality ----------------------- */
 function ToggleStoryText()
 {
     //get current mode
@@ -33,9 +72,9 @@ function ToggleStoryText()
         textArea.css("display", "block");
         
         //shrink video
-        video.css('height', '70%');
-        video.css('width', '70%');
-        video.css('margin', '2.5% 15% 2.5% 15%'); //top right bottom left
+        visuals.css('height', '70%');
+        visuals.css('width', '70%');
+        visuals.css('margin', '2.5% 15% 2.5% 15%'); //top right bottom left
         
     }
     else
@@ -44,9 +83,9 @@ function ToggleStoryText()
         textArea.css("display", "none");
         
         //expand video to be full size
-        video.css('height', '100%');
-        video.css('width', '100%');
-        video.css('margin', '0px');
+        visuals.css('height', '100%');
+        visuals.css('width', '100%');
+        visuals.css('margin', '0px');
     }
 }
 
