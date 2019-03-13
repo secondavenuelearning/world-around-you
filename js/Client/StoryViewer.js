@@ -2,13 +2,15 @@ import _ from 'underscore';
 export default StoryViewer
 
 /* ----------------------- Global Variables ----------------------- */
-var textArea;
-var visuals;
-var fullscreen = false;
-var pageIndex = 0;
-var totalPages;
 var storyData;
 
+var pageIndex = 0;
+var totalPages;
+
+var textArea;
+var visuals;
+
+var fullscreen = false;
 
 /* ----------------------- Constructor ----------------------- */
 
@@ -63,13 +65,19 @@ function parsePage(page, writtenLang, signLang)
 
 function updatePageNumbers()
 {
+    var screen = 1;
+    if(!ShowingCover())
+    {
+        screen = 2;
+    }
+    
     //update current
     $('#index #current').text(pageIndex + 1);
     $('#currentOverlay span').text(pageIndex + 1);
     
     //update buttons
-    $('.viewerNav#forward #num').text(pageIndex + 2);
-    $('.viewerNav#back #num').text(pageIndex);
+    $('.viewerNav#forward #num').text(pageIndex + screen);
+    $('.viewerNav#back #num').text(pageIndex - (screen % 2) + 1);
 }
 
 /* ----------------------- Button Functionality ----------------------- */
@@ -81,6 +89,7 @@ function changePage(pageNum)
         return;
     }
     
+    //check if we are paging forward or backward, call fucntion accordingly
     if(pageNum > pageIndex)
     {
         NextScreen(pageNum);
@@ -110,12 +119,13 @@ function LastScreen(pageNum)
         $('#visuals img').css("display", "none");
         $('#visuals video').css("display", "block");
         
+        //set text and visuals back to default
+        textArea.removeAttr('style');
+        visuals.removeAttr('style');
+        
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/language.png');
-        
-        //minimize story text
-        ToggleStoryText();
     }
     //we saw the video we need to parse the next page
     else
@@ -124,12 +134,17 @@ function LastScreen(pageNum)
         $('#visuals img').css("display", "block");
         $('#visuals video').css("display", "none");
         
+        //turn off text area
+        textArea.css("display", "none");
+        
+        //expand video to be full size
+        visuals.css('height', '100%');
+        visuals.css('width', '100%');
+        visuals.css('margin', '0px');
+        
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/language.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/replay.png');
-        
-        //bring story text back up
-        ToggleStoryText();
     }
 }
 
@@ -142,12 +157,13 @@ function NextScreen(pageNum)
         $('#visuals img').css("display", "none");
         $('#visuals video').css("display", "block");
         
+        //set text and visuals back to default
+        textArea.removeAttr('style');
+        visuals.removeAttr('style');
+        
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/language.png');
-        
-        //minimize story text
-        ToggleStoryText();
     }
     //we saw the video we need to parse the next page
     else
@@ -159,12 +175,17 @@ function NextScreen(pageNum)
         $('#visuals img').css("display", "block");
         $('#visuals video').css("display", "none");
         
+        //turn off text area
+        textArea.css("display", "none");
+        
+        //expand video to be full size
+        visuals.css('height', '100%');
+        visuals.css('width', '100%');
+        visuals.css('margin', '0px');
+        
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/language.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/replay.png');
-        
-        //bring story text back up
-        ToggleStoryText();
     }
 }
 
@@ -239,20 +260,19 @@ function ToggleFullScreen()
 /* ---------------------- Button Extra Styling Functions ---------------------- */
 function greyOutNav()
 {
-    var forward = $('.viewerNav#forward button');
-    var back = $('.viewerNav#back button');
-    
     //special events
     if(pageIndex == 0 && ShowingCover()) //first page should hide left button
     {
         //get back button and "grey" it out
-        back.css('opacity', '.3');
+        $('.viewerNav#back button').css('opacity', '.3');
+        $('.viewerNav#back span').text(1);
 
     }
     else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
-    { console.log("max");
+    {
         //get forward button and "grey" it out
-        forward.css('opacity', '.3');
+        $('.viewerNav#forward button').css('opacity', '.3');
+        $('.viewerNav#forward span').text(totalPages - 1);
     }
     else
     {
