@@ -4,6 +4,7 @@ import html from 'html/Client/Viewer.html!text';
 import StoryPreview from 'js/Client/StoryPreview';
 import Carousel from 'js/Client/Carousel.js';
 import StoryViewer from 'js/Client/StoryViewer.js';
+
 var totalLikes;
 var canLike = true;
 
@@ -89,6 +90,7 @@ function GenerateTage(Tags) {
 
     }
 }
+
 $(document).ready(function () {
     //update main section of page
 
@@ -137,7 +139,19 @@ $(document).ready(function () {
         }
     setOverlayItems("Round Earth", "The theory the earth is round instead of the proper flat", 0,1, "../../videos/Malakas_Maganda/fsl_luzon/0.mp4","img/glossary/huge.png" );
     //add story functionality
-    StoryViewer();
+
+    var xmlhttp = new XMLHttpRequest();
+    var dataURL = "../../text/Malakas_Maganda.json";
+    var storyObj = null;
+    
+    xmlhttp.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        storyObj = JSON.parse(this.responseText);
+        StoryViewer(storyObj);
+      }
+    };
+    xmlhttp.open("GET", dataURL);
+    xmlhttp.send();
     
 
 
