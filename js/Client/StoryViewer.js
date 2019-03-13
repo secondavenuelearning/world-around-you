@@ -36,6 +36,9 @@ export function StoryViewer(storyObj)
     $('#total').text(totalPages);
     
     //parse the first page
+    $('#visuals img').css("display", "block");
+    $('#visuals video').css("display", "none");
+    
     parsePage(pageIndex, "English", "fsl_luzon");
     ToggleStoryText(); //hide text for cover image
     greyOutNav(); //grey out back button bc on first item
@@ -43,7 +46,7 @@ export function StoryViewer(storyObj)
 
 /* ----------------------- Data parsing ----------------------- */
 function parsePage(page, writtenLang, signLang)
-{
+{ console.log("Parsing: " + page);
     //update all the page numbers
     updatePageNumbers();
     
@@ -51,11 +54,9 @@ function parsePage(page, writtenLang, signLang)
     $('#story').text(storyData[pageIndex].text[writtenLang]);
     
     //set image
-    $('#visuals img').css('display', 'block');
     $('#visuals img').attr('src', storyData[pageIndex].image);
     
     //set video
-    $('#visuals video').css('display', 'none');
     $('#visuals video').attr('src', storyData[pageIndex].video[signLang]);
     
 }
@@ -75,12 +76,66 @@ function updatePageNumbers()
 function changePage(pageNum)
 {
     //validate requested page
-    if((pageNum < 0 && ShowingCover) || (pageNum > totalPages - 2 && !ShowingCover()))
+    if((pageNum < 0 && ShowingCover()) || (pageNum > totalPages - 1 && !ShowingCover()))
     {
         return;
     }
     
-    //check if we are on the video or img, and switch between those before changing pages
+    if(pageNum > pageIndex)
+    {
+        NextScreen(pageNum);
+    }
+    else
+    {
+        LastScreen(pageNum);
+    }
+   
+    
+    //grey out nav on last and first items
+    greyOutNav();
+    
+    //parse data from story josn to the viewers elements
+    parsePage(pageIndex, "English", "fsl_luzon");
+    
+}
+
+function LastScreen(pageNum)
+{
+    if(ShowingCover())
+    {
+        //change page index
+        pageIndex = pageNum;
+        
+        //change to show video
+        $('#visuals img').css("display", "none");
+        $('#visuals video').css("display", "block");
+        
+        //update icons
+        $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
+        $('.viewerNav #icon').attr('src', '../../img/icons/language.png');
+        
+        //minimize story text
+        ToggleStoryText();
+    }
+    //we saw the video we need to parse the next page
+    else
+    {
+        //change to show img
+        $('#visuals img').css("display", "block");
+        $('#visuals video').css("display", "none");
+        
+        //update icons
+        $('#currentOverlay img').attr('src', '../../img/icons/language.png');
+        $('.viewerNav #icon').attr('src', '../../img/icons/replay.png');
+        
+        //bring story text back up
+        ToggleStoryText();
+    }
+}
+
+function NextScreen(pageNum)
+{
+     //check if we are on the video or img, and switch between those before changing pages
     if(ShowingCover())
     {
         //change to show video
@@ -100,20 +155,17 @@ function changePage(pageNum)
         //change page index
         pageIndex = pageNum;
         
+        //change to show img
+        $('#visuals img').css("display", "block");
+        $('#visuals video').css("display", "none");
+        
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/language.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/replay.png');
         
         //bring story text back up
         ToggleStoryText();
-
-        //parse data from story josn to the viewers elements
-        parsePage(pageIndex, "English", "fsl_luzon");
     }
-    
-    //grey out nav on last and first items
-    greyOutNav();
-    
 }
 
 function ToggleStoryText()
