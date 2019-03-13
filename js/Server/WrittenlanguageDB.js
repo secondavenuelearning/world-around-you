@@ -12,31 +12,31 @@ const pool = mdb.createPool({
 function WrittenlanguageDB() {
 }
 
-WrittenlanguageDB.db_add_writtenlanguage = function(name) {
+WrittenlanguageDB.prototype.db_add_writtenlanguage = function(name) {
     return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
 		    conn.query("INSERT INTO writtenlanguage (name) VALUES ('"+name+"')").then((res) => {
 			conn.end();
-			resolve("[db_add_writtenlanguage][success]");
+			resolve({id:res.insertId});
 			return;
 		    }).catch(err => {
 			//handle error
 			conn.end();
-			reject("[db_add_writtenlanguage][failure1]");
+			reject(err);
 			return;
 		    })
 
 		}).catch(err => {
-		    reject("[db_add_writtenlanguage][failure2]");
+		    reject(err);
 		    return;
 		});
 
     });
 }
 
-WrittenlanguageDB.getwrittenlanguage = function(language) {
+WrittenlanguageDB.prototype.getwrittenlanguage = function(language) {
 
 	return new Promise(function(resolve,reject) {
 

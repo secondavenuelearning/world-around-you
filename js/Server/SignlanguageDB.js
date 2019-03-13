@@ -12,7 +12,7 @@ const pool = mdb.createPool({
 function SignlanguageDB() {
 }
 
-SignlanguageDB.db_add_signlanguage = function(name) {
+SignlanguageDB.prototype.db_add_signlanguage = function(name) {
     return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
