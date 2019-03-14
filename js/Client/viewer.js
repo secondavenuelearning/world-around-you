@@ -47,7 +47,9 @@ function updateLikes() {
         totalLikes++;
         document.getElementById("likes").innerHTML = "Likes: " + totalLikes;
         canLike = false;
+        
     }
+    document.getElementById("likeClick").style.backgroundColor = "#0098ba";
 
 }
 
