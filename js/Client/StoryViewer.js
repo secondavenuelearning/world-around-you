@@ -50,6 +50,7 @@ export function StoryViewer(storyObj)
     GenerateLanguageSelects();
     
     parsePage(pageIndex);
+    $('#storyToggle').css('display', 'none');
     ToggleStoryText(); //hide text for cover image
     greyOutNav(); //grey out back button bc on first item
 }
@@ -270,6 +271,7 @@ function LastScreen(pageNum)
         //set text and visuals back to default
         textArea.removeAttr('style');
         visuals.removeAttr('style');
+        $('#storyToggle').removeAttr('style');
         
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
@@ -308,6 +310,7 @@ function NextScreen(pageNum)
         //set text and visuals back to default
         textArea.removeAttr('style');
         visuals.removeAttr('style');
+        $('#storyToggle').removeAttr('style');
         
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
@@ -325,6 +328,7 @@ function NextScreen(pageNum)
         
         //turn off text area
         textArea.css("display", "none");
+        $('#storyToggle').css('display', 'none');
         
         //expand video to be full size
         visuals.css('height', '100%');
@@ -348,6 +352,7 @@ function ToggleStoryText()
         //set text and visuals back to default
         textArea.removeAttr('style');
         visuals.removeAttr('style');
+        $('#storyToggle').removeAttr('style');
         
     }
     else
@@ -359,6 +364,8 @@ function ToggleStoryText()
         visuals.css('height', '100%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
+        
+        $('#storyToggle').css('top', "calc(-100px - 1.5%)");
     }
 }
 

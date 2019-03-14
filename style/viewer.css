@@ -342,8 +342,8 @@
 {
 
     position: relative;
-    top: -50px;
-    height: 43%;
+    top: calc(-50px - 2%);
+    height: calc(45% - 50px);
     background-color: #0098ba;
     padding: 15px;
     padding-left: 30px;
@@ -356,27 +356,36 @@
     color: white;
 }
 
-.content #storyToggle {
+.content #storyToggle
+{
+    height: 50px;
+    width: 100%;
+    
+    margin-top: 1.25%;
+    
+    position: relative;
+    top: calc(-50px - 2%);
+    
+    opacity: .9;
+}
+
+.content #storyToggle button{
     height: 50px;
     width: 50px;
 
-    margin: 5px;
-
     border: 1px;
-    border-radius: 50%;
+    border-radius: 50% 50% 0 0;
     border-color: #004e74;
     background-color: #004e74;
 
-    opacity: .7;
-
     position: relative;
+    left: calc(25px - 50%);
     z-index: 3;
 
-    top: -110px;
     float: right;
 }
 
-.content #storyToggle img {
+.content #storyToggle button img {
     height: 40px;
     width: 40px;
     opacity: 1.3;
