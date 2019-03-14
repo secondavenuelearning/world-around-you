@@ -37,7 +37,7 @@ export function StoryViewer(storyObj)
     $('.viewerNav#forward button').on('click', function() {changePage(pageIndex + 1)});
     
     //set the total page number
-    totalPages = Object.keys(storyData).length - 1;
+    totalPages = Object.keys(storyData).length;
     $('#total').text(totalPages);
     
     //parse the first page
@@ -115,7 +115,50 @@ function GenerateGlossaryButtons()
         
         //give modified text back to story element
         textArea.html(story);
+        
+        //add button functionality
+        $('.glossary').on('click', function(e)
+        {
+            //parse data to modal pop up
+            var glossary = storyData[pageIndex].glossary[writtenLang];
+            var term = $(e.target).text().toLowerCase();
+                
+            setOverlayItems( term, //word
+                glossary[term].definition,
+                glossary[term].video[signLang].start,
+                glossary[term].video[signLang].end,
+                storyData[pageIndex].video[signLang],
+                storyData[pageIndex].image
+            );
+            
+            //call pop up
+            $('.modal').css("display", "block");
+            $('.modal').css("width", "auto");
+            $('#videoLoop').focus();
+        });
     }
+}
+
+function setOverlayItems(word, definition, start, end, video, image)
+{
+    var videoTag = document.getElementById("videoLoop");
+    var videoContainer = document.getElementById("videoContainer")
+    var imageTag = document.getElementById("definitionImage");
+    var description = document.getElementById("definitionText");
+    var title = document.getElementById("definitionWord");
+    
+    videoTag.src = video + "#t="+start+","+end;
+    videoContainer.ontimeupdate = function(){ console.log("loop");
+        if(videoContainer.currentTime>=end){
+            videoContainer.currentTime = start;
+            videoContainer.play();
+            
+        }
+    }
+    imageTag.src = image;
+    description.innerHTML = definition;
+    title.innerHTML = word;
+    
 }
 
 /* ----------------------- Button Functionality ----------------------- */
