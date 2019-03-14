@@ -581,7 +581,10 @@ input[type=email] {
     font-size: 35px;
     font-weight: bold;
 }
-
+#likeClick:hover{
+    color:white;
+    background-color:#0098ba;
+}
 .close:hover,
 .close:focus {
     color: red;
@@ -623,7 +626,14 @@ input[type=email] {
     text-align: left;
     
     background-color: #a0eaf7;
+
+    font-size: 30px;
+    font-style: bold;
     
+}
+#definitionContainer h1{
+    color: #004e74;
+    margin:0;
 }
 #mediaContainer {
     display: block;
@@ -632,7 +642,7 @@ input[type=email] {
     
     margin: 2.5%;
     
-    bottom: 50px;
+
     border-style: none;
     border-radius: 10px;
     float: left;
@@ -643,6 +653,7 @@ input[type=email] {
     
     padding: 5px;
 }
+
 #mediaImage{
     height: 50%;
     
