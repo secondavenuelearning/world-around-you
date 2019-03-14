@@ -245,6 +245,14 @@ function changePage(pageNum)
     
     //parse data from story josn to the viewers elements
     parsePage(pageIndex);
+     if(ShowingCover()){
+         var nav = document.getElementById("currentOverlay");
+         nav.style.opacity = .7;
+     }
+    else{
+         var nav = document.getElementById("currentOverlay");
+         nav.style.opacity = 0;
+    }
     
 }
 
