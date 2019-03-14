@@ -628,6 +628,45 @@ app.post('/api/story',function(req,res) {
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/language',function(req,res) {
+	obj=req.body;
+	myid=obj.id;
+	mywarr=obj['writtenlanguages[]'];
+	mysarr=obj['signlanguages[]'];
+
+	//console.log("[api/story/language][storyid]["+myid+"]");
+	//console.log("[api/story/language][written-array]["+mywarr+"]");
+	//console.log("[api/story/language][sign-array]["+mysarr+"]");
+
+	// *************************
+	// * DOES THE STORY EXIST? *
+	// *************************
+        console.log("[POST-/api/story/language][DOES STORY EXIST?][STORY]["+myid+"]");
+	StoryDB.getStory(myid).then(function(result) {
+		if(result=="[]") {
+			// ****************************
+			// * NO, STORY DOES NOT EXIST *
+			// ****************************
+			console.log("[POST-/api/story/language][StoryDB.getStory][NO, STORY "+myid+" DOESN'T EXIST]");
+			res.send(result);
+		}
+		else {
+			// *********************
+			// * YES, STORY EXISTS *
+			// *********************
+                        console.log("[POST-/api/story/language][StoryDB.getStory][YES, STORY EXISTS]["+myid+"]");
+			post_api_story_language_part2(req,res,myid,mywarr,mysarr);
+		}
+	}).catch(err => {
+		res.send(err);
+	});
+});
+
+// ****************************
+// * SAVE LANGUAGES IN STORY  *
+// * 1ST TRY - BROKEN         *
+// * - RETURN - true or false *
+// ****************************
+app.post('/api/story/languagex',function(req,res) {
 
 	obj=req.body;
 	myid=obj.id;
@@ -658,7 +697,7 @@ app.post('/api/story/language',function(req,res) {
 			// * YES, STORY EXISTS *
 			// *********************
                         console.log("[StoryDB.getStory][YES, STORY EXISTS]["+myid+"]");
-			post_api_story_language_part2(req,res,myid,mywlang,mywarr,mysarr);
+			xpost_api_story_language_part2x(req,res,myid,mywlang,mywarr,mysarr);
 		}
 	}).catch(err => {
 		res.send(err);
@@ -772,38 +811,37 @@ function keep_email_in_session(req,email) {
 	}
 }
 
-function post_api_story_language_part2(req,res,storyid,writlang,mywarr,mysarr) {
+function xpost_api_story_language_part2x(req,res,storyid,writlang,mywarr,mysarr) {
 	// *******************
 	// * STORY WAS FOUND *
 	// *******************
         // ********************************
         // * DOES WRITTEN LANGUAGE EXIST? *
         // ********************************
-        console.log("[post_api_story_language_part2][DOES WRITTEN LANGUAGE EXIST?][language]["+writlang+"][storyid]["+storyid+"]");
+        console.log("[xpost_api_story_language_part2x][DOES WRITTEN LANGUAGE EXIST?][language]["+writlang+"][storyid]["+storyid+"]");
 	WrittenlanguageDB.getwrittenlanguage(writlang).then(function(result) {
 		if(result=="[]") {
                         // ***************************************
                         // * NO, WRITTEN LANGUAGE DOES NOT EXIST *
                         // ***************************************
-                        console.log("[post_api_story_language_part2][NO, WRITTENLANGUGE DOESN'T EXIST]["+writlang+"][story]["+storyid+"]");
-                        post_api_story_language_part3(req,res,storyid,writlang,mywarr,mysarr);
+                        console.log("[xpost_api_story_language_part2x][NO, WRITTENLANGUGE DOESN'T EXIST]["+writlang+"][story]["+storyid+"]");
+                        xpost_api_story_language_part3x(req,res,storyid,writlang,mywarr,mysarr);
                 }
                 else {
                         obj=JSON.parse(result);
-                        writid=obj[0]["id"];
+                        var writid=obj[0]["id"];
                         // ******************************
-                        // * YES, WRITTENLANGUGE EXISTS *
+                        // * YES, WRITTENLANGUAGE EXISTS *
                         // ******************************
-                        console.log("[post_api_story_language_part2][YES, WRITTEN LANGUAGE EXISTS]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"]");
-                        //console.log(result);
-                        res.send(result);
+                        console.log("[xpost_api_story_language_part2x][YES, WRITTEN LANGUAGE EXISTS]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"][go to part 4]");
+			post_api_story_language_part4(req,res,storyId,writid,mywarr,mysarr);
                 }
 	}).catch(err => {
 		res.send(err);
 	});
 }
 
-function post_api_story_language_part3(req,res,storyid,writlang,mywarr,mysarr) {
+function xpost_api_story_language_part3x(req,res,storyid,writlang,mywarr,mysarr) {
         // *******************
         // * STORY WAS FOUND *
         // *******************
@@ -813,21 +851,22 @@ function post_api_story_language_part3(req,res,storyid,writlang,mywarr,mysarr) {
         // ************************
         // * ADD WRITTEN LANGUAGE *
         // ************************
-        console.log("[post_api_story_language_part3][ADD WRITTEN LANGUAGE]["+writlang+"][story]["+storyid+"]");
+        console.log("[xpost_api_story_language_part3x][ADD WRITTEN LANGUAGE]["+writlang+"][story]["+storyid+"]");
         writid=0;
         WrittenlanguageDB.db_add_writtenlanguage(writlang).then(function(result) {
                 writid=result.id;
-                console.log("[post_api_story_language_part3][NEW WRITTEN LANGUAGE ID]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"]");
+                console.log("[xpost_api_story_language_part3x][NEW WRITTEN LANGUAGE ID]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"]");
 		// ********************************************************
 		// * DOES STORY AND WRITTEN LANGUAGE HAVE A RELATIONSHIP? *
 		// ********************************************************
-		post_api_story_language_part4(req,res,storyid,writid,mywarr,mysarr);
+		xpost_api_story_language_part4x(req,res,storyid,writid,mywarr,mysarr);
         }).catch(err => {
                 res.send(err);
         });
 }
 
-function post_api_story_language_part4(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
+function xpost_api_story_language_part4x(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
+	console.log("got to part 4");
         // *******************
         // * STORY EXISTS *
         // *******************
@@ -837,14 +876,14 @@ function post_api_story_language_part4(req,res,storyId,writtenlanguageId,mywarr,
         // ***************************************************
         // * STORY AND WRITTEN LANGUAGE RELATIONSHIP EXIST ? *
         // ***************************************************
-	console.log("[post_api_story_language_part4][STORY TO WRITTEN LANGUAGE RELATIONSHIP EXIST?][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
+	console.log("[part4][STORY/WRITTEN LANGUAGE RELATIONSHIP EXIST?][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
 	StoryDB.getStoryToWrittenlanguage(storyId,writtenlanguageId).then(function(result) {
 		if(result=="[]") {
-			console.log("[post_api_story_language_part4][NO RELATIONSHIP][ADD!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
-			post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,mysarr);
+			console.log("[xpost_api_story_language_part4x][NO RELATIONSHIP][ADD!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
+			xpost_api_story_language_part5x(req,res,storyId,writtenlanguageId,mywarr,mysarr);
 		}
 		else {
-			console.log("[post_api_story_language_part4][RELATIONSHIP EXISTS][DONE!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
+			console.log("[xpost_api_story_language_part4x][RELATIONSHIP EXISTS][DONE!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
 			res.send(result);
 		}
         }).catch(err => {
@@ -852,8 +891,8 @@ function post_api_story_language_part4(req,res,storyId,writtenlanguageId,mywarr,
         });
 }
 
-function post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
-	console.log("[post_api_story_language_part5][ADD RELATIONSHIP][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
+function xpost_api_story_language_part5x(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
+	console.log("[xpost_api_story_language_part5x][ADD RELATIONSHIP][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
 	StoryDB.addStoryToWrittenlanguage(storyId,writtenlanguageId).then(function(result) {
 		var recid=result.id;
                 console.log("[NEW RELATIONSHIP ADDED]["+recid+"]");
@@ -861,5 +900,146 @@ function post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,
         }).catch(err => {
                 res.send(err);
         });
+}
+
+function post_api_story_language_part2(req,res,storyid,mywarr,mysarr) {
+
+	var wlangpromarr=[];
+	var wfoundarr=[];
+	var len=mywarr.length;
+	//console.log("[post_api_story_language_part2][storyid]["+storyid+"][Enter the promise land!]")
+
+	for(var i=0;i<len;i++) {
+		//console.log("[post_api_story_language_part2][storyid]["+storyid+"][writtenlanguage]["+i+"]["+mywarr[i]+"]")
+		wlangpromarr.push(new Promise((resolve,reject) => {
+			WrittenlanguageDB.getwrittenlanguage(mywarr[i]).then(function(result) {
+				if(result=="[]") {
+					// ******************************
+					// * NO WRITTEN LANGUAGE FOUND *
+					// ******************************
+					console.log("[post_api_story_language_part2][NO WRITTENLANGUGE FOUND][story]["+storyid+"]");
+					//console.log(result);
+					resolve(result);
+				}
+				else {
+					// **************************
+					// * WRITTEN LANGUAGE FOUND *
+					// **************************
+					obj=JSON.parse(result);
+					var writid=obj[0]["id"];
+					console.log("[post_api_story_language_part2][WRITTENLANGUGE FOUND][writtenlanguageid]["+writid+"][storyid]["+storyid+"]");
+					//console.log(result);
+					wfoundarr.push(result);
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(wlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part2][PROMISES DONE-WRITTEN LANGUAGE-CHECKS]");
+		post_api_story_language_part3(req,res,storyid,wfoundarr,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 2");
+	});
+}
+
+function post_api_story_language_part3(req,res,storyid,wfoundarr,mywarr,mysarr) {
+	// ****************************************************
+	// * CREATE WRITTEN LANGUAGE ARRAY FROM FOUND RECORDS *
+	// ****************************************************
+	var rec=null;
+	var foundlangs=[];
+	var added_ids=[];
+	flen=wfoundarr.length;
+	for(var jj=0;jj<flen;jj++) {
+		rec=wfoundarr[jj];
+		tmp1=JSON.parse(rec);
+		foundlangs.push(tmp1[0].name);
+		added_ids.push(tmp1[0].id);
+	}
+	// *********************************************
+	// * CREATE WRITTEN LANGUAGE "NOT-FOUND" ARRAY *
+	// *********************************************
+	var notfoundlangs=[];
+	mlen=mywarr.length;
+	for(var kk=0;kk<mlen;kk++) {
+		if(check_found_wlangs(mywarr[kk],foundlangs)==false) {
+			notfoundlangs.push(mywarr[kk]);
+		}
+	}
+	// ********************************************
+	// * ADD WRITTEN LANGUAGE "NOT-FOUND" RECORDS *
+	// ********************************************
+	var writlangpromarr=[];
+	nflen=notfoundlangs.length;
+	for(var aa=0;aa<nflen;aa++) {
+		console.log("[post_api_story_language_part3][ADD-NOT-FOUND WRITTEN LAUGUAGE]["+notfoundlangs[aa]+"]");
+		writlangpromarr.push(new Promise((resolve,reject) => {
+			WrittenlanguageDB.db_add_writtenlanguage(notfoundlangs[aa]).then(function(result) {
+				writid=result.id;
+				added_ids.push(writid);
+				console.log("[post_api_story_language_part3][ADDED WRITTEN LANGUAGE][ID]["+writid+"][writtenlanguage]["+notfoundlangs[aa]+"][story]["+storyid+"]");
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(writlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part3][PROMISES DONE-WRITTEN LANGUAGE-ADD]");
+		alen=added_ids.length;
+		for(var bb=0;bb<alen;bb++) {
+			console.log("[post_api_story_language_part3][added-ids]["+bb+"]["+added_ids[bb]+"]")
+		}
+		post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 3");
+	});
+}
+
+function check_found_wlangs(onelang,foundlangs) {
+	wlen=foundlangs.length;
+	for(var ii=0;ii<wlen;ii++) {
+		if(onelang==foundlangs[ii]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr) {
+	console.log(added_ids);
+	var storywlangpromarr=[];
+	addlen=added_ids.length;
+	for(var cc=0;cc<addlen;cc++) {
+		storywlangpromarr.push(new Promise((resolve,reject) => {
+			console.log("[post_api_story_language_part4][storyid]["+storyid+"][writtenlanguageid]["+added_ids[cc]+"]");
+			StoryDB.getStoryToWrittenlanguage(storyid,added_ids[cc]).then(function(result) {
+				if(result=="[]") {
+					console.log("[post_api_story_language_part4][STORYTOWRITTENLANGUAGE NOT-FOUND]["+storyid+"]");
+					console.log(result);
+					resolve(result);
+				}
+				else {
+					obj=JSON.parse(result);
+					var storytowritid=obj[0]["id"];
+					console.log("[post_api_story_language_part4][STORYTOWRITTENLANGUGE FOUND][storytowrittenlanguageid]["+storytowritid+"][storyid]["+storyid+"]");
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(storywlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part4][PROMISES DONE-STORY TO WRITTEN LANGUAGE-CHECKS]");
+	}).catch(err => {
+		console.log("broken promises 4");
+	});
 }
 
