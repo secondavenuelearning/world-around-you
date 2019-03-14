@@ -8,7 +8,10 @@ var pageIndex = 0;
 var totalPages;
 
 var writtenLang = "English";
+var writtenOptions;
+
 var signLang = "fsl_luzon";
+var signOptions;
 
 var textArea;
 var visuals;
@@ -43,6 +46,8 @@ export function StoryViewer(storyObj)
     //parse the first page
     $('#visuals img').css("display", "block");
     $('#visuals video').css("display", "none");
+    
+    GenerateLanguageSelects();
     
     parsePage(pageIndex);
     ToggleStoryText(); //hide text for cover image
@@ -141,13 +146,12 @@ function GenerateGlossaryButtons()
 
 function setOverlayItems(word, definition, start, end, video, image)
 {
-    var videoTag = document.getElementById("videoLoop");
     var videoContainer = document.getElementById("videoContainer")
     var imageTag = document.getElementById("definitionImage");
     var description = document.getElementById("definitionText");
     var title = document.getElementById("definitionWord");
     
-    videoTag.src = video + "#t="+start+","+end;
+    videoContainer.src = video + "#t="+start+","+end;
     if(videoContainer.currentTime < start){
         videoContainer.currentTime = start;
     }
@@ -162,6 +166,58 @@ function setOverlayItems(word, definition, start, end, video, image)
     description.innerHTML = definition;
     title.innerHTML = word;
     
+}
+
+function GenerateLanguageSelects()
+{
+    //get sign and written options from the json
+    writtenOptions = Object.keys(storyData[0].text);
+    signOptions = Object.keys(storyData[0].video);
+    
+    //build menus
+    BuildSelectOptions($('#writtenLang select'), writtenOptions);
+    BuildSelectOptions($('#signLang select'), signOptions);
+    
+    //add click events
+    $('#writtenLang button').on('click', function()
+    {   
+        //toggle dropdown visibility
+        ToggleOptions('#writtenLang');
+    });
+    $('#writtenLang select').on('change', function(e)
+    {
+        writtenLang = e.target.value;  
+        parsePage(pageIndex);
+        ToggleOptions('#writtenLang');
+    });
+    
+    $('#signLang button').on('click', function()
+    {
+        ToggleOptions('#signLang');
+    });
+    $('#signLang select').on('change', function(e)
+    {
+        signLang = e.target.value;
+        parsePage(pageIndex);
+        ToggleOptions('#signLang');
+    });
+    
+}
+
+function BuildSelectOptions(select, options)
+{
+    var optionsHTML = "";
+    
+    //loop through options and create html
+    options.forEach(function(option)
+    {
+        optionsHTML += "<option value=\"" + option + "\">";
+        optionsHTML += option;
+        optionsHTML += "</option>";
+    });
+    
+    //add to slect object
+    select.html(optionsHTML);
 }
 
 /* ----------------------- Button Functionality ----------------------- */
@@ -295,6 +351,31 @@ function ToggleStoryText()
         visuals.css('height', '100%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
+    }
+}
+
+function ToggleOptions(tag)
+{
+    var selectObj = $(tag + ' select');
+    var buttonObj = $(tag + ' button');
+    
+    //get current mode
+    var currentMode = selectObj.css("display");
+    
+     //check if showing or not
+    if(currentMode.toString() === "none")
+    {
+        selectObj.css('display', 'block');
+        
+        buttonObj.css("border-bottom-left-radius", "0");
+        buttonObj.css("border-bottom-right-radius", "0");
+        
+    }
+    else
+    {
+        //set text and visuals back to default
+        selectObj.removeAttr('style');
+        buttonObj.removeAttr('style');
     }
 }
 

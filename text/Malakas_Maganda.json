@@ -8,7 +8,7 @@
         },
         "text": {
             "English": "Malakas and Maganda",
-            "Tagalog": "Malakas and Maganda"
+            "Tagalog": "Malakas and Maganda [In Tagalog]"
         }
 
     },
@@ -16,7 +16,7 @@
         "image": "../../img/Malakas_Maganda/1.png",
         "video": {
             "fsl_luzon": "../../videos/Malakas_Maganda/fsl_luzon/1.mp4",
-            "fsl_visayas": "video.file",
+            "fsl_visayas": "../../videos/Malakas_Maganda/fsl_visayas/1.mp4",
             "fsl_mindanao": "video.file"
         },
         "text": {
