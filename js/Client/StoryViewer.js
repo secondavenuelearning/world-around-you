@@ -7,6 +7,9 @@ var storyData;
 var pageIndex = 0;
 var totalPages;
 
+var writtenLang = "English";
+var signLang = "fsl_luzon";
+
 var textArea;
 var visuals;
 
@@ -41,13 +44,13 @@ export function StoryViewer(storyObj)
     $('#visuals img').css("display", "block");
     $('#visuals video').css("display", "none");
     
-    parsePage(pageIndex, "English", "fsl_luzon");
+    parsePage(pageIndex);
     ToggleStoryText(); //hide text for cover image
     greyOutNav(); //grey out back button bc on first item
 }
 
 /* ----------------------- Data parsing ----------------------- */
-function parsePage(page, writtenLang, signLang)
+function parsePage(page)
 { console.log("Parsing: " + page);
     //update all the page numbers
     updatePageNumbers();
@@ -60,6 +63,9 @@ function parsePage(page, writtenLang, signLang)
     
     //set video
     $('#visuals video').attr('src', storyData[pageIndex].video[signLang]);
+ 
+    //search for glossary terms and make them buttons
+    GenerateGlossaryButtons();
     
 }
 
@@ -78,6 +84,38 @@ function updatePageNumbers()
     //update buttons
     $('.viewerNav#forward #num').text(pageIndex + screen);
     $('.viewerNav#back #num').text(pageIndex - (screen % 2) + 1);
+}
+
+function GenerateGlossaryButtons()
+{
+    var story = storyData[pageIndex].text[writtenLang];
+    
+    // Add glossary functionality
+    var glossary = {};
+    if(storyData[pageIndex].hasOwnProperty('glossary')) //check if we even have glossary items
+    { 
+        glossary = storyData[pageIndex].glossary[writtenLang]; //get all glossary object for this lang
+
+        //build glossary regex
+        var glossaryRegex = "";
+        var terms = 1;
+        Object.keys(glossary).forEach(function(term){ //terms
+            glossaryRegex += term + "|";
+            terms++;
+         });
+
+        glossaryRegex = glossaryRegex.slice(0, glossaryRegex.length - 1); //clean off last '|'
+        glossaryRegex = new RegExp(glossaryRegex, 'gi'); //convert to actual regular expression - gi is global (g) and not case sensitive(i)
+
+        //replace found regex terms with functional glossary items in the html
+         story = story.replace(glossaryRegex, function(match){
+            var formattedTerm = '<span class=\"glossary\">' + match + '</span>';
+            return formattedTerm;
+        });
+        
+        //give modified text back to story element
+        textArea.html(story);
+    }
 }
 
 /* ----------------------- Button Functionality ----------------------- */
@@ -104,7 +142,7 @@ function changePage(pageNum)
     greyOutNav();
     
     //parse data from story josn to the viewers elements
-    parsePage(pageIndex, "English", "fsl_luzon");
+    parsePage(pageIndex);
     
 }
 
@@ -265,19 +303,36 @@ function greyOutNav()
     {
         //get back button and "grey" it out
         $('.viewerNav#back button').css('opacity', '.3');
-        $('.viewerNav#back span').text(1);
+        
+        //hide text
+        //$('.viewerNav#back span').text(1);
+        $('.viewerNav#back span').css('display', "none");
+        
+        //resize icon
+        $('.viewerNav#back #icon').css('height', '70%');
+        $('.viewerNav#back #icon').css('padding', '10%');
+        $('.viewerNav#back #icon').css('margin-top', '10%');
 
     }
     else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
     {
         //get forward button and "grey" it out
         $('.viewerNav#forward button').css('opacity', '.3');
-        $('.viewerNav#forward span').text(totalPages - 1);
+        
+        //hide text
+        //$('.viewerNav#forward span').text(totalPages - 1);
+        $('.viewerNav#forward span').css('display', "none");
+        
+        //resize icon
+        $('.viewerNav#forward #icon').css('height', '70%');
+        $('.viewerNav#forward #icon').css('padding', '10%');
+        $('.viewerNav#forward #icon').css('margin-top', '10%');
     }
     else
     {
         $('.viewerNav button').removeAttr('style');
-        $('.viewerNav button').removeAttr('disabled');
+        $('.viewerNav span').removeAttr('style');
+        $('.viewerNav #icon').removeAttr('style');
     }
 }
 
