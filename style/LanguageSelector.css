@@ -13,3 +13,9 @@
 	-ms-text-align-last: center;
 	-moz-text-align-last: center;
 }
+ #language-selector img{
+    position: absolute;
+    left: 10px;
+    top: 2px;
+    height: 25px;
+}

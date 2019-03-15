@@ -80,3 +80,9 @@ nav .nav-icon{
    bottom: .5px;
 
 }
+#logoHolder{
+    position: absolute;
+    width:150px;
+    bottom: .5px;
+ 
+}

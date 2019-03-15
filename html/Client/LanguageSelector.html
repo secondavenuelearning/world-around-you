@@ -1,6 +1,9 @@
 <div id="language-selector">
+     <img src = "../../img/icons/General/icon_Globe_White.svg">
 	<select id="language-select">
+        
 		<% _.each(languages, function(language){ %>
+          
 			<option value="<%- language.code %>"><%- language.text %></option>
 		<% }) %>
 	</select>
