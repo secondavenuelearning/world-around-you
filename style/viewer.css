@@ -107,6 +107,12 @@
     background-color: #004e74;
 }
 
+#viewerBar #optionBtns button:hover img
+{
+    height: calc(85% - 5px);
+    width: calc(85% - 5px); 
+}
+
 #viewerBar #optionBtns button img {
     height: calc(80% - 5px);
     width: calc(80% - 5px);
@@ -328,13 +334,13 @@
 
     position: relative;
     vertical-align: bottom;
-    top: calc(-50px - 2%);
+    top: calc(-50px - 1.25%);
     height: calc(45% - 50px);
     background-color: #0098ba;
     padding: 5px;
     padding-left: 30px;
     padding-right: 30px;
-    line-height: 37px;
+    line-height: 40px;
     
     overflow-y: auto;
     
@@ -361,7 +367,7 @@
     margin-top: 1.25%;
     
     position: relative;
-    top: calc(-50px - 2%);
+    top: calc(-50px - 1.25%);
     
     opacity: .9;
 }
