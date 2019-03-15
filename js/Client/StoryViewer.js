@@ -139,7 +139,7 @@ function GenerateGlossaryButtons()
             
             //call pop up
             $('.modal').css("display", "block");
-            $('.modal').css("width", "auto");
+
             $('#videoLoop').focus();
         });
     }
