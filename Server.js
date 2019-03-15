@@ -1014,6 +1014,7 @@ function check_found_wlangs(onelang,foundlangs) {
 function post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr) {
 	console.log(added_ids);
 	var storywlangpromarr=[];
+	var s2wexist=[];
 	addlen=added_ids.length;
 	for(var cc=0;cc<addlen;cc++) {
 		storywlangpromarr.push(new Promise((resolve,reject) => {
@@ -1027,6 +1028,7 @@ function post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr) 
 				else {
 					obj=JSON.parse(result);
 					var storytowritid=obj[0]["id"];
+					s2wexist.push(obj[0]["writtenlanguageId"]);
 					console.log("[post_api_story_language_part4][STORYTOWRITTENLANGUGE FOUND][storytowrittenlanguageid]["+storytowritid+"][storyid]["+storyid+"]");
 					resolve(result);
 				}
@@ -1038,8 +1040,56 @@ function post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr) 
 	}
 	Promise.all(storywlangpromarr).then(() => { 
 		console.log("[post_api_story_language_part4][PROMISES DONE-STORY TO WRITTEN LANGUAGE-CHECKS]");
+		post_api_story_language_part5(req,res,storyid,s2wexist,added_ids,mywarr,mysarr);
 	}).catch(err => {
 		console.log("broken promises 4");
 	});
+}
+
+function post_api_story_language_part5(req,res,storyid,s2w_exist,allw_ids,mywarr,mysarr) {
+
+	s2w_len=s2w_exist.length;
+	for(var ee=0;ee<s2w_len;ee++) {
+		console.log("[post_api_story_language_part5][writlangid-related to story]["+ee+"]["+s2w_exist[ee]+"]");
+	}
+
+	var ids2add=[];
+	var all_wlen=allw_ids.length;
+	for(var dd=0;dd<all_wlen;dd++) {
+		console.log("[post_api_story_language_part5][writelangid]["+dd+"]["+allw_ids[dd]+"]");
+		if(check_found_s2wlangs(allw_ids[dd],s2w_exist)==false) {
+			console.log("[PUSH]["+allw_ids[dd]+"]");
+			ids2add.push(allw_ids[dd]);
+		}
+	}
+
+	var story2wlangpromarr=[];
+	ids2a_len=ids2add.length;
+	for(var ff=0;ff<ids2a_len;ff++) {
+		console.log("[post_api_story_language_part5][ADD TO STORY TO WRITTEN LANGUAGE RELATIONSHIP][writelangid]["+ff+"]["+ids2add[ff]+"]");
+		story2wlangpromarr.push(new Promise((resolve,reject) => {
+			StoryDB.addStoryToWrittenlanguage(storyid,ids2add[ff]).then(function(result) {
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2wlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part5][PROMISES DONE-STORY TO WRITTEN LANGUAGE-ADDS]");
+	}).catch(err => {
+		console.log("broken promises 5");
+	});
+}
+
+function check_found_s2wlangs(onelang,s2w_exist) {
+	s2w_wlen=s2w_exist.length;
+	for(var ff=0;ff<s2w_wlen;ff++) {
+		if(onelang==s2w_exist[ff]) {
+			return true;
+		}
+	}
+	return false;
 }
 
