@@ -633,10 +633,7 @@ input[type=email] {
     font-size: 35px;
     font-weight: bold;
 }
-#likeClick:hover{
-    color:white;
-    background-color:#0098ba;
-}
+
 .close:hover,
 .close:focus {
     color: red;
