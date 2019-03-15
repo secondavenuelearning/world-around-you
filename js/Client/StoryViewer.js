@@ -1,4 +1,5 @@
 import _ from 'underscore';
+import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default StoryViewer
 
 /* ----------------------- Global Variables ----------------------- */
@@ -54,6 +55,9 @@ export function StoryViewer(storyObj)
     ToggleStoryText(); //hide text for cover image
     visuals.css('max-height', '100%');
     greyOutNav(); //grey out back button bc on first item
+    
+    //add hover image swaping
+    ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg")
 }
 
 /* ----------------------- Data parsing ----------------------- */
