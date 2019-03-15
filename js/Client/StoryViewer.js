@@ -47,6 +47,8 @@ export function StoryViewer(storyObj)
     //parse the first page
     $('#visuals img').css("display", "block");
     $('#visuals video').css("display", "none");
+    $('.viewerNav #cover.icon').css('display', 'none');
+    $('#storyToggle #show').css('display', 'none');
     
     GenerateLanguageSelects();
     
@@ -57,7 +59,23 @@ export function StoryViewer(storyObj)
     greyOutNav(); //grey out back button bc on first item
     
     //add hover image swaping
-    ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg")
+    ImageHoverSwap("#storyToggle button", "#storyToggle #hide", "../../img/icons/StoryViewer/icon_SV_HideText.svg", "../../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg");
+    
+     ImageHoverSwap("#storyToggle button", "#storyToggle #show", "../../img/icons/StoryViewer/icon_SV_ShowText.svg", "../../img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg");
+    
+    ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg");
+    
+    ImageHoverSwap("#signLang", "#signLang img", "../../img/icons/StoryViewer/icon_SV_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_SignLang_HoverDown.svg");
+    
+    ImageHoverSwap("#writtenLang", "#writtenLang img", "../../img/icons/StoryViewer/icon_SV_WrittenLang.svg", "../../img/icons/StoryViewer/icon_SV_WrittenLang_HoverDown.svg");
+    
+    ImageHoverSwap("#forward.viewerNav", "#forward.viewerNav #sign.icon", "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg");
+    
+    ImageHoverSwap("#forward.viewerNav", "#forward.viewerNav #cover.icon", "../../img/icons/StoryViewer/icon_SV_Page_Image.svg", "../../img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg");
+    
+     ImageHoverSwap("#back.viewerNav", "#back.viewerNav #sign.icon", "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg");
+    
+    ImageHoverSwap("#back.viewerNav", "#back.viewerNav #cover.icon", "../../img/icons/StoryViewer/icon_SV_Page_Image.svg", "../../img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg");
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -278,13 +296,15 @@ function LastScreen(pageNum)
         $('#visuals video').css("display", "block");
         
         //set text and visuals back to default
-        textArea.removeClass('hideAnim');;
+        textArea.removeClass('hideAnim');
         visuals.removeAttr('style');
         $('#storyToggle').removeAttr('style');
         
         //update icons
-        $('.viewerNav #icon').attr('src', '../../img/icons/StoryViewer/icon_SV_Page_Image.svg');
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_ShowText.svg");
+        $('.viewerNav #sign.icon').css('display', 'none');
+        $('.viewerNav #cover.icon').removeAttr('style');
+        $('#storyToggle #hide').css('display', 'none');
+        $('#storyToggle #show').removeAttr('style');
     }
     //we saw the video we need to parse the next page
     else
@@ -304,8 +324,10 @@ function LastScreen(pageNum)
         visuals.css('margin', '0px');
         
         //update icons
-        $('.viewerNav #icon').attr('src', "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg");
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_HideText.svg");
+        $('.viewerNav #sign.icon').removeAttr('style');
+        $('.viewerNav #cover.icon').css('display', 'none');
+        $('#storyToggle #show').css('display', 'none');
+        $('#storyToggle #hide').removeAttr('style');
     }
 }
 
@@ -324,11 +346,10 @@ function NextScreen(pageNum)
         $('#storyToggle').removeAttr('style');
         
         //update icons
-        $('.viewerNav #icon').attr('src', '../../img/icons/StoryViewer/icon_SV_Page_Image.svg');
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_ShowText.svg");
-        
-        //play video
-        //$('#primeVid').trigger('play');
+        $('.viewerNav #sign.icon').css('display', 'none');
+        $('.viewerNav #cover.icon').removeAttr('style');
+        $('#storyToggle #hide').css('display', 'none');
+        $('#storyToggle #show').removeAttr('style');
     }
     //we saw the video we need to parse the next page
     else
@@ -351,8 +372,10 @@ function NextScreen(pageNum)
         visuals.css('margin', '0px');
         
         //update icons
-        $('.viewerNav #icon').attr('src', "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg");
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_HideText.svg");
+        $('.viewerNav #sign.icon').removeAttr('style');
+        $('.viewerNav #cover.icon').css('display', 'none');
+        $('#storyToggle #show').css('display', 'none');
+        $('#storyToggle #hide').removeAttr('style');
     }
 }
 
@@ -368,7 +391,8 @@ function ToggleStoryText()
         textArea.removeClass("hideAnim");
         visuals.removeAttr('style');
         $('#storyToggle').removeAttr('style');
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_ShowText.svg");
+        $('#storyToggle #hide').css('display', 'none');
+        $('#storyToggle #show').removeAttr('style');
         
     }
     else
@@ -384,7 +408,8 @@ function ToggleStoryText()
         visuals.css('margin', '0px');
         
         $('#storyToggle').css('top', "calc(-100px)");
-        $('#storyToggle img').attr('src', "../../img/icons/StoryViewer/icon_SV_HideText.svg");
+        $('#storyToggle #show').css('display', 'none');
+        $('#storyToggle #hide').removeAttr('style');
     }
 }
 
@@ -470,9 +495,9 @@ function greyOutNav()
         $('.viewerNav#back span').css('display', "none");
         
         //resize icon
-        $('.viewerNav#back #icon').css('height', '70%');
-        $('.viewerNav#back #icon').css('padding', '10%');
-        $('.viewerNav#back #icon').css('margin-top', '10%');
+        $('.viewerNav#back .icon').css('height', '70%');
+        $('.viewerNav#back .icon').css('padding', '10%');
+        $('.viewerNav#back .icon').css('margin-top', '10%');
 
     }
     else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
@@ -485,15 +510,17 @@ function greyOutNav()
         $('.viewerNav#forward span').css('display', "none");
         
         //resize icon
-        $('.viewerNav#forward #icon').css('height', '70%');
-        $('.viewerNav#forward #icon').css('padding', '10%');
-        $('.viewerNav#forward #icon').css('margin-top', '10%');
+        $('.viewerNav#forward .icon').css('height', '70%');
+        $('.viewerNav#forward .icon').css('padding', '10%');
+        $('.viewerNav#forward .icon').css('margin-top', '10%');
     }
     else
     {
         $('.viewerNav button').removeAttr('style');
         $('.viewerNav span').removeAttr('style');
-        $('.viewerNav #icon').removeAttr('style');
+        $('.viewerNav .icon').removeAttr('margin-top');
+        $('.viewerNav .icon').removeAttr('padding');
+        $('.viewerNav .icon').removeAttr('height');
     }
 }
 
