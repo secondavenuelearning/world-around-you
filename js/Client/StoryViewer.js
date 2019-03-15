@@ -269,7 +269,7 @@ function LastScreen(pageNum)
         $('#visuals video').css("display", "block");
         
         //set text and visuals back to default
-        textArea.removeAttr('style');
+        textArea.removeClass('hideAnim');;
         visuals.removeAttr('style');
         $('#storyToggle').removeAttr('style');
         
@@ -285,7 +285,8 @@ function LastScreen(pageNum)
         $('#visuals video').css("display", "none");
         
         //turn off text area
-        textArea.css("display", "none");
+        textArea.addClass('hideAnim');;
+        $('#storyToggle').css('display', 'none');
         
         //expand video to be full size
         visuals.css('height', '100%');
@@ -308,13 +309,16 @@ function NextScreen(pageNum)
         $('#visuals video').css("display", "block");
         
         //set text and visuals back to default
-        textArea.removeAttr('style');
+        textArea.removeClass('hideAnim');;
         visuals.removeAttr('style');
         $('#storyToggle').removeAttr('style');
         
         //update icons
         $('#currentOverlay img').attr('src', '../../img/icons/replay.png');
         $('.viewerNav #icon').attr('src', '../../img/icons/language.png');
+        
+        //play video
+        //$('#primeVid').trigger('play');
     }
     //we saw the video we need to parse the next page
     else
@@ -327,7 +331,7 @@ function NextScreen(pageNum)
         $('#visuals video').css("display", "none");
         
         //turn off text area
-        textArea.css("display", "none");
+        textArea.addClass('hideAnim');
         $('#storyToggle').css('display', 'none');
         
         //expand video to be full size
@@ -344,13 +348,13 @@ function NextScreen(pageNum)
 function ToggleStoryText()
 {
     //get current mode
-    var currentMode = textArea.css("display");
+    var currentMode = textArea.hasClass('hideAnim');
     
     //check if showing or not
-    if(currentMode.toString() === "none")
+    if(currentMode)
     {
         //set text and visuals back to default
-        textArea.removeAttr('style');
+        textArea.removeClass("hideAnim");
         visuals.removeAttr('style');
         $('#storyToggle').removeAttr('style');
         
@@ -358,7 +362,8 @@ function ToggleStoryText()
     else
     {
         //turn off text area
-        textArea.css("display", "none");
+        //textArea.css("display", "none");
+        textArea.addClass('hideAnim');
         
         //expand video to be full size
         visuals.css('height', '100%');
@@ -428,7 +433,7 @@ function ToggleFullScreen()
         //move viewer elements up and make it fill
         $('main').css('top', '0');
         $('main').css('height', '100%');
-        $('#viewer').css('height', 'calc(100% - 100px');
+        $('#viewer').css('height', 'calc(100% - 72px');
         
         //scroll to the top so we dont have odd whitespace and remove anythign thats extra
         $('main').scrollTop(0);

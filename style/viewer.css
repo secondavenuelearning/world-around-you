@@ -2,7 +2,7 @@
 #viewer {
     background-color: #004e74;
     width: 100%;
-    height: calc(100% - 140px);
+    height: calc(100% - 90px);
     padding: 20px;
 }
 
@@ -71,23 +71,6 @@
 
 }
 
-#more-stories {
-    height: 30%;
-
-
-
-}
-
-#more-author {
-    height: 30%;
-}
-
-.carousel {
-    width: 100%;
-
-
-}
-
 #viewerBar #optionBtns
 {
     display: inline-block;
@@ -133,7 +116,7 @@
 #viewerBar #optionBtns select
 {
     position: relative;
-    top: -5px;
+    top: -18px;
     z-index: 1;
     
     display: none;
@@ -311,6 +294,8 @@
 
     height: 50%;
     width: 70%;
+    
+    transition: height .6s;
 }
 
 
@@ -342,18 +327,30 @@
 {
 
     position: relative;
+    vertical-align: bottom;
     top: calc(-50px - 2%);
     height: calc(45% - 50px);
     background-color: #0098ba;
-    padding: 15px;
+    padding: 5px;
     padding-left: 30px;
     padding-right: 30px;
-    line-height: 40px;
+    line-height: 37px;
+    
+    overflow-y: auto;
+    
+    transition: height .6s, opacity .4s;
     
     
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 27px;
+    font-size: 24px;
     color: white;
+}
+
+.content #story.hideAnim
+{
+    height: 0px;
+    overflow: hidden;
+    opacity: 0;
 }
 
 .content #storyToggle
@@ -556,6 +553,22 @@
     top: 3px;
 }
 
+#more-stories {
+    height: 30%;
+
+
+
+}
+
+#more-author {
+    height: 30%;
+}
+
+.carousel {
+    width: 100%;
+
+
+}
 
 /* The Modal (background) */
 input[type=password],
