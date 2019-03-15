@@ -129,9 +129,9 @@ StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId]).then((res) => {
 				conn.end();
-				resolve(res);
+				resolve({id:res.insertId});
 				return;
 			}).catch(err => {
 				//handle error
@@ -433,6 +433,28 @@ StoryDB.prototype.getStoryToWrittenlanguage = function(storyId,writtenlanguageId
 		pool.getConnection().then(conn => {
 
 			conn.query("SELECT * FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("SELECT * FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((res) => {
 				conn.end();
 				resolve(JSON.stringify(res));
 				return;
