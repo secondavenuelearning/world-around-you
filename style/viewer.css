@@ -298,7 +298,8 @@
     margin-right: auto;
     
 
-    height: calc(50% - 20px);
+    height: 50%;
+    max-height: calc(50% - 20px);
     width: 100%;
     
     transition: height .6s;
@@ -335,7 +336,8 @@
     position: relative;
     vertical-align: bottom;
     top: calc(-50px);
-    height: calc(50% - 50px);
+    max-height: calc(50% - 50px);
+    height: 50%;
     background-color: #0098ba;
     padding: 5px;
     padding-left: 30px;

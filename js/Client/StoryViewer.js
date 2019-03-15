@@ -52,6 +52,7 @@ export function StoryViewer(storyObj)
     parsePage(pageIndex);
     $('#storyToggle').css('display', 'none');
     ToggleStoryText(); //hide text for cover image
+    visuals.css('max-height', '100%');
     greyOutNav(); //grey out back button bc on first item
 }
 
@@ -294,6 +295,7 @@ function LastScreen(pageNum)
         
         //expand video to be full size
         visuals.css('height', '100%');
+        visuals.css('max-height', '100%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
         
@@ -340,6 +342,7 @@ function NextScreen(pageNum)
         
         //expand video to be full size
         visuals.css('height', '100%');
+        visuals.css('max-height', '100%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
         
@@ -371,6 +374,7 @@ function ToggleStoryText()
         
         //expand video to be full size
         visuals.css('height', '100%');
+        visuals.css('max-height', '100%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
         
