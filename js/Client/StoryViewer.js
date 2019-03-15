@@ -153,16 +153,20 @@ function setOverlayItems(word, definition, start, end, video, image)
     var title = document.getElementById("definitionWord");
     
     videoContainer.src = video + "#t="+start+","+end;
-    if(videoContainer.currentTime < start){
-        videoContainer.currentTime = start;
-    }
-    videoContainer.ontimeupdate = function(){ console.log("loop");
-        if(videoContainer.currentTime>=end){
+    videoContainer.addEventListener('loadedmetadata', function()
+    {
+        if(videoContainer.currentTime < start){
             videoContainer.currentTime = start;
-            videoContainer.play();
-            
         }
-    }
+        videoContainer.ontimeupdate = function(){
+            if(videoContainer.currentTime>=end){
+                videoContainer.currentTime = start;
+                videoContainer.play();
+
+            }
+        }
+    }, false);
+    
     imageTag.src = image;
     description.innerHTML = definition;
     title.innerHTML = word;
