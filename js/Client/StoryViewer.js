@@ -433,7 +433,7 @@ function ToggleFullScreen()
         //move viewer elements up and make it fill
         $('main').css('top', '0');
         $('main').css('height', '100%');
-        $('#viewer').css('height', 'calc(100% - 72px');
+        $('#viewer').css('height', 'calc(100% - 70px');
         
         //scroll to the top so we dont have odd whitespace and remove anythign thats extra
         $('main').scrollTop(0);
