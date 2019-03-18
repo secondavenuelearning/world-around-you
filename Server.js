@@ -95,7 +95,7 @@ var sess=null;
 	});
 	app.get('/Story', function(req, res){
 		res.send(PageTemplate({
-			Page: 'viewer'
+			Page: 'Story'
 		}));
 	});
 
@@ -719,12 +719,42 @@ app.post('/api/story/language/delete',function(req,res) {
 // * - RETURN - true or false         *
 // ************************************
 app.post('/api/story/cover',function(req,res) {
+
+	console.log(req.body);
+	myid=req.body.id;
+	myauthor=req.body.author;
+	mycover=req.body.coverimage;
+
+	console.log("[api/story/cover][storyid]["+myid+"]");
+	console.log("[api/story/cover][author]["+myauthor+"]");
+	console.log("[api/story/cover][cover-image]["+mycover+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/cover][NO ID]");
+		res.send('done');
+	}
+	if((myauthor==null)||(myauthor=="")) {
+		console.log("[/api/story/cover][NO AUTHOR]");
+		res.send('done');
+	}
+	if((mycover==null)||(mycover=='')) {
+		console.log("[/api/story/cover][NO COVER IMAGE]");
+		res.send('done');
+	}
+	StoryDB.addStoryCover(myid,mycover,myauthor).then(function(result) {
+		console.log("[/api/story/cover][storyid]["+myid+"][author]["+myauthor+"][coverimage]["+mycover+"][result]["+result+"]");
+		res.send(result);
+	}).catch(err => {
+		console.log("[/api/story/cover][storyid]["+myid+"][author]["+myauthor+"][coverimage]["+mycover+"][ERROR]["+err+"]");
+		res.send(err);
+	});
 });
 // ****************************
 // * SAVE STORY METADATA      *
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/metadata',function(req,res) {
+	console.log(req.body);
 });
 // ****************************
 // * SAVE STORY JSON DATA     *
