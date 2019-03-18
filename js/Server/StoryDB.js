@@ -449,6 +449,31 @@ StoryDB.prototype.getStoryToWrittenlanguage = function(storyId,writtenlanguageId
 		});
 	});
 }
+
+StoryDB.prototype.deleteStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("DELETE FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
 StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
 	return new Promise((resolve, reject) => {
 
@@ -457,6 +482,30 @@ StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
 			conn.query("SELECT * FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((res) => {
 				conn.end();
 				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.deleteStoryToSignlanguage = function(storyId,signlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("DELETE FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
 				return;
 			}).catch(err => {
 				//handle error

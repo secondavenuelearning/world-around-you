@@ -665,7 +665,54 @@ app.post('/api/story/language',function(req,res) {
 // * DELETE STORY LANGUAGES   *
 // * - RETURN - true or false *
 // ****************************
-app.delete('/api/story/language',function(req,res) {
+app.post('/api/story/language/delete',function(req,res) {
+
+	myid=req.body.id;
+	mylangid=req.body.languageid;
+	mytyp=req.body.langtyp;
+
+	console.log("[api/story/language/delete][storyid]["+myid+"]");
+	console.log("[api/story/language/delete][languageid]["+mylangid+"]");
+	console.log("[api/story/language/delete][sign-array]["+mytyp+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/language/delete][NO ID]");
+		res.send('done');
+	}
+	if((mylangid==null)||(mylangid==0)) {
+		console.log("[/api/story/language/delete][NO LANGUAGE ID]");
+		res.send('done');
+	}
+	if((mytyp==null)||(mytyp=='')) {
+		console.log("[/api/story/language/delete][NO LANGUAGE TYPE]");
+		res.send('done');
+	}
+	if((mytyp=="sign")&&(mytyp=='written')) {
+		console.log("[/api/story/language/delete][INVALID LANGUAGE TYPE]["+langtyp+"]");
+		res.send('done');
+	}
+
+	if(mytyp=="sign") {
+		StoryDB.deleteStoryToSignlanguage(myid,mylangid).then(function(result) {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][signlanguageid]["+mylangid+"][result]["+result+"]");
+			res.send(result);
+		}).catch(err => {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][signlanguageid]["+mylangid+"][ERROR]["+err+"]");
+			res.send(err);
+		});
+	}
+	else if(mytyp=="written") {
+		StoryDB.deleteStoryToWrittenlanguage(myid,mylangid).then(function(result) {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][writtenlanguageid]["+mylangid+"][result]["+result+"]");
+			res.send(result);
+		}).catch(err => {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][writtenlanguageid]["+mylangid+"][ERROR]["+err+"]");
+			res.send(err);
+		});
+	}
+	else {
+		res.send('done');
+	}
 });
 // ************************************
 // * SAVE STORY COVER PAGE AND AUTHOR *
