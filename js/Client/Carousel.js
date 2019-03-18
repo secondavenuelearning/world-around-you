@@ -1,6 +1,7 @@
 import 'style/Carousel.css!';
 import _ from "underscore";
 import html from "html/Client/Carousel.html!text";
+import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 
 var imageLink = 'img/carousel/1.jpg';
 
@@ -204,6 +205,11 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
         });
     }
+    
+    //add hover functionality to icons
+    ImageHoverSwap(id + " .carousel-nav.left", id + " .carousel-nav.left .carousel-nav-img", "../../img/icons/General/icon_Page_Back.svg", "../../img/icons/General/icon_Page_Back_HoverDown.svg");
+    
+     ImageHoverSwap(id + " .carousel-nav.right", id + " .carousel-nav.right .carousel-nav-img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
 
 }
 

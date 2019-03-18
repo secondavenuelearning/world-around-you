@@ -75,9 +75,9 @@
 
 .carousel .carousel-nav:hover .carousel-nav-img
 {
-    width: 55%;
+   /* width: 55%;
     border-color: #004e74;
-    background-color: #004e74;
+    background-color: #004e74;*/
 }
 
 /* Page Indicator */
