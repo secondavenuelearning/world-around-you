@@ -19,6 +19,7 @@ nav .nav-icon{
 	width: 35px;
 	border-radius: 50%;
 	background-color: #0098BA;
+    background-color: white;
 }
 #nav-user-links{
 	position: absolute;
@@ -73,4 +74,15 @@ nav .nav-icon{
 	border: none;
 	color: #FFFFFF;
 	border-radius: 0px 35px 35px 0px;
+}
+#nav-games-icon img{
+    position: absolute;
+   bottom: .5px;
+
+}
+#logoHolder{
+    position: absolute;
+    width:150px;
+    bottom: .5px;
+ 
 }

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #004e75;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>icon</title>
+  <g id="buttons">
+    <g>
+      <rect class="cls-1" x="1.22" y="1.77" width="27.56" height="26.46" rx="7"/>
+      <path class="cls-2" d="M13.45,23.49,7.79,16.6,9.5,15l3.61,4.34,7.65-14,1.9,1.17Z"/>
+    </g>
+  </g>
+</svg>
