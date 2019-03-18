@@ -761,12 +761,28 @@ app.post('/api/story/metadata',function(req,res) {
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/data',function(req,res) {
+	console.log(req.body);
 });
 // ****************************
 // * PUBLISH STORY            *
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/publish',function(req,res) {
+
+	console.log(req.body);
+	myid=req.body.id;
+	console.log("[api/story/cover][storyid]["+myid+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/cover][NO ID]");
+		res.send('done');
+	}
+
+	StoryDB.publishStory(myid).then(function(result) {
+		res.send(result);
+	}).catch(err => {
+		res.send(err);
+	});
 });
 // ****************************************
 // ****************************************

@@ -545,6 +545,30 @@ StoryDB.prototype.addStoryCover = function(storyId,coverimage,author) {
 	});
 }
 
+StoryDB.prototype.publishStory = function(storyId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("UPDATE story SET visible=1 WHERE(id="+storyId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
 let _StoryDB = new StoryDB();
 module.exports = _StoryDB;
 
