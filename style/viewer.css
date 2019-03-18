@@ -98,16 +98,18 @@
     width: 60px;
     
     display: inline-block;
+    
+    padding: 0px;
 
-    border: 1px;
+    border: 0px;
     border-radius: 50%;
-    border-color: #004e74;
-    background-color: #004e74;
+    border-color: #0098ba;
+    background-color: #0098ba;
 }
 
 #viewerBar #optionBtns button img {
-    height: calc(100%);
-    width: calc(100%);
+    height: 60px;
+    width: 60px;
 }
 
 #viewerBar #optionBtns select
@@ -181,7 +183,7 @@
     float: right;
 }
 
-.viewerNav #icon {
+.viewerNav .icon {
     height: 60%;
     width: 70%;
 
@@ -190,12 +192,12 @@
     padding-top: 8px;
 }
 
-.viewerNav#back #icon {
+.viewerNav#back .icon {
     position: relative;
     float: right;
 }
 
-.viewerNav#forward #icon {
+.viewerNav#forward .icon {
     position: relative;
     float: left;
 }

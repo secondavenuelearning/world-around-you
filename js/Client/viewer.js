@@ -4,6 +4,7 @@ import html from 'html/Client/Viewer.html!text';
 import StoryPreview from 'js/Client/StoryPreview';
 import Carousel from 'js/Client/Carousel.js';
 import StoryViewer from 'js/Client/StoryViewer.js';
+import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 
 var totalLikes;
 var canLike = true;
@@ -135,6 +136,6 @@ $(document).ready(function () {
     xmlhttp.open("GET", dataURL);
     xmlhttp.send();
     
-
+    //add hover
 
 });
