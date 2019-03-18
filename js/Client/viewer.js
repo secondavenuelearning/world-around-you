@@ -76,6 +76,7 @@ $(document).ready(function () {
     //update main section of page
 
     $('main').html(html);
+    
     SetVideoTitle("Test");
     SetAuthorInfo("Chase", "img/icons/user.png");
     SetViewLikeCounts(1000000, 2000);
@@ -83,20 +84,64 @@ $(document).ready(function () {
     GenerateGenres(["Folk", "Fantasy"]);
     GenerateTage(["folktale", "fantasy"]);
 
-    var storyOne = [];
-    for (var i = 0; i < 9; i++) {
-        let sp = new StoryPreview({
-            id: i + 1,
-            title: 'Aesop Fables: The Clever Donkey',
-            author: 'Massimo V.',
-            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.',
-            coverImage: 'img/carousel/from_this_author/1.png'
-        });
-        storyOne.push(sp);
 
-    }
-    new Carousel("#more-stories", storyOne, 4, false, false, "More Stories");
-    var storyTwo = [];
+    $.ajax({
+        method: 'get',
+        url: './api/stories'
+    }).done((stories) => {
+        console.log(stories);
+        var storyOne = [];
+        for (var i = 0; i < 9; i++) {
+            let sp = new StoryPreview({
+                id: i + 1,
+                metadata: {
+                    title: {
+                        english: 'Aesop Fables: The Clever Donkey'
+                    },
+                    description: {
+                        english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
+                    }                    
+                },
+                author: 'Massimo V.',
+                coverImage: 'img/carousel/from_this_author/1.png'
+            });
+            storyOne.push(sp);
+        }
+        new Carousel("#more-stories", storyOne, 4, false, false, "More Stories");
+            
+        }).fail((err) => {
+
+    });
+    
+        $.ajax({
+        method: 'get',
+        url: './api/stories'
+    }).done((stories) => {
+        console.log(stories);
+        var storyTwo = [];
+        for (var i = 0; i < 9; i++) {
+            let sp = new StoryPreview({
+                id: i + 1,
+                metadata: {
+                    title: {
+                        english: 'Aesop Fables: The Clever Donkey'
+                    },
+                    description: {
+                        english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
+                    }                    
+                },
+                author: 'Massimo V.',
+                coverImage: 'img/carousel/from_this_author/1.png'
+            });
+            storyTwo.push(sp);
+        }
+        new Carousel("#more-author", storyTwo, 4, false, false, "More from this Author");
+            
+        }).fail((err) => {
+
+    });
+    
+   /* var storyTwo = [];
     for (var i = 0; i < 9; i++) {
         let sp = new StoryPreview({
             id: i + 1,
@@ -108,7 +153,7 @@ $(document).ready(function () {
         storyTwo.push(sp);
 
     }
-    new Carousel("#more-author", storyTwo, 4, false, false, "More Stories");
+    */
 
       var modal = document.getElementById('id01');
 
