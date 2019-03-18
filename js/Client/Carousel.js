@@ -146,42 +146,47 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
 
 
     buttonRight.onclick = function () {
+        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
 
         if (endIndex >= imageList.length - 1) {
+            offset = 0;
+            startIndex = 0;
+            endIndex = startIndex + showing - 1;
 
         } else {
-            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
             
             offset += showing;
             startIndex = startIndex + showing;
             endIndex = endIndex + showing;
-            drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset, isOverlay);
-            
-            //update indicator
-            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
         }
+        
+        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset, isOverlay);
 
-
+         //update indicator
+        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
 
 
 
     };
     var buttonLeft = parent.getElementsByClassName("left")[0];
     buttonLeft.onclick = function () {
+        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
 
         if (startIndex <= 0) {
+            offset = imageList.length - 1;
+            startIndex = imageList.length - 1;
+            endIndex = imageList.length - 1;
 
         } else {
-            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
             
             offset -= showing;
             startIndex = startIndex - showing;
             endIndex = endIndex - showing;
-            
-            $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
-        }
+        } console.log(offset + " " + startIndex);
 
         drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "left", offset, isOverlay);
+        
+        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).attr('id', 'current');
 
 
     };
