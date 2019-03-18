@@ -95,7 +95,7 @@ var sess=null;
 	});
 	app.get('/Story', function(req, res){
 		res.send(PageTemplate({
-			Page: 'Story'
+			Page: 'viewer'
 		}));
 	});
 
