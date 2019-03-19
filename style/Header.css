@@ -13,7 +13,7 @@ nav{
 	position: absolute;
 	bottom: 0px;
 	width: 100%;
-	padding: 2px 15px;
+	padding: 3px 15px;
 }
 nav > div{
 	position: relative;
@@ -21,6 +21,9 @@ nav > div{
 	margin-left: 10px;
 	height: 35px;
 	width: 35px;
+}
+nav > div:not(#nav-search):not(.active):hover{
+	top: 2px;
 }
 .nav-icon{
 	display: block;
