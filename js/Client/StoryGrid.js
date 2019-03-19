@@ -3,9 +3,11 @@ import _ from "underscore";
 
 var selectedPage = 1;
 var maxPage = -1;
+var storiesDiv;
+var offsetCount = 0;
 
 function addStories(){
-	var childrenCount = document.getElementById("stories").childElementCount;
+	var childrenCount = document.getElementById(storiesDiv).childElementCount;
 	var countNode = 0;
 	var newDiv;
 	var pageNum = 0;
@@ -16,6 +18,7 @@ function addStories(){
 			newDiv = document.createElement("div"); 
 			newDiv.id = 'grid-page' + pageNum;
 			$(newDiv).addClass("grid-page");
+
 			// Handles multiple pages
 			if(pageNum > 1){
 				$(newDiv).addClass("grid-page");
@@ -24,9 +27,10 @@ function addStories(){
 				var gridButtons
 				// Creates pagination only if it doesn't exist already
 				if(pageNum == 2){
+
 					gridButtons = document.createElement("div"); 
 					gridButtons.id = "grid-buttons";
-					$('#stories').append(gridButtons);
+					$('#' + storiesDiv).append(gridButtons);
 					gridButton = document.createElement("button"); 
 					$(gridButton).attr("type","button");
 					$(gridButton).addClass("grid-button");
@@ -51,10 +55,14 @@ function addStories(){
 				gridButton.addEventListener("click", swapGridPage);
 				$(gridButtons).append(gridButton);
 			}
-			$('#stories').append(newDiv);
+			$('#' + storiesDiv).append(newDiv);
+
 		}
-		$(newDiv).append(document.getElementById('story-preview-' + countNode));
+		var sp = $('#' + storiesDiv + ' #story-preview-' + (countNode + offsetCount))[0];
+		$(newDiv).append(sp);
 		countNode++;
+
+
 	}
 	// Next button
 	gridButton = document.createElement("button"); 
@@ -118,7 +126,7 @@ function resizeStories(){
 	// Timeout to make sure elements have been populated
 	setTimeout(function(){
 		var height = $('#grid-page1').height();
-		$('#stories').css('height', (height + 20) + 'px');
+		$('#' + storiesDiv).css('height', (height + 20) + 'px');
 	}, 100);
 }
 
@@ -126,8 +134,11 @@ function StoryGrid(id, stories){
 	for(var i in stories){
 		stories[i].appendTo(id);
 	}
+	storiesDiv = id;
+	offsetCount = parseInt(stories[0].id.match(/\d+/g));
 	// Calculate and setup pagination
 	addStories();
+
 	// Resize div for stories and pagination
 	$(window).off('.storygrid');
 	$(window).on('resize.storygrid', resizeStories);
