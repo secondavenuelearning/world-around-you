@@ -7,7 +7,7 @@
 }
 
 .filters {
-    width: 770px;
+    width: 80%;
     
     display: block; 
     
@@ -22,7 +22,7 @@
 }
 
 .filter{
-    width: 250px;
+    width: calc(100% / 3);
     height: 100%;
     display: inline-block;
     vertical-align: top;
