@@ -1,0 +1,73 @@
+#grid-buttons{
+	position: absolute;
+	bottom: 5px;
+	right: 0px;
+}
+
+.grid-button{
+	border-radius: 50%;
+	background-color: #A1EBF3;
+}
+
+#grid-next-button{
+	border-radius: 50%;
+	background-color: #A1EBF3;
+	margin-left: 10px;
+}
+
+#grid-prev-button{
+	border-radius: 50%;
+	background-color: #A1EBF3;
+	margin-right: 10px;
+	visibility: hidden;
+}
+.grid-button-selected{
+	background-color: #004E75;
+	position: relative;
+}
+.grid-page{
+	position: absolute;
+	animation-duration: .75s;
+	width: 100%;
+	opacity: 1;
+	animation-fill-mode: forwards;
+
+	animation-timing-function:linear;
+	animation-delay:0s;
+	animation-fill-mode:forwards;
+	animation-iteration-count: 1;
+	-webkit-animation-iteration-count: 1;
+	-webkit-animation-timing-function:linear;
+	-webkit-animation-delay:0s;
+	-webkit-animation-fill-mode: forwards;
+	display: inline-block;
+}
+
+#stories{
+	height: auto;
+	overflow: hidden;
+	overflow-x: hidden;
+	position: relative;
+	width: 80%; 
+	margin: 10px auto;
+}
+
+@keyframes gridLeftFadeOut {
+	0% {opacity: 1; transform: translateX(0);}
+	100% {opacity: 0;  transform: translateX(-100vw); }
+}
+
+@keyframes gridLeftFadeIn {
+	0% {opacity: 0; transform: translateX(100vw);}
+	100% {opacity: 1; transform: translateX(0); }
+}
+
+@keyframes gridRightFadeOut {
+	0% {opacity: 1;transform: translateX(0);}
+	100% {opacity: 0; transform: translateX(100vw); }
+}
+
+@keyframes gridRightFadeIn {
+	0% {opacity: 0; transform: translateX(-100vw);}
+	100% {opacity: 1; transform: translateX(0); }
+}
