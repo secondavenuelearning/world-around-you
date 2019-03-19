@@ -129,9 +129,9 @@ StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId]).then((res) => {
 				conn.end();
-				resolve(res);
+				resolve({id:res.insertId});
 				return;
 			}).catch(err => {
 				//handle error
@@ -197,7 +197,6 @@ StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId
 
 StoryDB.prototype.getStories = function(includeUnpublished){
 	return new Promise((resolve, reject) => {
-
 		pool.getConnection().then(conn => {
 
 			let storyQuery = 'SELECT id, author, coverimage, visible, datemodified, datecreated from story';
@@ -382,26 +381,27 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 							_resolve();
 						}).catch(err => {
 							_reject(err);
-							return;
 						});
 					}));
 
 					Promise.all(dataPromises).then(() => {
-						conn.end();
-						resolve(Object.values(stories));
+						conn.end().then(() => {
+							resolve(Object.values(stories));
+						});
 					}).catch(err => {
-						reject(err);
-						return;
+						conn.end().then(() => {
+							reject(err);
+						});
 					});
 
 				});
 			}).catch(err => {
-				reject(err);
-				return;
+				conn.end().then(() => {
+					reject(err);					
+				});
 			});
 		}).catch(err => {
 			reject(err);
-			return;
 		});
 
 	});
@@ -435,6 +435,125 @@ StoryDB.prototype.getStoryToWrittenlanguage = function(storyId,writtenlanguageId
 			conn.query("SELECT * FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((res) => {
 				conn.end();
 				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.deleteStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("DELETE FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("SELECT * FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.deleteStoryToSignlanguage = function(storyId,signlanguageId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("DELETE FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.addStoryCover = function(storyId,coverimage,author) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("UPDATE story SET coverimage='"+coverimage+"',author='"+author+"' WHERE(id="+storyId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.publishStory = function(storyId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("UPDATE story SET visible=1 WHERE(id="+storyId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
 				return;
 			}).catch(err => {
 				//handle error

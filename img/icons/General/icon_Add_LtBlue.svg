@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #0098ba;
+        stroke: #0098ba;
+        stroke-miterlimit: 10;
+        stroke-width: 0.75px;
+      }
+    </style>
+  </defs>
+  <title>icon</title>
+  <g id="buttons">
+    <path class="cls-1" d="M15,2.43a1,1,0,0,0-1,1V14H3.22a1,1,0,0,0,.23,2H13.93V26.53a1,1,0,1,0,2.07,0V16.05H26.49a1,1,0,0,0,.25-2H16V3.49a1,1,0,0,0-1-1.06Z"/>
+  </g>
+</svg>

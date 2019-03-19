@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 53.38">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>icon</title>
+  <g id="topBar">
+    <g>
+      <path class="cls-1" d="M39.08,48.18H6.92a2,2,0,0,1-2-2v-39a2,2,0,0,1,2-2H39.08a2,2,0,0,1,2,2v39A2,2,0,0,1,39.08,48.18Zm-30.16-4H37.08v-35H8.92Z"/>
+      <rect class="cls-1" x="11.74" y="15.25" width="22.52" height="4.25" rx="2.12"/>
+      <rect class="cls-1" x="11.74" y="24.18" width="22.52" height="4.25" rx="2.12"/>
+      <rect class="cls-1" x="11.74" y="32.98" width="22.52" height="4.25" rx="2.12"/>
+    </g>
+  </g>
+</svg>

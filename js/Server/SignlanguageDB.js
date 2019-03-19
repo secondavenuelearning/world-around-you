@@ -19,17 +19,17 @@ SignlanguageDB.prototype.db_add_signlanguage = function(name) {
 
 		    conn.query("INSERT INTO signlanguage (name) VALUES ('"+name+"')").then((res) => {
 			conn.end();
-			resolve("[db_add_signlanguage][success]");
+			resolve({id:res.insertId});
 			return;
 		    }).catch(err => {
 			//handle error
 			conn.end();
-			reject("[db_add_signlanguage][failure1]");
+			reject(err);
 			return;
 		    })
 
 		}).catch(err => {
-		    reject("[db_add_signlanguage][failure2]");
+		    reject(err);
 		    return;
 		});
 
@@ -48,9 +48,40 @@ SignlanguageDB.prototype.getSignLanguages = function(){
 				for(var i = 0; i < res.length; i++){
 					signlanguages[res[i].id] = res[i];
 				}
-				
-				resolve(signlanguages);
+				conn.end().then(() => {
+					resolve(signlanguages);
+				});
 			}).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+			});
+
+		}).catch(err => {
+			conn.end().then(() => {
+				reject(err);
+				return;
+			});
+		});
+
+	});
+}
+
+SignlanguageDB.prototype.getsignlanguage = function(language) {
+
+	return new Promise(function(resolve,reject) {
+
+		pool.getConnection().then(conn => {
+
+			conn.query('SELECT * FROM signlanguage WHERE (name="'+language+'")').then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				console.log(err);
+				//handle error
+				conn.end();
 				reject(err);
 				return;
 			});
@@ -59,7 +90,6 @@ SignlanguageDB.prototype.getSignLanguages = function(){
 			reject(err);
 			return;
 		});
-
 	});
 }
 

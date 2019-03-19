@@ -1,5 +1,6 @@
 import '../../style/Filter.css!';
 import _ from 'underscore';
+import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default FiltersBar
 
 /* ----------------------- Global variables ----------------------- */
@@ -52,7 +53,7 @@ function FiltersBar(id)
     //build html for filter
     var signID = "SignLanguageFilter";
     var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
-    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "img/icons/language.png"); //build out html for signs filter
+    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "img/icons/General/icon_SignLang_White.svg"); //build out html for signs filter
     
     //update pahe html to ahve this filter
     $('.filters').append(signsHTML); //apend filter bar to have signs html
@@ -65,7 +66,7 @@ function FiltersBar(id)
     //build html for filter
     var writtenID = "WrittenLanguageFilter";
     var written = GetValues("Written", database); //note: hardcoded for now - later will get from json files or database
-    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "img/icons/language.png"); //build out html for signs filter
+    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "img/icons/General/icon_WrittenLang_White.svg"); //build out html for signs filter
     
     //update page html to have this filter
     $('.filters').append(writtenHTML); //apend filter bar to have signs html
@@ -77,12 +78,16 @@ function FiltersBar(id)
 //---SORTING FILTER
     var sortID = "SortByFilter";
     var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
-    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/language.png");
+    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/General/icon_Filter.svg");
     
     $('.filters').append(sortByHTML);
     
     $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
     $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
+    
+//--Button Icon Hover Swapping
+    //ImageHoverSwap("#sortByFilter button", "#sortByFilter img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
+    
 }
 
 /*
@@ -109,7 +114,7 @@ function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarge
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
     filterHTML += "<button><img src=\"" + icon + "\">"
-    filterHTML += filterName + "</button>";
+    filterHTML += filterName + "<img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
     filterHTML += "\n";
     filterHTML += "<div id = \"options\">";
     filterHTML += "\n";
@@ -165,7 +170,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions, icon)
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
     filterHTML += "<button><img src=\"" + icon + "\">"
-    filterHTML += filterName + "</button>";
+    filterHTML += filterName + "<img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
     filterHTML += "\n";
     filterHTML += "<select id = \"options\">";
     filterHTML += "\n";

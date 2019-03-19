@@ -1,0 +1,11 @@
+<svg id="Layer_3" data-name="Layer 3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #004e75;
+      }
+    </style>
+  </defs>
+  <title>icon</title>
+  <path class="cls-1" d="M15,1A14,14,0,1,0,29,15,14,14,0,0,0,15,1Zm0,1.75A12.25,12.25,0,1,1,2.75,15,12.23,12.23,0,0,1,15,2.75ZM15,8a7,7,0,1,0,7,7A7,7,0,0,0,15,8Z"/>
+</svg>

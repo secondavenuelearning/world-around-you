@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 62 62">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #004e75;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <title>icon</title>
+  <g id="topBar">
+    <g>
+      <circle class="cls-1" cx="31" cy="31" r="29"/>
+      <path class="cls-2" d="M37.28,31l9.19-9.19a4.44,4.44,0,1,0-6.28-6.28L31,24.72l-9.19-9.19a4.44,4.44,0,0,0-6.28,6.28L24.72,31l-9.19,9.19a4.44,4.44,0,0,0,6.28,6.28L31,37.28l9.19,9.19a4.44,4.44,0,0,0,6.28-6.28Z"/>
+    </g>
+  </g>
+</svg>

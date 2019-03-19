@@ -30,18 +30,57 @@ const UsertypeDB = require('./js/Server/UsertypeDB.js');
 const ViewDB = require('./js/Server/ViewDB.js');
 const WrittenlanguageDB = require('./js/Server/WrittenlanguageDB.js');
 
-app = express();
-app.use(bodyParser.urlencoded({extended:false}));
-port = 3000;
 
-app.use(express.static(__dirname));
+/**
+ * Adds text to the defined log file, creates a new file is the original is too long
+ * @param {string} log  	name of the log file
+ * @param {string} text 	text to add to the file
+ * @param {string} dir 		the directory of where the logs should be put
+ * @return {string}			returns the new name of the file
+ */
+function WriteLog(log, text, dir){
+	dir = dir || './logs';
+	
+	// create the directory if it doesn't exist
+	var dirExist = fs.existsSync(dir);
+	if(!dirExist) fs.mkdirSync(dir);
 
-// ****************************************************************************
-// * CREATE SESSION STUFF - BELOW THIS LINE                                   *
-// ****************************************************************************
-app.CreateSessions = function(options){
+	// write the log file
+	fs.writeFileSync(`${dir}/${log}`, `\n${text}`, {flag: 'a'});
+	console.log(`${dir}/${log}`, text);
+
+	// loop through to make sure we are accessing the correct log and no log file gets too big
+	var loop = true;
+	var appendix = 0;
+	const originalLog = log;
+
+	while(loop){
+		// check the file size and switch to a differenct file if it is too big
+		var stats = fs.statSync(`${dir}/${log}`);
+		var fileSize = stats.size / 1000000;
+
+		// move to a different file if the log is too big
+		if(fileSize > 1000){
+			appendix++;
+			log = `${originalLog}_${appendix}`;
+		}
+		else{
+			loop = false;
+		}
+	}
+
+	// return the log in case it has changed, to avoid doing the loop every time.
+	return log;
+}
+
+/**
+ * Function to create a session file store for the server
+ * @param {Expressjs} _app    	express.js server app
+ * @param {object} options 		default options for the sessions store
+ */
+function CreateSessions(_app, options){
     var options = typeof options == "object" ? options : {};
-    options.secret = options.secret || "salNodeBB"; // the secret is used as the id for the session cookie
+    options.secret = options.secret || "worldAroundYou"; // the secret is used as the id for the session cookie
     options.resave = options.resave || false;     // automatically save sessions whenever they are grabbed even if they arent modified
     options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
     options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
@@ -53,15 +92,35 @@ app.CreateSessions = function(options){
     storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
     storeOptions.ttlInterval = storeOptions.ttl;
     options.store = new LokiStore(storeOptions);
-    // options.store = new FileStore();
 
-    app.use(session(options));
+    _app.use(session(options));
 }
-app.CreateSessions({});
+
+
+var access_log = "access.log";
+var error_log = "error.log";
+const app = express();
+
+
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(express.static(__dirname));
+
+CreateSessions(app, {});
+
 var sess=null;
 // ****************************************************************************
 // * CREATE SESSION STUFF - ABOVE THIS LINE                                   *
 // ****************************************************************************
+	app.use((req, res, next) => {		
+		// add to the access log
+		if(!req.url.match(/.js|.css|.html|.png|.jpg/)){
+			access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
+		}
+
+		// TODO: add logic to set client side cookie if the user is logged in
+
+		next();
+	});
 
 	app.get('/', function(req, res){
 		res.redirect('/Stories');
@@ -77,8 +136,6 @@ var sess=null;
 		}));
 	});
 	app.get('/Login', function(req, res){
-	sess=req.session;
-	console.log("[/Login][Sess.Email]["+sess.email+"]");
 		res.send(PageTemplate({
 			Page: 'Login'
 		}));
@@ -93,9 +150,9 @@ var sess=null;
 			Page: 'Edit'
 		}));
 	});
-	app.get('/Story', function(req, res){
+    app.get('/View', function(req, res){
 		res.send(PageTemplate({
-			Page: 'Story'
+			Page: 'Viewer'
 		}));
 	});
 
@@ -628,71 +685,161 @@ app.post('/api/story',function(req,res) {
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/language',function(req,res) {
-
 	obj=req.body;
 	myid=obj.id;
 	mywarr=obj['writtenlanguages[]'];
 	mysarr=obj['signlanguages[]'];
 
-	console.log("[api/story/language][id]["+myid+"]");
-	console.log("[api/story/language][written-array]["+mywarr+"]");
-	console.log("[api/story/language][sign-array]["+mysarr+"]");
-
-	mywlang=mywarr[0];
+	//console.log("[api/story/language][storyid]["+myid+"]");
+	//console.log("[api/story/language][written-array]["+mywarr+"]");
+	//console.log("[api/story/language][sign-array]["+mysarr+"]");
 
 	// *************************
 	// * DOES THE STORY EXIST? *
 	// *************************
-        console.log("[DOES STORY EXIST?][STORY]["+myid+"]");
+        console.log("[POST-/api/story/language][DOES STORY EXIST?][STORY]["+myid+"]");
 	StoryDB.getStory(myid).then(function(result) {
 		if(result=="[]") {
 			// ****************************
 			// * NO, STORY DOES NOT EXIST *
 			// ****************************
-			console.log("[StoryDB.getStory][NO, STORY DOESN'T EXIST]");
-			console.log(result);
+			console.log("[POST-/api/story/language][StoryDB.getStory][NO, STORY "+myid+" DOESN'T EXIST]");
 			res.send(result);
 		}
 		else {
 			// *********************
 			// * YES, STORY EXISTS *
 			// *********************
-                        console.log("[StoryDB.getStory][YES, STORY EXISTS]["+myid+"]");
-			post_api_story_language_part2(req,res,myid,mywlang,mywarr,mysarr);
+                        console.log("[POST-/api/story/language][StoryDB.getStory][YES, STORY EXISTS]["+myid+"]");
+			post_api_story_language_part2(req,res,myid,mywarr,mysarr);
 		}
 	}).catch(err => {
 		res.send(err);
 	});
 });
+
 // ****************************
 // * DELETE STORY LANGUAGES   *
 // * - RETURN - true or false *
 // ****************************
-app.delete('/api/story/language',function(req,res) {
+app.post('/api/story/language/delete',function(req,res) {
+
+	myid=req.body.id;
+	mylangid=req.body.languageid;
+	mytyp=req.body.langtyp;
+
+	console.log("[api/story/language/delete][storyid]["+myid+"]");
+	console.log("[api/story/language/delete][languageid]["+mylangid+"]");
+	console.log("[api/story/language/delete][sign-array]["+mytyp+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/language/delete][NO ID]");
+		res.send('done');
+	}
+	if((mylangid==null)||(mylangid==0)) {
+		console.log("[/api/story/language/delete][NO LANGUAGE ID]");
+		res.send('done');
+	}
+	if((mytyp==null)||(mytyp=='')) {
+		console.log("[/api/story/language/delete][NO LANGUAGE TYPE]");
+		res.send('done');
+	}
+	if((mytyp=="sign")&&(mytyp=='written')) {
+		console.log("[/api/story/language/delete][INVALID LANGUAGE TYPE]["+langtyp+"]");
+		res.send('done');
+	}
+
+	if(mytyp=="sign") {
+		StoryDB.deleteStoryToSignlanguage(myid,mylangid).then(function(result) {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][signlanguageid]["+mylangid+"][result]["+result+"]");
+			res.send(result);
+		}).catch(err => {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][signlanguageid]["+mylangid+"][ERROR]["+err+"]");
+			res.send(err);
+		});
+	}
+	else if(mytyp=="written") {
+		StoryDB.deleteStoryToWrittenlanguage(myid,mylangid).then(function(result) {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][writtenlanguageid]["+mylangid+"][result]["+result+"]");
+			res.send(result);
+		}).catch(err => {
+			console.log("[/api/story/language/delete][storyid]["+myid+"][writtenlanguageid]["+mylangid+"][ERROR]["+err+"]");
+			res.send(err);
+		});
+	}
+	else {
+		res.send('done');
+	}
 });
 // ************************************
 // * SAVE STORY COVER PAGE AND AUTHOR *
 // * - RETURN - true or false         *
 // ************************************
 app.post('/api/story/cover',function(req,res) {
+
+	console.log(req.body);
+	myid=req.body.id;
+	myauthor=req.body.author;
+	mycover=req.body.coverimage;
+
+	console.log("[api/story/cover][storyid]["+myid+"]");
+	console.log("[api/story/cover][author]["+myauthor+"]");
+	console.log("[api/story/cover][cover-image]["+mycover+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/cover][NO ID]");
+		res.send('done');
+	}
+	if((myauthor==null)||(myauthor=="")) {
+		console.log("[/api/story/cover][NO AUTHOR]");
+		res.send('done');
+	}
+	if((mycover==null)||(mycover=='')) {
+		console.log("[/api/story/cover][NO COVER IMAGE]");
+		res.send('done');
+	}
+	StoryDB.addStoryCover(myid,mycover,myauthor).then(function(result) {
+		console.log("[/api/story/cover][storyid]["+myid+"][author]["+myauthor+"][coverimage]["+mycover+"][result]["+result+"]");
+		res.send(result);
+	}).catch(err => {
+		console.log("[/api/story/cover][storyid]["+myid+"][author]["+myauthor+"][coverimage]["+mycover+"][ERROR]["+err+"]");
+		res.send(err);
+	});
 });
 // ****************************
 // * SAVE STORY METADATA      *
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/metadata',function(req,res) {
+	console.log(req.body);
 });
 // ****************************
 // * SAVE STORY JSON DATA     *
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/data',function(req,res) {
+	console.log(req.body);
 });
 // ****************************
 // * PUBLISH STORY            *
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/publish',function(req,res) {
+
+	console.log(req.body);
+	myid=req.body.id;
+	console.log("[api/story/cover][storyid]["+myid+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/cover][NO ID]");
+		res.send('done');
+	}
+
+	StoryDB.publishStory(myid).then(function(result) {
+		res.send(result);
+	}).catch(err => {
+		res.send(err);
+	});
 });
 // ****************************************
 // ****************************************
@@ -772,94 +919,430 @@ function keep_email_in_session(req,email) {
 	}
 }
 
-function post_api_story_language_part2(req,res,storyid,writlang,mywarr,mysarr) {
-	// *******************
-	// * STORY WAS FOUND *
-	// *******************
-        // ********************************
-        // * DOES WRITTEN LANGUAGE EXIST? *
-        // ********************************
-        console.log("[post_api_story_language_part2][DOES WRITTEN LANGUAGE EXIST?][language]["+writlang+"][storyid]["+storyid+"]");
-	WrittenlanguageDB.getwrittenlanguage(writlang).then(function(result) {
-		if(result=="[]") {
-                        // ***************************************
-                        // * NO, WRITTEN LANGUAGE DOES NOT EXIST *
-                        // ***************************************
-                        console.log("[post_api_story_language_part2][NO, WRITTENLANGUGE DOESN'T EXIST]["+writlang+"][story]["+storyid+"]");
-                        post_api_story_language_part3(req,res,storyid,writlang,mywarr,mysarr);
-                }
-                else {
-                        obj=JSON.parse(result);
-                        writid=obj[0]["id"];
-                        // ******************************
-                        // * YES, WRITTENLANGUGE EXISTS *
-                        // ******************************
-                        console.log("[post_api_story_language_part2][YES, WRITTEN LANGUAGE EXISTS]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"]");
-                        //console.log(result);
-                        res.send(result);
-                }
+// ****************************************************************
+// * PART OF SAVE STORY                                           *
+// * SEE IF WRITTEN LANGUAGES EXIST IN WRITTEN LANGUAGES DB TABLE *
+// ****************************************************************
+function post_api_story_language_part2(req,res,storyid,mywarr,mysarr) {
+
+	var wlangpromarr=[];
+	var wfoundarr=[];
+	var len=mywarr.length;
+	//console.log("[post_api_story_language_part2][storyid]["+storyid+"][Enter the promise land!]")
+
+	for(var i=0;i<len;i++) {
+		//console.log("[post_api_story_language_part2][storyid]["+storyid+"][writtenlanguage]["+i+"]["+mywarr[i]+"]")
+		wlangpromarr.push(new Promise((resolve,reject) => {
+			WrittenlanguageDB.getwrittenlanguage(mywarr[i]).then(function(result) {
+				if(result=="[]") {
+					// ******************************
+					// * NO WRITTEN LANGUAGE FOUND *
+					// ******************************
+					console.log("[post_api_story_language_part2][NO WRITTENLANGUGE FOUND][story]["+storyid+"]");
+					//console.log(result);
+					resolve(result);
+				}
+				else {
+					// **************************
+					// * WRITTEN LANGUAGE FOUND *
+					// **************************
+					obj=JSON.parse(result);
+					var writid=obj[0]["id"];
+					console.log("[post_api_story_language_part2][WRITTENLANGUGE FOUND][writtenlanguageid]["+writid+"][storyid]["+storyid+"]");
+					//console.log(result);
+					wfoundarr.push(result);
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-2][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(wlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part2][PROMISES DONE-WRITTEN LANGUAGE-CHECKS]");
+		post_api_story_language_part3(req,res,storyid,wfoundarr,mywarr,mysarr);
 	}).catch(err => {
-		res.send(err);
+		console.log("broken promises 2");
 	});
 }
 
-function post_api_story_language_part3(req,res,storyid,writlang,mywarr,mysarr) {
-        // *******************
-        // * STORY WAS FOUND *
-        // *******************
-        // ***********************************
-        // * WRITTEN LANGUAGE DOES NOT EXIST *
-        // ***********************************
-        // ************************
-        // * ADD WRITTEN LANGUAGE *
-        // ************************
-        console.log("[post_api_story_language_part3][ADD WRITTEN LANGUAGE]["+writlang+"][story]["+storyid+"]");
-        writid=0;
-        WrittenlanguageDB.db_add_writtenlanguage(writlang).then(function(result) {
-                writid=result.id;
-                console.log("[post_api_story_language_part3][NEW WRITTEN LANGUAGE ID]["+writid+"][writtenlanguage]["+writlang+"][story]["+storyid+"]");
-		// ********************************************************
-		// * DOES STORY AND WRITTEN LANGUAGE HAVE A RELATIONSHIP? *
-		// ********************************************************
-		post_api_story_language_part4(req,res,storyid,writid,mywarr,mysarr);
-        }).catch(err => {
-                res.send(err);
-        });
+// *********************************************************
+// * PART OF SAVE STORY                                    *
+// * ADD WRITTEN LANGUAGES INTO WRITTEN LANGUAGES DB TABLE *
+// *********************************************************
+function post_api_story_language_part3(req,res,storyid,wfoundarr,mywarr,mysarr) {
+	// ****************************************************
+	// * CREATE WRITTEN LANGUAGE ARRAY FROM FOUND RECORDS *
+	// ****************************************************
+	var rec=null;
+	var foundlangs=[];
+	var added_ids=[];
+	flen=wfoundarr.length;
+	for(var jj=0;jj<flen;jj++) {
+		rec=wfoundarr[jj];
+		tmp1=JSON.parse(rec);
+		foundlangs.push(tmp1[0].name);
+		added_ids.push(tmp1[0].id);
+	}
+	// *********************************************
+	// * CREATE WRITTEN LANGUAGE "NOT-FOUND" ARRAY *
+	// *********************************************
+	var notfoundlangs=[];
+	mlen=mywarr.length;
+	for(var kk=0;kk<mlen;kk++) {
+		if(check_found_wlangs(mywarr[kk],foundlangs)==false) {
+			notfoundlangs.push(mywarr[kk]);
+		}
+	}
+	// ********************************************
+	// * ADD WRITTEN LANGUAGE "NOT-FOUND" RECORDS *
+	// ********************************************
+	var writlangpromarr=[];
+	nflen=notfoundlangs.length;
+	for(var aa=0;aa<nflen;aa++) {
+		console.log("[post_api_story_language_part3][ADD-NOT-FOUND WRITTEN LAUGUAGE]["+notfoundlangs[aa]+"]");
+		writlangpromarr.push(new Promise((resolve,reject) => {
+			WrittenlanguageDB.db_add_writtenlanguage(notfoundlangs[aa]).then(function(result) {
+				writid=result.id;
+				added_ids.push(writid);
+				console.log("[post_api_story_language_part3][ADDED WRITTEN LANGUAGE][ID]["+writid+"][writtenlanguage]["+notfoundlangs[aa]+"][story]["+storyid+"]");
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-3][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(writlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part3][PROMISES DONE-WRITTEN LANGUAGE-ADD]");
+		alen=added_ids.length;
+		for(var bb=0;bb<alen;bb++) {
+			console.log("[post_api_story_language_part3][added-ids]["+bb+"]["+added_ids[bb]+"]")
+		}
+		post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 3");
+	});
 }
 
-function post_api_story_language_part4(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
-        // *******************
-        // * STORY EXISTS *
-        // *******************
-        // ***************************
-        // * WRITTEN LANGUAGE EXISTS *
-        // ***************************
-        // ***************************************************
-        // * STORY AND WRITTEN LANGUAGE RELATIONSHIP EXIST ? *
-        // ***************************************************
-	console.log("[post_api_story_language_part4][STORY TO WRITTEN LANGUAGE RELATIONSHIP EXIST?][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
-	StoryDB.getStoryToWrittenlanguage(storyId,writtenlanguageId).then(function(result) {
-		if(result=="[]") {
-			console.log("[post_api_story_language_part4][NO RELATIONSHIP][ADD!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
-			post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,mysarr);
+function check_found_wlangs(onelang,foundlangs) {
+	wlen=foundlangs.length;
+	for(var ii=0;ii<wlen;ii++) {
+		if(onelang==foundlangs[ii]) {
+			return true;
 		}
-		else {
-			console.log("[post_api_story_language_part4][RELATIONSHIP EXISTS][DONE!][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
-			res.send(result);
-		}
-        }).catch(err => {
-                res.send(err);
-        });
+	}
+	return false;
 }
 
-function post_api_story_language_part5(req,res,storyId,writtenlanguageId,mywarr,mysarr) {
-	console.log("[post_api_story_language_part5][ADD RELATIONSHIP][story]["+storyId+"][writtenlanguage]["+writtenlanguageId+"]");
-	StoryDB.addStoryToWrittenlanguage(storyId,writtenlanguageId).then(function(result) {
-		var recid=result.id;
-                console.log("[NEW RELATIONSHIP ADDED]["+recid+"]");
-		res.send(result);
-        }).catch(err => {
-                res.send(err);
-        });
+// *************************************************************************
+// * PART OF SAVE STORY                                                    *
+// * SEE IF WRITTEN LANGUAGES EXIST IN STORY TO WRITTEN LANGUAGES DB TABLE *
+// *************************************************************************
+function post_api_story_language_part4(req,res,storyid,added_ids,mywarr,mysarr) {
+	console.log(added_ids);
+	var storywlangpromarr=[];
+	var s2wexist=[];
+	addlen=added_ids.length;
+	for(var cc=0;cc<addlen;cc++) {
+		storywlangpromarr.push(new Promise((resolve,reject) => {
+			console.log("[post_api_story_language_part4][storyid]["+storyid+"][writtenlanguageid]["+added_ids[cc]+"]");
+			StoryDB.getStoryToWrittenlanguage(storyid,added_ids[cc]).then(function(result) {
+				if(result=="[]") {
+					console.log("[post_api_story_language_part4][STORYTOWRITTENLANGUAGE NOT-FOUND]["+storyid+"]");
+					console.log(result);
+					resolve(result);
+				}
+				else {
+					obj=JSON.parse(result);
+					var storytowritid=obj[0]["id"];
+					s2wexist.push(obj[0]["writtenlanguageId"]);
+					console.log("[post_api_story_language_part4][STORYTOWRITTENLANGUGE FOUND][storytowrittenlanguageid]["+storytowritid+"][storyid]["+storyid+"]");
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-4][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(storywlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part4][PROMISES DONE-STORY TO WRITTEN LANGUAGE-CHECKS]");
+		post_api_story_language_part5(req,res,storyid,s2wexist,added_ids,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 4");
+	});
+}
+
+// ******************************************************************
+// * PART OF SAVE STORY                                             *
+// * ADD WRITTEN LANGUAGES INTO STORY TO WRITTEN LANGUAGES DB TABLE *
+// ******************************************************************
+function post_api_story_language_part5(req,res,storyid,s2w_exist,allw_ids,mywarr,mysarr) {
+
+	s2w_len=s2w_exist.length;
+	for(var ee=0;ee<s2w_len;ee++) {
+		console.log("[post_api_story_language_part5][writlangid-related to story]["+ee+"]["+s2w_exist[ee]+"]");
+	}
+
+	var ids2add=[];
+	var all_wlen=allw_ids.length;
+	for(var dd=0;dd<all_wlen;dd++) {
+		console.log("[post_api_story_language_part5][writelangid]["+dd+"]["+allw_ids[dd]+"]");
+		if(check_found_s2wlangs(allw_ids[dd],s2w_exist)==false) {
+			console.log("[PUSH]["+allw_ids[dd]+"]");
+			ids2add.push(allw_ids[dd]);
+		}
+	}
+
+	var story2wlangpromarr=[];
+	ids2a_len=ids2add.length;
+	for(var ff=0;ff<ids2a_len;ff++) {
+		console.log("[post_api_story_language_part5][ADD TO STORY TO WRITTEN LANGUAGE RELATIONSHIP][writelangid]["+ff+"]["+ids2add[ff]+"]");
+		story2wlangpromarr.push(new Promise((resolve,reject) => {
+			StoryDB.addStoryToWrittenlanguage(storyid,ids2add[ff]).then(function(result) {
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-5][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2wlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part5][PROMISES DONE-STORY TO WRITTEN LANGUAGE-ADDS]");
+		post_api_story_language_part6(req,res,storyid,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 5");
+	});
+}
+
+function check_found_s2wlangs(onelang,s2w_exist) {
+	s2w_wlen=s2w_exist.length;
+	for(var ff=0;ff<s2w_wlen;ff++) {
+		if(onelang==s2w_exist[ff]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// **********************************************************
+// * PART OF SAVE STORY                                     *
+// * SEE IF SIGN LANGUAGES EXIST IN SIGN LANGUAGES DB TABLE *
+// **********************************************************
+function post_api_story_language_part6(req,res,storyid,mywarr,mysarr) {
+
+	var slangpromarr=[];
+	var sfoundarr=[];
+	var slen=mysarr.length;
+	console.log("[post_api_story_language_part6][storyid]["+storyid+"][Enter the promise land!]")
+
+	for(var gg=0;gg<slen;gg++) {
+		console.log("[post_api_story_language_part6][storyid]["+storyid+"][signlanguage]["+gg+"]["+mysarr[gg]+"]")
+		slangpromarr.push(new Promise((resolve,reject) => {
+			SignlanguageDB.getsignlanguage(mysarr[gg]).then(function(result) {
+				if(result=="[]") {
+					// **************************
+					// * NO SIGN LANGUAGE FOUND *
+					// **************************
+					console.log("[post_api_story_language_part6][NO SIGNLANGUAGE FOUND][story]["+storyid+"]");
+					//console.log(result);
+					resolve(result);
+				}
+				else {
+					// ***********************
+					// * SIGN LANGUAGE FOUND *
+					// ***********************
+					obj=JSON.parse(result);
+					var signid=obj[0]["id"];
+					console.log("[post_api_story_language_part6][SIGNLANGUAGE FOUND][signlanguageid]["+signid+"][storyid]["+storyid+"]");
+					//console.log(result);
+					sfoundarr.push(result);
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-6][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(slangpromarr).then(() => { 
+		console.log("[post_api_story_language_part6][PROMISES DONE-SIGN LANGUAGE-CHECKS]");
+		post_api_story_language_part7(req,res,storyid,sfoundarr,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 6");
+	});
+}
+// ***************************************************
+// * PART OF SAVE STORY                              *
+// * ADD SIGN LANGUAGES INTO SIGN LANGUAGES DB TABLE *
+// ***************************************************
+function post_api_story_language_part7(req,res,storyid,sfoundarr,mywarr,mysarr) {
+	console.log(sfoundarr.length);
+	console.log(mysarr.length);
+	// *************************************************
+	// * CREATE SIGN LANGUAGE ARRAY FROM FOUND RECORDS *
+	// *************************************************
+	var srec=null;
+	var foundslangs=[];
+	var sadded_ids=[];
+	fslen=sfoundarr.length;
+	console.log("[post_api_story_language_part7][signlangauges-found]["+fslen+"]");
+	for(var hh=0;hh<fslen;hh++) {
+		srec=sfoundarr[hh];
+		stmp1=JSON.parse(srec);
+		foundslangs.push(stmp1[0].name);
+		sadded_ids.push(stmp1[0].id);
+	}
+	// ******************************************
+	// * CREATE SIGN LANGUAGE "NOT-FOUND" ARRAY *
+	// ******************************************
+	var notfoundslangs=[];
+	sslen=mysarr.length;
+	for(var pp=0;pp<sslen;pp++) {
+		console.log(mysarr[pp]);
+		if(check_found_slangs(mysarr[pp],foundslangs)==false) {
+			notfoundslangs.push(mysarr[pp]);
+		}
+	}
+	// *****************************************
+	// * ADD SIGN LANGUAGE "NOT-FOUND" RECORDS *
+	// *****************************************
+	var signlangpromarr=[];
+	nfslen=notfoundslangs.length;
+	for(var qq=0;qq<nfslen;qq++) {
+		console.log("[post_api_story_language_part7][ADD-NOT-FOUND SIGN LAUGUAGE]["+notfoundslangs[qq]+"]");
+		signlangpromarr.push(new Promise((resolve,reject) => {
+			SignlanguageDB.db_add_signlanguage(notfoundslangs[qq]).then(function(result) {
+				console.log(result);
+				signid=result.id;
+				console.log("[post_api_story_language_part7][ADDED][signlanguagetableid]["+signid+"]");
+				sadded_ids.push(signid);
+				console.log("[post_api_story_language_part7][ADDED SIGN LANGUAGE][ID]["+signid+"][signlanguage]["+notfoundslangs[qq]+"][story]["+storyid+"]");
+
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-7][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(signlangpromarr).then(() => { 
+		console.log("[post_api_story_language_part7][PROMISES DONE-SIGN LANGUAGE-ADD]");
+		salen=sadded_ids.length;
+		for(var rr=0;rr<salen;rr++) {
+			console.log("[post_api_story_language_part7][sadded-ids]["+rr+"]["+sadded_ids[rr]+"]")
+		}
+		post_api_story_language_part8(req,res,storyid,sadded_ids,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 7");
+	});
+}
+
+function check_found_slangs(onelang,foundslangs) {
+	slen=foundslangs.length;
+	for(var ss=0;ss<slen;ss++) {
+		if(onelang==foundslangs[ss]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// *******************************************************************
+// * PART OF SAVE STORY                                              *
+// * SEE IF SIGN LANGUAGES EXIST IN STORY TO SIGN LANGUAGES DB TABLE *
+// *******************************************************************
+function post_api_story_language_part8(req,res,storyid,sadded_ids,mywarr,mysarr) {
+	console.log(sadded_ids);
+	var story2slangpromarr=[];
+	var s2sexist=[];
+	saddlen=sadded_ids.length;
+	for(var tt=0;tt<saddlen;tt++) {
+		story2slangpromarr.push(new Promise((resolve,reject) => {
+			console.log("[post_api_story_language_part8][storyid]["+storyid+"][signlanguageid]["+sadded_ids[tt]+"]");
+			StoryDB.getStoryToSignlanguage(storyid,sadded_ids[tt]).then(function(result) {
+				if(result=="[]") {
+					console.log("[post_api_story_language_part8][STORYTOSIGNLANGUAGE NOT-FOUND]["+storyid+"]");
+					console.log(result);
+					resolve(result);
+				}
+				else {
+					obj=JSON.parse(result);
+					var storytosignid=obj[0]["id"];
+					s2sexist.push(obj[0]["signlanguageId"]);
+					console.log("[post_api_story_language_part8][STORYTOSIGNLANGUAGE FOUND][storytosignlanguageid]["+storytosignid+"][storyid]["+storyid+"]");
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-8][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2slangpromarr).then(() => { 
+		console.log("[post_api_story_language_part8][PROMISES DONE-STORY TO SIGN LANGUAGE-CHECKS]");
+		post_api_story_language_part9(req,res,storyid,s2sexist,sadded_ids,mywarr,mysarr);
+	}).catch(err => {
+		console.log("broken promises 8");
+	});
+}
+
+// ******************************************************************
+// * PART OF SAVE STORY                                             *
+// * ADD SIGN LANGUAGES INTO STORY TO SIGN LANGUAGES DB TABLE *
+// ******************************************************************
+function post_api_story_language_part9(req,res,storyid,s2sexist,alls_ids,mywarr,mysarr) {
+	console.log("[s2sexist]");
+	console.log(s2sexist);
+	console.log("[alls_ids]");
+	console.log(alls_ids);
+
+	s2s_len=s2sexist.length;
+	for(var uu=0;uu<s2w_len;uu++) {
+		console.log("[post_api_story_language_part9][signlangid-related to story]["+uu+"]["+s2sexist[uu]+"]");
+	}
+
+	var sids2add=[];
+	var all_slen=alls_ids.length;
+	for(var vv=0;vv<all_slen;vv++) {
+		console.log("[post_api_story_language_part9][signlangid]["+vv+"]["+alls_ids[vv]+"]");
+		if(check_found_s2slangs(alls_ids[vv],s2sexist)==false) {
+			console.log("[PUSH]["+alls_ids[vv]+"]");
+			sids2add.push(alls_ids[vv]);
+		}
+	}
+	console.log("[sids2add]");
+	console.log(sids2add);
+
+	var story2slangpromarr=[];
+	sids2a_len=sids2add.length;
+	for(var ww=0;ww<sids2a_len;ww++) {
+		console.log("[post_api_story_language_part9][ADD TO STORY TO SIGN LANGUAGE RELATIONSHIP][signlangid]["+ww+"]["+sids2add[ww]+"]");
+		story2slangpromarr.push(new Promise((resolve,reject) => {
+			StoryDB.addStoryToSignlanguage(storyid,sids2add[ww]).then(function(result) {
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-9][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2slangpromarr).then(() => { 
+		console.log("[post_api_story_language_part9][PROMISES DONE-STORY TO SIGN LANGUAGE-ADDS]");
+	}).catch(err => {
+		console.log("broken promises 9");
+	});
+}
+
+function check_found_s2slangs(onelang,s2sexist) {
+	s2s_slen=s2sexist.length;
+	for(var xx=0;xx<s2s_slen;xx++) {
+		if(onelang==s2sexist[xx]) {
+			return true;
+		}
+	}
+	return false;
 }
 
