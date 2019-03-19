@@ -1,3 +1,14 @@
+#logo-wrapper{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    height: 100%;
+}
+#logo{
+	height: 100%;
+	vertical-align: middle;
+}
 nav{
 	position: absolute;
 	bottom: 0px;
@@ -9,17 +20,42 @@ nav > div{
 	float: right;
 	margin-left: 10px;
 	height: 35px;
-}
-nav > div:not(#nav-search):not(.active):hover{
-	top: 2px;
-}
-nav .nav-icon{
-	display: block;
-	height: 35px;
 	width: 35px;
-	border-radius: 50%;
-	background-color: #0098BA;
-    background-color: white;
+}
+.nav-icon{
+	display: block;
+	height: 100%;
+	width: 100%;
+	border: none;
+    background: none;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 0px;
+}
+#nav-stories-icon{
+	background-image: url('../../img/icons/NavBar/nav_stories.svg');
+}
+nav > div:not(#nav-search):not(.active):hover #nav-stories-icon{
+	background-image: url('../../img/icons/NavBar/nav_stories_hoverDown.svg');
+}
+#nav-games-icon{
+	background-image: url('../../img/icons/NavBar/nav_games.svg');
+}
+nav > div:not(#nav-search):not(.active):hover #nav-games-icon{
+	background-image: url('../../img/icons/NavBar/nav_games_hoverDown.svg');
+}
+#nav-user-icon{
+	background-image: url('../../img/icons/NavBar/nav_acct.svg');
+}
+nav > div:not(#nav-search):not(.active):hover #nav-user-icon, #nav-user-icon:focus{
+	background-image: url('../../img/icons/NavBar/nav_acct_hoverDown.svg');
+}
+#nav-edit-icon{
+	background-image: url('../../img/icons/NavBar/nav_SB.svg');
+	height: 42px;
+}
+nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
+	background-image: url('../../img/icons/NavBar/nav_SB_hover_selected.svg');
 }
 #nav-user-links{
 	position: absolute;
@@ -31,6 +67,7 @@ nav .nav-icon{
     display: none;
 	border: 3px solid #004E74;
 	border-top: none;
+	top: 100%;
 }
 #nav-user-links div{
 	padding: 2px 5px;
@@ -44,15 +81,16 @@ nav .nav-icon{
 #nav-user:hover .nav-icon, #nav-user:focus .nav-icon{
 	border-radius: 50% 50% 0px 0px;
 }
-#nav-user:hover #nav-user-links, #nav-user:focus #nav-user-links{
+#nav-user:hover #nav-user-links, #nav-user-icon:focus + #nav-user-links{
 	display: block;
 }
 #nav-search{
 	margin-left: 25px;
+	width: 250px;
 }
 #nav-search form{
 	height: 100%;
-	width: 250px;
+	width: 100%;
 }
 #nav-search #nav-serach-input, #nav-search #nav-submit-input{
 	position: absolute;
@@ -66,23 +104,16 @@ nav .nav-icon{
 	border: 2px solid #0098BA;
 	border-radius: 35px;
 	padding: 5px 7px;
-	padding-right: 40px;
+	padding-right: 41px;
 }
 #nav-search #nav-submit-input{
 	position: absolute;
 	background-color: #0098BA;
+	background-image: url('../../img/icons/search.png');
+	background-repeat: no-repeat;
+	background-size: 60%;
+	background-position: 40% 50%;
 	border: none;
-	color: #FFFFFF;
-	border-radius: 0px 35px 35px 0px;
+	border-radius: 0px 50% 50% 0px;
 }
-#nav-games-icon img{
-    position: absolute;
-   bottom: .5px;
 
-}
-#logoHolder{
-    position: absolute;
-    width:150px;
-    bottom: .5px;
- 
-}

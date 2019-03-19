@@ -13,6 +13,9 @@
 	-ms-text-align-last: center;
 	-moz-text-align-last: center;
 }
+#language-selector select:focus{
+	border-radius: 0px;
+}
  #language-selector img{
     position: absolute;
     left: 10px;

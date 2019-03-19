@@ -16,13 +16,6 @@ function resizePrviews(){
 			var width = parseFloat($el.width());
 
 			$el.css('height', `${9/16 * width}px`);
-			// var height = parseFloat($el.height());
-
-			// if(height != (9/16 * width)){
-			// 	$el.css('width', `${16/9 * height}px`);				
-			// }
-
-
 		});
 	}, 40);	
 }

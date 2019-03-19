@@ -73,16 +73,21 @@ WrittenlanguageDB.prototype.getWrittenLanguages = function(){
 				for(var i = 0; i < res.length; i++){
 					writtenlanguages[res[i].id] = res[i];
 				}
-
-				resolve(writtenlanguages);
+				conn.end().then(() => {
+					resolve(writtenlanguages);
+				});
 			}).catch(err => {
-				reject(err);
-				return;
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
 			});
 
 		}).catch(err => {
-			reject(err);
-			return;
+			conn.end().then(() => {
+				reject(err);
+				return;
+			});
 		});
 
 	});
