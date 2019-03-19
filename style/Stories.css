@@ -3,7 +3,7 @@
 	height: 400px;
 }
 #more-stories{
-    background-color: #a0eaf7;
+    background-color: #A0EAF7;
     color: #004e74;
     text-align: center;
     font-size: 25px;
@@ -12,5 +12,40 @@
     padding-top: 10px;
 }
 #filter-bar{
-	background-color: #a0eaf7;
+	background-color: #A0EAF7;
+}
+#search-bar{
+    padding: 25px 10% 10px;
+    background-color: #A0EAF7;
+}
+#search-wrapper{
+    position: relative;
+    height: 50px;
+    width: 80%
+    margin: 0px auto;
+}
+#search-input, #search-submit{
+    position: absolute;
+    right: 0px;
+    height: 100%;
+    width: 100%;
+    border: 3px solid #004E74;
+    border-radius: 25px;
+}
+#search-input{
+    padding: 10px;
+    padding-right: 85px; 
+    font-size: 1.5em;
+}
+#search-submit{
+    width: 75px;
+    border-radius: 0px 25px 25px 0px;
+    background-color: #004E74;
+    background-image: url('../../img/icons/search.png');
+    background-repeat: no-repeat;
+    background-size: 50%;
+    background-position: 30% 50%;
+    border: none;
+    border-radius: 0px 50% 50% 0px;
+
 }
