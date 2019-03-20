@@ -1,40 +1,72 @@
 mdb = require('mariadb');
 
 const Settings = require('./Settings');
+const pool = mdb.createPool({
+        host: Settings.dbHost,
+        user: Settings.dbUser,
+        password: Settings.dbPassword,
+        database: Settings.dbName ,
+        connectionLimit: Settings.dbPoolConnectionLimit
+});
+
 
 function TitleDB() {
 }
 
-TitleDB.db_add_title = function(name,writtenlanguageId,storyId) {
-
-    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+TitleDB.prototype.db_add_title = function(name,writtenlanguageId,storyId) {
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
 	    conn.query("INSERT INTO title (name,writtenlanguageId,storyId) VALUES ('"+name+"',"+writtenlanguageId+","+storyId+")").then((res) => {
-		//console.log("[db_add_title][success]");
-		//console.log(res);
 		conn.end();
-		resolve("[db_add_title][success]");
+		resolve({id:res.insertId});
 		return;
 	    }).catch(err => {
-		//console.log("[db_add_title][bad1]");
 		//handle error
+		console.log(err);
 		conn.end();
-		reject("[db_add_title][failure]");
+		reject(err);
 		return;
 	    })
 
 	}).catch(err => {
-	    //console.log("[db_add_title][bad2]");
-	    reject("[db_add_title][failure]");
+	    console.log(err);
+	    reject(err);
 	    return;
 	});
 
     });
 }
 
-module.exports = TitleDB;
+TitleDB.prototype.db_get_title = function(writtenlanguageId,storyId) {
+
+    return new Promise(function(resolve,reject) {
+
+	pool.getConnection().then(conn => {
+
+	    conn.query("SELECT * FROM title WHERE (writtenlanguageId="+writtenlanguageId+" AND storyId="+storyId+")").then((res) => {
+		conn.end();
+		resolve(JSON.stringify(res));
+		return;
+	    }).catch(err => {
+		//handle error
+		console.log(err);
+		conn.end();
+		reject(err);
+		return;
+	    })
+
+	}).catch(err => {
+	    console.log(err);
+	    reject(err);
+	    return;
+	});
+
+    });
+}
+
+let _TitleDB = new TitleDB();
+module.exports = _TitleDB;
 
