@@ -2,6 +2,7 @@ import 'style/Stories.css!';
 import FiltersBar from 'js/Client/Filter.js';
 import StoryPreview from 'js/Client/StoryPreview';
 import LanguageSelector from 'js/Client/LanguageSelector';
+import StoryGrid from 'js/Client/StoryGrid.js';
 
 import html from 'html/Client/Search.html!text';
 
@@ -21,14 +22,13 @@ $(document).ready(function () {
             if(evt.key == 'Enter')
                 $('#search-wrapper').submit();
         });
-
         FiltersBar('filter-bar');
-
+        var storyPreviews = [];
         for (var i = 0; i < stories.length; i++) {
             let sp = new StoryPreview(stories[i]);
-            sp.appendTo('stories');
+            storyPreviews.push(stories[i]);
         }
-        
+        StoryGrid("stories", storyPreviews);
         LanguageSelector.updateLanguageDisplay();
     });
 
