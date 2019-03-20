@@ -1472,6 +1472,8 @@ function post_api_story_metadata_part3(req,res,myid,mywritid,mytitle,mydesc,myga
 			var titleid=obj[0]["id"];
 			console.log("[post_api_story_metadata_part3][TITLE FOUND][titleid]["+titleid+"][storyid]["+myid+"]");
 			//res.send(result);
+			post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytarr);
+
 		}
 	}).catch(err => {
 		console.log(err);
@@ -1520,6 +1522,7 @@ function post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytar
 			var descid=obj[0]["id"];
 			console.log("[post_api_story_metadata_part5][DESCRIPTION FOUND][descid]["+descid+"][storyid]["+myid+"]");
 			//res.send(result);
+			post_api_story_metadata_part7(req,res,myid,mywritid,descid,mygarr,mytarr);
 		}
 	}).catch(err => {
 		console.log(err);
