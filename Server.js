@@ -754,7 +754,43 @@ app.post('/api/story/cover',function(req,res) {
 // * - RETURN - true or false *
 // ****************************
 app.post('/api/story/metadata',function(req,res) {
-	console.log(req.body);
+	obj=req.body;
+	myid=obj.id;
+	mylang=obj.language;
+	mytitle=obj.title;
+	mydesc=obj.description;
+	mygarr=obj['genre[]'];
+	mytarr=obj['tag[]'];
+
+	console.log("[api/story/metadata][storyid]["+myid+"]");
+	console.log("[api/story/metadata][language]["+mylang+"]");
+	console.log("[api/story/metadata][title]["+mytitle+"]");
+	console.log("[api/story/metadata][description]["+mydesc+"]");
+	console.log("[api/story/metadata][genre-array]["+mygarr+"]");
+	console.log("[api/story/metadata][tag-array]["+mytarr+"]");
+
+	// *************************
+	// * DOES THE STORY EXIST? *
+	// *************************
+        console.log("[POST-/api/story/metadata][DOES STORY EXIST?][STORY]["+myid+"]");
+	StoryDB.getStory(myid).then(function(result) {
+		if(result=="[]") {
+			// ****************************
+			// * NO, STORY DOES NOT EXIST *
+			// ****************************
+			console.log("[POST-/api/story/metadata][StoryDB.getStory][NO, STORY "+myid+" DOESN'T EXIST]");
+			res.send(result);
+		}
+		else {
+			// *********************
+			// * YES, STORY EXISTS *
+			// *********************
+                        console.log("[POST-/api/story/metadata][StoryDB.getStory][YES, STORY EXISTS]["+myid+"]");
+			post_api_story_metadata_part2(req,res,myid,mylang,mytitle,mydesc,mygarr,mytarr);
+		}
+	}).catch(err => {
+		res.send(err);
+	});
 });
 // ****************************
 // * SAVE STORY JSON DATA     *
@@ -762,6 +798,26 @@ app.post('/api/story/metadata',function(req,res) {
 // ****************************
 app.post('/api/story/data',function(req,res) {
 	console.log(req.body);
+	myid=req.body.id;
+	myblob=req.body.theblob;
+	console.log("[api/story/data][storyid]["+myid+"]");
+	console.log("[api/story/data][blob]["+myblob+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[/api/story/data][NO ID]");
+		res.send('done');
+	}
+
+	if((myblob==null)||(myblob=="")) {
+		console.log("[/api/story/data][NO BLOB]");
+		res.send('done');
+	}
+
+	StoryDB.addStoryData(myid,myblob).then(function(result) {
+		res.send(result);
+	}).catch(err => {
+		res.send(err);
+	});
 });
 // ****************************
 // * PUBLISH STORY            *
@@ -771,10 +827,10 @@ app.post('/api/story/publish',function(req,res) {
 
 	console.log(req.body);
 	myid=req.body.id;
-	console.log("[api/story/cover][storyid]["+myid+"]");
+	console.log("[api/story/publish][storyid]["+myid+"]");
 
 	if((myid==null)||(myid==0)) {
-		console.log("[/api/story/cover][NO ID]");
+		console.log("[/api/story/publish][NO ID]");
 		res.send('done');
 	}
 
@@ -1283,6 +1339,576 @@ function check_found_s2slangs(onelang,s2sexist) {
 	s2s_slen=s2sexist.length;
 	for(var xx=0;xx<s2s_slen;xx++) {
 		if(onelang==s2sexist[xx]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// *****************************************************
+// * PART OF SAVE STORY                                *
+// * GET WRITTEN LANGUAGE ID - FOR SAVE STORY METADATA *
+// *****************************************************
+function post_api_story_metadata_part2(req,res,myid,mylang,mytitle,mydesc,mygarr,mytarr) {
+	console.log("[post_api_story_metadata_part2][storyid]["+myid+"][language]["+mylang+"][title]["+mytitle+"][description]["+mydesc+"]");
+	console.log(mygarr);
+	console.log(mytarr);
+
+	WrittenlanguageDB.getwrittenlanguage(mylang).then(function(result) {
+		if(result=="[]") {
+			// ******************************
+			// * NO WRITTEN LANGUAGE FOUND *
+			// ******************************
+			console.log("[post_api_story_metadata_part2][NO WRITTENLANGUGE FOUND][story]["+myid+"]");
+			console.log(result);
+			res.send(result);
+		}
+		else {
+			// **************************
+			// * WRITTEN LANGUAGE FOUND *
+			// **************************
+			obj=JSON.parse(result);
+			var writid=obj[0]["id"];
+			console.log("[post_api_story_metadata_part2][WRITTENLANGUGE FOUND][writtenlanguageid]["+writid+"][storyid]["+myid+"]");
+			console.log(result);
+			post_api_story_metadata_part3(req,res,myid,writid,mytitle,mydesc,mygarr,mytarr);
+			res.send(result);
+		}
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
+	});
+}
+
+// *****************************************************
+// * PART OF SAVE STORY                                *
+// * GET STORY TITLE - FOR SAVE STORY METADATA         *
+// *****************************************************
+function post_api_story_metadata_part3(req,res,myid,mywritid,mytitle,mydesc,mygarr,mytarr) {
+	console.log("[post_api_story_metadata_part3][storyid]["+myid+"][writtenlanguageid]["+mywritid+"][title]["+mytitle+"][description]["+mydesc+"]");
+	console.log(mygarr);
+	console.log(mytarr);
+	TitleDB.db_get_title(mywritid,myid).then(function(result) {
+		if(result=="[]") {
+			// ******************
+			// * NO TITLE FOUND *
+			// ******************
+			console.log("[post_api_story_metadata_part3][NO TITLE FOUND][story]["+myid+"]");
+			post_api_story_metadata_part4(req,res,myid,mywritid,mytitle,mydesc,mygarr,mytarr);
+		}
+		else {
+			// ***************
+			// * TITLE FOUND *
+			// ***************
+			obj=JSON.parse(result);
+			var titleid=obj[0]["id"];
+			console.log("[post_api_story_metadata_part3][TITLE FOUND][titleid]["+titleid+"][storyid]["+myid+"]");
+			//res.send(result);
+		}
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
+	});
+}
+
+// *****************************************************
+// * PART OF SAVE STORY                                *
+// * ADD STORY TITLE - FOR SAVE STORY METADATA         *
+// *****************************************************
+function post_api_story_metadata_part4(req,res,myid,mywritid,mytitle,mydesc,mygarr,mytarr) {
+	console.log("[post_api_story_metadata_part4][storyid]["+myid+"][writtenlanguageid]["+mywritid+"][title]["+mytitle+"][description]["+mydesc+"]");
+	console.log(mygarr);
+	console.log(mytarr);
+
+	TitleDB.db_add_title(mytitle,mywritid,myid).then(function(result) {
+		titleid=result.id;
+		console.log("[post_api_story_metadata_part4][ADDED][titleid]["+titleid+"]");
+		post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytarr);
+
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
+	});
+}
+
+// *****************************************************
+// * PART OF SAVE STORY                                *
+// * GET STORY DESCRIPTION - FOR SAVE STORY METADATA   *
+// *****************************************************
+function post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytarr) {
+	DescriptionDB.db_get_description(mywritid,myid).then(function(result) {
+		if(result=="[]") {
+			// ************************
+			// * NO DESCRIPTION FOUND *
+			// ************************
+			console.log("[post_api_story_metadata_part5][NO DESCRIPTION FOUND][story]["+myid+"]");
+			post_api_story_metadata_part6(req,res,myid,mywritid,mydesc,mygarr,mytarr);
+		}
+		else {
+			// *********************
+			// * DESCRIPTION FOUND *
+			// *********************
+			obj=JSON.parse(result);
+			var descid=obj[0]["id"];
+			console.log("[post_api_story_metadata_part5][DESCRIPTION FOUND][descid]["+descid+"][storyid]["+myid+"]");
+			//res.send(result);
+		}
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
+	});
+}
+
+// *****************************************************
+// * PART OF SAVE STORY                                *
+// * ADD STORY DESCRIPTION - FOR SAVE STORY METADATA   *
+// *****************************************************
+function post_api_story_metadata_part6(req,res,myid,mywritid,mydesc,mygarr,mytarr) {
+	DescriptionDB.db_add_description(mydesc,mywritid,myid).then(function(result) {
+		descid=result.id;
+		console.log("[post_api_story_metadata_part6][ADDED][descriptionid]["+descid+"]");
+		post_api_story_metadata_part7(req,res,myid,mywritid,descid,mygarr,mytarr);
+	}).catch(err => {
+		console.log(err);
+		res.send(err);
+	});
+}
+
+// ***********************************************************
+// * PART OF SAVE STORY                                      *
+// * ADD DESCRIPTION ID TO STORY - FOR SAVE STORY METADATA   *
+// ***********************************************************
+function post_api_story_metadata_part7(req,res,myid,mywritid,descid,mygarr,mytarr) {
+        StoryDB.addStoryDescriptionId(myid,descid).then(function(result) {
+		console.log(result);
+                console.log("[post_api_story_metadata_part7][ADDED][descriptionid]["+descid+"]");
+		post_api_story_metadata_part8(req,res,myid,mywritid,mygarr,mytarr);
+        }).catch(err => {
+                console.log(err);
+                res.send(err);
+        });
+}
+
+// *****************************************
+// * PART OF SAVE STORY                    *
+// * SEE IF GENRES EXIST IN GENRE DB TABLE *
+// *****************************************
+function post_api_story_metadata_part8(req,res,myid,writid,mygarr,mytarr) {
+
+	var genrepromarr=[];
+	var gfoundarr=[];
+	var glen=mygarr.length;
+	console.log("[post_api_story_metadata_part8][storyid]["+myid+"][Enter the promise land!]")
+
+	for(var yy=0;yy<glen;yy++) {
+		console.log("[post_api_story_metadata_part8][storyid]["+myid+"][genre]["+yy+"]["+mygarr[yy]+"]")
+		genrepromarr.push(new Promise((resolve,reject) => {
+			GenreDB.db_get_genre(mygarr[yy]).then(function(result) {
+				if(result=="[]") {
+					// ******************
+					// * NO GENRE FOUND *
+					// ******************
+					console.log("[post_api_story_metadata_part8][NO GENRE FOUND][story]["+myid+"]");
+					//console.log(result);
+					resolve(result);
+				}
+				else {
+					// ***************
+					// * GENRE FOUND *
+					// ***************
+					obj=JSON.parse(result);
+					var genreid=obj[0]["id"];
+					console.log("[post_api_story_metadata_part8][GENRE FOUND][genreid]["+genreid+"][storyid]["+myid+"]");
+					//console.log(result);
+					gfoundarr.push(result);
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-8][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(genrepromarr).then(() => { 
+		console.log("[post_api_story_metadata_part8][PROMISES DONE-GENRE-CHECKS]");
+		post_api_story_metadata_part9(req,res,myid,writid,gfoundarr,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 8");
+	});
+}
+
+// ********************************************
+// * PART OF SAVE STORY                       *
+// * ADD STORY GENRE- FOR SAVE STORY METADATA *
+// ********************************************
+function post_api_story_metadata_part9(req,res,myid,writid,gfoundarr,mygarr,mytarr) {
+	console.log("[post_api_story_metadata_part9]");
+
+	// *****************************************
+	// * CREATE GENRE ARRAY FROM FOUND RECORDS *
+	// *****************************************
+	var rec=null;
+	var foundgenres=[];
+	var added_ids=[];
+	glen=gfoundarr.length;
+	for(var zz=0;zz<glen;zz++) {
+		rec=gfoundarr[zz];
+		tmp1=JSON.parse(rec);
+		foundgenres.push(tmp1[0].name);
+		added_ids.push(tmp1[0].id);
+	}
+	// ***********************************
+	// * CREATE GENRES "NOT-FOUND" ARRAY *
+	// ***********************************
+	var notfoundgenres=[];
+	grlen=mygarr.length;
+	for(var aa=0;aa<grlen;aa++) {
+		if(check_found_genres(mygarr[aa],foundgenres)==false) {
+			notfoundgenres.push(mygarr[aa]);
+		}
+	}
+	// **********************************
+	// * ADD GENRES "NOT-FOUND" RECORDS *
+	// **********************************
+	var genrespromarr=[];
+	nflen=notfoundgenres.length;
+	for(var bb=0;bb<nflen;bb++) {
+		console.log("[post_api_story_metadata_part9][ADD-NOT-FOUND GENRE]["+notfoundgenres[bb]+"]");
+		genrespromarr.push(new Promise((resolve,reject) => {
+			GenreDB.db_add_genre(notfoundgenres[bb],writid).then(function(result) {
+				genreid=result.id;
+				added_ids.push(genreid);
+				console.log("[post_api_story_metadata_part9][ADDED GENRE][ID]["+genreid+"][genre]["+notfoundgenres[bb]+"][story]["+myid+"]");
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-9][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(genrespromarr).then(() => { 
+		console.log("[post_api_story_metadata_part9][PROMISES DONE-GENRE-ADD]");
+		alen=added_ids.length;
+		for(var cc=0;cc<alen;cc++) {
+			console.log("[post_api_story_metadata_part9][added-ids]["+cc+"]["+added_ids[cc]+"]")
+		}
+		post_api_story_metadata_part10(req,res,myid,added_ids,writid,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 9");
+	});
+}
+
+function check_found_genres(onegenre,foundgenres) {
+	gglen=foundgenres.length;
+	for(var dd=0;dd<gglen;dd++) {
+		if(onegenre==foundgenres[dd]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// ***********************************************
+// * PART OF SAVE STORY                          *
+// * GET STORY TO GENRE- FOR SAVE STORY METADATA *
+// ***********************************************
+function post_api_story_metadata_part10(req,res,myid,added_ids,writid,mygarr,mytarr) {
+
+	var story2genrepromarr=[];
+	var s2gexist=[];
+	addlen=added_ids.length;
+	for(var ee=0;ee<addlen;ee++) {
+		story2genrepromarr.push(new Promise((resolve,reject) => {
+			console.log("[post_api_story_metadata_part10][storyid]["+myid+"][genreid]["+added_ids[ee]+"]");
+			StoryDB.getStoryToGenre(myid,added_ids[ee]).then(function(result) {
+				if(result=="[]") {
+					console.log("[post_api_story_metadata_part10][STORYTOGENRE NOT-FOUND]["+myid+"]");
+					resolve(result);
+				}
+				else {
+					obj=JSON.parse(result);
+					var storytogenreid=obj[0]["id"];
+					s2gexist.push(obj[0]["genreId"]);
+					console.log("[post_api_story_metadata_part10][STORYTOGENRE FOUND][storytogenreid]["+storytogenreid+"][storyid]["+myid+"]");
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-10][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2genrepromarr).then(() => { 
+		console.log("[post_api_story_metadata_part10][PROMISES DONE-STORY TO GENRE-CHECKS]");
+		post_api_story_metadata_part11(req,res,myid,s2gexist,added_ids,writid,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 10");
+	});
+}
+
+// ***********************************************
+// * PART OF SAVE STORY                          *
+// * ADD STORY TO GENRE- FOR SAVE STORY METADATA *
+// ***********************************************
+function post_api_story_metadata_part11(req,res,myid,s2gexist,allg_ids,writid,mygarr,mytarr) {
+	s2g_len=s2gexist.length;
+	for(var ff=0;ff<s2g_len;ff++) {
+		console.log("[post_api_story_metadata_part11][genreid-related to story]["+ff+"]["+s2gexist[ff]+"]");
+	}
+
+	var ids2gadd=[];
+	var all_glen=allg_ids.length;
+	for(var gg=0;gg<all_glen;gg++) {
+		if(check_found_s2genre(allg_ids[gg],s2gexist)==false) {
+			ids2gadd.push(allg_ids[gg]);
+		}
+	}
+
+	var story2genrespromarr=[];
+	ids2ga_len=ids2gadd.length;
+	for(var hh=0;hh<ids2ga_len;hh++) {
+		story2genrespromarr.push(new Promise((resolve,reject) => {
+			StoryDB.addStoryToGenre(myid,ids2gadd[hh]).then(function(result) {
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-11][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2genrespromarr).then(() => { 
+		console.log("[post_api_story_metadata_part11][PROMISES DONE-STORY TO GENRE-ADDS]");
+		post_api_story_metadata_part12(req,res,myid,writid,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 11");
+	});
+}
+
+function check_found_s2genre(onegenre,s2gexist) {
+	s2g_glen=s2gexist.length;
+	for(var ii=0;ii<s2g_glen;ii++) {
+		if(onegenre==s2gexist[ii]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// *******************************************
+// * PART OF SAVE STORY                      *
+// * GET STORY TAG - FOR SAVE STORY METADATA *
+// *******************************************
+function post_api_story_metadata_part12(req,res,myid,writid,mygarr,mytarr) {
+
+	console.log(mytarr);
+
+	var tagpromarr=[];
+	var tfoundarr=[];
+	var tlen=mytarr.length;
+	console.log("[post_api_story_metadata_part12][storyid]["+myid+"][Enter the promise land!]")
+
+	for(var jj=0;jj<tlen;jj++) {
+		console.log("[post_api_story_metadata_part12][storyid]["+myid+"][tag]["+jj+"]["+mytarr[jj]+"]")
+		tagpromarr.push(new Promise((resolve,reject) => {
+			TagDB.db_get_tag(mytarr[jj]).then(function(result) {
+				if(result=="[]") {
+					// ****************
+					// * NO TAG FOUND *
+					// ****************
+					console.log("[post_api_story_metadata_part12][NO TAG FOUND][story]["+myid+"]");
+					console.log(result);
+					resolve(result);
+				}
+				else {
+					// *************
+					// * TAG FOUND *
+					// *************
+					obj=JSON.parse(result);
+					var tagid=obj[0]["id"];
+					console.log("[post_api_story_metadata_part12][TAG FOUND][tagid]["+tagid+"][storyid]["+myid+"]");
+					console.log(result);
+					tfoundarr.push(result);
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-12][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(tagpromarr).then(() => { 
+		console.log("[post_api_story_metadata_part12][PROMISES DONE-TAG-CHECKS]");
+		post_api_story_metadata_part13(req,res,myid,writid,tfoundarr,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 12");
+	});
+}
+
+// *******************************************
+// * PART OF SAVE STORY                      *
+// * ADD STORY TAG - FOR SAVE STORY METADATA *
+// *******************************************
+function post_api_story_metadata_part13(req,res,myid,writid,tfoundarr,mygarr,mytarr) {
+
+	console.log("[post_api_story_metadata_part13]");
+
+	// ***************************************
+	// * CREATE TAG ARRAY FROM FOUND RECORDS *
+	// ***************************************
+	var rec=null;
+	var foundtags=[];
+	var added_ids=[];
+	var tlen=tfoundarr.length;
+	for(var kk=0;kk<tlen;kk++) {
+		rec=tfoundarr[kk];
+		tmp1=JSON.parse(rec);
+		foundtags.push(tmp1[0].name);
+		added_ids.push(tmp1[0].id);
+	}
+	console.log("[post_api_story_metadata_part13][foundtags]");
+	console.log(foundtags);
+	console.log("[post_api_story_metadata_part13][added_ids]");
+	console.log(added_ids);
+	// ***********************************
+	// * CREATE TAG "NOT-FOUND" ARRAY *
+	// ***********************************
+	var notfoundtags=[];
+	var tglen=mytarr.length;
+	for(var ll=0;ll<tglen;ll++) {
+		console.log("[post_api_story_metadata_part13][ll]["+ll+"]["+mytarr[ll]+"]");
+		if(check_found_tags(mytarr[ll],foundtags)==false) {
+			console.log("[post_api_story_metadata_part13][PUSH][ll]["+ll+"]["+mytarr[ll]+"]");
+			notfoundtags.push(mytarr[ll]);
+		}
+	}
+	console.log("[post_api_story_metadata_part13][notfoundtags]");
+	console.log(notfoundtags);
+	// **********************************
+	// * ADD TAG "NOT-FOUND" RECORDS *
+	// **********************************
+	var tagspromarr=[];
+	taglen=notfoundtags.length;
+	for(var mm=0;mm<taglen;mm++) {
+		console.log("[post_api_story_metadata_part13][ADD-NOT-FOUND TAG]["+notfoundtags[mm]+"]");
+		tagspromarr.push(new Promise((resolve,reject) => {
+			TagDB.db_add_tag(notfoundtags[mm],writid).then(function(result) {
+				tagid=result.id;
+				added_ids.push(tagid);
+				console.log("[post_api_story_metadata_part13][ADDED TAG][ID]["+tagid+"][tag]["+notfoundtags[mm]+"][story]["+myid+"]");
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-13][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(tagspromarr).then(() => { 
+		console.log("[post_api_story_metadata_part13][PROMISES DONE-GENRE-ADD]");
+		alen=added_ids.length;
+		for(var nn=0;nn<alen;nn++) {
+			console.log("[post_api_story_metadata_part13][added-ids]["+nn+"]["+added_ids[nn]+"]")
+		}
+		post_api_story_metadata_part14(req,res,myid,added_ids,writid,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 13");
+	});
+}
+
+function check_found_tags(onetag,foundtags) {
+	console.log("check_found_tags][onetag]["+onetag+"]");
+	console.log("[foundtags]");
+	console.log(foundtags);
+	taglen=foundtags.length;
+	console.log("check_found_tags][taglen]["+taglen+"]");
+	for(var oo=0;oo<taglen;oo++) {
+		if(onetag==foundtags[oo]) {
+			return true;
+		}
+	}
+	return false;
+}
+
+// **********************************************
+// * PART OF SAVE STORY                         *
+// * GET STORY TO TAG - FOR SAVE STORY METADATA *
+// **********************************************
+function post_api_story_metadata_part14(req,res,myid,added_ids,writid,mygarr,mytarr) {
+
+	var story2tagpromarr=[];
+	var s2texist=[];
+	var addlen=added_ids.length;
+	for(var pp=0;pp<addlen;pp++) {
+		story2tagpromarr.push(new Promise((resolve,reject) => {
+			console.log("[post_api_story_metadata_part14][storyid]["+myid+"][tagid]["+added_ids[pp]+"]");
+			StoryDB.getStoryToTag(myid,added_ids[pp]).then(function(result) {
+				if(result=="[]") {
+					console.log("[post_api_story_metadata_part14][STORYTOTAG NOT-FOUND]["+myid+"]");
+					resolve(result);
+				}
+				else {
+					obj=JSON.parse(result);
+					var storytotagid=obj[0]["id"];
+					s2texist.push(obj[0]["tagId"]);
+					console.log("[post_api_story_metadata_part14][STORYTOTAG FOUND][storytotagid]["+storytotagid+"][storyid]["+myid+"]");
+					resolve(result);
+				}
+			}).catch(err => {
+				console.log("[promise-14][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2tagpromarr).then(() => { 
+		console.log("[post_api_story_metadata_part14][PROMISES DONE-STORY TO TAG-CHECKS]");
+		post_api_story_metadata_part15(req,res,myid,s2texist,added_ids,writid,mygarr,mytarr);
+	}).catch(err => {
+		console.log("broken promises 14");
+	});
+}
+
+// *********************************************
+// * PART OF SAVE STORY                        *
+// * ADD STORY TO TAG- FOR SAVE STORY METADATA *
+// *********************************************
+function post_api_story_metadata_part15(req,res,myid,s2texist,allt_ids,writid,mygarr,mytarr) {
+	console.log("post_api_story_metadata_part15");
+
+	var s2t_len=s2texist.length;
+	for(var qq=0;qq<s2t_len;qq++) {
+		console.log("[post_api_story_metadata_part15][tagid-related to story]["+qq+"]["+s2texist[qq]+"]");
+	}
+
+	var ids2tadd=[];
+	var all_tlen=allt_ids.length;
+	for(var rr=0;rr<all_tlen;rr++) {
+		if(check_found_s2tag(allt_ids[rr],s2texist)==false) {
+			ids2tadd.push(allt_ids[rr]);
+		}
+	}
+
+	var story2tagspromarr=[];
+	ids2ta_len=ids2tadd.length;
+	for(var ss=0;ss<ids2ta_len;ss++) {
+		story2tagspromarr.push(new Promise((resolve,reject) => {
+			StoryDB.addStoryToTag(myid,ids2tadd[ss]).then(function(result) {
+				resolve(result);
+			}).catch(err => {
+				console.log("[promise-15][rejected]");
+				reject(err);
+			});
+		}));
+	}
+	Promise.all(story2tagspromarr).then(() => { 
+		console.log("[post_api_story_metadata_part15][PROMISES DONE-STORY TO TAG-ADDS]");
+	}).catch(err => {
+		console.log("broken promises 15");
+	});
+}
+
+function check_found_s2tag(onetag,s2texist) {
+	var s2t_tlen=s2texist.length;
+	for(var tt=0;tt<s2t_tlen;tt++) {
+		if(onetag==s2texist[tt]) {
 			return true;
 		}
 	}

@@ -1,40 +1,69 @@
 mdb = require('mariadb');
 
 const Settings = require('./Settings');
+const pool = mdb.createPool({
+        host: Settings.dbHost,
+        user: Settings.dbUser,
+        password: Settings.dbPassword,
+        database: Settings.dbName ,
+        connectionLimit: Settings.dbPoolConnectionLimit
+});
 
 function TagDB() {
 }
 
-TagDB.db_add_tag = function(name,writtenlanguageId) {
-
-    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+TagDB.prototype.db_add_tag = function(name,writtenlanguageId) {
 
     return new Promise(function(resolve,reject) {
 
 	pool.getConnection().then(conn => {
 
 	    conn.query("INSERT INTO tag (name,writtenlanguageId) VALUES ('"+name+"',"+writtenlanguageId+")").then((res) => {
-		//console.log("[db_add_tag][success]");
-		//console.log(res);
 		conn.end();
-		resolve("[db_add_tag][success]");
+                resolve({id:res.insertId});
 		return;
 	    }).catch(err => {
-		//console.log("[db_add_tag][bad1]");
 		//handle error
 		conn.end();
-		reject("[db_add_tag][failure]");
+		reject(err);
 		return;
 	    })
 
 	}).catch(err => {
-	    //console.log("[db_add_tag][bad2]");
-	    reject("[db_add_tag][failure]");
+	    reject(err);
 	    return;
 	});
 
     });
 }
 
-module.exports = TagDB;
+TagDB.prototype.db_get_tag = function(name) {
+
+    return new Promise(function(resolve,reject) {
+
+	pool.getConnection().then(conn => {
+
+	    conn.query("SELECT * FROM tag WHERE (name='"+name+"')").then((res) => {
+		conn.end();
+		resolve(JSON.stringify(res));
+		return;
+	    }).catch(err => {
+		//handle error
+		console.log(err);
+		conn.end();
+		reject(err);
+		return;
+	    })
+
+	}).catch(err => {
+	    console.log(err);
+	    reject(err);
+	    return;
+	});
+
+    });
+}
+
+let _TagDB = new TagDB();
+module.exports = _TagDB;
 

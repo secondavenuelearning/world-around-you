@@ -105,9 +105,9 @@ StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_genre (storyId, genreId) VALUES (?, ?)", [storyId, genreId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_genre (storyId, genreId) VALUES (?, ?)", [storyId, genreId]).then((res) => {
 				conn.end();
-				resolve(res);
+                                resolve({id:res.insertId});
 				return;
 			}).catch(err => {
 				//handle error
@@ -153,9 +153,9 @@ StoryDB.prototype.addStoryToTag = function(storyId,tagId) {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_tag (storyId, tagId) VALUES (?, ?)", [storyId, tagId, time]).then((res) => {
+			conn.query("INSERT INTO story_to_tag (storyId, tagId) VALUES (?, ?)", [storyId, tagId]).then((res) => {
 				conn.end();
-				resolve(res);
+				resolve({id:res.insertId});
 				return;
 			}).catch(err => {
 				//handle error
@@ -554,6 +554,101 @@ StoryDB.prototype.publishStory = function(storyId) {
 				console.log("[Affected-Rows]["+res.affectedRows+"]");
 				conn.end();
 				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.addStoryData = function(storyId,theblob) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("UPDATE story SET data='"+theblob+"' WHERE(id="+storyId+")").then((res) => {
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.addStoryDescriptionId = function(storyId,descriptionId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("UPDATE story SET descriptionId='"+descriptionId+"' WHERE(id="+storyId+")").then((res) => {
+
+				console.log("[Affected-Rows]["+res.affectedRows+"]");
+				conn.end();
+				resolve('{rows:'+res.affectedRows+'}');
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.getStoryToGenre = function(storyId,genreId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("SELECT * FROM story_to_genre WHERE(storyId="+storyId+" AND genreId="+genreId+")").then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+	});
+}
+
+StoryDB.prototype.getStoryToTag = function(storyId,tagId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("SELECT * FROM story_to_tag WHERE(storyId="+storyId+" AND tagId="+tagId+")").then((res) => {
+				conn.end();
+				resolve(JSON.stringify(res));
 				return;
 			}).catch(err => {
 				//handle error
