@@ -12,4 +12,5 @@ $(document).ready(function(){
 
 	var el = template({});
 	$('header').append(el);
+	LanguageSelector.updateLanguageDisplay();
 });
