@@ -3,6 +3,7 @@ import Carousel from 'js/Client/Carousel.js';
 import FiltersBar from 'js/Client/Filter.js';
 import StoryPreview from 'js/Client/StoryPreview';
 import LanguageSelector from 'js/Client/LanguageSelector';
+import StoryGrid from 'js/Client/StoryGrid.js';
 
 import html from 'html/Client/Stories.html!text';
 
@@ -34,13 +35,13 @@ $(document).ready(function () {
         }
         new Carousel("#new-stories", storyOne, 1, false,  true, "New Stories");
 
-
         FiltersBar('filter-bar');
 
+        var storyPreviews = [];
 
         // for (var i = 0; i < stories.length; i++) {
         //     let sp = new StoryPreview(stories[i]);
-        for (var i = 0; i < 9; i++) {
+        for (var i = 0; i < 27; i++) {
             let sp = new StoryPreview({
                 id: i + 1,
                 metadata: {
@@ -54,8 +55,10 @@ $(document).ready(function () {
                 author: 'Massimo V.',
                 coverImage: 'img/carousel/from_this_author/1.png'
             });
-            sp.appendTo('stories');
+            storyPreviews.push(sp);
         }
+        StoryGrid("stories", storyPreviews);
+        
 
         LanguageSelector.updateLanguageDisplay();
     }).fail((err) => {

@@ -16,9 +16,9 @@ $(document).ready(function () {
         url: './api/stories'
     }).done((stories) => {
         //console.log(stories);
-        var storyPreviews = [];
-
         FiltersBar('filter-bar');
+        
+        var storyPreviews = [];
 
         // for (var i = 0; i < stories.length; i++) {
         //     let sp = new StoryPreview(stories[i]);
