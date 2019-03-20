@@ -145,6 +145,17 @@ var sess=null;
 			Page: 'Search'
 		}));
 	});
+	app.get('/Bookmarks', function(req, res){
+		// if there is no user logged in redirect to the main page
+		if(!req.session.user){
+			res.redirect('/Stories');
+			return;
+		}
+
+		res.send(PageTemplate({
+			Page: 'Bookmarks'
+		}));
+	});
 	app.get('/Edit', function(req, res){
 		res.send(PageTemplate({
 			Page: 'Edit'
