@@ -197,7 +197,6 @@ StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId
 
 StoryDB.prototype.getStories = function(includeUnpublished){
 	return new Promise((resolve, reject) => {
-
 		pool.getConnection().then(conn => {
 
 			let storyQuery = 'SELECT id, author, coverimage, visible, datemodified, datecreated from story';
@@ -382,26 +381,27 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 							_resolve();
 						}).catch(err => {
 							_reject(err);
-							return;
 						});
 					}));
 
 					Promise.all(dataPromises).then(() => {
-						conn.end();
-						resolve(Object.values(stories));
+						conn.end().then(() => {
+							resolve(Object.values(stories));
+						});
 					}).catch(err => {
-						reject(err);
-						return;
+						conn.end().then(() => {
+							reject(err);
+						});
 					});
 
 				});
 			}).catch(err => {
-				reject(err);
-				return;
+				conn.end().then(() => {
+					reject(err);					
+				});
 			});
 		}).catch(err => {
 			reject(err);
-			return;
 		});
 
 	});

@@ -30,18 +30,57 @@ const UsertypeDB = require('./js/Server/UsertypeDB.js');
 const ViewDB = require('./js/Server/ViewDB.js');
 const WrittenlanguageDB = require('./js/Server/WrittenlanguageDB.js');
 
-app = express();
-app.use(bodyParser.urlencoded({extended:false}));
-port = 3000;
 
-app.use(express.static(__dirname));
+/**
+ * Adds text to the defined log file, creates a new file is the original is too long
+ * @param {string} log  	name of the log file
+ * @param {string} text 	text to add to the file
+ * @param {string} dir 		the directory of where the logs should be put
+ * @return {string}			returns the new name of the file
+ */
+function WriteLog(log, text, dir){
+	dir = dir || './logs';
+	
+	// create the directory if it doesn't exist
+	var dirExist = fs.existsSync(dir);
+	if(!dirExist) fs.mkdirSync(dir);
 
-// ****************************************************************************
-// * CREATE SESSION STUFF - BELOW THIS LINE                                   *
-// ****************************************************************************
-app.CreateSessions = function(options){
+	// write the log file
+	fs.writeFileSync(`${dir}/${log}`, `\n${text}`, {flag: 'a'});
+	console.log(`${dir}/${log}`, text);
+
+	// loop through to make sure we are accessing the correct log and no log file gets too big
+	var loop = true;
+	var appendix = 0;
+	const originalLog = log;
+
+	while(loop){
+		// check the file size and switch to a differenct file if it is too big
+		var stats = fs.statSync(`${dir}/${log}`);
+		var fileSize = stats.size / 1000000;
+
+		// move to a different file if the log is too big
+		if(fileSize > 1000){
+			appendix++;
+			log = `${originalLog}_${appendix}`;
+		}
+		else{
+			loop = false;
+		}
+	}
+
+	// return the log in case it has changed, to avoid doing the loop every time.
+	return log;
+}
+
+/**
+ * Function to create a session file store for the server
+ * @param {Expressjs} _app    	express.js server app
+ * @param {object} options 		default options for the sessions store
+ */
+function CreateSessions(_app, options){
     var options = typeof options == "object" ? options : {};
-    options.secret = options.secret || "salNodeBB"; // the secret is used as the id for the session cookie
+    options.secret = options.secret || "worldAroundYou"; // the secret is used as the id for the session cookie
     options.resave = options.resave || false;     // automatically save sessions whenever they are grabbed even if they arent modified
     options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
     options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
@@ -53,15 +92,35 @@ app.CreateSessions = function(options){
     storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
     storeOptions.ttlInterval = storeOptions.ttl;
     options.store = new LokiStore(storeOptions);
-    // options.store = new FileStore();
 
-    app.use(session(options));
+    _app.use(session(options));
 }
-app.CreateSessions({});
+
+
+var access_log = "access.log";
+var error_log = "error.log";
+const app = express();
+
+
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(express.static(__dirname));
+
+CreateSessions(app, {});
+
 var sess=null;
 // ****************************************************************************
 // * CREATE SESSION STUFF - ABOVE THIS LINE                                   *
 // ****************************************************************************
+	app.use((req, res, next) => {		
+		// add to the access log
+		if(!req.url.match(/.js|.css|.html|.png|.jpg/)){
+			access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
+		}
+
+		// TODO: add logic to set client side cookie if the user is logged in
+
+		next();
+	});
 
 	app.get('/', function(req, res){
 		res.redirect('/Stories');
@@ -77,8 +136,6 @@ var sess=null;
 		}));
 	});
 	app.get('/Login', function(req, res){
-	sess=req.session;
-	console.log("[/Login][Sess.Email]["+sess.email+"]");
 		res.send(PageTemplate({
 			Page: 'Login'
 		}));
@@ -88,14 +145,25 @@ var sess=null;
 			Page: 'Search'
 		}));
 	});
+	app.get('/Bookmarks', function(req, res){
+		// if there is no user logged in redirect to the main page
+		if(!req.session.user){
+			res.redirect('/Stories');
+			return;
+		}
+
+		res.send(PageTemplate({
+			Page: 'Bookmarks'
+		}));
+	});
 	app.get('/Edit', function(req, res){
 		res.send(PageTemplate({
 			Page: 'Edit'
 		}));
 	});
-	app.get('/Story', function(req, res){
+    app.get('/View', function(req, res){
 		res.send(PageTemplate({
-			Page: 'Story'
+			Page: 'Viewer'
 		}));
 	});
 

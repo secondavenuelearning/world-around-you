@@ -48,16 +48,21 @@ SignlanguageDB.prototype.getSignLanguages = function(){
 				for(var i = 0; i < res.length; i++){
 					signlanguages[res[i].id] = res[i];
 				}
-				
-				resolve(signlanguages);
+				conn.end().then(() => {
+					resolve(signlanguages);
+				});
 			}).catch(err => {
-				reject(err);
-				return;
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
 			});
 
 		}).catch(err => {
-			reject(err);
-			return;
+			conn.end().then(() => {
+				reject(err);
+				return;
+			});
 		});
 
 	});
