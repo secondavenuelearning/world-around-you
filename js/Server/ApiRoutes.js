@@ -3,6 +3,11 @@ const StoryDB = require('./StoryDB.js');
 
 var apiRoutes = function(app){
 // ******************************************************
+// User Routes
+// ******************************************************
+
+
+// ******************************************************
 // Get Stories
 // ******************************************************
 	app.get('/api/stories', (req, res) => {
@@ -83,7 +88,19 @@ var apiRoutes = function(app){
 			res.send(err);
 		});
 	});
-}
 
+	app.get('/api/bookmarks', (req, res) => {
+		if(!req.session.user){
+			res.send([]);
+			return;
+		}
+
+		StoryDB.getStories(false, req.session.user.id).then((stories) => {
+			res.send(stories);
+		}).catch((err) => {
+			res.send(err);
+		});
+	});
+}
 
 module.exports = apiRoutes;

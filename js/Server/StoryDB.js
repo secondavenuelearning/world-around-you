@@ -91,6 +91,7 @@ StoryDB.prototype.getStory = function(id) {
 		});
 	});
 }
+
 // ****************************************************************************
 // GET A STORY - ABOVE THIS LINE                                              *
 // ****************************************************************************
@@ -195,14 +196,15 @@ StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId
 	});
 }
 
-StoryDB.prototype.getStories = function(includeUnpublished){
+StoryDB.prototype.getStories = function(includeUnpublished, userId){
 	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
 
-			let storyQuery = 'SELECT id, author, coverimage, visible, datemodified, datecreated from story';
-			if(!includeUnpublished) storyQuery += ' WHERE visible = 1;';
+			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
+			if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
 
-			conn.query(storyQuery).then(storyResults => {
+			conn.query(storyQuery, [userId]).then(storyResults => {
 				var stories = {};
 				for(let i=0; i<storyResults.length; i++){
 					var story = storyResults[i];
@@ -393,7 +395,6 @@ StoryDB.prototype.getStories = function(includeUnpublished){
 							reject(err);
 						});
 					});
-
 				});
 			}).catch(err => {
 				conn.end().then(() => {
