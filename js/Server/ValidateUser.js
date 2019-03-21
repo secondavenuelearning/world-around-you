@@ -1,7 +1,7 @@
 var ValidateUser = function(req, res, next){
-	// if there is no user logged in redirect to the main page
+	// if there is no user logged in redirect to the main page or return nothing
 	if(!req.session.user){
-		if(req.method == "get")
+		if(req.method == "GET")
 			res.redirect('/Stories');
 		else
 			res.send(false);

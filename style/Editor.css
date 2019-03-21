@@ -1,0 +1,38 @@
+#editor{
+	position: relative;
+	height: 100%;
+	width: 100%;
+}
+.editor-nav-button, #editor-content{
+	float: left;
+	height: 100%;
+}
+.editor-nav-button{
+	width: 5%;
+	border: none;
+	background-color: #0097BA;
+	background-repeat: no-repeat;
+	background-size: 50%;
+	background-position: 50%;
+}
+#editor-nav-previous{
+	background-image: url('../img/icons/General/icon_Page_Back.svg')
+}
+#editor-nav-previous:not([disabled]):hover{
+	background-image: url('../img/icons/General/icon_Page_Back_hoverDown.svg')
+}
+#editor-nav-previous:disabled{
+	background-image: url('../img/icons/General/icon_Page_Back_inactive.svg')
+}
+#editor-nav-next{
+	background-image: url('../img/icons/General/icon_Page_Next.svg')
+}
+#editor-nav-next:not([disabled]):hover{
+	background-image: url('../img/icons/General/icon_Page_Next_hoverDown.svg')
+}
+#editor-nav-next:disabled{
+	background-image: url('../img/icons/General/icon_Page_Next_inactive.svg')
+}
+#editor-content{
+	width: 90%;
+}
