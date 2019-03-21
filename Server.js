@@ -402,6 +402,27 @@ app.post('/add_story_to_writtenlanguage',function(req,res) {
 	});
 });
 
+app.post('/add_story_to_user',function(req,res) {
+
+	storyId=get_body_stuff(req.body,"storyId");
+	if((storyId==null)||(storyId==0)) {
+		res.send("<b>bad story_to_user-storyId<b/>");
+		return;
+	}
+
+	userId=get_body_stuff(req.body,"userId");
+	if((userId==null)||(userId==0)) {
+		res.send("<b>bad story_to_user-userId<b/>");
+		return;
+	}
+
+	StoryDB.addStoryToUser(storyId,userId).then(function(result) {
+		console.log(result);
+		res.send("<div>story_to_user '"+storyId+"' added to Story_to_user["+result+"]</div>");
+	}).catch(err => {
+		res.send(err);
+	});
+});
 
 // *************
 // * TAG - ADD *

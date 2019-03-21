@@ -1,13 +1,18 @@
 mdb = require('mariadb');
 
 const Settings = require('./Settings');
+const pool = mdb.createPool({
+        host: Settings.dbHost,
+        user: Settings.dbUser,
+        password: Settings.dbPassword,
+        database: Settings.dbName ,
+        connectionLimit: Settings.dbPoolConnectionLimit
+});
 
 function LikedDB() {
 }
 
-LikedDB.db_add_liked = function(storyId) {
-
-    const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
+LikedDB.prototype.db_add_liked = function(storyId) {
 
     return new Promise(function(resolve,reject) {
 
@@ -15,22 +20,50 @@ LikedDB.db_add_liked = function(storyId) {
 
 	    conn.query("INSERT INTO liked (storyId) VALUES ("+storyId+")").then((res) => {
 		conn.end();
-		resolve("[db_add_liked][success]");
+                resolve({id:res.insertId});
 		return;
 	    }).catch(err => {
 		//handle error
 		conn.end();
-		reject("[db_add_liked][failure1]");
+		reject(err);
 		return;
 	    })
 
 	}).catch(err => {
-	    reject("[db_add_liked][failure2]");
+	    reject(err);
 	    return;
 	});
 
     });
 }
 
-module.exports = LikedDB;
+LikedDB.prototype.db_get_liked = function(storyId) {
+
+    return new Promise(function(resolve,reject) {
+
+	pool.getConnection().then(conn => {
+
+	    conn.query("SELECT * FROM liked WHERE (storyId='"+storyId+"')").then((res) => {
+		conn.end();
+		resolve(JSON.stringify(res));
+		return;
+	    }).catch(err => {
+		//handle error
+		console.log(err);
+		conn.end();
+		reject(err);
+		return;
+	    })
+
+	}).catch(err => {
+	    console.log(err);
+	    reject(err);
+	    return;
+	});
+
+    });
+}
+
+let _LikedDB = new LikedDB();
+module.exports = _LikedDB;
 
