@@ -1,5 +1,5 @@
 const Settings = require('./Settings.js');
-const ValidateUser = require('./js/Server/ValidateUser.js');
+const ValidateUser = require('./ValidateUser.js');
 const StoryDB = require('./StoryDB.js');
 const UserDB = require('./UserDB.js');
 
@@ -12,31 +12,28 @@ var apiRoutes = function(app){
 			password = req.body.password;
 
 		if(!username || username == '') {
-			res.send('Username Error');
-			return;
+			return res.send('Username Error');
 		}
 		if(!password || password == '') {
-			res.send('Password Error');
-			return;
+			return res.send('Password Error');
 		}
 
 		UserDB.getUser(username).then(function(user) {
 			if(!user || user.password != password){
-				res.send(false);
+				return res.send(false);
 			}
 			else{
 				delete user.password;
 				req.session.user = user;
 				req.session.save(err => {
 					if(err){
-						res.send(err);
-						return;
+						return res.send(err);
 					}
-					res.send(true);
+					return res.send(true);
 				});
 			}
 		}).catch(err => {
-			res.send(err);
+			return res.send(err);
 		});
 	});
 
@@ -46,16 +43,13 @@ var apiRoutes = function(app){
 			password = req.body.password;
 
 		if(!username || username == '') {
-			res.send('Username Error');
-			return;
+			return res.send('Username Error');
 		}
 		if(!email || email == '') {
-			res.send('Email Error');
-			return;
+			return res.send('Email Error');
 		}
 		if(!password || password == '') {
-			res.send('Password Error');
-			return;
+			return res.send('Password Error');
 		}
 
 		UserDB.addUser(username, email, password).then(function(userId) {
@@ -64,16 +58,15 @@ var apiRoutes = function(app){
 				req.session.user = user;
 				req.session.save(err => {
 					if(err){
-						res.send(err);
-						return;
+						return res.send(err);
 					}
 					res.redirect('/Stories');
 				});
 			}).catch(err => {
-				res.send(err);
+				return res.send(err);
 			});
 		}).catch(err => {
-			res.send(err);
+			return res.send(err);
 		});
 	});
 
@@ -85,9 +78,28 @@ var apiRoutes = function(app){
 		let unpublished = req.query.unpublished;
 
 		StoryDB.getStories(unpublished).then((stories) => {
-			res.send(stories);
+			return res.send(stories);
 		}).catch((err) => {
-			res.send(err);
+			return res.send(err);
+		});
+	});
+
+	app.get('/api/story', (req, res) => {
+		let id = req.query.id;		
+		StoryDB.getStory(id).then((story) => {
+			if(story){
+				StoryDB.getStoryData(id).then((data) => {
+					story.data = data;
+					return res.send(story);
+				}).catch((err) => {
+					return res.send(err);
+				});
+			}
+			else{
+				return res.send(false);
+			}
+		}).catch((err) => {
+			return res.send(err);
 		});
 	});
 
@@ -154,32 +166,31 @@ var apiRoutes = function(app){
 				return a.relevancy > b.relevancy ? 1 : a.relevancy < b.relevancy ? -1 : 0;
 			});			
 
-			res.send(stories);
+			return res.send(stories);
 		}).catch((err) => {
-			res.send(err);
+			return res.send(err);
 		});
 	});
 
 	app.get('/api/bookmarks', (req, res) => {
 		if(!req.session.user){
-			res.send([]);
-			return;
+			return res.send([]);
 		}
 
 		StoryDB.getStories(false, req.session.user.id).then((stories) => {
-			res.send(stories);
+			return res.send(stories);
 		}).catch((err) => {
-			res.send(err);
+			return res.send(err);
 		});
 	});
 
-	// app.post('/api/story', ValidateUser, (req,res) => {
-	// 	StoryDB.addEmptyStory().then(function(result) {
-	// 		res.send(result);
-	// 	}).catch(err => {
-	// 		res.send(err);
-	// 	});
-	// });
+	app.post('/api/story', ValidateUser, (req,res) => {
+		StoryDB.addStory().then(function(storyId) {
+			return res.send(storyId + '');
+		}).catch(err => {
+			return res.send(err);
+		});
+	});
 }
 
 module.exports = apiRoutes;

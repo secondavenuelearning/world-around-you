@@ -87,11 +87,11 @@ function CreateSessions(_app, options){
     options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
     options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
     options.cookie = {};
-    options.cookie.maxAge = options.maxAge || 10 * 60 * 1000; // 10 min max age
+    options.cookie.maxAge = options.maxAge || 60 * 60 * 1000; // 60 min max age
     options.cookie.secure = options.secure || false;
    
     var storeOptions = {}
-    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
+    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 60 * 60; // 60 min age
     storeOptions.ttlInterval = storeOptions.ttl;
     options.store = new LokiStore(storeOptions);
 
@@ -121,7 +121,10 @@ var sess=null;
 
 		// set a browser cookie
 		if(req.session.user){
-			res.cookie('way.user', req.session.user, { maxAge: 10 * 60 * 1000, httpOnly: false});
+			res.cookie('way.user', req.session.user, { maxAge: 60 * 60 * 1000, httpOnly: false});
+		}
+		else{
+			res.clearCookie('way.user');
 		}
 
 		next();
@@ -710,18 +713,7 @@ app.post('/add_writtenlanguage',function(req,res) {
 // * SAVE STORY API CALLS BELOW THIS LINE *
 // ****************************************
 // ****************************************
-// **********************
-// * CREATE NEW STORY   *
-// * - RETURN - storyId *
-// **********************
-app.post('/api/story',function(req,res) {
-	StoryDB.addEmptyStory().then(function(result) {
-		//console.log("ADD EMPTY STORY");
-		res.send(result);
-	}).catch(err => {
-		res.send(err);
-	});
-});
+// 
 // ****************************
 // * SAVE LANGUAGES IN STORY  *
 // * - RETURN - true or false *

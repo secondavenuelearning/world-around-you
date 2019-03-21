@@ -21,15 +21,17 @@ function resizePrviews(){
 }
 $(window).resize(resizePrviews);
 
-function StoryPreview(story){
+function StoryPreview(story, launchToEditor){
 	// get the index for this current instance
 	this.id = `story-preview-${index++}`;
 	this.story = story;
+	this.launchToEditor = launchToEditor === true ? true : false;
 
 	// get the html from the template
 	var element = template({
 		id: this.id,
-		story: this.story
+		story: this.story,
+		launchToEditor: this.launchToEditor
 	});
 
 	// create the jquery element
