@@ -412,6 +412,27 @@ app.post('/add_story_to_writtenlanguage',function(req,res) {
 	});
 });
 
+app.post('/add_story_to_user',function(req,res) {
+
+	storyId=get_body_stuff(req.body,"storyId");
+	if((storyId==null)||(storyId==0)) {
+		res.send("<b>bad story_to_user-storyId<b/>");
+		return;
+	}
+
+	userId=get_body_stuff(req.body,"userId");
+	if((userId==null)||(userId==0)) {
+		res.send("<b>bad story_to_user-userId<b/>");
+		return;
+	}
+
+	StoryDB.addStoryToUser(storyId,userId).then(function(result) {
+		console.log(result);
+		res.send("<div>story_to_user '"+storyId+"' added to Story_to_user["+result+"]</div>");
+	}).catch(err => {
+		res.send(err);
+	});
+});
 
 // *************
 // * TAG - ADD *
@@ -1482,6 +1503,8 @@ function post_api_story_metadata_part3(req,res,myid,mywritid,mytitle,mydesc,myga
 			var titleid=obj[0]["id"];
 			console.log("[post_api_story_metadata_part3][TITLE FOUND][titleid]["+titleid+"][storyid]["+myid+"]");
 			//res.send(result);
+			post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytarr);
+
 		}
 	}).catch(err => {
 		console.log(err);
@@ -1530,6 +1553,7 @@ function post_api_story_metadata_part5(req,res,myid,mywritid,mydesc,mygarr,mytar
 			var descid=obj[0]["id"];
 			console.log("[post_api_story_metadata_part5][DESCRIPTION FOUND][descid]["+descid+"][storyid]["+myid+"]");
 			//res.send(result);
+			post_api_story_metadata_part7(req,res,myid,mywritid,descid,mygarr,mytarr);
 		}
 	}).catch(err => {
 		console.log(err);

@@ -196,6 +196,30 @@ StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId
 	});
 }
 
+StoryDB.prototype.addStoryToUser = function(storyId,userId) {
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			conn.query("INSERT INTO story_to_user (storyId,userId) VALUES (?, ?)", [storyId, userId]).then((res) => {
+				conn.end();
+				resolve({id:res.insertId});
+				return;
+			}).catch(err => {
+				//handle error
+				conn.end();
+				reject(err);
+				return;
+			});
+
+		}).catch(err => {
+			reject(err);
+			return;
+		});
+
+	});
+}
+
 StoryDB.prototype.getStories = function(includeUnpublished, userId){
 	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
