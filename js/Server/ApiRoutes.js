@@ -1,17 +1,88 @@
 const Settings = require('./Settings.js');
+const ValidateUser = require('./js/Server/ValidateUser.js');
 const StoryDB = require('./StoryDB.js');
+const UserDB = require('./UserDB.js');
 
 var apiRoutes = function(app){
 // ******************************************************
 // User Routes
 // ******************************************************
+	app.post('/api/login', (req, res) => {
+		let username = req.body.username,
+			password = req.body.password;
 
+		if(!username || username == '') {
+			res.send('Username Error');
+			return;
+		}
+		if(!password || password == '') {
+			res.send('Password Error');
+			return;
+		}
+
+		UserDB.getUser(username).then(function(user) {
+			if(!user || user.password != password){
+				res.send(false);
+			}
+			else{
+				delete user.password;
+				req.session.user = user;
+				req.session.save(err => {
+					if(err){
+						res.send(err);
+						return;
+					}
+					res.send(true);
+				});
+			}
+		}).catch(err => {
+			res.send(err);
+		});
+	});
+
+	app.post('/api/register', (req, res) => {
+		let username = req.body.username,
+			email = req.body.email,
+			password = req.body.password;
+
+		if(!username || username == '') {
+			res.send('Username Error');
+			return;
+		}
+		if(!email || email == '') {
+			res.send('Email Error');
+			return;
+		}
+		if(!password || password == '') {
+			res.send('Password Error');
+			return;
+		}
+
+		UserDB.addUser(username, email, password).then(function(userId) {
+			UserDB.getUser(username).then(function(user) {
+				delete user.password;
+				req.session.user = user;
+				req.session.save(err => {
+					if(err){
+						res.send(err);
+						return;
+					}
+					res.redirect('/Stories');
+				});
+			}).catch(err => {
+				res.send(err);
+			});
+		}).catch(err => {
+			res.send(err);
+		});
+	});
 
 // ******************************************************
-// Get Stories
+// Story Routes
 // ******************************************************
+
 	app.get('/api/stories', (req, res) => {
-		var unpublished = req.query.unpublished;
+		let unpublished = req.query.unpublished;
 
 		StoryDB.getStories(unpublished).then((stories) => {
 			res.send(stories);
@@ -22,8 +93,8 @@ var apiRoutes = function(app){
 
 	function SearchForMatch(term, comparingTerm, exactMatch){
 		if(typeof comparingTerm == 'object'){
-			var match = false;
-			for(var i in comparingTerm){
+			let match = false;
+			for(let i in comparingTerm){
 				if(SearchForMatch(term, comparingTerm[i], exactMatch))
 					match = true;
 			}
@@ -34,7 +105,7 @@ var apiRoutes = function(app){
 				return term.toLowerCase() == comparingTerm.toLowerCase();
 			}
 			else{
-				var reg = new RegExp(term, 'gi');
+				let reg = new RegExp(term, 'gi');
 				return comparingTerm.match(reg) ? true : false;
 			}
 		}
@@ -44,11 +115,11 @@ var apiRoutes = function(app){
 	}
 
 	app.get('/api/search/:term', (req, res) => {
-		var term = req.params.term;
+		let term = req.params.term;
 		StoryDB.getStories(false).then((_stories) => {
-			var stories = [];
+			let stories = [];
 
-			for(var i=0; i<_stories.length; i++){
+			for(let i=0; i<_stories.length; i++){
 				let story = _stories[i];
 				// Check for an exact match of the title 
 				if(SearchForMatch(term, story.metadata.title, true))
@@ -101,6 +172,14 @@ var apiRoutes = function(app){
 			res.send(err);
 		});
 	});
+
+	// app.post('/api/story', ValidateUser, (req,res) => {
+	// 	StoryDB.addEmptyStory().then(function(result) {
+	// 		res.send(result);
+	// 	}).catch(err => {
+	// 		res.send(err);
+	// 	});
+	// });
 }
 
 module.exports = apiRoutes;

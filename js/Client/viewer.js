@@ -1,4 +1,4 @@
-import 'style/viewer.css!';
+import 'style/Viewer.css!';
 import html from 'html/Client/Viewer.html!text';
 
 import StoryPreview from 'js/Client/StoryPreview';

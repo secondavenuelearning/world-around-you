@@ -206,6 +206,12 @@ StoryDB.prototype.getStories = function(includeUnpublished, userId){
 
 			conn.query(storyQuery, [userId]).then(storyResults => {
 				var stories = {};
+
+				if(storyResults.length == 0){
+					resolve([]);
+					return;
+				}
+
 				for(let i=0; i<storyResults.length; i++){
 					var story = storyResults[i];
 					story.metadata = {

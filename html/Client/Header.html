@@ -8,8 +8,18 @@
         
 		<button class="nav-icon" id="nav-user-icon"></button>
 		<span id="nav-user-links">
-			<div><a href="./Login">Log In</a></div>
-			<div><a href="./Login">Log Out</a></div>
+			<% if(user){ %>
+				<div><a href="./Bookmarks">
+					<span lang="en">Bookmarks</span>
+				</a></div>
+				<div><a href="./Logout">
+					<span lang="en">Log Out</span>
+				</a></div>
+			<% } else { %>
+				<div><a href="./Login">
+					<span lang="en">Log In</span>
+				</a></div>
+			<% } %>
 		</span>
 	</div>
 	<div class="" id="nav-search">

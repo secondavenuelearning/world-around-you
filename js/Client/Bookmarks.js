@@ -16,7 +16,7 @@ $(document).ready(function () {
         FiltersBar('filter-bar');
 
         if(stories.length == 0){
-           $('#stories-header').html(`You have no stories bookmarked`);
+           $('#stories-header').html('You have no stories bookmarked.');
             return;
         }
 
@@ -25,7 +25,9 @@ $(document).ready(function () {
             let sp = new StoryPreview(stories[i]);
             storyPreviews.push(sp);
         }
+
         StoryGrid("stories", storyPreviews);
+        
         LanguageSelector.updateLanguageDisplay();
     });
 
