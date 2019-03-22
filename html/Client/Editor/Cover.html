@@ -1,0 +1,13 @@
+<div id="editor-content-wrapper">
+	<h1>Upload Cover</h1>
+	<div id="cover-image-container" class="half" style="background-image: url(<%- coverImage ? coverImage : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+		<div id="cover-image-input-container">
+			<input id="cover-image-input" type="file" name="coverimage" accept="image/*">
+			<button id="cover-image-button">Upload image</button>
+		</div>
+	</div>
+	<div class="half">
+		<label>Author</label>
+		<input id="author-input" type="text" name="author" value="<%- author %>">
+	</div>
+</div>
