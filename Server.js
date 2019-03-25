@@ -8,7 +8,9 @@ const encode = require('urlencode');
 const _ = require('underscore');
 
 const Settings = require('./js/Server/Settings.js');
+const ValidateUser = require('./js/Server/ValidateUser.js');
 const ApiRoutes = require('./js/Server/ApiRoutes.js');
+
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
@@ -85,11 +87,11 @@ function CreateSessions(_app, options){
     options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
     options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
     options.cookie = {};
-    options.cookie.maxAge = options.maxAge || 10 * 60 * 1000; // 10 min max age
+    options.cookie.maxAge = options.maxAge || 60 * 60 * 1000; // 60 min max age
     options.cookie.secure = options.secure || false;
    
     var storeOptions = {}
-    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 10 * 60; // 10 min age
+    storeOptions.ttl = options.maxAge ? options.maxAge / 1000 : 60 * 60; // 60 min age
     storeOptions.ttlInterval = storeOptions.ttl;
     options.store = new LokiStore(storeOptions);
 
@@ -117,53 +119,64 @@ var sess=null;
 			access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
 		}
 
-		// TODO: add logic to set client side cookie if the user is logged in
+		// set a browser cookie
+		if(req.session.user){
+			res.cookie('way.user', req.session.user, { maxAge: 60 * 60 * 1000, httpOnly: false});
+		}
+		else{
+			res.clearCookie('way.user');
+		}
 
 		next();
 	});
 
-	app.get('/', function(req, res){
+	app.get('/', (req, res) => {
 		res.redirect('/Stories');
 	});
-	app.get('/Stories', function(req, res){
+	app.get('/Stories', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Stories'
 		}));
 	});
-	app.get('/Games', function(req, res){
+	app.get('/Games', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Games'
 		}));
 	});
-	app.get('/Login', function(req, res){
+	app.get('/Login', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Login'
 		}));
 	});
-	app.get('/Search', function(req, res){
-		res.send(PageTemplate({
-			Page: 'Search'
-		}));
-	});
-	app.get('/Bookmarks', function(req, res){
-		// if there is no user logged in redirect to the main page
-		if(!req.session.user){
+	app.get('/Logout', (req, res) => {
+		req.session.destroy((err) => {
+			res.clearCookie('way.user');
 			res.redirect('/Stories');
-			return;
-		}
-
+		});
+	});
+	app.get('/Bookmarks', ValidateUser, (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Bookmarks'
 		}));
 	});
-	app.get('/Edit', function(req, res){
+	app.get('/Search', (req, res) => {
+		res.send(PageTemplate({
+			Page: 'Search'
+		}));
+	});
+    app.get('/View', (req, res) => {
+		res.send(PageTemplate({
+			Page: 'Viewer'
+		}));
+	});
+	app.get('/Edit', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Edit'
 		}));
 	});
-    app.get('/View', function(req, res){
+	app.get('/Editor', ValidateUser, (req, res) => {
 		res.send(PageTemplate({
-			Page: 'Viewer'
+			Page: 'Editor'
 		}));
 	});
 
@@ -700,18 +713,7 @@ app.post('/add_writtenlanguage',function(req,res) {
 // * SAVE STORY API CALLS BELOW THIS LINE *
 // ****************************************
 // ****************************************
-// **********************
-// * CREATE NEW STORY   *
-// * - RETURN - storyId *
-// **********************
-app.post('/api/story',function(req,res) {
-	StoryDB.addEmptyStory().then(function(result) {
-		//console.log("ADD EMPTY STORY");
-		res.send(result);
-	}).catch(err => {
-		res.send(err);
-	});
-});
+// 
 // ****************************
 // * SAVE LANGUAGES IN STORY  *
 // * - RETURN - true or false *

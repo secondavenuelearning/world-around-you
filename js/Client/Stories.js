@@ -62,7 +62,7 @@ $(document).ready(function () {
 
         LanguageSelector.updateLanguageDisplay();
     }).fail((err) => {
-
+        alert('[PH] Something went wrong with the serve, please try again later');
     });
 
 });

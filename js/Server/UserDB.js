@@ -1,6 +1,13 @@
-mdb = require('mariadb');
+const mdb = require('mariadb');
 
 const Settings = require('./Settings');
+const pool = mdb.createPool({
+	host: Settings.dbHost,
+	user: Settings.dbUser, 
+	password: Settings.dbPassword, 
+	database: Settings.dbName ,
+	connectionLimit: Settings.dbPoolConnectionLimit
+});
 
 function UserDB() {
 }
@@ -35,7 +42,43 @@ UserDB.db_add_user = function(email,password,firstname,lastname,usertypeId) {
 
     });
 }
-
+UserDB.prototype.addUser = function(username, email, password){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = 'INSERT INTO user (username, email, password) VALUES (?, ?, ?)';
+			console.log(query, [username, email, password]);
+		    conn.query(query, [username, email, password]).then(res => {
+				conn.end().then(() => {
+					resolve(res.insertId);
+				});
+		    }).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+				});
+		    });
+		}).catch(err => {
+		    reject(err);
+		});
+	});	
+}
+UserDB.prototype.getUser = function(username){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM user WHERE username = ?';
+		    conn.query(query, [username]).then(res => {
+				conn.end().then(() => {
+					resolve(res[0]);
+				});
+		    }).catch(err => {
+				conn.end().then(() => {
+					 reject(err);
+				});
+		    });
+		}).catch(err => {
+		    reject(err);
+		});
+	});
+}
 UserDB.db_get_user = function(email,password) {
 
     const pool = mdb.createPool({host: Settings.dbHost, user: Settings.dbUser, password: Settings.dbPassword, database: Settings.dbName ,connectionLimit: 1});
@@ -103,5 +146,5 @@ UserDB.db_get_user2 = function(email) {
     });
 }
 
-module.exports = UserDB;
-
+let _UserDB = new UserDB();
+module.exports = _UserDB;

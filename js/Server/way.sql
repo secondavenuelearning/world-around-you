@@ -194,11 +194,12 @@ CREATE TABLE `title` (
 
 CREATE TABLE `user` (
   `id` int(11) UNSIGNED NOT NULL,
-  `email` varchar(256) DEFAULT NULL,
-  `password` varchar(256) DEFAULT NULL,
+  `username` varchar(256) NOT NULL,
+  `email` varchar(256) NOT NULL,
+  `password` varchar(256) NOT NULL,
   `firstname` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
-  `usertypeid` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `usertypeid` int(11) UNSIGNED NOT NULL,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -346,6 +347,7 @@ ALTER TABLE `title`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
+  ADD KEY `username` (`username`),
   ADD KEY `email` (`email`),
   ADD KEY `password` (`password`),
   ADD KEY `usertypeid` (`usertypeid`),

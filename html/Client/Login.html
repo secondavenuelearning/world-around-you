@@ -1,0 +1,60 @@
+<div id = "loginHolder">
+    
+    <!-- Main Head -->
+        <h1 lang="en">Sign up for World Around You</h1>
+
+    <!-- Second Header -->
+        <h2>To register, enter your email below:</h2>
+
+    <!-- Register form -->
+        <form id="register-form" action="./api/register" method="post">
+            <!-- Username Labels -->
+                <label lang="en" for="username">Username</label>
+            <input id="username" class="register" type="text" placeholder="Enter Username" name="username" required>
+
+            <!-- Email Labels -->
+                <label lang="en" for="email">Email</label>
+            <input id="email" class="register" type="email" placeholder="Enter Email" name="email" required>
+
+            <!-- Password Labels -->
+                <label lang="en" for="password">Password</label>
+            <input id="password" class="register" type="password" placeholder="Enter Password" name="password" required>
+
+            <!-- Confirm Password Labels -->
+                <label lang="en" for="password-confirm">Confirm Password</label>
+            <input id="password-confirm" class="register" type="password" placeholder="Confirm Password" name="password-confirm" required>
+
+            <button>Sign Up</button>
+        </form>
+
+        <h2> Already a user? Sign in here: </h2>
+        <button onclick="document.getElementById('login-model').style.display='block'">Sign In</button>
+
+    <!-- Sign In Modal -->
+        <div id="login-model" class="modal">
+            <form id="login-form" class="modal-content animate" action="./api/login">
+                <label for="login-username"><b>Username</b></label>
+                <input id="login-username" type="text" placeholder="Enter Username" name="username" required>
+
+                <label for="login-password"><b>Password</b></label>
+                <input id="login-password" type="password" placeholder="Enter Password" name="password" required>
+                <!-- <div id="invalidLogin">
+                    <span lang="en">Invalid Login Credentials</span>
+                </div> -->
+                <button id="login-form-submit" type="submit">Login</button>
+                <button id="login-form-cancel" type="button" onclick="document.getElementById('login-model').style.display='none'" class="cancelbtn">Cancel</button>
+            </form>
+        </div>
+
+    <script>
+        // Get the modal
+        var modal = document.getElementById('login-model');
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+</div>
