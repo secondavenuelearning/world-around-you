@@ -140,7 +140,7 @@ var sess=null;
 	});
 	app.get('/Games', (req, res) => {
 		res.send(PageTemplate({
-			Page: 'Games'
+			Page: 'BusGame'
 		}));
 	});
 	app.get('/Login', (req, res) => {
