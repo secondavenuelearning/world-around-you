@@ -7,6 +7,21 @@ header #language-selector, header #logo-wrapper, header nav
 header
 {
     border: none;
+    width: 100%;
+
+
+}
+span{
+    width: 100%;
+    text-align: center;
+    display: block;
+    font-size: 100px;
+}
+@media only screen and (max-width: 600px){
+    span{
+             font-size: 80px;
+    }
+
 }
 
 footer
@@ -31,6 +46,13 @@ header #backBtn img
     height: 100%;
     width: 100%;
 }
+#playBtn{
+    display: inline-block;
+}
+.centered{
+  text-align: center;
+}
+
 
 /* Main Menu */
 
