@@ -88,10 +88,10 @@ function parsePage(page)
     $('#story').text(storyData[pageIndex].text[writtenLang]);
     
     //set image
-    $('#visuals img').attr('src', storyData[pageIndex].image);
+    $('#visuals img').attr('src', storyData[page].image);
     
     //set video
-    $('#visuals video').attr('src', storyData[pageIndex].video[signLang]);
+    $('#visuals video').attr('src', storyData[page].video[signLang]);
  
     //search for glossary terms and make them buttons
     GenerateGlossaryButtons();
@@ -157,7 +157,7 @@ function GenerateGlossaryButtons()
                 glossary[term].video[signLang].start,
                 glossary[term].video[signLang].end,
                 storyData[pageIndex].video[signLang],
-                storyData[pageIndex].image
+                glossary[term].image
             );
             
             //call pop up
