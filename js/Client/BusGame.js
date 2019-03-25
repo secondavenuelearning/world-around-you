@@ -1,5 +1,6 @@
 import 'style/BusGame.css!';
 import html from 'html/Client/BusGame.html!text';
+import BusGame from 'js/Client/BusGame_Game.js';
 
 
 $(document).ready(function () {
@@ -18,7 +19,7 @@ $(document).ready(function () {
         storyObj = JSON.parse(this.responseText);
           
         //build story viwer functionality and pass in page data
-        //StoryViewer(storyObj);
+        BusGame(storyObj, "fsl_luzon", "English");
       }
     };
     xmlhttp.open("GET", dataURL);
