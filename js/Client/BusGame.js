@@ -1,11 +1,12 @@
 import 'style/BusGame.css!';
 import html from 'html/Client/BusGame.html!text';
 import BusGame from 'js/Client/BusGame_Game.js';
+import header from 'html/Client/BusGame_Header.html!text';
 
 
 $(document).ready(function () {
     //update main section of page
-
+    $('header').html(header);
     $('main').html(html);
 
     var xmlhttp = new XMLHttpRequest();
