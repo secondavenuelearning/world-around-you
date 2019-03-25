@@ -7,20 +7,25 @@ header #language-selector, header #logo-wrapper, header nav
 header
 {
     border: none;
+
     width: 100%;
+     height: 75px;
+    background-color: transparent;
 
 
 }
-span{
+.title span{
     width: 100%;
+    padding-top: 100px;
     text-align: center;
     display: block;
     font-size: 100px;
 }
 @media only screen and (max-width: 600px){
-    span{
+    .title span{
              font-size: 80px;
     }
+
 
 }
 
@@ -30,21 +35,46 @@ footer
 }
 
 /* new header */
-header #backBtn
+header button
 {
-    height: 75px;
-    width: 75px;
+    height: 100px;
+    width: 100px;
     
     border-radius: 50%;
-    border: 1px;
+    border: 5px;
+    border-style: solid;
+     border-color: black;
     
     float: right;
+    
+    position: relative;
+    left: 20px;
+    top: -30px;
+    
+    background-color: indianred;
+}
+
+header button img
+{
+    height: 70%;
+    width: 70%;
 }
 
 header #backBtn img
 {
-    height: 100%;
+    position: relative;
+    top: 10px;
+    left: -9px;
+}
+
+main
+{
+    height: calc(100% + 75px);
+    top: -75px;
     width: 100%;
+    background-image: url(../img/games/BusGame/background_BusGame-03.png);
+    background-size: contain;
+    background-repeat: repeat-x;
 }
 #playBtn{
     display: inline-block;
@@ -56,4 +86,35 @@ header #backBtn img
 
 /* Main Menu */
 
+
 /* Core Game */
+header #score
+{
+    float: left;
+    
+    position: relative;
+    left: -20px;
+    top: -30px;
+    
+    font-size: 30px;
+    text-align: center;
+    color: white;
+}
+
+header #score span
+{
+    position: relative;
+    top: 5px;
+    left: 3px;
+}
+
+.lane
+{
+    width: 100%;
+    height: 30%;
+    margin-bottom: 5%;
+    background-color: darkgray;
+    opacity: .3;
+}
+
+
