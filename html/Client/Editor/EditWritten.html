@@ -1,0 +1,22 @@
+<div id="edit-written">
+	<div class="two-thirds">
+		<div id="select-container">
+			<select id="current-written-language-select">
+				<% _.each(story.metadata.writtenLanguages, function(language){ %> 
+					<option value="<%- language %>" <%- language == currentWrittenLanguage ? 'selected' : '' %>><%- language %></option>
+				<% }); %>
+			</select>
+		</div>
+		<div id="text-container">
+			<textarea id="page-text"><%= page.text ? page.text[currentWrittenLanguage] : '' %></textarea>
+		</div>
+	</div>
+	<div class="third">
+		<div id="image-container" class="cover-image-container" style="background-image: url(<%- page.image ? page.image : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+			<div id="image-input-container" class="upload-input-container">
+				<input id="image-input" class="upload-input" type="file" name="coverimage" accept="image/*">
+				<button id="image-button" class="upload-button">Upload image</button>
+			</div>
+		</div>
+	</div>
+</div>

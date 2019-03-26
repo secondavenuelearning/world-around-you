@@ -1,28 +1,31 @@
-<div>
-	<button class="page-preview" page-index="<%- pageIndex + 1 %>">
+<div class="page-preview-container">
+	<button class="page-preview" page-index="<%- pageIndex %>">
 		<div class="half">
-			<div id="cover-image-container" class="half" style="background-image: url(<%- image ? coverImage : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+			<div class="cover-image-container" style="background-image: url(<%- page.image ? page.image : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
 				<div class="page-number"><%- pageIndex + 1 %></div>
 			</div>
 		</div>
 		<div class="half">
 			<%
 				var hasWritten, hasSign, hasGlossary;
-				_.each(text, function(){
+				_.each(page.text, function(){
 					hasWritten = true;
 				});
-				_.each(video, function(){
+				_.each(page.video, function(){
 					hasSign = true;
 				});
-				_.each(glossary, function(langArray){
+				_.each(page.glossary, function(langArray){
 					_.each(langArray, function(){
 						hasGlossary = true;
 					});
 				});
 			%>
 			<div class="page-icon <%- hasWritten ? 'added' : 'missing' %>">written</div>
-			<div class="page-icon <%- hasWritten ? 'added' : 'missing' %>">sign</div>
-			<div class="page-icon <%- hasWritten ? 'added' : 'o-missing' %>">glossary</div>
+			<div class="page-icon <%- hasSign ? 'added' : 'missing' %>">sign</div>
+			<div class="page-icon <%- hasGlossary ? 'added' : 'o-missing' %>">glossary</div>
 		</div>
 	</button>
+	<% if(includeDelete){ %>
+		<button class="page-delete-button" page-index="<%- pageIndex %>">x</button>
+	<% } %>
 </div>
