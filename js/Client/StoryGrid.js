@@ -43,7 +43,6 @@ function addStories(){
 					gridButton = document.createElement("button"); 
 					$(gridButton).attr("type","button");
 					gridButton.id = "grid-prev-button";
-					gridButton.innerHTML = "<";
 					gridButton.addEventListener("click", swapGridPage);
 					$(gridButtons).prepend(gridButton);
 				}
@@ -66,9 +65,10 @@ function addStories(){
 	}
 	// Next button
 	gridButton = document.createElement("button"); 
-	$(gridButton).attr("type","button");
+	$(gridButton).attr("type","image");
+	$(gridButton).attr("src","img/icons/General/icon_Page_Next.svg");
 	gridButton.id = "grid-next-button";
-	gridButton.innerHTML = ">";
+	gridButton.innerHTML = "";
 	gridButton.addEventListener("click", swapGridPage);
 	$(gridButtons).append(gridButton);
 	maxPage = pageNum;
@@ -126,7 +126,7 @@ function resizeStories(){
 	// Timeout to make sure elements have been populated
 	setTimeout(function(){
 		var height = $('#grid-page1').height();
-		$('#' + storiesDiv).css('height', (height + 20) + 'px');
+		$('#' + storiesDiv).css('height', (height + 40) + 'px');
 	}, 100);
 }
 

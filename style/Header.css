@@ -1,7 +1,7 @@
 #logo-wrapper{
     position: absolute;
     top: 0px;
-    left: 0px;
+    left: 10px;
 
     height: 100%;
 }
@@ -9,18 +9,23 @@
 	height: 100%;
 	vertical-align: middle;
 }
+#logo a{
+	height: 100%;
+    display: block;
+}
 nav{
 	position: absolute;
 	bottom: 0px;
-	width: 100%;
+	width: 80%;
+	left: 20%;
 	padding: 3px 15px;
 }
 nav > div{
 	position: relative;
 	float: right;
-	margin-left: 10px;
-	height: 35px;
-	width: 35px;
+	margin-left: 15px;
+	height: 48px;
+	width: 48px;
 }
 nav > div:not(#nav-search):not(.active):hover{
 	top: 2px;
@@ -34,6 +39,7 @@ nav > div:not(#nav-search):not(.active):hover{
     background-repeat: no-repeat;
     position: absolute;
     bottom: 0px;
+    -webkit-backface-visibility: hidden;
 }
 #nav-stories-icon{
 	background-image: url('../../img/icons/NavBar/nav_stories.svg');
@@ -55,7 +61,6 @@ nav > div:not(#nav-search):not(.active):hover #nav-user-icon, #nav-user-icon:foc
 }
 #nav-edit-icon{
 	background-image: url('../../img/icons/NavBar/nav_SB.svg');
-	height: 42px;
 }
 nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 	background-image: url('../../img/icons/NavBar/nav_SB_hover_selected.svg');
@@ -80,9 +85,20 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 }
 #nav-user{
 	margin-left: 25px;
+	bottom: 0px;
+	border-radius: 100%;
+}
+#nav-user:hover .nav-icon{
+	bottom: 2px;
+}
+#nav-user:hover{
+	bottom: 2px;
 }
 #nav-user:hover .nav-icon, #nav-user:focus .nav-icon{
 	border-radius: 50% 50% 0px 0px;
+}
+.nav-icon:hover{
+	bottom: 2px;
 }
 #nav-user:hover #nav-user-links, #nav-user-icon:focus + #nav-user-links{
 	display: block;
@@ -90,6 +106,7 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 #nav-search{
 	margin-left: 25px;
 	width: 250px;
+	bottom: 3px;
 }
 #nav-search form{
 	height: 100%;
