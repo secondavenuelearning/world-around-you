@@ -28,5 +28,7 @@
 			<input id="nav-submit-input" type="submit" value="" />
 		</form>
 	</div>
-	<div class=""><a href="./Edit"><button class="nav-icon" id="nav-edit-icon"></button></a></div>
+	<% if(user){ %>
+		<div class=""><a href="./Edit"><button class="nav-icon" id="nav-edit-icon"></button></a></div>
+	<% } %>
 </nav>
