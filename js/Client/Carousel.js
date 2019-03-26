@@ -214,10 +214,10 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
         //on hover hide title and index indicator
         $(holder).hover(function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '1');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '.7');
         });
     }
     
