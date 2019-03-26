@@ -68,7 +68,7 @@ function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, d
 
     for (var x = 0; x < panels.length; x++) {
         var adjust = 0;
-        if(isOverlay) { adjust = 2.5; }
+        if(isOverlay) { adjust = 0; }
         
         if (x >= startIndex && x <= endIndex) {
             //            $(panels[x]).attr("display", "inline-block");
@@ -217,7 +217,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '1');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '1');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
         });
     }
     
