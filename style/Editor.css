@@ -36,3 +36,9 @@
 #editor-content{
 	width: 90%;
 }
+#nav-search{
+	margin-right: 65px;
+}
+#language-select{
+	font-size: 1.1em;
+}

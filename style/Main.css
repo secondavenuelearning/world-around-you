@@ -11,10 +11,10 @@ header, footer, main{
 	width: 100%;
 }
 header{
-	height: 75px;
+	height: 93px;
 	background-color: #FFFFFF;
 	top: 0px;
-	border-bottom: 3px solid #004E74;
+	border-bottom: 3px solid rgba(155,155,155,.5);
 	z-index: 100;
 }
 main{
@@ -33,6 +33,10 @@ header #language-selector{
 	position: absolute;
 	top: 0px;
 	right: 15px;
+	width: 175px;
+}
+button:focus {
+  outline: none;
 }
 
 *[lang]:not(html){
@@ -46,6 +50,6 @@ header #language-selector{
     text-align: center;
     font-size: 25px;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     padding-top: 10px;
 }

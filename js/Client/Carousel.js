@@ -207,7 +207,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '1');
         });
     }
     
@@ -255,7 +255,7 @@ function BuildTitle(isOverlay, carouselItemID, title)
     var indicatorHTML = "<div class = \"pageTitle";
     if(isOverlay) 
     {
-        indicatorHTML += " overlay\">" + " " + title;
+        indicatorHTML += " overlay\"><span>" + " " + title + "</span>";
     }
     else
     {
