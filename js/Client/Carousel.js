@@ -170,7 +170,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     };
     var buttonLeft = parent.getElementsByClassName("left")[0];
     buttonLeft.onclick = function () {
-      $("#current").removeAttr('id');
+ $('#' + itemsID + " #current").removeAttr('id');
 
         if (startIndex <= 0) {
             offset = imageList.length - 1;
@@ -198,8 +198,8 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     BuildIndexIndicator(isOverlay, holder, panelCount / showing, panels, startIndex, endIndex, showing, offset);
     $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(0).attr('id', 'current');
     
-      $(".dots").delegate('div', 'click', function () {
-        document.getElementById("current").id = "";
+      $('#' + itemsID + " .dots").delegate('div', 'click', function () {
+       $('#' + itemsID + " #current").removeAttr('id');
         $(this).attr('id', 'current');
         startIndex = showing * $(this).index();
         endIndex = startIndex + (showing-1);
