@@ -111,10 +111,12 @@ header #score span
 .lane
 {
     height: 500px;
-    width: 2000%;
+    width: 100%;
     
     position: absolute;
     bottom: 0px;
+    
+    display: block;
     
     overflow-y: hidden;
     overflow-x: hidden;
@@ -123,7 +125,7 @@ header #score span
 .lane .inner
 {
     height: 500px;
-    display: table-cell;
+    display: inline-block;
     vertical-align: bottom;
 }
 

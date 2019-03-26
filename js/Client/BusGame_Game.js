@@ -69,7 +69,7 @@ export function BusGame(storyObj, signLang, writtenLang)
     BuildBus("FacingLeft", "#top .inner");
     BuildCar("FacingLeft", "#top .inner");
     
-    BuildCar("FacingRight", "#bottom .inner");
+    
     BuildBus("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");
@@ -127,6 +127,11 @@ function BuildCar(dir, lane)
     
     //add car to lane
     $(lane).append(carHTML);
+    
+    //update lane width
+    var laneWidth = $(lane).width();
+    laneWidth += 600;
+    $(lane).css('width', laneWidth);
 }
 
 function BuildBus(dir, lane)
@@ -142,6 +147,11 @@ function BuildBus(dir, lane)
     
     //add car to lane
     $(lane).append(busHTML);
+    
+    //update lane width
+    var laneWidth = $(lane).width();
+    laneWidth += 1080;
+    $(lane).css('width', laneWidth);
 }
 
 /* ----------------------- Game Loop ----------------------- */
