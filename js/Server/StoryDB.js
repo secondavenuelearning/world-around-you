@@ -35,32 +35,6 @@ StoryDB.prototype.addStory = function() {
 	});
 }
 
-// ****************************************************************************
-// GET A STORY - BELOW THIS LINE                                              *
-// ****************************************************************************
-StoryDB.prototype.getStory = function(id) {
-
-	return new Promise(function(resolve,reject) {
-
-		pool.getConnection().then(conn => {
-
-			conn.query('SELECT * FROM story WHERE (id='+id+')').then((result) => {
-				//console.log(result);
-				conn.end().then(() => {
-					return resolve(JSON.stringify(result));
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
 
 // ****************************************************************************
 // GET A STORY - ABOVE THIS LINE                                              *
@@ -78,7 +52,7 @@ StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
 
 			conn.query("INSERT INTO story_to_genre (storyId, genreId) VALUES (?, ?)", [storyId, genreId]).then((result) => {
 				conn.end().then(() => {
-					return resolve({id:res.insertId});
+					return resolve(result.insertId);
 				});
 			}).catch(err => {
 				//handle error
@@ -101,7 +75,7 @@ StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
 
 			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId]).then((result) => {
 				conn.end().then(() => {
-					return resolve({id:res.insertId});
+					return resolve(result.insertId);
 				});
 			}).catch(err => {
 				//handle error
@@ -124,7 +98,7 @@ StoryDB.prototype.addStoryToTag = function(storyId,tagId) {
 
 			conn.query("INSERT INTO story_to_tag (storyId, tagId) VALUES (?, ?)", [storyId, tagId]).then((result) => {
 				conn.end().then(() => {
-					return resolve({id:res.insertId});
+					return resolve(result.insertId);
 				});
 			}).catch(err => {
 				//handle error
@@ -144,9 +118,11 @@ StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId
 
 		pool.getConnection().then(conn => {
 
-			conn.query("INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId) VALUES (?, ?)", [storyId, writtenlanguageId]).then((result) => {
+			var query = 'INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId) VALUES (?, ?)';
+
+			conn.query(query, [storyId, writtenlanguageId]).then((result) => {
 				conn.end().then(() => {
-					return resolve({id:res.insertId});
+					return resolve(result.insertId);
 				});
 			}).catch(err => {
 				//handle error
@@ -169,7 +145,7 @@ StoryDB.prototype.addStoryToUser = function(storyId,userId) {
 
 			conn.query("INSERT INTO story_to_user (storyId,userId) VALUES (?, ?)", [storyId, userId]).then((result) => {
 				conn.end().then(() => {
-					return resolve({id:res.insertId});
+					return resolve(result.insertId);
 				});
 			}).catch(err => {
 				//handle error
@@ -189,14 +165,15 @@ StoryDB.prototype.addStoryToUser = function(storyId,userId) {
 function AddStoriesMetadata (storyResults){
 	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
-			var stories = {};
+			let stories = {};
 
 			if(storyResults.length == 0){
 				return resolve([]);
 			}
 
 			for(let i=0; i<storyResults.length; i++){
-				var story = storyResults[i];
+				let story = storyResults[i] || {};
+				console.log(story)
 				story.metadata = {
 					title: {},
 					description: {},
@@ -220,18 +197,25 @@ function AddStoriesMetadata (storyResults){
 				writtenLanguages = languageResults[0];
 				signLanguages = languageResults[1];
 
-				var dataPromises = [];
+				let dataPromises = [];
 
 				// Load the titles
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from title";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = writtenLanguages[res[i].writtenlanguageId].name;
+					let query = 'SELECT * from title',
+						where = '';
 
-							stories[storyId].metadata.title[lang] = res[i].name;
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
+
+							stories[storyId].metadata.title[lang] = result[i].name;
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -242,14 +226,21 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the descriptions
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from description";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = writtenLanguages[res[i].writtenlanguageId].name;
+					let query = 'SELECT * from description',
+						where = '';
 
-							stories[storyId].metadata.description[lang] = res[i].name;
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
+
+							stories[storyId].metadata.description[lang] = result[i].name;
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -260,14 +251,21 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the written languages
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from story_to_writtenlanguage";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = writtenLanguages[res[i].writtenlanguageId].name;
+					let query = "SELECT * from story_to_writtenlanguage",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
 
 							stories[storyId].metadata.writtenLanguages.push(lang);
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -278,14 +276,21 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the sign languages
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from story_to_signlanguage";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = signLanguages[res[i].signlanguageId].name;
+					let query = "SELECT * from story_to_signlanguage",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = signLanguages[result[i].signlanguageId].name;
 
 							stories[storyId].metadata.signLanguages.push(lang);
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -296,17 +301,24 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the genres
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT story_to_genre.*, genre.name, genre.writtenlanguageId from story_to_genre JOIN genre ON story_to_genre.genreId = genre.id";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = writtenLanguages[res[i].writtenlanguageId].name;
+					let query = "SELECT story_to_genre.*, genre.name, genre.writtenlanguageId from story_to_genre JOIN genre ON story_to_genre.genreId = genre.id",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
 
 							if(!stories[storyId].metadata.genres[lang])
 								stories[storyId].metadata.genres[lang] = [];
 
-							stories[storyId].metadata.genres[lang].push(res[i].name);
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+							stories[storyId].metadata.genres[lang].push(result[i].name);
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -317,17 +329,24 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the tags
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT story_to_tag.*, tag.name, tag.writtenlanguageId from story_to_tag JOIN tag ON story_to_tag.tagId = tag.id";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId,
-								lang = writtenLanguages[res[i].writtenlanguageId].name;
+					let query = "SELECT story_to_tag.*, tag.name, tag.writtenlanguageId from story_to_tag JOIN tag ON story_to_tag.tagId = tag.id",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
 
 							if(!stories[storyId].metadata.tags[lang])
 								stories[storyId].metadata.tags[lang] = [];
 
-							stories[storyId].metadata.tags[lang].push(res[i].name);
-							if(res[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = res[i].datemodified;
+							stories[storyId].metadata.tags[lang].push(result[i].name);
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
 						return _resolve();
@@ -338,10 +357,17 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the views
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from view";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId;
+					let query = "SELECT * from view",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId;
 
 							stories[storyId].metadata.views++;
 						}
@@ -354,10 +380,17 @@ function AddStoriesMetadata (storyResults){
 
 				// Load the likes
 				dataPromises.push(new Promise((_resolve, _reject) => {
-					let query = "SELECT * from liked";
-					conn.query(query).then(res => {
-						for(let i = 0; i < res.length; i++){
-							let storyId = res[i].storyId;
+					let query = "SELECT * from liked",
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId;
 
 							stories[storyId].metadata.likes++;
 						}
@@ -484,15 +517,15 @@ StoryDB.prototype.getStoryToWrittenlanguage = function(storyId,writtenlanguageId
 	});
 }
 
-StoryDB.prototype.deleteStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
+StoryDB.prototype.deleteStoryToWrittenlanguage = function(storyId, writtenlanguageId) {
 	return new Promise((resolve, reject) => {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("DELETE FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((result) => {
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
+			var query = 'DELETE FROM story_to_writtenlanguage WHERE(storyId=? AND writtenlanguageId=?)';
+			conn.query(query, [storyId, writtenlanguageId]).then((result) => {
 				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
+					return resolve(true);
 				});
 			}).catch(err => {
 				//handle error
@@ -529,15 +562,15 @@ StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
 	});
 }
 
-StoryDB.prototype.deleteStoryToSignlanguage = function(storyId,signlanguageId) {
+StoryDB.prototype.deleteStoryToSignlanguage = function(storyId, signlanguageId) {
 	return new Promise((resolve, reject) => {
 
 		pool.getConnection().then(conn => {
 
-			conn.query("DELETE FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((result) => {
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
+			var query = 'DELETE FROM story_to_signlanguage WHERE(storyId=? AND signlanguageId=?)';
+			conn.query(query, [storyId, signlanguageId]).then((result) => {
 				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
+					return resolve(true);
 				});
 			}).catch(err => {
 				//handle error

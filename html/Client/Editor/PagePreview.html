@@ -1,0 +1,28 @@
+<div>
+	<button class="page-preview" page-index="<%- pageIndex + 1 %>">
+		<div class="half">
+			<div id="cover-image-container" class="half" style="background-image: url(<%- image ? coverImage : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+				<div class="page-number"><%- pageIndex + 1 %></div>
+			</div>
+		</div>
+		<div class="half">
+			<%
+				var hasWritten, hasSign, hasGlossary;
+				_.each(text, function(){
+					hasWritten = true;
+				});
+				_.each(video, function(){
+					hasSign = true;
+				});
+				_.each(glossary, function(langArray){
+					_.each(langArray, function(){
+						hasGlossary = true;
+					});
+				});
+			%>
+			<div class="page-icon <%- hasWritten ? 'added' : 'missing' %>">written</div>
+			<div class="page-icon <%- hasWritten ? 'added' : 'missing' %>">sign</div>
+			<div class="page-icon <%- hasWritten ? 'added' : 'o-missing' %>">glossary</div>
+		</div>
+	</button>
+</div>

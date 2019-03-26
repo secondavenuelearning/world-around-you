@@ -1,0 +1,47 @@
+<div id="metadata-content" class="editor-content-wrapper">
+	<h1 class="main-header">Add Metadata</h1>
+	<div class="main-content">
+		<div class="two-thirds">
+			<div>
+				<div class="quarter"></div>
+				<div class="three-quarters">
+					<select id="current-language-select">
+						<% _.each(metadata.writtenLanguages, function(language){ %> 
+							<option value="<%- language %>" <%- language == currentWrittenLanguage ? 'selected' : '' %>><%- language %></option>
+						<% }); %>
+					</select>
+				</div>
+			</div>
+			<div>
+				<div class="quarter"><label>Title</label></div>
+				<div class="three-quarters"><input type="text" id="title-input" name="title" value="<%- metadata.title[currentWrittenLanguage] %>" data-type="title"></div>
+			</div>
+			<div>
+				<div class="quarter"><label>Description</label></div>
+				<div class="three-quarters"><textarea id="description-input" data-type="description"><%- metadata.description[currentWrittenLanguage] %></textarea></div>
+			</div>
+			<div>
+				<div class="quarter"><label>Genres</label></div>
+				<div class="three-quarters">
+					<% _.each(metadata.genres[currentWrittenLanguage], function(genre){ %>
+						<div><button class="delete-button" data-type="genres"><%- genre %></button></div>
+					<% }); %>
+					<div><button id="add-genre" class="add-text-button" data-type="genres">+</button></div>
+				</div>
+			</div>
+			<div>
+				<div class="quarter"><label>Tags</label></div>
+				<div class="three-quarters">
+					<% _.each(metadata.tags[currentWrittenLanguage], function(tag){ %>
+						<div><button class="delete-button" data-type="tags"><%- tag %></button></div>
+					<% }); %>
+					<div><button id="add-tag" class="add-text-button" data-type="tags">+</button></div>
+				</div>
+			</div>
+		</div>
+		<div class="third">
+			<div id="cover-image-container" style="background-image: url(<%- coverImage ? coverImage : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);"></div>
+		</div>
+	</div>
+</div>
+<button id="save-metadata" class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

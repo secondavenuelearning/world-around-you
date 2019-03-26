@@ -16,7 +16,7 @@ $(document).ready(function () {
 
     $.ajax({
         method: 'get',
-        url: `./api/search/${search}`
+        url: `./api/stories/${search}`
     }).done((stories) => {
         $('#search-input').on('keyup', (evt) => {
             if(evt.key == 'Enter')

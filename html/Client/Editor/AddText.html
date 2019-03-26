@@ -1,0 +1,12 @@
+<div class="add-text-container">
+	<div><input class="add-text-input" type="text" name="new-text" data-type="<%- dataType %>"></div>
+	<% if(autocompleteValues){ %>
+		<div class="autocomplete-container">
+			<% _.each(autocompleteValues, function(value){ %>
+				<button class="autocomplete-button"><%- value %></button>
+			<% }); %>
+		</div>
+	<% } %>
+	<div class="half"><button class="save-text" >Save</button></div>
+	<div class="half"><button class="cancel-text" >Cancel</button></div>
+</div>
