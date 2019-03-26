@@ -38,16 +38,16 @@
 }
 
 .carousel.single .left{
-    margin-left: 20%;
+    margin-left: 10%;
 }
 
 .carousel.single .right{
-    margin-right: 20%;
+    margin-right: 10%;
 }
 
 .carousel.single .image-holder
 {
-    width: 40%;
+    width: 60%;
 }
 
 .carousel.single .image-holder.outerIndicator
@@ -89,7 +89,7 @@
     height: 35px;
     transition: opacity .5s;
     color: White;
-    top: 45px;
+    top: 35px;
 }
 .pageTitle.overlay span{
     font-size: 23px;
@@ -119,7 +119,7 @@
     opacity: .7;
     
     position: relative;
-    top: -82px; 
+    top: -64px; 
 }
 
 .page-indicator
@@ -181,7 +181,9 @@
 .image-holder .story-preview{
     width: 100%;
     height: 100%;
-    /*background-color: #004e74;*/
+    background-color: #004e74;
+    
+    padding: 0px;
 }
 .image-holder .story-preview .cover-image-container{
     width: calc(100% - 30px);

@@ -9,7 +9,7 @@ var interval = 0;
 function resizePrviews(){
 	clearInterval(interval);
 	interval = setTimeout(() => {
-		$('.story-preview').each((i, el) => {
+		$('.story-preview').not('.carousel .story-preview').each((i, el) => { //dont apply this to carousel previews
 			let $el = $(el);
 			
 			$el.css('width', '');
