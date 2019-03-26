@@ -77,13 +77,23 @@ main
     background-repeat: repeat-x;
 }
 #playBtn{
+   margin-top:10%;
     display: inline-block;
 }
 .centered{
   text-align: center;
 }
 
-
+#pageContent{
+    display: block;
+    height : 20%;
+    width: 60%;
+    border: solid 10px;
+margin: 0 auto;
+    border-color: blue;
+    border-radius: 10px;
+    
+}
 /* Main Menu */
 
 
