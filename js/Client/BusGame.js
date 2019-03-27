@@ -30,7 +30,7 @@ $(document).ready(function () {
         storyObj = JSON.parse(this.responseText);
           
         //build story viwer functionality and pass in page data
-        BusGame(storyObj, "fsl_luzon", "English");
+     //   BusGame(storyObj, "fsl_luzon", "English");
       }
     };
     xmlhttp.open("GET", dataURL);
