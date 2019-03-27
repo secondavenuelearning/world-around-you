@@ -58,9 +58,10 @@ export function BusGame(storyObj, sign, written)
     
     //build out lanes and add cars
     BuildLanes();
+    BuildCar("FacingLeft", "#top .inner");
     BuildBus("FacingLeft", "#top .inner");
     BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingLeft", "#top .inner");
+    
     BuildCar("FacingRight", "#bottom .inner");
     /*
     BuildCar("FacingLeft", "#top .inner");

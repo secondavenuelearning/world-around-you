@@ -230,7 +230,7 @@ header #score span
 .car
 {
     
-    width: 34%;
+    width: 34vw;
     height: auto;
 }
 
@@ -251,7 +251,7 @@ header #score span
 
 .bus
 {
-    width: 60%;
+    width: 60vw;
     height: auto;
 }
 
