@@ -1,4 +1,5 @@
 const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const session = require('express-session');
 const LokiStore = require('connect-loki')(session);
@@ -179,6 +180,13 @@ var sess=null;
 			Page: 'Editor'
 		}));
 	});
+
+    app.get('/img/*', (req, res) => {
+        var imgPath = req.path;
+        var folders = fs.readdirSync(path.resolve(__dirname) + imgPath);
+
+        res.send(folders);
+    });
 
 // ******************************************************
 // Get Requests
