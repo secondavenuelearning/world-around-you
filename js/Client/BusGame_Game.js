@@ -90,19 +90,23 @@ export function BusGame(storyObj, sign, written)
     BuildCar("FacingRight", "#bottom .inner");*/
     
     //add looping to the video
-    var termData = storyData[1].glossary;
-    termData = termData[writtenLang];
-    
-    var vids = $(".window video").get();
-    var vidIds = [];
+    var vids = $(".window video").toArray();
     vids.forEach(function(vid)
     {
         //get term
         var term = vid.id.toString();
-        term = term.substring(0, term.length - 4);
+        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
+        console.log(term);
+        
+        //get term data
+         var termData = storyData[1].glossary;
+        termData = termData[writtenLang];
+        termData = termData[term].video;
+        termData = termData[signLang];
+        
         
         //add looping
-        LoopVideoClip(vid.id, )
+        LoopVideoClip(vid.id, termData.start, termData.end);
     });
 }
 
@@ -213,7 +217,7 @@ function BuildBus(dir, lane)
         {
             case 0: //term
                 var id = term + "Trm";
-                busHTML += "<p><span id = \"" + id + "\">Huge</span></p>"; 
+                busHTML += "<p><span id = \"" + id + "\">" + term + "</span></p>"; 
             break;
 
             case 1: //video
@@ -245,9 +249,10 @@ function BuildBus(dir, lane)
 /* ----------------------- Game Loop ----------------------- */
 
 /* ----------------------- Helper Functions ----------------------- */
-function LoopVideoClip(videoContainer, start, end)
+function LoopVideoClip(videoID, start, end)
 {
-    videoContainer.src = video + "#t="+start+","+end;
+    var videoContainer = document.getElementById(videoID)
+    videoContainer.src += "#t="+start+","+end;
     videoContainer.addEventListener('loadedmetadata', function()
     {
         if(videoContainer.currentTime < start){
