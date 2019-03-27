@@ -332,8 +332,13 @@ header #score span
     overflow: hidden;
 }
 
-.window p
+.window p span
 {
-    padding: 10px;
+    color: white;
+    font-size: 50px;
+    height: 50px;
+    
     text-align: center;
+    
+    display: block;
 }

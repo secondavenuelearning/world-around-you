@@ -21,12 +21,18 @@ var images =
         }
     };
 
+var termList = ["world", "sea", "sky", "huge"]; //hard values for testing
+var signLang;
+var writtenLang;
+
 
 /* ----------------------- Constructor ----------------------- */
-export function BusGame(storyObj, signLang, writtenLang)
+export function BusGame(storyObj, sign, written)
 {
     //save story data to be globally acessable
     storyData = storyObj;
+    signLang = sign;
+    writtenLang = written;
     
     //define how many matches the user will need this round
     totalMatches = (Math.floor(Math.random() * 10) + 1); //number between 0 and 10
@@ -82,6 +88,22 @@ export function BusGame(storyObj, signLang, writtenLang)
     BuildCar("FacingRight", "#bottom .inner");
     BuildBus("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");*/
+    
+    //add looping to the video
+    var termData = storyData[1].glossary;
+    termData = termData[writtenLang];
+    
+    var vids = $(".window video").get();
+    var vidIds = [];
+    vids.forEach(function(vid)
+    {
+        //get term
+        var term = vid.id.toString();
+        term = term.substring(0, term.length - 4);
+        
+        //add looping
+        LoopVideoClip(vid.id, )
+    });
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -183,16 +205,21 @@ function BuildBus(dir, lane)
             busHTML += "<div class = \"window\">";
         }
         
+        //get term and relvant data
+        var term = termList[Math.floor(Math.random() * termList.length)];
+        
         var mediaType = Math.floor(Math.random() * 3); // 0 - 3
         switch(mediaType)
         {
-            case 0: //word
-                busHTML += "<p>Huge</p>"; 
+            case 0: //term
+                var id = term + "Trm";
+                busHTML += "<p><span id = \"" + id + "\">Huge</span></p>"; 
             break;
 
             case 1: //video
+                var id = term + "Vid";
                 var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
-                busHTML += "<video src =\"" + vidPath + "\" autoplay muted loop></video>";
+                busHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
             case 2: //no media
@@ -206,7 +233,7 @@ function BuildBus(dir, lane)
     busHTML += "</div>"; //close windows div 
     busHTML += "</div>"; //close bus div
     
-    //add car to lane
+    //add bus to lane
     $(lane).append(busHTML);
     
     //update lane width
@@ -217,3 +244,21 @@ function BuildBus(dir, lane)
 
 /* ----------------------- Game Loop ----------------------- */
 
+/* ----------------------- Helper Functions ----------------------- */
+function LoopVideoClip(videoContainer, start, end)
+{
+    videoContainer.src = video + "#t="+start+","+end;
+    videoContainer.addEventListener('loadedmetadata', function()
+    {
+        if(videoContainer.currentTime < start){
+            videoContainer.currentTime = start;
+        }
+        videoContainer.ontimeupdate = function(){
+            if(videoContainer.currentTime>=end){
+                videoContainer.currentTime = start;
+                videoContainer.play();
+
+            }
+        }
+    }, false);
+}
