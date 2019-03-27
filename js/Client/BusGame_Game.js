@@ -174,10 +174,10 @@ function BuildCar(dir, lane)
     //add car to lane
     $(lane).append(carHTML);
     
-    //update lane width
+    /*update lane width
     var laneWidth = $(lane).width();
     laneWidth += 600;
-    $(lane).css('width', laneWidth);
+    $(lane).css('width', laneWidth); //*/
 }
 
 function BuildBus(dir, lane)
@@ -198,15 +198,15 @@ function BuildBus(dir, lane)
         //build window - acount for extra spacing betwen special case windows
         if(dir == "FacingLeft" && i === 0) //first window on facing left bus
         {
-            busHTML += "<div class = \"window first\">";
+            busHTML += "<div class = \"window  hidden first\">";
         }
         else if(dir == "FacingRight" && i === 2) //last widnow on facing right bus
         {
-            busHTML += "<div class = \"window last\">";
+            busHTML += "<div class = \"window hidden last\">";
         }
         else //default
         {
-            busHTML += "<div class = \"window\">";
+            busHTML += "<div class = \"window hidden\">";
         }
         
         //get term and relvant data
@@ -240,10 +240,10 @@ function BuildBus(dir, lane)
     //add bus to lane
     $(lane).append(busHTML);
     
-    //update lane width
+    /*update lane width
     var laneWidth = $(lane).width();
     laneWidth += 1080;
-    $(lane).css('width', laneWidth);
+    $(lane).css('width', laneWidth);//*/
 }
 
 /* ----------------------- Game Loop ----------------------- */

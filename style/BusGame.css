@@ -182,7 +182,6 @@ header #score span
 /* Core Game: lanes*/
 .lane
 {
-    height: 500px;
     width: 100%;
     
     position: absolute;
@@ -199,7 +198,6 @@ header #score span
     height: 300px;
     display: inline-block;
     position: relative;
-    bottom: -10%;
 }
 
 #top
@@ -274,6 +272,9 @@ header #score span
     display: inline-block;
     height: 33%;
     width: 69%;
+    
+    position: absolute;
+    z-index: 10;
 }
 
 #top .windows
@@ -302,6 +303,13 @@ header #score span
     border-radius: 15px;
     
     background-color: #0098ba;
+    
+    transition: opacity .7s;
+}
+
+.bus .windows .window:hover
+{
+    opacity: 1;
 }
 
 .bus .windows .window.first
@@ -341,4 +349,9 @@ header #score span
     text-align: center;
     
     display: block;
+}
+
+.hidden
+{
+    opacity: 0;
 }
