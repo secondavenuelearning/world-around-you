@@ -1,5 +1,5 @@
 import 'style/BusGame.css!';
-import html from 'html/Client/BusGame.html!text';
+import html from 'html/Client/BusGame_Title.html!text';
 import BusGame from 'js/Client/BusGame_Game.js';
 import header from 'html/Client/BusGame_Header.html!text';
 
@@ -18,7 +18,10 @@ $(document).ready(function () {
     //update main section of page
     $('header').html(header);
     $('main').html(html);
-
+    var play = document.getElementById("playButton");
+    play.onclick = function(){
+        BusGame(storyObj, "fsl_luzon", "English");
+    };
     var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
     var storyObj = null;
