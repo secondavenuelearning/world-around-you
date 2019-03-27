@@ -146,8 +146,8 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
 
 
     buttonRight.onclick = function () {
-        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
-
+        //$('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+        $('#' + itemsID + " #current").removeAttr('id');
         if (endIndex >= imageList.length - 1) {
             offset = 0;
             startIndex = 0;
@@ -170,7 +170,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     };
     var buttonLeft = parent.getElementsByClassName("left")[0];
     buttonLeft.onclick = function () {
-        $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(Math.floor(startIndex / showing)).removeAttr('id');
+ $('#' + itemsID + " #current").removeAttr('id');
 
         if (startIndex <= 0) {
             offset = imageList.length - 1;
@@ -195,8 +195,18 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", 0, isOverlay);
     
     var itemsID = "carousel-" + tempIndex.toString();
-    BuildIndexIndicator(isOverlay, holder, panelCount / showing);
+    BuildIndexIndicator(isOverlay, holder, panelCount / showing, panels, startIndex, endIndex, showing, offset);
     $('#' + itemsID + ' > .image-holder > .page-indicator > .dots').children().eq(0).attr('id', 'current');
+    
+      $('#' + itemsID + " .dots").delegate('div', 'click', function () {
+       $('#' + itemsID + " #current").removeAttr('id');
+        $(this).attr('id', 'current');
+        startIndex = showing * $(this).index();
+        endIndex = startIndex + (showing-1);
+        console.log(startIndex);
+        offset = $(this).index();
+        drawPanels(panels, 0,0,0,0,0,"left",$(this).index(),true);
+    });
     
     //add special functionality for overlays
     if(isOverlay)
@@ -204,10 +214,10 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
         //on hover hide title and index indicator
         $(holder).hover(function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '0');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .overlay').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '.7');
         });
     }
     
@@ -223,7 +233,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
 (carouselItemID: html id of the holder for this carousels items)
 (pages: number of pages - should be total items / number showing)
 */
-function BuildIndexIndicator(isOverlay, carouselItemID, pages)
+function BuildIndexIndicator(isOverlay, carouselItemID, pages, panels, startIndex, endIndex, showing, offset)
 {
     //build html
     var indicatorHTML = "<div class = \"page-indicator";
@@ -248,6 +258,21 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages)
     
     //add built html to page
     $(carouselItemID).append(indicatorHTML);
+   /* var dots = document.getElementsByClassName("dot");
+    console.log(dots);
+     
+    for(var x = 0; x<dots.length;x++){
+      var temp = x;
+        dots[x].onclick = function(){
+            
+           
+     
+         
+        };
+    }
+    */
+  
+     
 }
 function BuildTitle(isOverlay, carouselItemID, title)
 {

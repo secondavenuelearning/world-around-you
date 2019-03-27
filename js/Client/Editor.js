@@ -23,12 +23,24 @@ const pagesTemplate = _.template(pagesHtml);
 import pagePreviewHtml from 'html/Client/Editor/PagePreview.html!text';
 const pagePreviewTemplate = _.template(pagePreviewHtml);
 
+import editWrittenHtml from 'html/Client/Editor/EditWritten.html!text';
+const editWrittenTemplate = _.template(editWrittenHtml);
+
+import editSignHtml from 'html/Client/Editor/EditSign.html!text';
+const editSignTemplate = _.template(editSignHtml);
+
+import editGlossaryHtml from 'html/Client/Editor/EditGlossary.html!text';
+const editGlossaryTemplate = _.template(editGlossaryHtml);
+
+import publishHtml from 'html/Client/Editor/Publish.html!text';
+const publishTemplate = _.template(publishHtml);
+
 const EDITORPAGES = [
 	'language',
 	'cover',
 	'metadata',
 	'pages',
-	'review'
+	'publish'
 ]
 
 var storyId,
@@ -42,12 +54,14 @@ var interval = 0;
 function resizeCover(noDelay){
 	clearInterval(interval);
 	interval = setTimeout(() => {
-		let $el = $('#cover-image-container');
-		
-		$el.css('width', '');
-		var width = parseFloat($el.width());
+		$('.cover-image-container').each((i, el) => {
+			let $el = $(el);
 
-		$el.css('height', `${9/16 * width}px`);
+			$el.css('width', '');
+			var width = parseFloat($el.width());
+
+			$el.css('height', `${9/16 * width}px`);
+		});
 	}, noDelay ? 1 : 40);	
 }
 $(window).resize(resizeCover);
@@ -125,40 +139,10 @@ function renderEditorContent(){
 	if(EDITORPAGES[editorPageIndex] == 'pages'){
 		renderPagesPage();
 	}
-}
-
-function RenderAddText(beforeElement, dataType, autocompleteValues){
-	$('.add-text-container').remove();
-
-	$(beforeElement).before(addTextTemplate({
-		autocompleteValues,
-		dataType
-	}));
-
-	$('.cancel-text').on('click', () => {
-		$('.add-text-container').remove();
-	});
-
-	if(autocompleteValues){
-		$('.add-text-input').on('keydown', () => {
-			let value = $('.add-text-input').val();
-
-			if(value == ''){
-				$('.autocomplete-container').hide();
-				return;
-			}
-
-			$('.autocomplete-container').show();
-			$('.autocomplete-button').css('display', 'none');
-			$('autocomplete-button').each((i, el) => {
-				let _value = $(el).val();
-				var regExp = new RegExp(`^${value}`);
-				if(_value.match(regExp)) $(el).css('display', 'block');
-			});
-		});
+	if(EDITORPAGES[editorPageIndex] == 'publish'){
+		renderPublishPage();
 	}
 }
-
 function renderLanguagePage(){
 
 	var promises = [];
@@ -291,7 +275,6 @@ function renderLanguagePage(){
 		ReRender();
 	});
 }
-
 function renderCoverPage(){
 	let coverImage = story.coverimage,
 		author = story.author;
@@ -333,7 +316,6 @@ function renderCoverPage(){
 	}
 	ReRender();
 }
-
 function renderMetadataPage(){
 	if(!story.metadata || !story.metadata.writtenLanguages){
 		editorPageIndex = 0;
@@ -437,24 +419,279 @@ function renderMetadataPage(){
 		ReRender();
 	});
 }
-
-function AddPagePreview(beforeElement, pageData, pageIndex){
-	pageData.pageIndex = pageIndex;
-	$(beforeElement).before(pagePreviewTemplate(pageData));
-}
 function renderPagesPage(){
-	let data = story.data ? JSON.parse(JSON.stringify(story.data)) : [];
+	if(!story.metadata || !story.metadata.writtenLanguages || !story.metadata.signLanguages){
+		editorPageIndex = 0;
+		renderEditorContent();
+		return;
+	}
+
+	// Create the variables needed for rendering each page
+	var data = story.data ? JSON.parse(JSON.stringify(story.data)) : [],
+		currentPageIndex = 0,
+		currentWrittenLanguage = story.metadata.writtenLanguages[0],
+		currentSignLanguage = story.metadata.signLanguages[0],
+		currentPageContent = 'written',
+		currentGlossaryTerm = '';
+
 
 	var ReRender = function(unsavedChanges){
+		// render the mage page content
 		$('#editor-content').html(pagesTemplate({
 			data,
 			unsavedChanges
 		}));
+
+		// resize any cover images to the correct aspect ratio
 		resizeCover(true);
 
-		$('.add-page-button').on('click', (evt) => {
-			AddPagePreview($(evt.currentTarget).parent(), {}, data.length)
+		// add button callbacks
+		$('.add-page-button').on('click', () => {
+			AddPage();
+		});
+
+		$('.page-nav-button').on('click', (evt) => {
+			let $el = $(evt.currentTarget);
+			$('.page-nav-button').removeClass('active');
+			$el.addClass('active');
+
+			currentPageContent = $el.attr('page-type');
+
+			RenderPageContent();
+		});
+
+		// create a default page or add any existing pages to the story
+		if(data.length == 0){
+			AddPage();
+		}
+		else{
+			_.each(data, (page, index) => {
+				AddPage(page, index);
+			});
+		}
+	}
+
+	// function to add a page an all the associated callbacks
+	var AddPage = function(page, index){
+		// set the page variables if there if none exist and we are creating a new page
+		if(!page){
+			page = {};
+			index = data.length;
+			data.push(page);
+		}
+
+		// add the page preview button
+		let $el = AddPagePreview($('.add-page-button').parent(), page, index, true, () => {
+			if(data.length == 1) return;
+
+			data.splice(index, 1);
+			$el.remove();
+			ReIndexPages();
+		});
+
+		// activat the newly added page
+		ActivatePage($el.find('.page-preview')[0]);
+
+		// setting a timeout here to ensure the content is actually on the page
+		setTimeout(() => {
+			// scroll to the bottom of the page previews
+			$('.add-page-button')[0].scrollIntoView();
+
+			// re-add the page preview callbacks
+			$('.page-preview').off();
+			$('.page-preview').on('click', (evt) => {
+				ActivatePage($(evt.currentTarget));
+			});
+		}, 0);
+	}
+
+	// function to renumber the pages in case one is deleted
+	var ReIndexPages = function(){
+		let lastEl;
+		$('.page-preview-container').each((i, el) => {
+			let $el = $(el);
+			$el.find('.page-preview').attr('page-index', i);
+			$el.find('.page-delete-button').attr('page-index', i);
+			$el.find('.page-number').html(i + 1);
+			lastEl = $el.find('.page-preview')[0];
+		});
+
+		ActivatePage(lastEl);
+	}
+
+	// funciton to activate a page and set all of the proper variables
+	var ActivatePage = function($el){
+		$el = $($el);
+
+		$('.page-preview').removeClass('active');
+		$el.addClass('active');
+
+		currentPageIndex = parseInt($el.attr('page-index'));
+		currentWrittenLanguage = story.metadata.writtenLanguages[0];
+		currentSignLanguage = story.metadata.signLanguages[0];
+		currentPageContent = 'written';
+
+		$('.page-nav-button').removeClass('active');
+		$(`.page-nav-button[page-type=${currentPageContent}]`).addClass('active');
+
+		RenderPageContent();
+	}
+
+	// function to render the a page tab (editing text, video, or glossary terms)
+	var RenderPageContent = function($el){		
+		if(currentPageContent == 'written'){
+			$('#page-edit-content').html(editWrittenTemplate({
+				page: data[currentPageIndex],
+				story,
+				currentWrittenLanguage
+			}));
+		}
+		if(currentPageContent == 'sign'){
+			$('#page-edit-content').html(editSignTemplate({
+				page: data[currentPageIndex],
+				story,
+				currentSignLanguage
+			}));
+		}
+		if(currentPageContent == 'glossary'){
+			$('#page-edit-content').html(editGlossaryTemplate({
+				page: data[currentPageIndex],
+				story,
+				currentWrittenLanguage,
+				currentSignLanguage,
+				currentGlossaryTerm
+			}));
+		}
+		resizeCover(true);
+
+		$('#current-written-language-select').on('change', (evt) => {
+			currentWrittenLanguage = $(evt.currentTarget).val();
+			RenderPageContent();
+		});
+
+		$('#current-sign-language-select').on('change', (evt) => {
+			currentSignLanguage = $(evt.currentTarget).val();
+			RenderPageContent();
+		});
+
+		$('#page-text').on('keydown keyup', (evt) => {
+			if(!data[currentPageIndex].text) data[currentPageIndex].text = {};
+			data[currentPageIndex].text[currentWrittenLanguage] = $(evt.currentTarget).val();
+
+			$('.save-button').prop('disabled', false);
+			unsavedChanges = true;
+		});
+
+
+		$('#image-button').on('click', (evt) => {
+			$('#image-input').trigger('click');
+		});
+
+		$('#image-input').on('change', (evt) => {
+			var file = $('#image-input')[0].files[0];
+			// create a new file reader
+			var reader = new FileReader();
+
+			reader.onload = function(){
+				$('#image-container').css('background-image', `url(${reader.result})`);
+				data[currentPageIndex].image = reader.result;
+				data[currentPageIndex].imageFile = file;
+
+				$('.save-button').prop('disabled', false);
+				unsavedChanges = true;
+			}
+			reader.readAsDataURL(file);
+		});
+
+		$('#video-button').on('click', (evt) => {
+			$('#video-input').trigger('click');
+		});
+
+		$('#video-input').on('change', (evt) => {
+			var file = $('#video-input')[0].files[0];
+			// create a new file reader
+			var reader = new FileReader();
+
+			reader.onload = function(){
+				// $('#video-player').remove();
+				// $('#video-container').prepend(`<video id="video-player" controls autoplay muted loop src="${reader.result}"></video>`);
+				$('#video-player').attr('src', reader.result);
+
+				if(!data[currentPageIndex].video) data[currentPageIndex].video = {};
+				data[currentPageIndex].video[currentSignLanguage] = reader.result;
+
+				if(!data[currentPageIndex].videoFile) data[currentPageIndex].videoFile = {};
+				data[currentPageIndex].videoFile[currentSignLanguage] = file;
+				
+				$('.save-button').prop('disabled', false);
+				unsavedChanges = true;
+			}
+			reader.readAsDataURL(file);
+		});
+
+	}
+	
+	var RenderWrittenEdit = function(){
+
+	}
+
+
+	ReRender();
+}
+function renderPublishPage(){
+	var data = story.data ? JSON.parse(JSON.stringify(story.data)) : []
+	$('#editor-content').html(publishTemplate({
+		data,
+	}));
+}
+
+function RenderAddText(beforeElement, dataType, autocompleteValues){
+	$('.add-text-container').remove();
+
+	$(beforeElement).before(addTextTemplate({
+		autocompleteValues,
+		dataType
+	}));
+
+	$('.cancel-text').on('click', () => {
+		$('.add-text-container').remove();
+	});
+
+	if(autocompleteValues){
+		$('.add-text-input').on('keydown', () => {
+			let value = $('.add-text-input').val();
+
+			if(value == ''){
+				$('.autocomplete-container').hide();
+				return;
+			}
+
+			$('.autocomplete-container').show();
+			$('.autocomplete-button').css('display', 'none');
+			$('autocomplete-button').each((i, el) => {
+				let _value = $(el).val();
+				var regExp = new RegExp(`^${value}`);
+				if(_value.match(regExp)) $(el).css('display', 'block');
+			});
 		});
 	}
-	ReRender();
+}
+function AddPagePreview(beforeElement, page, pageIndex, includeDelete, deleteCallback){
+	let $el = $(pagePreviewTemplate({
+		pageIndex,
+		page,
+		includeDelete
+	}));
+
+	$(beforeElement).before($el);
+	resizeCover(true);
+
+	$el.find('.page-delete-button').on('click', (evt) => {
+		if(typeof deleteCallback == 'function')
+			deleteCallback();
+		else
+			$el.remove();
+	});
+
+	return $el;
 }

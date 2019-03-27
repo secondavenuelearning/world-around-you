@@ -1,0 +1,16 @@
+<div id="edit-sign">
+	<div id="select-container">
+		<select id="current-sign-language-select">
+			<% _.each(story.metadata.signLanguages, function(language){ %> 
+				<option value="<%- language %>" <%- language == currentSignLanguage ? 'selected' : '' %>><%- language %></option>
+			<% }); %>
+		</select>
+	</div>
+	<div id="video-container">
+		<video id="video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
+		<div id="video-input-container" class="upload-input-container">
+			<input id="video-input" class="upload-input" type="file" name="coverimage" accept="video/*">
+			<button id="video-button" class="upload-button">Upload video</button>
+		</div>		
+	</div>
+</div>
