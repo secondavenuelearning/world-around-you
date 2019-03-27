@@ -135,9 +135,10 @@ header #score span
 
 .lane .inner
 {
-    height: 500px;
+    height: 300px;
     display: inline-block;
-    vertical-align: bottom;
+    position: relative;
+    bottom: -10%;
 }
 
 #top
@@ -151,7 +152,7 @@ header #score span
 {
     display: inline-block;
     
-    position: absolute;
+    position: relative;
     bottom: 0;
     
     margin-left: 5px;
@@ -160,7 +161,7 @@ header #score span
     overflow: hidden;
 }
 
-.vehcile img
+.vehicle img
 {
     display: inline-block;
     height: 100%;
@@ -170,8 +171,23 @@ header #score span
 .car
 {
     
-    width: 600px;
-    height: 250px;
+    width: 34%;
+    height: auto;
+}
+
+.car img
+{
+    position: relative;
+    left: -15%;
+    
+    width: 140%;
+    
+}
+
+#bottom .car img
+{
+    position: relative;
+    left: -28%; 
 }
 
 .bus
@@ -221,8 +237,10 @@ header #score span
     height: calc(100% - 2px);
     margin-right: 2.8%;
     
-    background-color: red;
-    opacity: .5;
+    border: 1px;
+    border-radius: 15px;
+    
+    background-color: #0098ba;
 }
 
 .bus .windows .window.first
@@ -239,8 +257,22 @@ header #score span
     margin-left: 1.4%;
 }
 
-.window span, .window video, .window div
+.window p, .window video, .window div
 {
-    height: 100%;
-    width: 100%;
+    display: inline-block;
+    height: calc(100%);
+    width: calc(100%);
+    
+    border: 1px;
+    border-radius: 15px;
+    
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+.window p
+{
+    padding: 10px;
+    text-align: center;
 }

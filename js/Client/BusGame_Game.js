@@ -40,11 +40,22 @@ export function BusGame(storyObj, signLang, writtenLang)
     images.Buses.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Animation_Right/Frames/"));
     images.Buses.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Yellow_Animation_Right/Frames/"));
     
+    images.Cars.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Grey_Animation_Left/Frames/"));
+    images.Cars.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Teal_Animation_Left/Frames/"));
+    images.Cars.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Yellow_Animation_Left/Frames/"));
+    images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Red_Animation_Right/Frames/"));
+    images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
+    images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
+    
+    
+    
     
     //build out lanes and add cars
     BuildLanes();
     BuildBus("FacingLeft", "#top .inner");
     BuildBus("FacingRight", "#bottom .inner");
+    BuildCar("FacingLeft", "#top .inner");
+    BuildCar("FacingRight", "#bottom .inner");
     /*
     BuildCar("FacingLeft", "#top .inner");
     BuildBus("FacingLeft", "#top .inner");
@@ -127,6 +138,7 @@ function BuildCar(dir, lane)
     //chose image to use for car
     var car = images.Cars[dir]; //get cars at the proper facing dir
     car = car[Math.floor(Math.random() * (car.length))]; //get random car from the array
+    car = car[0];
     
     //build car html
     var carHTML = "<div class = \"vehicle car\">";
@@ -175,11 +187,12 @@ function BuildBus(dir, lane)
         switch(mediaType)
         {
             case 0: //word
-                busHTML += "<span></span>"; 
+                busHTML += "<p>Huge</p>"; 
             break;
 
             case 1: //video
-                busHTML += "<video></video>";
+                var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
+                busHTML += "<video src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
             case 2: //no media
