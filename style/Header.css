@@ -68,9 +68,9 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 #nav-user-links{
 	position: absolute;
 	width: 100px;
-	background-color: #0098BA;
+	background-color: #004E74;
 	left: 0px;
-    border-radius: 0px 0px 15px 15px;
+    /*border-radius: 0px 0px 15px 15px;*/
     padding: 5px;
     display: none;
 	border: 3px solid #004E74;

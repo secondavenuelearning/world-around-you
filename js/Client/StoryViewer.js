@@ -35,6 +35,7 @@ export function StoryViewer(storyObj)
     
     //add onclick for fullscreen toggling
     $('#fullscreen').on('click', function() {ToggleFullScreen()});
+    $('#exit-fullscreen').on('click', function() {ToggleFullScreen()});
     
     //add onclick event for chaning pages onto the nav buttons
     $('.viewerNav#back button').on('click', function() {changePage(pageIndex - 1)});
@@ -59,11 +60,11 @@ export function StoryViewer(storyObj)
     greyOutNav(); //grey out back button bc on first item
     
     //add hover image swaping
-    ImageHoverSwap("#storyToggle button", "#storyToggle #hide", "../../img/icons/StoryViewer/icon_SV_HideText.svg", "../../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg");
+    ImageHoverSwap("#storyToggle button", "#storyToggle #show", "../../img/icons/StoryViewer/icon_SV_HideText.svg", "../../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg");
     
-     ImageHoverSwap("#storyToggle button", "#storyToggle #show", "../../img/icons/StoryViewer/icon_SV_ShowText.svg", "../../img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg");
+    ImageHoverSwap("#storyToggle button", "#storyToggle #hide", "../../img/icons/StoryViewer/icon_SV_ShowText.svg", "../../img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg");
     
-    ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg");
+    //ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg");
     
     ImageHoverSwap("#signLang", "#signLang img", "../../img/icons/StoryViewer/icon_SV_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_SignLang_HoverDown.svg");
     
@@ -111,8 +112,8 @@ function updatePageNumbers()
     $('#currentOverlay span').text(pageIndex + 1);
     
     //update buttons
-    $('.viewerNav#forward #num').text(pageIndex + screen);
-    $('.viewerNav#back #num').text(pageIndex - (screen % 2) + 1);
+    $('.viewerNav#forward .num').text(pageIndex + screen);
+    $('.viewerNav#back .num').text(pageIndex - (screen % 2) + 1);
 }
 
 function GenerateGlossaryButtons()
@@ -403,11 +404,11 @@ function ToggleStoryText()
         
         //expand video to be full size
         visuals.css('height', '100%');
-        visuals.css('max-height', '100%');
+        visuals.css('max-height', '90%');
         visuals.css('width', '100%');
         visuals.css('margin', '0px');
         
-        $('#storyToggle').css('top', "calc(-100px)");
+        //$('#storyToggle').css('top', "calc(-100px)");
         $('#storyToggle #show').css('display', 'none');
         $('#storyToggle #hide').removeAttr('style');
     }
@@ -448,14 +449,22 @@ function ToggleFullScreen()
         //show elements
         $('header').removeAttr('style');
         $('#details').removeAttr('style');
-        $('#more-stories').removeAttr('style');
-        $('#more-author').removeAttr('style');
+        $('#more-stories').css('display', 'block');
+        $('#more-author').css('display', 'block');
         $('footer').removeAttr('style');
         
         //move viewer elements back down under header
         $('main').removeAttr('style');
         $('#viewer').removeAttr('style');
         $('#viewerBar').removeAttr('style');
+
+        $('#holder').removeClass('holder-fullscreen');
+        $('#viewer-content').removeClass('viewer-content-fullscreen');
+
+        $('#fullscreen').removeClass('fullscreen-active');
+        $('.filters').removeClass('fullscreen-active');
+        $('#exit-fullscreen').removeClass('fullscreen-active');
+
     }
     else
     {
@@ -473,10 +482,20 @@ function ToggleFullScreen()
         $('main').css('top', '0');
         $('main').css('height', '100%');
         $('#viewer').css('height', 'calc(100% - 70px');
+
+        $('#holder').addClass('holder-fullscreen');
+        $('#viewer-content').addClass('viewer-content-fullscreen');
+
         
         //scroll to the top so we dont have odd whitespace and remove anythign thats extra
         $('main').scrollTop(0);
         $('main').css('overflow', 'hidden');
+
+        $('#fullscreen').addClass('fullscreen-active');
+        $('.filters').addClass('fullscreen-active');
+        $('#exit-fullscreen').addClass('fullscreen-active');
+
+
     }
     
 }
@@ -497,7 +516,7 @@ function greyOutNav()
         //resize icon
         $('.viewerNav#back .icon').css('height', '70%');
         $('.viewerNav#back .icon').css('padding', '10%');
-        $('.viewerNav#back .icon').css('margin-top', '10%');
+        $('.viewerNav#back .icon').css('margin-top', '15px');
 
     }
     else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
@@ -512,7 +531,7 @@ function greyOutNav()
         //resize icon
         $('.viewerNav#forward .icon').css('height', '70%');
         $('.viewerNav#forward .icon').css('padding', '10%');
-        $('.viewerNav#forward .icon').css('margin-top', '10%');
+        $('.viewerNav#forward .icon').css('margin-top', '15px');
     }
     else
     {
