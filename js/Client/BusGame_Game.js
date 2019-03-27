@@ -10,34 +10,14 @@ var images =
     {
         Cars: 
         {
-            FacingRight:
-            [
-            "../../img/games/BusGame/Cars/car_blue_facingRight.png",
-            "../../img/games/BusGame/Cars/car_darkBlue_facingRight.png",
-            "../../img/games/BusGame/Cars/car_red_facingRight.png"
-            ],
-            
-            FacingLeft:
-            [
-                "../../img/games/BusGame/Cars/car_grey_facingLeft.png",
-                "../../img/games/BusGame/Cars/car_teal_facingLeft.png",
-                "../../img/games/BusGame/Cars/car_yellow_facingLeft.png"
-            ]
+            FacingRight: [],
+            FacingLeft: []
         },
         
         Buses: 
         {
-            FacingRight:
-            [
-            "../../img/games/BusGame/Buses/bus_green_facingRight.png",
-            "../../img/games/BusGame/Buses/bus_yellow_facingRight.png",
-            ],
-            
-            FacingLeft:
-            [
-                "../../img/games/BusGame/Buses/bus_blue_facingLeft.png",
-                "../../img/games/BusGame/Buses/bus_red_facingLeft.png",
-            ]
+            FacingRight: [],
+            FacingLeft: []
         }
     };
 
@@ -54,8 +34,18 @@ export function BusGame(storyObj, signLang, writtenLang)
     //add score area to header
     ExtendHeader();
     
+    //get all car and bus images
+    images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Blue_Animation_Left/Frames/"));
+    images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Red_Animation_Left/Frames/"));
+    images.Buses.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Animation_Right/Frames/"));
+    images.Buses.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Yellow_Animation_Right/Frames/"));
+    
+    
     //build out lanes and add cars
     BuildLanes();
+    BuildBus("FacingLeft", "#top .inner");
+    BuildBus("FacingRight", "#bottom .inner");
+    /*
     BuildCar("FacingLeft", "#top .inner");
     BuildBus("FacingLeft", "#top .inner");
     BuildCar("FacingLeft", "#top .inner");
@@ -80,10 +70,28 @@ export function BusGame(storyObj, signLang, writtenLang)
     BuildCar("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");
     BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
+    BuildCar("FacingRight", "#bottom .inner");*/
 }
 
 /* ----------------------- Data parsing ----------------------- */
+function GetImagesFromFolder(folder)
+{
+    var files = [];
+    
+    $.ajax({
+        url : folder,
+        async: false, //to ensure all data points have been added before we continue
+        success: function (data) {
+            
+            data.forEach(function(datapoint)
+            {
+                var path = "../.." + folder.toString() + "" + datapoint.toString();
+                files.push(path);
+            }); 
+        }
+    });
+    return files;
+}
 
 
 
@@ -121,7 +129,7 @@ function BuildCar(dir, lane)
     car = car[Math.floor(Math.random() * (car.length))]; //get random car from the array
     
     //build car html
-    var carHTML = "<div class = \"car\">";
+    var carHTML = "<div class = \"vehicle car\">";
     carHTML += "<img src = \"" + car + "\">"
     carHTML += "</div>";
     
@@ -138,12 +146,52 @@ function BuildBus(dir, lane)
 {
     //chose image to use for bus
     var bus = images.Buses[dir]; //get cars at the proper facing dir
-    bus = bus[Math.floor(Math.random() * (bus.length))]; //get random car from the array
+    bus = bus[Math.floor(Math.random() * (bus.length))]; //get random car from array
+    bus = bus[0]; //get first frame as the still photo
     
     //build car html
-    var busHTML = "<div class = \"bus\">";
-    busHTML += "<img src = \"" + bus + "\">"
-    busHTML += "</div>";
+    var busHTML = "<div class = \"vehicle bus\">";
+    busHTML += "<img src = \"" + bus + "\">";
+    busHTML += "<div class = \"windows\">";
+    
+    //add html for each window
+    for(var i = 0; i < 3; i++)
+    {
+        //build window - acount for extra spacing betwen special case windows
+        if(dir == "FacingLeft" && i === 0) //first window on facing left bus
+        {
+            busHTML += "<div class = \"window first\">";
+        }
+        else if(dir == "FacingRight" && i === 2) //last widnow on facing right bus
+        {
+            busHTML += "<div class = \"window last\">";
+        }
+        else //default
+        {
+            busHTML += "<div class = \"window\">";
+        }
+        
+        var mediaType = Math.floor(Math.random() * 3); // 0 - 3
+        switch(mediaType)
+        {
+            case 0: //word
+                busHTML += "<span></span>"; 
+            break;
+
+            case 1: //video
+                busHTML += "<video></video>";
+            break;
+
+            case 2: //no media
+                busHTML += "<div></div>";
+            break;
+        } 
+        
+        busHTML += "</div>"; //close window div 
+    }
+    
+    busHTML += "</div>"; //close windows div 
+    busHTML += "</div>"; //close bus div
     
     //add car to lane
     $(lane).append(busHTML);
