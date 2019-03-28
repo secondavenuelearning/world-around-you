@@ -5,6 +5,10 @@ export default BusGame
 /* ----------------------- Global Variables ----------------------- */
 var storyData;
 var score = 0;
+var firstClick = false;
+
+var firstSelected;
+var secondSelected;
 var totalMatches;
 var images = 
     {
@@ -72,10 +76,12 @@ export function BusGame(storyObj, sign, written, terms)
     
     //build out lanes and add cars
     BuildLanes();
+
     
     //start first round
     NextRound();
     RoundTransition();
+
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -238,9 +244,11 @@ function BuildBus(dir, lane)
 
         switch(mediaType)
         {
+
             case "txt": //term
                 var id = term + "Txt";
-                busHTML += "<p><span id = \"" + id + "\">" + term + "</span></p>"; 
+                busHTML += "<span id = \"" + id + "\">" + term + "</span>"; 
+
             break;
 
             case "vid": //video
@@ -250,7 +258,7 @@ function BuildBus(dir, lane)
             break;
 
             case "none": //no media
-                busHTML += "<div></div>";
+                busHTML += "<div id = \"none\"></div>";
             break;
         } 
         
@@ -272,6 +280,49 @@ function BuildBus(dir, lane)
     $(lane).css('width', laneWidth);//*/
 }
 
+function SetupWindowConnections(){
+    var windows = document.getElementsByClassName("window");
+    console.log(windows[0]);
+    for(var x  = 0; x < windows.length; x++){
+        windows[x].onclick = function(e) 
+        {
+            if(firstClick == false){
+                console.log("first");
+                firstSelected = e.target.parentElement;
+                console.log(e.target.parentElement);
+                firstClick = true;
+                firstSelected.classList.remove("hidden");
+            }
+            else if(firstClick==true){
+                secondSelected = e.target.parentElement;
+                  console.log(firstSelected.firstChild.id);
+                if(firstSelected.firstChild.id.substr(0,firstSelected.firstChild.id.length-3) == secondSelected.firstChild.id.substr(0,secondSelected.firstChild.id.length-3)){
+                    secondSelected.classList.remove("hidden");
+                   
+                    firstClick = false;
+                    if(firstSelected.firstChild.id == "none"){
+                        
+                    }
+                    else{
+                              score++;
+                    document.getElementById("current").innerHTML = score;
+                    }
+                     secondSelected = null;
+                    firstSelected = null;
+              
+                }
+                else{
+                    firstSelected.classList.add("hidden");
+                    firstClick = false;
+                }
+               
+              
+            }
+           
+        }
+    }
+}
+
 /* ----------------------- Game Loop ----------------------- */
 function NextRound()
 {      
@@ -286,7 +337,7 @@ function NextRound()
     BuildBus("FacingLeft", "#top .inner"); //buses hold terms
     BuildBus("FacingRight", "#bottom .inner"); //buses hold terms
     BuildCar("FacingRight", "#bottom .inner");
-    
+    SetupWindowConnections();
     //add looping to the video
     var vids = $(".window video").toArray();
     vids.forEach(function(vid)
