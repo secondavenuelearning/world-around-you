@@ -25,6 +25,17 @@ var termList = ["world", "sea", "sky", "huge"]; //hard values for testing
 var signLang;
 var writtenLang;
 
+var round = 
+[
+    //round data will be structured as such:
+    
+    //  { 
+    //    "term": mediaType
+    //  },
+    // --repeats 2x per term
+    // --once for each mediaType ("vid" or "txt")
+];
+
 
 /* ----------------------- Constructor ----------------------- */
 export function BusGame(storyObj, sign, written)
@@ -35,7 +46,7 @@ export function BusGame(storyObj, sign, written)
     writtenLang = written;
     
     //define how many matches the user will need this round
-    totalMatches = (Math.floor(Math.random() * 10) + 1); //number between 0 and 10
+    totalMatches = (termList.length); //number between 0 and 10
     
     //add score area to header
     ExtendHeader();
@@ -53,7 +64,8 @@ export function BusGame(storyObj, sign, written)
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
     
-    
+    //generate round data
+    DefineRound(2);
     
     
     //build out lanes and add cars
@@ -108,7 +120,34 @@ function GetImagesFromFolder(folder)
     return files;
 }
 
-
+function DefineRound(numTerms)
+{
+    //grab random terms from term list until we get the num needed this round
+    for(var i = 0; i < numTerms; i++)
+    {
+        //get term
+        var termIndex = Math.floor(Math.random() * termList.length);
+        var term = termList[termIndex];
+        
+        //define term in round
+        vid = { [term]: "vid"};
+        txt = { [term]: "txt"};
+        
+        round.push(vid);
+        round.push(txt);
+        
+        //remove term from master termlist so we dont get repeats
+        termList.splice(termIndex, 1);
+        console.log(termList);
+    }
+    
+    //fill blank windows
+    if(numTerms < 3) //will always be 2 if not 3
+    {
+        round.push({BlankFillerTerm: "none"});
+        round.push({BlankFillerTerm: "none"});
+    }
+}
 
 /* ----------------------- Building Objects ----------------------- */
 function ExtendHeader()
@@ -188,26 +227,32 @@ function BuildBus(dir, lane)
         }
         
         //get term and relvant data
-        var term = termList[Math.floor(Math.random() * termList.length)];
-        
-        var mediaType = Math.floor(Math.random() * 3); // 0 - 3
+        var randIndex = Math.floor(Math.random() * round.length); //random index of item
+        var roundItem = round[randIndex]; //get item at index
+        var term = Object.keys(roundItem); //should only be one so key is the term
+        var mediaType = roundItem[term]; //media is value of the key(term)
+
+
         switch(mediaType)
         {
-            case 0: //term
-                var id = term + "Trm";
+            case "txt": //term
+                var id = term + "Txt";
                 busHTML += "<p><span id = \"" + id + "\">" + term + "</span></p>"; 
             break;
 
-            case 1: //video
+            case "vid": //video
                 var id = term + "Vid";
                 var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
                 busHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
-            case 2: //no media
+            case "none": //no media
                 busHTML += "<div></div>";
             break;
         } 
+        
+        //remove used term from roundlist
+        round.splice(randIndex, 1);
         
         busHTML += "</div>"; //close window div 
     }
