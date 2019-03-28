@@ -58,52 +58,34 @@ export function BusGame(storyObj, sign, written)
     
     //build out lanes and add cars
     BuildLanes();
-    BuildBus("FacingLeft", "#top .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    /*
     BuildCar("FacingLeft", "#top .inner");
     BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    
-    
     BuildBus("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");*/
     
     //add looping to the video
-    var termData = storyData[1].glossary;
-    termData = termData[writtenLang];
-    
-    var vids = $(".window video").get();
-    var vidIds = [];
+    var vids = $(".window video").toArray();
     vids.forEach(function(vid)
     {
         //get term
         var term = vid.id.toString();
-        term = term.substring(0, term.length - 4);
+        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
+        console.log(term);
+        
+        //get term data
+         var termData = storyData[1].glossary;
+        termData = termData[writtenLang];
+        termData = termData[term].video;
+        termData = termData[signLang];
+        
         
         //add looping
-        LoopVideoClip(vid.id, )
+        LoopVideoClip(vid.id, termData.start, termData.end);
     });
+    
+    //animate
+    Animate("#bottom .car img", images.Cars.FacingRight[0]);
+    Animate("#bottom .bus img", images.Buses.FacingRight[1]);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -170,10 +152,10 @@ function BuildCar(dir, lane)
     //add car to lane
     $(lane).append(carHTML);
     
-    //update lane width
+    /*update lane width
     var laneWidth = $(lane).width();
     laneWidth += 600;
-    $(lane).css('width', laneWidth);
+    $(lane).css('width', laneWidth); //*/
 }
 
 function BuildBus(dir, lane)
@@ -194,15 +176,15 @@ function BuildBus(dir, lane)
         //build window - acount for extra spacing betwen special case windows
         if(dir == "FacingLeft" && i === 0) //first window on facing left bus
         {
-            busHTML += "<div class = \"window first\">";
+            busHTML += "<div class = \"window  hidden first\">";
         }
         else if(dir == "FacingRight" && i === 2) //last widnow on facing right bus
         {
-            busHTML += "<div class = \"window last\">";
+            busHTML += "<div class = \"window hidden last\">";
         }
         else //default
         {
-            busHTML += "<div class = \"window\">";
+            busHTML += "<div class = \"window hidden\">";
         }
         
         //get term and relvant data
@@ -213,7 +195,7 @@ function BuildBus(dir, lane)
         {
             case 0: //term
                 var id = term + "Trm";
-                busHTML += "<p><span id = \"" + id + "\">Huge</span></p>"; 
+                busHTML += "<p><span id = \"" + id + "\">" + term + "</span></p>"; 
             break;
 
             case 1: //video
@@ -236,18 +218,19 @@ function BuildBus(dir, lane)
     //add bus to lane
     $(lane).append(busHTML);
     
-    //update lane width
+    /*update lane width
     var laneWidth = $(lane).width();
     laneWidth += 1080;
-    $(lane).css('width', laneWidth);
+    $(lane).css('width', laneWidth);//*/
 }
 
 /* ----------------------- Game Loop ----------------------- */
 
 /* ----------------------- Helper Functions ----------------------- */
-function LoopVideoClip(videoContainer, start, end)
+function LoopVideoClip(videoID, start, end)
 {
-    videoContainer.src = video + "#t="+start+","+end;
+    var videoContainer = document.getElementById(videoID)
+    videoContainer.src += "#t="+start+","+end;
     videoContainer.addEventListener('loadedmetadata', function()
     {
         if(videoContainer.currentTime < start){
@@ -261,4 +244,27 @@ function LoopVideoClip(videoContainer, start, end)
             }
         }
     }, false);
+}
+
+function Animate(imgId, frames)
+{
+    //set rate
+    var rate = setInterval(nextFrame, 60);
+    var frame = 0;
+    
+    function nextFrame()
+    {
+        if(frame >= 59)
+        {
+            //clearInterval(rate);
+            frame = 0;
+        }
+        else
+        {
+            //change source of img to next frame
+            frame++;
+            
+            $(imgId)[0].src = frames[frame];
+        }
+    }
 }
