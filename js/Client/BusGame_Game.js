@@ -1,10 +1,11 @@
 import _ from 'underscore';
+import html from 'html/Client/BusGame_Directions.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default BusGame
 
 /* ----------------------- Global Variables ----------------------- */
 var storyData;
-var score = 0;
+var score = 2;
 var firstClick = false;
 
 var firstSelected;
@@ -80,8 +81,6 @@ export function BusGame(storyObj, sign, written, terms)
     
     //start first round
     NextRound();
-    RoundTransition();
-
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -306,6 +305,7 @@ function SetupWindowConnections(){
                     else{
                               score++;
                     document.getElementById("current").innerHTML = score;
+                        WinScreen();
                     }
                      secondSelected = null;
                     firstSelected = null;
@@ -360,19 +360,67 @@ function NextRound()
 }
 
 function RoundTransition()
-{
-    //move vehicles
-    /*MoveAndAnimate("#bottom .car", 1500, "Left", images.Cars.FacingRight[0]);
-    MoveAndAnimate("#bottom .bus", 1500, "Left", images.Buses.FacingRight[1]);
-    MoveAndAnimate("#top .car", -1500, "Right", images.Cars.FacingLeft[0]);
-    MoveAndAnimate("#top .bus", -1500, "Right", images.Buses.FacingLeft[0]);*/
-    
-    Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
+{   
      window.requestAnimationFrame(function(timestamp)
     {
-        //Move(timestamp, '#bottom .vehicle', null, "Right", 1000);
-        //Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
+        Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
+        Animate("#top .bus img", images.Buses.FacingLeft[0], null);
+        Animate("#bottom .car img", images.Cars.FacingRight[0], null);
+        Animate("#top .car img", images.Cars.FacingLeft[1], null);
+         
+        Move(timestamp, '#bottom .vehicle', null, "Right", 2000);
+        Move(timestamp, '#top .vehicle', null, "Left", -2000);
     });
+}
+
+function WinScreen()
+{
+    if(score === totalMatches)
+    {
+        //change to win screen
+        $('main').html(html);
+        
+        //clear data of this script
+        storyData = null;
+        score = 0;
+        firstClick = false;
+
+        firstSelected = null;
+        secondSelected = null;
+        totalMatches = null;
+        images = 
+        {
+            Cars: 
+            {
+                FacingRight: [],
+                FacingLeft: []
+            },
+
+            Buses: 
+            {
+                FacingRight: [],
+                FacingLeft: []
+            }
+        };
+
+        termList = []; //hard values for testing
+        signLang = null;
+        writtenLang = null;
+
+        roundorder = null;
+        round = 
+        [
+            //round data will be structured as such:
+
+            //  { 
+            //    "term": mediaType
+            //  },
+            // --repeats 2x per term
+            // --once for each mediaType ("vid" or "txt")
+        ];
+
+        stopAnimations = false; //bool for forcing animations to stop
+    }
 }
 
 
