@@ -21,10 +21,11 @@ var images =
         }
     };
 
-var termList = ["world", "sea", "sky", "huge"]; //hard values for testing
+var termList = []; //hard values for testing
 var signLang;
 var writtenLang;
 
+var roundorder;
 var round = 
 [
     //round data will be structured as such:
@@ -36,16 +37,20 @@ var round =
     // --once for each mediaType ("vid" or "txt")
 ];
 
+var stopAnimations = false; //bool for forcing animations to stop
+
 
 /* ----------------------- Constructor ----------------------- */
-export function BusGame(storyObj, sign, written)
+export function BusGame(storyObj, sign, written, terms)
 {
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
     writtenLang = written;
+    termList = terms;
     
     //define how many matches the user will need this round
+    roundOrder = createCountList(termList);
     totalMatches = (termList.length); //number between 0 and 10
     
     //add score area to header
@@ -64,40 +69,16 @@ export function BusGame(storyObj, sign, written)
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
     
-    //generate round data
-    DefineRound(2);
-    
     
     //build out lanes and add cars
     BuildLanes();
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
     
-    //add looping to the video
-    var vids = $(".window video").toArray();
-    vids.forEach(function(vid)
-    {
-        //get term
-        var term = vid.id.toString();
-        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
-        console.log(term);
-        
-        //get term data
-         var termData = storyData[1].glossary;
-        termData = termData[writtenLang];
-        termData = termData[term].video;
-        termData = termData[signLang];
-        
-        
-        //add looping
-        LoopVideoClip(vid.id, termData.start, termData.end);
-    });
+    //start first round
+    NextRound();
     
     //animate
-    Animate("#bottom .car img", images.Cars.FacingRight[0]);
-    Animate("#bottom .bus img", images.Buses.FacingRight[1]);
+    //Animate("#bottom .car img", images.Cars.FacingRight[0]);
+    //Animate("#bottom .bus img", images.Buses.FacingRight[1]);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -118,6 +99,29 @@ function GetImagesFromFolder(folder)
         }
     });
     return files;
+}
+
+function createCountList(terms) {
+    var values = terms.length;
+    var order = [];
+    if ((values % 3) == 2) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+        order.push(2);
+    } else if ((values % 3) == 1) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+        order[order.length - 1] = 2;
+        order.push(2);
+    } else if ((values % 3) == 0) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+    }
+   
+    return order;
 }
 
 function DefineRound(numTerms)
@@ -270,6 +274,40 @@ function BuildBus(dir, lane)
 }
 
 /* ----------------------- Game Loop ----------------------- */
+function NextRound()
+{
+    //generate round data
+    var randIndex = Math.floor(Math.random() * roundOrder.length);
+    var roundLength = roundOrder[randIndex];
+    DefineRound(roundLength);
+    roundOrder.splice(randIndex, 1);
+    
+    //builds vehicles for this round
+    BuildCar("FacingLeft", "#top .inner");
+    BuildBus("FacingLeft", "#top .inner"); //buses hold terms
+    BuildBus("FacingRight", "#bottom .inner"); //buses hold terms
+    BuildCar("FacingRight", "#bottom .inner");
+    
+    //add looping to the video
+    var vids = $(".window video").toArray();
+    vids.forEach(function(vid)
+    {
+        //get term
+        var term = vid.id.toString();
+        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
+        console.log(term);
+        
+        //get term data
+         var termData = storyData[1].glossary;
+        termData = termData[writtenLang];
+        termData = termData[term].video;
+        termData = termData[signLang];
+        
+        
+        //add looping
+        LoopVideoClip(vid.id, termData.start, termData.end);
+    });
+}
 
 /* ----------------------- Helper Functions ----------------------- */
 function LoopVideoClip(videoID, start, end)
@@ -301,8 +339,11 @@ function Animate(imgId, frames)
     {
         if(frame >= 59)
         {
-            //clearInterval(rate);
             frame = 0;
+        }
+        else if(stopAnimations)
+        {
+            clearInterval(rate);
         }
         else
         {
