@@ -3,3 +3,4 @@ jspm_packages/
 js/Server/Settings.js
 session-store.db
 logs/
+uploads/

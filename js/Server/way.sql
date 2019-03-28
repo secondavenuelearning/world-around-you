@@ -3,10 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2019 at 03:44 PM
+-- Generation Time: Mar 28, 2019 at 02:28 PM
 -- Server version: 5.6.17
 -- PHP Version: 7.1.9
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -199,7 +200,7 @@ CREATE TABLE `user` (
   `password` varchar(256) NOT NULL,
   `firstname` varchar(100) DEFAULT NULL,
   `lastname` varchar(100) DEFAULT NULL,
-  `usertypeid` int(11) UNSIGNED NOT NULL,
+  `usertypeid` int(11) UNSIGNED DEFAULT NULL,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -347,12 +348,12 @@ ALTER TABLE `title`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `username` (`username`),
   ADD KEY `email` (`email`),
   ADD KEY `password` (`password`),
   ADD KEY `usertypeid` (`usertypeid`),
   ADD KEY `firstname` (`firstname`),
-  ADD KEY `lastname` (`lastname`);
+  ADD KEY `lastname` (`lastname`),
+  ADD KEY `username` (`username`);
 
 --
 -- Indexes for table `usertype`
@@ -523,8 +524,8 @@ ALTER TABLE `story_to_tag`
 -- Constraints for table `story_to_user`
 --
 ALTER TABLE `story_to_user`
-  ADD CONSTRAINT `story_to_user_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`),
-  ADD CONSTRAINT `story_to_user_ibfk_1` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`);
+  ADD CONSTRAINT `story_to_user_ibfk_1` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`),
+  ADD CONSTRAINT `story_to_user_ibfk_2` FOREIGN KEY (`userId`) REFERENCES `user` (`id`);
 
 --
 -- Constraints for table `story_to_writtenlanguage`
@@ -557,4 +558,5 @@ ALTER TABLE `user`
 --
 ALTER TABLE `view`
   ADD CONSTRAINT `view_ibfk_1` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`);
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;

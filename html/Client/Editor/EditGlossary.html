@@ -4,7 +4,7 @@
 		<h2>Written Language</h2>
 		<div id="written-select">
 			<% _.each(story.metadata.writtenLanguages, function(language){ %>
-				<div><button class="language-select-button <%- language == currentWrittenLanguage ? 'active' : '' %>" lang-type="written"><%- language %></button></div>
+				<div><button class="written-language-select-button glossary-select-button <%- language == currentWrittenLanguage ? 'active' : '' %>" select-type="currentWrittenLanguage" select-value="<%- language %>"><%- language %></button></div>
 			<% }) %>
 		</div>
 	</div>
@@ -14,19 +14,19 @@
 				<h2>Glossary Term</h2>
 				<div id="term-select">
 					<% if(page.glossary && page.glossary[currentWrittenLanguage]){
-						_.each(page.glossary[currentWrittenLangauge], function(termData, term){ 
+						_.each(page.glossary[currentWrittenLanguage], function(termData, term){ 
 							if(!currentGlossaryTerm || currentGlossaryTerm == '') currentGlossaryTerm = term;
 					%>
-							<div class="term <%- currentGlossaryTerm == term ? 'active' : '' %>" term-name="<%- term %>">
+							<div class="term" term-name="<%- term %>">
+								<button class="term-button glossary-select-button <%- currentGlossaryTerm == term ? 'active' : '' %>" select-type="currentGlossaryTerm" select-value="<%- term %>"><%- term %></button>
 								<button class="term-delete-button delete-button" term-name="<%- term %>"></button>
-								<button class="term-button" term-name="<%- term %>"><%- term %></button>
 							</div>
 						<% });
 					} %>
 					<button id="term-add-button" class="add-text-button">+</button>
 				</div>
 			</div>
-			<div class="third">
+			<div id="term-edit-container" class="third">
 				<textarea id="term-definition-input"><%= currentGlossaryTermData.definition %></textarea>
 			</div>
 			<div class="third">
@@ -39,27 +39,27 @@
 			</div>
 		</div>
 		<div>
-			<div class="third">
+			<div id="sign-language-select-container" class="third">
 				<h2>Sign Language</h2>
 				<div id="sign-select">
 					<% _.each(story.metadata.signLanguages, function(language){ 
 						if(!page.video || !page.video[language]) return;
 					%>
-						<div><button class="language-select-button <%- language == currentSignLanguage ? 'active' : '' %> <%- currentGlossaryTermData.video && currentGlossaryTermData.video[language] ? 'added' : '' %>" lang-type="sign"><%- language %></button></div>
+						<div><button class="sign-language-select-button glossary-select-button <%- language == currentSignLanguage ? 'active' : '' %> <%- currentGlossaryTermData.video && currentGlossaryTermData.video[language] ? 'added' : '' %>" select-type="currentSignLanguage" select-value="<%- language %>"><%- language %></button></div>
 					<% }) %>
 				</div>
 			</div>
-			<div class="third">
-				<div id="glossary-video-container">
+			<div id="glossary-video-container" class="two-thirds">
+				<div id="glossary-video-player-container">
 					<video id="glossary-video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
 					<div id="glossary-video-controller">
-						<div class="selected-track"></div>
-						<div class="start-knob"></div>
-						<div class="end-knob"></div>
+						<div id="track"></div>
+						<div id="selected-track"></div>
+						<% var termVideo = currentGlossaryTermData.video && currentGlossaryTermData.video[currentSignLanguage] ? currentGlossaryTermData.video[currentSignLanguage] : {}; %>
+						<div id="start-knob" class="video-knob" knob-type="start"><div class="knob-time" style="display: none;"><%- termVideo.start ? termVideo.start + 's' : 'n/a' %></div></div>
+						<div id="end-knob" class="video-knob" knob-type="end"><div class="knob-time" style="display: none;"><%- termVideo.end ? termVideo.end + 's' : 'n/a' %></div></div>
 					</div>
 				</div>
-			</div>
-			<div class="third">
 			</div>
 		</div>
 	</div>

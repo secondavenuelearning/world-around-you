@@ -1,6 +1,7 @@
 import 'style/StoryPreview.css!';
 import _ from 'underscore';
 import html from 'html/Client/StoryPreview.html!text';
+import LanguageSelector from 'js/Client/LanguageSelector';
 
 var index = 0,
 	template = _.template(html);
@@ -45,6 +46,7 @@ StoryPreview.prototype.appendTo = function(elementOrId) {
 	// append the story preview element
 	$elementOrId.append(this.$element);
 	resizePrviews();
+    LanguageSelector.updateLanguageDisplay();
 };
 
 export default StoryPreview;

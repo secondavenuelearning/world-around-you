@@ -45,9 +45,7 @@ const EDITORPAGES = [
 
 var storyId,
 	story,
-	editorPageIndex = 0,
-	writtenLanguages,
-	signLanguages;
+	editorPageIndex = 0;
 
 
 var interval = 0;
@@ -78,7 +76,7 @@ $(document).ready(function () {
 		else{
 			$.ajax({
 				method: 'post',
-				url: './api/story'
+				url: '/api/story'
 			}).done((_storyId) => {
 				storyId = parseInt(_storyId);
 				return resolve();
@@ -122,30 +120,32 @@ $(document).ready(function () {
 	});
 });
 
-function renderEditorContent(){
+function renderEditorContent(renderData){
 	if(!story) return;
 
 	$('#editor-content').html('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 
 	if(EDITORPAGES[editorPageIndex] == 'language'){
-		renderLanguagePage();
+		renderLanguagePage(renderData);
 	}
 	if(EDITORPAGES[editorPageIndex] == 'cover'){
-		renderCoverPage();
+		renderCoverPage(renderData);
 	}
 	if(EDITORPAGES[editorPageIndex] == 'metadata'){
-		renderMetadataPage();
+		renderMetadataPage(renderData);
 	}
 	if(EDITORPAGES[editorPageIndex] == 'pages'){
-		renderPagesPage();
+		renderPagesPage(renderData);
 	}
 	if(EDITORPAGES[editorPageIndex] == 'publish'){
-		renderPublishPage();
+		renderPublishPage(renderData);
 	}
 }
 function renderLanguagePage(){
 
-	var promises = [];
+	let promises = [],
+		writtenLanguages,
+		signLanguages;
 
 	promises.push(new Promise((resolve, reject) => {
 		$.ajax({
@@ -218,9 +218,7 @@ function renderLanguagePage(){
 
 			$('.add-language').on('click', (evt) => {
 				let type = $(evt.currentTarget).attr('lang-type');
-				RenderAddText($(evt.currentTarget).parent(), type);
-
-				$('.save-text').on('click', () => {
+				RenderAddText($(evt.currentTarget).parent(), type, null, () => {
 					var language = $('.add-text-input').val();
 					if(language == '') {
 						$('.add-text-container').remove();	
@@ -255,8 +253,8 @@ function renderLanguagePage(){
 				};
 
 				$.ajax({
-					url: 'api/story/languages',
 					method: 'post',
+					url: 'api/story/languages',
 					data,
 				}).done((_story) => {
 					if(_story){
@@ -269,7 +267,7 @@ function renderLanguagePage(){
 				}).fail((err) => {
 					console.error(err);
 					return alert('[PH] Error check the console');
-				})
+				});
 			});
 		}
 		ReRender();
@@ -277,7 +275,8 @@ function renderLanguagePage(){
 }
 function renderCoverPage(){
 	let coverImage = story.coverimage,
-		author = story.author;
+		author = story.author,
+		newImageFile;
 
 	var ReRender = function(unsavedChanges){
 		$('#editor-content').html(coverTemplate({
@@ -297,13 +296,14 @@ function renderCoverPage(){
 			var reader = new FileReader();
 
 			reader.onload = function(){
+				newImageFile = file;
 				coverImage = reader.result;
 				ReRender(true);
 			}
 			reader.readAsDataURL(file);
 		});
 
-		$('#author-input').on('keydown', (evt) => {
+		$('#author-input').on('keydown keyup', (evt) => {
 			var _author = $('#author-input').val();
 			if(author == _author) return;
 
@@ -313,6 +313,45 @@ function renderCoverPage(){
 			$('#save-cover').prop('disabled', false);
 			unsavedChanges = true;
 		});
+
+		$('.save-button').on('click', () => {
+			var uploadPromise = new Promise((resolve, reject) => {
+				if(newImageFile){
+					UploadFile(newImageFile, `ci-${storyId}`).then((path) => {
+						coverImage = path
+						resolve();
+					});
+				}
+				else{
+					resolve();
+				}
+			});
+
+			uploadPromise.then(() => {
+				let data = {
+					id: storyId,
+					author,
+					coverImage
+				};
+
+				$.ajax({
+					method: 'post',
+					url: 'api/story/cover',
+					data
+				}).done((_story) => {
+					if(_story){
+						story = _story;
+						ReRender();
+					}
+					else{
+						alert('[PH] something went wrong.')
+					}
+				}).fail((err) => {
+					console.error(err);
+					return alert('[PH] Error check the console');
+				});
+			});
+		})
 	}
 	ReRender();
 }
@@ -323,34 +362,35 @@ function renderMetadataPage(){
 		return;
 	}
 
+	let promises = [],
+		genres,
+		tags;
 
-	var promises = [];
+	promises.push(new Promise((resolve, reject) => {
+		$.ajax({
+			method: 'get',
+			url: `./api/genres`
+		}).done((_genres) => {
+			genres = _genres;
+			resolve();
+		}).fail((err) => {
+			console.error(err);
+			return alert('[PH] Error check the console');
+		});
+	}));
 
-	// promises.push(new Promise((resolve, reject) => {
-	// 	$.ajax({
-	// 		method: 'get',
-	// 		url: `./api/writtenlanguages`
-	// 	}).done((_writtenLanguages) => {
-	// 		writtenLanguages = _writtenLanguages;
-	// 		resolve();
-	// 	}).fail((err) => {
-	// 		console.error(err);
-	// 		return alert('[PH] Error check the console');
-	// 	});
-	// }));
-
-	// promises.push(new Promise((resolve, reject) => {
-	// 	$.ajax({
-	// 		method: 'get',
-	// 		url: `./api/signlanguages`
-	// 	}).done((_signLanguages) => {
-	// 		signLanguages = _signLanguages;
-	// 		resolve();
-	// 	}).fail((err) => {
-	// 		console.error(err);
-	// 		return alert('[PH] Error check the console');
-	// 	});
-	// }));
+	promises.push(new Promise((resolve, reject) => {
+		$.ajax({
+			method: 'get',
+			url: `./api/tags`
+		}).done((_tags) => {
+			tags = _tags;
+			resolve();
+		}).fail((err) => {
+			console.error(err);
+			return alert('[PH] Error check the console');
+		});
+	}));
 
 	Promise.all(promises).then(() => {
 		if(EDITORPAGES[editorPageIndex] != 'metadata') return;
@@ -401,17 +441,65 @@ function renderMetadataPage(){
 			});
 
 			$('.add-text-button').on('click', (evt) => {
-				let type = $(evt.currentTarget).attr('data-type');
-				RenderAddText($(evt.currentTarget).parent(), type);
+				let type = $(evt.currentTarget).attr('data-type'),
+					autoComplete = [];
+				var	typeList = type == 'genres' ? genres : tags;
 
-				$('.save-text').on('click', function(){
+					_.each(typeList, (acObj) => {
+						if(acObj.language.toLowerCase() == currentWrittenLanguage)
+							autoComplete.push(acObj.name);
+					});
+
+				RenderAddText($(evt.currentTarget).parent(), type, autoComplete, (el) => {
 					let value = $('.add-text-input').val();
-					
-					if(value != ''){
+
+					if(value == '') return;
+
+					let data = {
+						name: value,
+						language: currentWrittenLanguage
+					};
+
+					$.ajax({
+						method: 'post',
+						url: `/api/${type == 'genres' ? 'genre' : 'tag'}`,
+						data
+					}).then((valueId) => {
+						data.id = valueId;
+						typeList[valueId] = data;
+
 						if(!metadata[type][currentWrittenLanguage]) metadata[type][currentWrittenLanguage] = [];
 						metadata[type][currentWrittenLanguage].push(value);
+
+						ReRender(true);
+
+					}).fail((err) => {
+						console.error(err);
+					})
+				});
+			});
+
+			$('.save-button').on('click', () => {
+				let data = {
+					id: storyId,
+					metadata
+				};
+
+				$.ajax({
+					method: 'post',
+					url: '/api/story/metadata',
+					data
+				}).done((_story) => {
+					if(_story){
+						story = _story;
+						ReRender();
 					}
-					ReRender(true);
+					else{
+						alert('[PH] something went wrong.')
+					}
+				}).fail((err) => {
+					console.error(err);
+					return alert('[PH] Error check the console');
 				});
 			});
 
@@ -419,7 +507,7 @@ function renderMetadataPage(){
 		ReRender();
 	});
 }
-function renderPagesPage(){
+function renderPagesPage(renderData){
 	if(!story.metadata || !story.metadata.writtenLanguages || !story.metadata.signLanguages){
 		editorPageIndex = 0;
 		renderEditorContent();
@@ -428,11 +516,13 @@ function renderPagesPage(){
 
 	// Create the variables needed for rendering each page
 	var data = story.data ? JSON.parse(JSON.stringify(story.data)) : [],
+		pageId = data.length,
 		currentPageIndex = 0,
 		currentWrittenLanguage = story.metadata.writtenLanguages[0],
 		currentSignLanguage = story.metadata.signLanguages[0],
 		currentPageContent = 'written',
-		currentGlossaryTerm = '';
+		currentGlossaryTerm = '',
+		loopIndex;
 
 
 	var ReRender = function(unsavedChanges){
@@ -460,6 +550,57 @@ function renderPagesPage(){
 			RenderPageContent();
 		});
 
+		$('.save-button').on('click', () => {
+			var uploadPromises = [];
+
+			_.each(data, (page, index) => {
+				if(page.imageFile){
+					uploadPromises.push(new Promise((resolve, reject) => {
+						UploadFile(page.imageFile, `pi-${storyId}-${page.id}`).then((path) =>{
+							page.image = path;
+							delete page.imageFile;
+							resolve();
+						});
+					}));
+				}
+				if(page.videoFile){
+					_.each(page.videoFile, (file, lang) => {
+						uploadPromises.push(new Promise((resolve, reject) => {
+							UploadFile(file, `pv-${storyId}-${page.id}-${lang}`).then((path) =>{
+								page.video[lang] = path;
+								delete page.videoFile[lang];
+								resolve();
+							});
+						}));
+					});
+				}
+
+				Promise.all(uploadPromises).then(() => {
+					let _data = {
+						id: storyId,
+						data
+					};
+
+					$.ajax({
+						method: 'post',
+						url: '/api/story/data',
+						data: _data
+					}).done((_story) => {
+						if(_story){
+							story = _story;
+							ReRender();
+						}
+						else{
+							alert('[PH] something went wrong.')
+						}
+					}).fail((err) => {
+						console.error(err);
+						return alert('[PH] Error check the console');
+					});
+				});
+			});
+		});
+
 		// create a default page or add any existing pages to the story
 		if(data.length == 0){
 			AddPage();
@@ -469,25 +610,34 @@ function renderPagesPage(){
 				AddPage(page, index);
 			});
 		}
+
+		if(renderData){
+			if(typeof renderData.currentPageIndex == 'number')
+				ActivatePage($('.page-preview')[renderData.currentPageIndex]);
+		}
 	}
 
 	// function to add a page an all the associated callbacks
 	var AddPage = function(page, index){
 		// set the page variables if there if none exist and we are creating a new page
 		if(!page){
-			page = {};
+			page = {
+				id: pageId++
+			};
 			index = data.length;
 			data.push(page);
 		}
 
 		// add the page preview button
-		let $el = AddPagePreview($('.add-page-button').parent(), page, index, true, () => {
+		let $el = AddPagePreview($('body'), page, index, true, (el) => {
 			if(data.length == 1) return;
 
-			data.splice(index, 1);
+			let _index = parseInt($(el).attr('page-index'));
+			data.splice(_index, 1);
 			$el.remove();
 			ReIndexPages();
 		});
+		$('.add-page-button').parent().before($el);
 
 		// activat the newly added page
 		ActivatePage($el.find('.page-preview')[0]);
@@ -500,7 +650,7 @@ function renderPagesPage(){
 			// re-add the page preview callbacks
 			$('.page-preview').off();
 			$('.page-preview').on('click', (evt) => {
-				ActivatePage($(evt.currentTarget));
+				ActivatePage(evt.currentTarget);
 			});
 		}, 0);
 	}
@@ -561,6 +711,29 @@ function renderPagesPage(){
 				currentSignLanguage,
 				currentGlossaryTerm
 			}));
+			let vid = $('#glossary-video-player')[0];
+			if(vid){
+				vid.ondurationchange = function(){
+					if(!data[currentPageIndex].glossary || !data[currentPageIndex].glossary[currentWrittenLanguage] 
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm] 
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
+					UpdateVideoKnobs();
+				}
+				vid.ontimeupdate = function(){
+					if(!data[currentPageIndex].glossary || !data[currentPageIndex].glossary[currentWrittenLanguage] 
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm] 
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video
+						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
+
+					let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0,
+						endTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end || vid.duration;
+
+					if(vid.currentTime < startTime || vid.currentTime > endTime)
+						vid.currentTime = startTime;
+				}
+
+			}
 		}
 		resizeCover(true);
 
@@ -629,6 +802,127 @@ function renderPagesPage(){
 			reader.readAsDataURL(file);
 		});
 
+		$('.glossary-select-button').on('click', (evt) => { 
+			let $el = $(evt.currentTarget),
+				selectValue = $el.attr('select-value'),
+				selectType = $el.attr('select-Type');
+
+			if(selectType == 'currentWrittenLanguage')
+				currentWrittenLanguage = selectValue;
+			if(selectType == 'currentSignLanguage')
+				currentSignLanguage = selectValue;
+			if(selectType == 'currentGlossaryTerm')
+				currentGlossaryTerm = selectValue;
+
+			RenderPageContent();
+		})
+
+		$('#term-add-button').on('click', (evt) => {
+			RenderAddText(evt.currentTarget, 'glossaryTerm', null, (el) => {
+				if(!data[currentPageIndex].glossary) data[currentPageIndex].glossary = {};
+				if(!data[currentPageIndex].glossary[currentWrittenLanguage]) data[currentPageIndex].glossary[currentWrittenLanguage] = {};
+
+				var term = $('.add-text-input').val();
+				data[currentPageIndex].glossary[currentWrittenLanguage][term] = {
+					name: term
+				};
+				currentGlossaryTerm = term;
+
+				RenderPageContent();
+			});
+		});
+
+
+		$('.video-knob').on('mousedown', (evt) => {
+			if(!currentGlossaryTerm || currentGlossaryTerm == '') return;
+
+			let knob = $(evt.currentTarget),
+				knobType = knob.attr('knob-type'),
+				maxDelta = parseInt($('#glossary-video-controller').width());
+				startPosition = parseInt(knob.css('left')),
+				startX = evt.pageX,
+				video = $('#glossary-video-player')[0];
+
+			$('#glossary-video-controller').append(knob);
+			knob.addClass('dragging');
+			$('body').addClass('dragging');
+			$('.knob-time').fadeIn(500);
+
+			$(document).on('mousemove.drag', (evt) => {
+				let delta = evt.pageX - startX + startPosition,
+					skPos = parseInt($('#start-knob').css('left')),
+					ekPos = parseInt($('#end-knob').css('left'));
+
+				if(knobType == 'start'){
+					delta = delta > 0 ? delta : 0;
+					delta = delta < ekPos ? delta : ekPos - 1;
+				}
+				else{
+					delta = delta > skPos ? delta : skPos + 1;
+					delta = delta < maxDelta ? delta : maxDelta;
+				}
+
+				let deltaPercent = delta / maxDelta;
+
+				let time = Math.round(video.duration * deltaPercent * 10) / 10;
+
+				if(isNaN(time)) return;
+
+				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
+
+				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
+
+				if(knobType == 'start')
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start = time;
+				else
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end = time;
+
+				let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0;
+				video.currentTime = startTime;
+
+				UpdateVideoKnobs();
+
+			});
+
+			$(document).on('mouseup.drag', (evt) => {
+				$(document).off('.drag');
+				knob.removeClass('dragging');
+				$('body').removeClass('dragging');
+				$('.knob-time').fadeOut(500);
+			});
+		});
+
+	}
+
+	var UpdateVideoKnobs = function(){
+		let video = $('#glossary-video-player')[0];
+
+		let duration = video.duration;
+
+		if(isNaN(duration)) return;
+
+		let startPercent, endPercent
+		if(data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start){
+			let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start;
+			startPercent = startTime / duration * 100;
+
+			$('#start-knob .knob-time').html(`${startTime}s`);
+			$('#start-knob').css('left', `${startPercent}%`);
+		}
+		if(data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end){
+			let endTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end;
+			endPercent = endTime / duration * 100;
+
+			$('#end-knob .knob-time').html(`${endTime}s`);
+			$('#end-knob').css('left', `${endPercent}%`);
+		}
+
+		startPercent = startPercent || 0;
+		endPercent = endPercent || 100;
+		$('#selected-track').css('left', `${startPercent}%`);
+		$('#selected-track').css('width', `${endPercent - startPercent}%`);
 	}
 	
 	var RenderWrittenEdit = function(){
@@ -643,55 +937,124 @@ function renderPublishPage(){
 	$('#editor-content').html(publishTemplate({
 		data,
 	}));
+	_.each(data, (page, index) => {
+		$el = AddPagePreview($('#pages'), page, index);
+		$el.on('click', () => {
+			editorPageIndex--;
+			$('#editor-nav-previous').prop('disabled', editorPageIndex == 0);
+			$('#editor-nav-next').prop('disabled', editorPageIndex == EDITORPAGES.length - 1);
+			renderEditorContent({currentPageIndex: index});
+		});
+	});
+
+	$('.save-button').on('click', () => {
+		let data = {
+			id: storyId
+		};
+
+		$.ajax({
+			method: 'post',
+			url: '/api/story/publish',
+			data
+		}).done((_story) => {
+			if(_story){
+				story = _story;
+				$('.save-button').remove();
+				alert('Story Published')
+			}
+			else{
+				alert('[PH] something went wrong.')
+			}
+		}).fail((err) => {
+			console.error(err);
+			return alert('[PH] Error check the console');
+		});
+
+	})
 }
 
-function RenderAddText(beforeElement, dataType, autocompleteValues){
+function RenderAddText(beforeElement, dataType, autocompleteValues, saveCallback){
 	$('.add-text-container').remove();
 
-	$(beforeElement).before(addTextTemplate({
+	var $el = $(addTextTemplate({
 		autocompleteValues,
 		dataType
 	}));
+
+	$(beforeElement).before($el);
+
+	$('.save-text').on('click', (evt) => {
+		if(typeof saveCallback == 'function') saveCallback(evt.currentTarget);
+		$('.add-text-container').remove();
+	});
 
 	$('.cancel-text').on('click', () => {
 		$('.add-text-container').remove();
 	});
 
 	if(autocompleteValues){
-		$('.add-text-input').on('keydown', () => {
+		$('.autocomplete-button').on('click', (evt) => {
+			let value = $(evt.currentTarget).html();
+			$('.add-text-input').val(value);
+			$('.save-text').trigger('click');
+		});
+		$('.autocomplete-container').hide();
+		$('.add-text-input').on('keydown keyup', () => {
 			let value = $('.add-text-input').val();
-
 			if(value == ''){
 				$('.autocomplete-container').hide();
 				return;
 			}
 
 			$('.autocomplete-container').show();
-			$('.autocomplete-button').css('display', 'none');
-			$('autocomplete-button').each((i, el) => {
-				let _value = $(el).val();
+			$('.autocomplete-button').prop('disabled', true);
+			$('.autocomplete-button').each((i, el) => {
+				let _value = $(el).html();
 				var regExp = new RegExp(`^${value}`);
-				if(_value.match(regExp)) $(el).css('display', 'block');
+				if(_value.match(regExp)) $(el).prop('disabled', false);
 			});
 		});
 	}
+
+	$('.add-text-input').focus();
+	return $el;
 }
-function AddPagePreview(beforeElement, page, pageIndex, includeDelete, deleteCallback){
+function AddPagePreview(parent, page, pageIndex, includeDelete, deleteCallback){
 	let $el = $(pagePreviewTemplate({
 		pageIndex,
 		page,
 		includeDelete
 	}));
 
-	$(beforeElement).before($el);
+	$(parent).append($el);
 	resizeCover(true);
 
 	$el.find('.page-delete-button').on('click', (evt) => {
 		if(typeof deleteCallback == 'function')
-			deleteCallback();
+			deleteCallback(evt.currentTarget);
 		else
 			$el.remove();
 	});
 
 	return $el;
+}
+function UploadFile(file, fileName){
+	return new Promise((resolve, reject) => {
+		var fd = new FormData();
+		fd.append('file', file);
+
+		$.ajax({
+			method: 'post',
+			url: `/api/file/${fileName}`,
+	        enctype: 'multipart/form-data',
+	        processData: false,  // Important!
+	        contentType: false,
+			data: fd
+		}).done((result) =>{
+			resolve(result.replace(/\\/, '/'));
+		}).fail((err) => {
+			console.error(err);
+			alert('error in file upload');
+		});
+	});
 }

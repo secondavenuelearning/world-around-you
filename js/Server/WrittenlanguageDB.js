@@ -9,92 +9,77 @@ const pool = mdb.createPool({
 	connectionLimit: Settings.dbPoolConnectionLimit
 });
 
-function WrittenlanguageDB() {
+function WrittenLanguageDB() {
 }
 
-WrittenlanguageDB.prototype.addWrittenLanguage = function(name) {
-    return new Promise(function(resolve,reject) {
-
+WrittenLanguageDB.prototype.add = function(name) {
+    return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
-
 			var query = 'INSERT INTO writtenlanguage (name) VALUES (?)';
 
-		    conn.query(query, [name]).then((res) => {
+		    conn.query(query, [name.toLowerCase()]).then((result) => {
 				conn.end().then(() => {
-					resolve(res.insertId);
-					return;
+					return resolve(result.insertId);
 				});
 		    }).catch(err => {
 				conn.end().then(() => {
-					reject(err);
-					return;
+					return reject(err);
 				});
 		    });
 		}).catch(err => {
-		    reject(err);
-		    return;
+		    return reject(err);
 		});
 
     });
 }
-
-WrittenlanguageDB.prototype.getwrittenlanguage = function(language) {
-
-	return new Promise(function(resolve,reject) {
-
+WrittenLanguageDB.prototype.get = function(name) {
+	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM writtenlanguage WHERE name=?';
 
-			conn.query('SELECT * FROM writtenlanguage WHERE (name="'+language+'")').then((res) => {
-				conn.end();
-				resolve(JSON.stringify(res));
-				return;
+			conn.query(query, [name.toLowerCase()]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result[0]);
+				});
 			}).catch(err => {
-				console.log(err);
-				//handle error
-				conn.end();
-				reject(err);
-				return;
+				conn.end().then(() => {
+					return reject(err);
+				});
 			});
 
 		}).catch(err => {
-			reject(err);
-			return;
+			return reject(err);
 		});
 	});
 }
-
-WrittenlanguageDB.prototype.getWrittenLanguages = function(){
+WrittenLanguageDB.prototype.getAll = function(){
 	return new Promise((resolve, reject) => {
-
 		pool.getConnection().then(conn => {
-
 			var query = 'SELECT * from writtenlanguage';
 
-			conn.query(query).then(res => {
+			conn.query(query).then(result => {
 				var writtenlanguages = {};
-				for(var i = 0; i < res.length; i++){
-					writtenlanguages[res[i].id] = res[i];
+				for(var i = 0; i < result.length; i++){
+					writtenlanguages[result[i].id] = result[i];
 				}
 				conn.end().then(() => {
 					resolve(writtenlanguages);
 				});
 			}).catch(err => {
 				conn.end().then(() => {
-					reject(err);
-					return;
+					return reject(err);
 				});
 			});
 
 		}).catch(err => {
 			conn.end().then(() => {
-				reject(err);
-				return;
+				return reject(err);
 			});
 		});
-
 	});
 }
 
-let _WrittenlanguageDB = new WrittenlanguageDB();
-module.exports = _WrittenlanguageDB;
+
+let _WrittenLanguageDB = new WrittenLanguageDB();
+module.exports = _WrittenLanguageDB;
 

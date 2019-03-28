@@ -12,57 +12,80 @@ const pool = mdb.createPool({
 function GenreDB() {
 }
 
-GenreDB.prototype.db_add_genre = function(name,writtenlanguageId) {
-
-    return new Promise(function(resolve,reject) {
-
-	pool.getConnection().then(conn => {
-
-	    conn.query("INSERT INTO genre (name,writtenlanguageId) VALUES ('"+name+"',"+writtenlanguageId+")").then((res) => {
-		conn.end();
-                resolve({id:res.insertId});
-		return;
-	    }).catch(err => {
-		//handle error
-		conn.end();
-		reject(err);
-		return;
-	    })
-
-	}).catch(err => {
-	    reject(err);
-	    return;
-	});
-
+GenreDB.prototype.add = function(name, writtenLanguageId) {
+    return new Promise(function(resolve, reject) {
+		pool.getConnection().then(conn => {
+			let query = 'INSERT INTO genre (name, writtenlanguageId) VALUES (?, ?)';
+		    conn.query(query, [name.toLowerCase(), writtenLanguageId]).then((result) => {
+				conn.end().then(() => {
+					resolve(result.insertId);
+					return;
+				});
+		    }).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+		    });
+		}).catch(err => {
+		    reject(err);
+		    return;
+		});
     });
 }
+GenreDB.prototype.get = function(name, writtenLanguageId) {
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM genre WHERE name=?';
+			if(writtenLanguageId) query += ' AND writtenlanguageId = ?';
 
-GenreDB.prototype.db_get_genre = function(name) {
+			conn.query(query, [name.toLowerCase(), writtenLanguageId]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result[0]);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
 
-    return new Promise(function(resolve,reject) {
-
-	pool.getConnection().then(conn => {
-
-	    conn.query("SELECT * FROM genre WHERE (name='"+name+"')").then((res) => {
-		conn.end();
-		resolve(JSON.stringify(res));
-		return;
-	    }).catch(err => {
-		//handle error
-		console.log(err);
-		conn.end();
-		reject(err);
-		return;
-	    })
-
-	}).catch(err => {
-	    console.log(err);
-	    reject(err);
-	    return;
+		}).catch(err => {
+			return reject(err);
+		});
 	});
-
-    });
 }
+GenreDB.prototype.getAll = function(){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			var query = 'SELECT genre.*, writtenlanguage.name as language from genre JOIN writtenlanguage on writtenlanguage.id = genre.writtenlanguageId';
+			conn.query(query).then(result => {
+
+				var genres = {};
+				for(var i = 0; i < result.length; i++){
+					genres[result[i].id] = result[i];
+				}
+				conn.end().then(() => {
+					resolve(genres);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+			});
+
+		}).catch(err => {
+			conn.end().then(() => {
+				reject(err);
+				return;
+			});
+		});
+
+	});
+}
+
 
 let _GenreDB = new GenreDB();
 module.exports = _GenreDB;

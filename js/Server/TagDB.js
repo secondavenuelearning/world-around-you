@@ -12,57 +12,80 @@ const pool = mdb.createPool({
 function TagDB() {
 }
 
-TagDB.prototype.db_add_tag = function(name,writtenlanguageId) {
-
-    return new Promise(function(resolve,reject) {
-
-	pool.getConnection().then(conn => {
-
-	    conn.query("INSERT INTO tag (name,writtenlanguageId) VALUES ('"+name+"',"+writtenlanguageId+")").then((res) => {
-		conn.end();
-                resolve({id:res.insertId});
-		return;
-	    }).catch(err => {
-		//handle error
-		conn.end();
-		reject(err);
-		return;
-	    })
-
-	}).catch(err => {
-	    reject(err);
-	    return;
-	});
-
+TagDB.prototype.add = function(name, writtenLanguageId) {
+    return new Promise(function(resolve, reject) {
+		pool.getConnection().then(conn => {
+			let query = 'INSERT INTO tag (name, writtenlanguageId) VALUES (?, ?)';
+		    conn.query(query, [name.toLowerCase(), writtenLanguageId]).then((result) => {
+				conn.end().then(() => {
+					resolve(result.insertId);
+					return;
+				});
+		    }).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+		    });
+		}).catch(err => {
+		    reject(err);
+		    return;
+		});
     });
 }
+TagDB.prototype.get = function(name, writtenLanguageId) {
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM tag WHERE name=?';
+			if(writtenLanguageId) query += ' AND writtenlanguageId = ?';
 
-TagDB.prototype.db_get_tag = function(name) {
+			conn.query(query, [name.toLowerCase(), writtenLanguageId]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result[0]);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
 
-    return new Promise(function(resolve,reject) {
-
-	pool.getConnection().then(conn => {
-
-	    conn.query("SELECT * FROM tag WHERE (name='"+name+"')").then((res) => {
-		conn.end();
-		resolve(JSON.stringify(res));
-		return;
-	    }).catch(err => {
-		//handle error
-		console.log(err);
-		conn.end();
-		reject(err);
-		return;
-	    })
-
-	}).catch(err => {
-	    console.log(err);
-	    reject(err);
-	    return;
+		}).catch(err => {
+			return reject(err);
+		});
 	});
-
-    });
 }
+TagDB.prototype.getAll = function(){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			var query = 'SELECT tag.*, writtenlanguage.name as language from tag JOIN writtenlanguage on writtenlanguage.id = tag.writtenlanguageId';
+			conn.query(query).then(result => {
+
+				var tags = {};
+				for(var i = 0; i < result.length; i++){
+					tags[result[i].id] = result[i];
+				}
+				conn.end().then(() => {
+					resolve(tags);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+			});
+
+		}).catch(err => {
+			conn.end().then(() => {
+				reject(err);
+				return;
+			});
+		});
+
+	});
+}
+
 
 let _TagDB = new TagDB();
 module.exports = _TagDB;
