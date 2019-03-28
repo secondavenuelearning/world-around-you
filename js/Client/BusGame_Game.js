@@ -5,6 +5,10 @@ export default BusGame
 /* ----------------------- Global Variables ----------------------- */
 var storyData;
 var score = 0;
+var firstClick = false;
+var secondClick = false;
+var firstSelected;
+var secondSelected;
 var totalMatches;
 var images = 
     {
@@ -62,7 +66,7 @@ export function BusGame(storyObj, sign, written)
     BuildBus("FacingLeft", "#top .inner");
     BuildBus("FacingRight", "#bottom .inner");
     BuildCar("FacingRight", "#bottom .inner");
-    
+    SetupWindowConnections();
     //add looping to the video
     var vids = $(".window video").toArray();
     vids.forEach(function(vid)
@@ -195,7 +199,7 @@ function BuildBus(dir, lane)
         {
             case 0: //term
                 var id = term + "Trm";
-                busHTML += "<p><span id = \"" + id + "\">" + term + "</span></p>"; 
+                busHTML += "<span id = \"" + id + "\">" + term + "</span>"; 
             break;
 
             case 1: //video
@@ -222,6 +226,35 @@ function BuildBus(dir, lane)
     var laneWidth = $(lane).width();
     laneWidth += 1080;
     $(lane).css('width', laneWidth);//*/
+}
+
+function SetupWindowConnections(){
+    var windows = document.getElementsByClassName("window");
+    console.log(windows[0]);
+    for(var x  = 0; x < windows.length; x++){
+        windows[x].onclick = function(e) 
+        {
+            if(firstClick == false){
+                firstSelected = e.target.parentElement;
+                console.log(e.target.parentElement);
+                firstClick = true;
+                firstSelected.classList.remove("hidden");
+            }
+            else if(firstClick==true && secondClick == false){
+                secondSelected = e.target.parentElement;
+                secondClick = true;
+                secondSelected.classList.remove("hidden");
+            }
+            else if(firstClick == true && secondClick == true){
+                firstClick = false;
+                firstSelected.classList.add("hidden");
+                secondClick = false;
+                secondSelected.classList.add("hidden");
+                firstSelected = null;
+                secondSelected = null;
+            }
+        }
+    }
 }
 
 /* ----------------------- Game Loop ----------------------- */
