@@ -5,7 +5,7 @@ export default BusGame
 
 /* ----------------------- Global Variables ----------------------- */
 var storyData;
-var score = 2;
+var score = 0;
 var firstClick = false;
 
 var firstSelected;
@@ -30,7 +30,8 @@ var termList = []; //hard values for testing
 var signLang;
 var writtenLang;
 
-var roundorder;
+var roundOrder;
+var roundTotalMatches = 0;
 var round = 
 [
     //round data will be structured as such:
@@ -305,7 +306,20 @@ function SetupWindowConnections(){
                     else{
                               score++;
                     document.getElementById("current").innerHTML = score;
-                        WinScreen();
+                        
+                        //check win state
+                        if(score === totalMatches)
+                        {
+                            //goto win screen and clear as much data as possible
+                            WinScreen(); 
+                        }
+                        else if(score === roundTotalMatches)
+                        {
+                            //goto next round
+                            //RoundTransition();
+                            console.log("round over");
+                        }
+                        
                     }
                      secondSelected = null;
                     firstSelected = null;
@@ -329,6 +343,7 @@ function NextRound()
     //generate round data
     var randIndex = Math.floor(Math.random() * roundOrder.length);
     var roundLength = roundOrder[randIndex];
+    roundTotalMatches = roundLength;
     DefineRound(roundLength);
     roundOrder.splice(randIndex, 1);
     
@@ -375,52 +390,49 @@ function RoundTransition()
 
 function WinScreen()
 {
-    if(score === totalMatches)
+    //change to win screen
+    $('main').html(html);
+
+    //clear data of this script
+    storyData = null;
+    score = 0;
+    firstClick = false;
+
+    firstSelected = null;
+    secondSelected = null;
+    totalMatches = null;
+    images = 
     {
-        //change to win screen
-        $('main').html(html);
-        
-        //clear data of this script
-        storyData = null;
-        score = 0;
-        firstClick = false;
-
-        firstSelected = null;
-        secondSelected = null;
-        totalMatches = null;
-        images = 
+        Cars: 
         {
-            Cars: 
-            {
-                FacingRight: [],
-                FacingLeft: []
-            },
+            FacingRight: [],
+            FacingLeft: []
+        },
 
-            Buses: 
-            {
-                FacingRight: [],
-                FacingLeft: []
-            }
-        };
+        Buses: 
+        {
+            FacingRight: [],
+            FacingLeft: []
+        }
+    };
 
-        termList = []; //hard values for testing
-        signLang = null;
-        writtenLang = null;
+    termList = []; //hard values for testing
+    signLang = null;
+    writtenLang = null;
 
-        roundorder = null;
-        round = 
-        [
-            //round data will be structured as such:
+    roundorder = null;
+    round = 
+    [
+        //round data will be structured as such:
 
-            //  { 
-            //    "term": mediaType
-            //  },
-            // --repeats 2x per term
-            // --once for each mediaType ("vid" or "txt")
-        ];
+        //  { 
+        //    "term": mediaType
+        //  },
+        // --repeats 2x per term
+        // --once for each mediaType ("vid" or "txt")
+    ];
 
-        stopAnimations = false; //bool for forcing animations to stop
-    }
+    stopAnimations = false; //bool for forcing animations to stop
 }
 
 
@@ -447,6 +459,7 @@ function Move(timestamp, id, start, dir, endPos)
     }
     else
     {
+        //stop animations
         stopAnimations = true;
     }
 }
@@ -467,7 +480,7 @@ function Animate(id, frames, frame)
         //update animation
         vImgs.forEach(function(img)
         {
-            img.src = frames[0];
+            img.src = frames[0].src;
         });
     }
     else
