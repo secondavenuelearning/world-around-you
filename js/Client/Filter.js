@@ -40,7 +40,7 @@ var database = //placeholder data obj
 /*
 Builds out filters bar for web pages that already have a div witht he "FIltersBar" id
 */
-function FiltersBar(id)
+function FiltersBar(id, launguageOnly = false)
 {
     //save full possible results
     finalResults = database;
@@ -74,17 +74,18 @@ function FiltersBar(id)
     //add click events for filter functionality
     $('#' + writtenID + ' > button').on('click', function() {ToggleOptionsVisible(writtenID)});
     $('#' + writtenID + ' > #options > label > input').on('click', function(e) {UpdateMultiSelectFilter(writtenID, e)});
-    
-//---SORTING FILTER
-    var sortID = "SortByFilter";
-    var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
-    var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/General/icon_Filter.svg");
-    
-    $('.filters').append(sortByHTML);
-    
-    $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
-    $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
-    
+
+    //---SORTING FILTER
+    if(!launguageOnly){
+        var sortID = "SortByFilter";
+        var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
+        var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/General/icon_Filter.svg");
+        
+        $('.filters').append(sortByHTML);
+        
+        $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
+        $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
+    }
 //--Button Icon Hover Swapping
     //ImageHoverSwap("#sortByFilter button", "#sortByFilter img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
     

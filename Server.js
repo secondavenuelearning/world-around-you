@@ -19,6 +19,8 @@ const StoryDB = require('./js/Server/StoryDB.js');
 const UserDB = require('./js/Server/UserDB.js');
 const UsertypeDB = require('./js/Server/UsertypeDB.js');
 const ViewDB = require('./js/Server/ViewDB.js');
+const GameDB = require('./js/Server/GameDB.js');
+const GamedataDB = require('./js/Server/GamedataDB.js');
 
 
 /**
@@ -287,6 +289,179 @@ app.post('/add_view',function(req,res) {
 // ****************************************
 // ****************************************
 
+
+// ************
+// * GET GAME *
+// ************
+app.get('/api/game', (req, res) => {
+
+	console.log("[GET /api/game]");
+	console.log(req.query);
+	myname=req.query.name;
+
+	console.log("[GET api/game][name]["+myname+"]");
+
+	if((myname==null)||(myname=='')) {
+		console.log("[GET /api/game][NO GAME NAME]");
+		res.send('done');
+		return;
+	}
+	GameDB.getGame(myname).then(function(result) {
+		if(result=="[]") {
+			console.log("[GET /api/game][gamename]["+myname+"][result]["+result+"][NOT-FOUND]");
+			console.log(result);
+			res.send(result);
+		}
+		else {
+			console.log("[GET /api/game][gamename]["+myname+"][result]["+result+"][FOUND]");
+			console.log(result);
+			res.send(result);
+		}
+	}).catch(err => {
+		console.log("[GET /api/game][gamename]["+myname+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+});
+
+// ************
+// * ADD GAME *
+// ************
+app.post('/api/game',function(req,res) {
+	console.log("[POST /api/game]");
+	console.log(req.body);
+	myname=req.body.name;
+
+	console.log("[POST api/game][name]["+myname+"]");
+
+	if((myname==null)||(myname=='')) {
+		console.log("[POST /api/game][NO GAME NAME]");
+		res.send('done');
+	}
+	GameDB.getGame(myname).then(function(result) {
+		if(result=="[]") {
+			console.log("[POST /api/game][gamename]["+myname+"][result]["+result+"][NOT-FOUND-WILL-ADD]");
+			console.log(result);
+			app_post_api_game_part2(req,res,myname);
+		}
+		else {
+			console.log("[POST /api/game][gamename]["+myname+"][result]["+result+"][ALREADY-ADD]");
+			console.log(result);
+			res.send('done');
+		}
+	}).catch(err => {
+		console.log("[POST /api/game][gamename]["+myname+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+});
+function app_post_api_game_part2(req,res,name) {
+	console.log("[app_post_api_game_part2][name]["+name+"]");
+
+	GameDB.addGame(name).then(function(result) {
+		console.log("[app_post_api_game_part2][gamename]["+name+"][result]["+result+"]");
+		console.log(result);
+		res.send(result);
+	}).catch(err => {
+		console.log("[app_post_api_game_part2][gamename]["+name+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+};
+
+// *****************
+// * GET GAME DATA *
+// *****************
+app.get('/api/gamedata', (req, res) => {
+	console.log("[GET /api/gamedata]");
+	console.log(req.query);
+	myid=req.query.id;
+	mygameid=req.query.gameId;
+
+	console.log("[GET api/gamedata][storyid]["+myid+"]");
+	console.log("[GET api/gamedata][gameId]["+mygameid+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[GET /api/gamedata][NO STORY ID]");
+		res.send('done');
+	}
+	if((mygameid==null)||(mygameid==0)) {
+		console.log("[GET /api/gamedata][NO GAME ID]");
+		res.send('done');
+	}
+	GamedataDB.getGamedata(myid,mygameid).then(function(result) {
+		console.log(result);
+		if(result=="[]") {
+			console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][result]["+result+"][NOT-FOUND]");
+			console.log(result);
+			res.send(result);
+		}
+		else {
+			console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][result]["+result+"][FOUND]");
+			console.log(result);
+			res.send(result);
+		}
+	}).catch(err => {
+		console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+});
+
+// *****************
+// * ADD GAME DATA *
+// *****************
+app.post('/api/gamedata',function(req,res) {
+	console.log("[POST /api/gamedata]");
+	console.log(req.body);
+	myid=req.body.id;
+	mygameid=req.body.gameId;
+	mydata=req.body.gamedata;
+
+	console.log("[POST api/gamedata][storyid]["+myid+"]");
+	console.log("[POST api/gamedata][gameId]["+mygameid+"]");
+	console.log("[POST api/gamedata][gamedata]["+mydata+"]");
+
+	if((myid==null)||(myid==0)) {
+		console.log("[POST /api/gamedata][NO STORY ID]");
+		res.send('done');
+	}
+	if((mygameid==null)||(mygameid==0)) {
+		console.log("[POST /api/gamedata][NO GAME ID]");
+		res.send('done');
+	}
+	if((mydata==null)||(mydata=='')) {
+		console.log("[POST /api/gamedata][NO GAME DATA]");
+		res.send('done');
+	}
+	GamedataDB.getGamedata(myid,mygameid).then(function(result) {
+		console.log(result);
+		if(result=="[]") {
+			console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][result]["+result+"][NOT-FOUND-WILL-ADD]");
+			console.log(result);
+			app_post_api_gamedata_part2(req,res,myid,mygameid,mydata);
+		}
+		else {
+			console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][result]["+result+"][FOUND-ALREADY-ADDED]");
+			console.log(result);
+			res.send(result);
+		}
+	}).catch(err => {
+		console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+});
+function app_post_api_gamedata_part2(req,res,storyid,gameid,gamedata) {
+
+	console.log("[app_post_api_gamedata_part2][storyid]["+storyid+"]");
+	console.log("[app_post_api_gamedata_part2][gameId]["+gameid+"]");
+	console.log("[app_post_api_gamedata_part2][gamedata]["+gamedata+"]");
+
+	GamedataDB.addGamedata(storyid,gameid,gamedata).then(function(result) {
+		console.log("[app_post_api_gamedata_part2][storyid]["+storyid+"][gameid]["+gameid+"][gamedata]["+gamedata+"][result]["+result+"]");
+		console.log(result);
+		res.send(result);
+	}).catch(err => {
+		console.log("[app_post_api_gamedata_part2][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
+		res.send(err);
+	});
+};
 // ******************
 // * LISTEN TO PORT *
 // ******************
