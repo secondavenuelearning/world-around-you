@@ -25,21 +25,37 @@ var images =
         }
     };
 
-var termList = ["world", "sea", "sky", "huge"]; //hard values for testing
+var termList = []; //hard values for testing
 var signLang;
 var writtenLang;
 
+var roundorder;
+var round = 
+[
+    //round data will be structured as such:
+    
+    //  { 
+    //    "term": mediaType
+    //  },
+    // --repeats 2x per term
+    // --once for each mediaType ("vid" or "txt")
+];
+
+var stopAnimations = false; //bool for forcing animations to stop
+
 
 /* ----------------------- Constructor ----------------------- */
-export function BusGame(storyObj, sign, written)
+export function BusGame(storyObj, sign, written, terms)
 {
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
     writtenLang = written;
+    termList = terms;
     
     //define how many matches the user will need this round
-    totalMatches = (Math.floor(Math.random() * 10) + 1); //number between 0 and 10
+    roundOrder = createCountList(termList);
+    totalMatches = (termList.length); //number between 0 and 10
     
     //add score area to header
     ExtendHeader();
@@ -58,38 +74,17 @@ export function BusGame(storyObj, sign, written)
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
     
     
-    
-    
     //build out lanes and add cars
     BuildLanes();
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    SetupWindowConnections();
-    //add looping to the video
-    var vids = $(".window video").toArray();
-    vids.forEach(function(vid)
-    {
-        //get term
-        var term = vid.id.toString();
-        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
-        console.log(term);
-        
-        //get term data
-         var termData = storyData[1].glossary;
-        termData = termData[writtenLang];
-        termData = termData[term].video;
-        termData = termData[signLang];
-        
-        
-        //add looping
-        LoopVideoClip(vid.id, termData.start, termData.end);
-    });
+
+    
+    //start first round
+    NextRound();
+
     
     //animate
-    Animate("#bottom .car img", images.Cars.FacingRight[0]);
-    Animate("#bottom .bus img", images.Buses.FacingRight[1]);
+    //Animate("#bottom .car img", images.Cars.FacingRight[0]);
+    //Animate("#bottom .bus img", images.Buses.FacingRight[1]);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -112,7 +107,57 @@ function GetImagesFromFolder(folder)
     return files;
 }
 
+function createCountList(terms) {
+    var values = terms.length;
+    var order = [];
+    if ((values % 3) == 2) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+        order.push(2);
+    } else if ((values % 3) == 1) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+        order[order.length - 1] = 2;
+        order.push(2);
+    } else if ((values % 3) == 0) {
+        for (var x = 0; x < Math.floor(values / 3); x++) {
+            order.push(3);
+        }
+    }
+   
+    return order;
+}
 
+function DefineRound(numTerms)
+{
+    //grab random terms from term list until we get the num needed this round
+    for(var i = 0; i < numTerms; i++)
+    {
+        //get term
+        var termIndex = Math.floor(Math.random() * termList.length);
+        var term = termList[termIndex];
+        
+        //define term in round
+        vid = { [term]: "vid"};
+        txt = { [term]: "txt"};
+        
+        round.push(vid);
+        round.push(txt);
+        
+        //remove term from master termlist so we dont get repeats
+        termList.splice(termIndex, 1);
+        console.log(termList);
+    }
+    
+    //fill blank windows
+    if(numTerms < 3) //will always be 2 if not 3
+    {
+        round.push({BlankFillerTerm: "none"});
+        round.push({BlankFillerTerm: "none"});
+    }
+}
 
 /* ----------------------- Building Objects ----------------------- */
 function ExtendHeader()
@@ -192,26 +237,34 @@ function BuildBus(dir, lane)
         }
         
         //get term and relvant data
-        var term = termList[Math.floor(Math.random() * termList.length)];
-        
-        var mediaType = Math.floor(Math.random() * 3); // 0 - 3
+        var randIndex = Math.floor(Math.random() * round.length); //random index of item
+        var roundItem = round[randIndex]; //get item at index
+        var term = Object.keys(roundItem); //should only be one so key is the term
+        var mediaType = roundItem[term]; //media is value of the key(term)
+
+
         switch(mediaType)
         {
-            case 0: //term
-                var id = term + "Trm";
+
+            case "txt": //term
+                var id = term + "Txt";
                 busHTML += "<span id = \"" + id + "\">" + term + "</span>"; 
+
             break;
 
-            case 1: //video
+            case "vid": //video
                 var id = term + "Vid";
                 var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
                 busHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
-            case 2: //no media
+            case "none": //no media
                 busHTML += "<div></div>";
             break;
         } 
+        
+        //remove used term from roundlist
+        round.splice(randIndex, 1);
         
         busHTML += "</div>"; //close window div 
     }
@@ -258,6 +311,40 @@ function SetupWindowConnections(){
 }
 
 /* ----------------------- Game Loop ----------------------- */
+function NextRound()
+{
+    //generate round data
+    var randIndex = Math.floor(Math.random() * roundOrder.length);
+    var roundLength = roundOrder[randIndex];
+    DefineRound(roundLength);
+    roundOrder.splice(randIndex, 1);
+    
+    //builds vehicles for this round
+    BuildCar("FacingLeft", "#top .inner");
+    BuildBus("FacingLeft", "#top .inner"); //buses hold terms
+    BuildBus("FacingRight", "#bottom .inner"); //buses hold terms
+    BuildCar("FacingRight", "#bottom .inner");
+    SetupWindowConnections();
+    //add looping to the video
+    var vids = $(".window video").toArray();
+    vids.forEach(function(vid)
+    {
+        //get term
+        var term = vid.id.toString();
+        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
+        console.log(term);
+        
+        //get term data
+         var termData = storyData[1].glossary;
+        termData = termData[writtenLang];
+        termData = termData[term].video;
+        termData = termData[signLang];
+        
+        
+        //add looping
+        LoopVideoClip(vid.id, termData.start, termData.end);
+    });
+}
 
 /* ----------------------- Helper Functions ----------------------- */
 function LoopVideoClip(videoID, start, end)
@@ -289,8 +376,11 @@ function Animate(imgId, frames)
     {
         if(frame >= 59)
         {
-            //clearInterval(rate);
             frame = 0;
+        }
+        else if(stopAnimations)
+        {
+            clearInterval(rate);
         }
         else
         {
