@@ -75,10 +75,7 @@ export function BusGame(storyObj, sign, written, terms)
     
     //start first round
     NextRound();
-    
-    //animate
-    //Animate("#bottom .car img", images.Cars.FacingRight[0]);
-    //Animate("#bottom .bus img", images.Buses.FacingRight[1]);
+    RoundTransition();
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -94,12 +91,14 @@ function GetImagesFromFolder(folder)
             data.forEach(function(datapoint)
             {
                 var path = "../.." + folder.toString() + "" + datapoint.toString();
-                files.push(path);
+                files.push(preloadImage(path));
             }); 
         }
     });
+    
     return files;
 }
+
 
 function createCountList(terms) {
     var values = terms.length;
@@ -189,7 +188,7 @@ function BuildCar(dir, lane)
     
     //build car html
     var carHTML = "<div class = \"vehicle car\">";
-    carHTML += "<img src = \"" + car + "\">"
+    carHTML += "<img src = \"" + car.src + "\">"
     carHTML += "</div>";
     
     //add car to lane
@@ -210,7 +209,7 @@ function BuildBus(dir, lane)
     
     //build car html
     var busHTML = "<div class = \"vehicle bus\">";
-    busHTML += "<img src = \"" + bus + "\">";
+    busHTML += "<img src = \"" + bus.src + "\">";
     busHTML += "<div class = \"windows\">";
     
     //add html for each window
@@ -275,7 +274,7 @@ function BuildBus(dir, lane)
 
 /* ----------------------- Game Loop ----------------------- */
 function NextRound()
-{
+{      
     //generate round data
     var randIndex = Math.floor(Math.random() * roundOrder.length);
     var roundLength = roundOrder[randIndex];
@@ -309,6 +308,80 @@ function NextRound()
     });
 }
 
+function RoundTransition()
+{
+    //move vehicles
+    /*MoveAndAnimate("#bottom .car", 1500, "Left", images.Cars.FacingRight[0]);
+    MoveAndAnimate("#bottom .bus", 1500, "Left", images.Buses.FacingRight[1]);
+    MoveAndAnimate("#top .car", -1500, "Right", images.Cars.FacingLeft[0]);
+    MoveAndAnimate("#top .bus", -1500, "Right", images.Buses.FacingLeft[0]);*/
+    
+    Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
+     window.requestAnimationFrame(function(timestamp)
+    {
+        //Move(timestamp, '#bottom .vehicle', null, "Right", 1000);
+        //Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
+    });
+}
+
+
+/* ----------------------- Animation ----------------------- */
+function Move(timestamp, id, start, dir, endPos)
+{
+    //get all vehciles of this type
+    var vehicles = $(id).toArray();
+    
+    if(!start) start = timestamp;
+    var pos = timestamp - start;
+    
+    if (pos < endPos) 
+    {
+        vehicles.forEach(function(vehicle)
+        { 
+            vehicle.style.left = pos + 'px';
+        });
+        
+        window.requestAnimationFrame(function(timestamp)
+        {
+            Move(timestamp, id, start, dir, endPos);
+        });
+    }
+    else
+    {
+        stopAnimations = true;
+    }
+}
+
+function Animate(id, frames, frame)
+{
+    window.requestAnimationFrame(function(timestamp)
+    {
+        Animate(id, frames, frame);
+    });
+    
+    if(!frame) frame = 0;
+    
+    var vImgs = $(id).toArray();
+    
+    if(stopAnimations)
+    {
+        //update animation
+        vImgs.forEach(function(img)
+        {
+            img.src = frames[0];
+        });
+    }
+    else
+    {
+        //update animation
+        vImgs.forEach(function(img)
+        {
+            frame = (frame + 1) % frames.length;
+            img.src = frames[frame].src;
+        });
+    }
+}
+
 /* ----------------------- Helper Functions ----------------------- */
 function LoopVideoClip(videoID, start, end)
 {
@@ -329,28 +402,11 @@ function LoopVideoClip(videoID, start, end)
     }, false);
 }
 
-function Animate(imgId, frames)
+//thanks: https://stackoverflow.com/questions/3646036/javascript-preloading-images
+function preloadImage(url)
 {
-    //set rate
-    var rate = setInterval(nextFrame, 60);
-    var frame = 0;
+    var img=new Image();
+    img.src=url;
     
-    function nextFrame()
-    {
-        if(frame >= 59)
-        {
-            frame = 0;
-        }
-        else if(stopAnimations)
-        {
-            clearInterval(rate);
-        }
-        else
-        {
-            //change source of img to next frame
-            frame++;
-            
-            $(imgId)[0].src = frames[frame];
-        }
-    }
+    return img;
 }
