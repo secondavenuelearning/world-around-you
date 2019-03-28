@@ -61,34 +61,7 @@ export function BusGame(storyObj, sign, written)
     BuildCar("FacingLeft", "#top .inner");
     BuildBus("FacingLeft", "#top .inner");
     BuildBus("FacingRight", "#bottom .inner");
-    
     BuildCar("FacingRight", "#bottom .inner");
-    /*
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    BuildBus("FacingLeft", "#top .inner");
-    BuildCar("FacingLeft", "#top .inner");
-    
-    
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");
-    BuildBus("FacingRight", "#bottom .inner");
-    BuildCar("FacingRight", "#bottom .inner");*/
     
     //add looping to the video
     var vids = $(".window video").toArray();
@@ -109,6 +82,10 @@ export function BusGame(storyObj, sign, written)
         //add looping
         LoopVideoClip(vid.id, termData.start, termData.end);
     });
+    
+    //animate
+    Animate("#bottom .car img", images.Cars.FacingRight[0]);
+    Animate("#bottom .bus img", images.Buses.FacingRight[1]);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -267,4 +244,27 @@ function LoopVideoClip(videoID, start, end)
             }
         }
     }, false);
+}
+
+function Animate(imgId, frames)
+{
+    //set rate
+    var rate = setInterval(nextFrame, 60);
+    var frame = 0;
+    
+    function nextFrame()
+    {
+        if(frame >= 59)
+        {
+            //clearInterval(rate);
+            frame = 0;
+        }
+        else
+        {
+            //change source of img to next frame
+            frame++;
+            
+            $(imgId)[0].src = frames[frame];
+        }
+    }
 }
