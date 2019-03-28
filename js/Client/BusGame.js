@@ -33,6 +33,7 @@ function initializeGameScene() {
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
+        document.getElementById("score").remove();
         initializeTitle();
     }
 }

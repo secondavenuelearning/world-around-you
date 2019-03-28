@@ -6,7 +6,7 @@ export default BusGame
 var storyData;
 var score = 0;
 var firstClick = false;
-var secondClick = false;
+
 var firstSelected;
 var secondSelected;
 var totalMatches;
@@ -259,7 +259,7 @@ function BuildBus(dir, lane)
             break;
 
             case "none": //no media
-                busHTML += "<div></div>";
+                busHTML += "<div id = \"none\"></div>";
             break;
         } 
         
@@ -288,24 +288,38 @@ function SetupWindowConnections(){
         windows[x].onclick = function(e) 
         {
             if(firstClick == false){
+                console.log("first");
                 firstSelected = e.target.parentElement;
                 console.log(e.target.parentElement);
                 firstClick = true;
                 firstSelected.classList.remove("hidden");
             }
-            else if(firstClick==true && secondClick == false){
+            else if(firstClick==true){
                 secondSelected = e.target.parentElement;
-                secondClick = true;
-                secondSelected.classList.remove("hidden");
+                  console.log(firstSelected.firstChild.id);
+                if(firstSelected.firstChild.id.substr(0,firstSelected.firstChild.id.length-3) == secondSelected.firstChild.id.substr(0,secondSelected.firstChild.id.length-3)){
+                    secondSelected.classList.remove("hidden");
+                   
+                    firstClick = false;
+                    if(firstSelected.firstChild.id == "none"){
+                        
+                    }
+                    else{
+                              score++;
+                    document.getElementById("current").innerHTML = score;
+                    }
+                     secondSelected = null;
+                    firstSelected = null;
+              
+                }
+                else{
+                    firstSelected.classList.add("hidden");
+                    firstClick = false;
+                }
+               
+              
             }
-            else if(firstClick == true && secondClick == true){
-                firstClick = false;
-                firstSelected.classList.add("hidden");
-                secondClick = false;
-                secondSelected.classList.add("hidden");
-                firstSelected = null;
-                secondSelected = null;
-            }
+           
         }
     }
 }
