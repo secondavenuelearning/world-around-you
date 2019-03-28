@@ -1,8 +1,9 @@
 #language-selector select{
 	background-color: #004E74;
 	color: #FFFFFF;
-	height: 30px;
+	height: 35px;
 	width: 200px;
+	font-size: 1.1em;
 	padding: 5px 25px;
 	text-align: center;
 	border: none;

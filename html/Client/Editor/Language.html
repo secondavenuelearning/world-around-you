@@ -1,0 +1,40 @@
+<div id="language-content" class="editor-content-wrapper">
+	<h1 class="main-header">Assign Languages</h1>
+	<div class="main-content">
+		<div id="assign-written-language" class="half assign-language">
+			<h2>Written Languages</h2>
+			<div class="half">
+				<% _.each(writtenLanguages, function(language){ %>
+					<% if(storyWrittenLanguages.indexOf(language.name) != -1) return; %>
+					<div><button class="language-button story-language-button add-story-language add-button" lang-name="<%- language.name %>" lang-type="written" lang-fnc="add"><%- language.name %></button></div>
+				<% }) %>
+				<div><button class="language-button add-language add-text-button" lang-type="written">+</button></div>
+			</div>
+			<div class="half selected-languages">
+				<div class="selected-title">Selected</div>
+				<% _.each(writtenLanguages, function(language){ %>
+					<% if(storyWrittenLanguages.indexOf(language.name) == -1) return; %>
+					<div><button class="language-button story-language-button delete-story-language delete-button" lang-name="<%- language.name %>" lang-type="written" lang-fnc="remove"><%- language.name %></button></div>
+				<% }) %>
+			</div>
+		</div>
+		<div id="assign-sign-language" class="half assign-language">
+			<h2>Sign Languages</h2>
+			<div class="half">
+				<% _.each(signLanguages, function(language){ %>
+					<% if(storySignLanguages.indexOf(language.name) != -1) return; %>
+					<div><button class="language-button story-language-button add-story-language add-button" lang-name="<%- language.name %>" lang-type="sign" lang-fnc="add"><%- language.name %></button></div>
+				<% }) %>
+				<div><button class="language-button add-language add-text-button" lang-type="sign">+</button></div>
+			</div>
+			<div class="half selected-languages">
+				<div class="selected-title">Selected</div>
+				<% _.each(signLanguages, function(language){ %>
+					<% if(storySignLanguages.indexOf(language.name) == -1) return; %>
+					<div><button class="language-button story-language-button delete-story-language delete-button" lang-name="<%- language.name %>" lang-type="sign" lang-fnc="remove"><%- language.name %></button></div>
+				<% }) %>
+			</div>
+		</div>
+	</div>
+</div>
+<button id="save-language" class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

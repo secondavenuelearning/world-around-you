@@ -1,0 +1,16 @@
+<div id="cover-content" class="editor-content-wrapper">
+	<h1 class="main-header">Upload Cover</h1>
+	<div class="main-content">
+		<div class="cover-image-container half" style="background-image: url(<%- coverImage ? coverImage : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+			<div id="cover-image-input-container" class="upload-input-container">
+				<input id="cover-image-input" class="upload-input" type="file" name="coverimage" accept="image/*">
+				<button id="cover-image-button" class="upload-button">Upload image</button>
+			</div>
+		</div>
+		<div class="half">
+			<div class="quarter"><label>Author</label></div>
+			<div class="three-quarters"><input id="author-input" type="text" name="author" value="<%- author %>"></div>
+		</div>
+	</div>
+</div>
+<button id="save-cover" class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

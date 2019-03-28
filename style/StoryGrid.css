@@ -3,32 +3,48 @@
 	bottom: 5px;
 	right: 0px;
 }
-
 .grid-button{
 	border-radius: 50%;
 	background-color: #A1EBF3;
 	border: none;
-	margin-left: 3px;
-}
-
-#grid-next-button{
-	border-radius: 50%;
-	background-color: #A1EBF3;
-	margin-left: 10px;
-	border: none;
-}
-
-#grid-prev-button{
-	border-radius: 50%;
-	background-color: #A1EBF3;
-	margin-right: 10px;
-	visibility: hidden;
-	border: none;
+	margin-left: 5px;
+	width: 30px;
+	height: 30px;
+	font-weight: bold;
+	font-size: 1.3em;
+	color: #004e74;
 }
 .grid-button-selected{
 	background-color: #004E75;
 	position: relative;
 	border: none;
+	color: white;
+}
+#grid-next-button{
+	border-radius: 50%;
+	margin-left: 20px;
+	padding: 7px;
+	border: none;
+	height: 27px;
+	width: 18px;
+	background: transparent url('../img/icons/General/icon_Page_Next_hoverDown.svg') no-repeat center;
+}
+#grid-next-button:active{
+	background: transparent url('../img/icons/General/icon_Page_Next_Grid_hoverDown.svg') no-repeat center;
+}
+#grid-prev-button{
+	border-radius: 50%;
+	background-color: #A1EBF3;
+	margin-right: 15px;
+	padding: 7px;
+	visibility: hidden;
+	border: none;
+	height: 27px;
+	width: 18px;
+	background: transparent url('../img/icons/General/icon_Page_Back_hoverDown.svg') no-repeat center;
+}
+#grid-prev-button:active{
+	background: transparent url('../img/icons/General/icon_Page_Back_Grid_hoverDown.svg') no-repeat center;
 }
 .grid-page{
 	position: absolute;

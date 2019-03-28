@@ -2,6 +2,8 @@ const Settings = require('./Settings.js');
 const ValidateUser = require('./ValidateUser.js');
 const StoryDB = require('./StoryDB.js');
 const UserDB = require('./UserDB.js');
+const WrittenlanguageDB = require('./WrittenlanguageDB');
+const SignlanguageDB = require('./SignlanguageDB');
 
 var apiRoutes = function(app){
 // ******************************************************
@@ -73,7 +75,6 @@ var apiRoutes = function(app){
 // ******************************************************
 // Story Routes
 // ******************************************************
-
 	app.get('/api/stories', (req, res) => {
 		let unpublished = req.query.unpublished;
 
@@ -125,8 +126,7 @@ var apiRoutes = function(app){
 			return false;
 		}
 	}
-
-	app.get('/api/search/:term', (req, res) => {
+	app.get('/api/stories/:term', (req, res) => {
 		let term = req.params.term;
 		StoryDB.getStories(false).then((_stories) => {
 			let stories = [];
@@ -191,6 +191,188 @@ var apiRoutes = function(app){
 			return res.send(err);
 		});
 	});
+
+	app.post('/api/story/languages', ValidateUser, (req, res) => {
+		let storyId = parseInt(req.body.id),
+			storyWrittenLanguages = req.body.writtenLanguages || [],
+			storySignLanguages = req.body.signLanguages || [];
+
+		new Promise((resolve, reject) => { // check if the story exists
+			StoryDB.getStory(storyId).then((story) => {
+				if(story){
+					resolve(story);
+				}
+				else{
+					reject('[PH] Invalid story id');
+				}
+			}).catch((err) => {
+				reject(err);
+			});
+		}).then((story) => { // add or remove written languages
+			return new Promise((resolve, reject) => {
+				WrittenlanguageDB.getWrittenLanguages().then((writtenLanguages) => { // get all written languages
+					let promises = [];
+
+					var nameBasedWrittenLanguages = {};
+					for(let i in writtenLanguages){
+						let language = writtenLanguages[i];
+						nameBasedWrittenLanguages[language.name.toLowerCase()] = language;
+					}
+ 					console.log('written languages')
+ 					// add new languages to the story
+					for(let i in storyWrittenLanguages){
+						let language = storyWrittenLanguages[i];
+						if(!story.metadata || !story.metadata.writtenLanguages || story.metadata.writtenLanguages.indexOf(language) == -1){
+							promises.push(new Promise((_resolve, _reject) => {
+								let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
+								StoryDB.addStoryToWrittenlanguage(story.id, writtenlanguageId).then(() => {
+									console.log('lang added');
+									if(!story.metadata) story.metadata = {};
+									if(!story.metadata.writtenLanguages) story.metadata.writtenLanguages = [];
+									story.metadata.writtenLanguages.push(language);
+									_resolve();
+								}).catch((err) => {
+									_reject(err);
+								});
+							}))
+						}
+					}
+
+ 					// remove old languages to the story
+					if(story.metadata && story.metadata.writtenLanguages){
+						for(let i in story.metadata.writtenLanguages){
+							let language = story.metadata.writtenLanguages[i];
+							if(storyWrittenLanguages.indexOf(language) != -1) continue;
+
+							promises.push(new Promise((_resolve, _reject) => {
+								let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
+								StoryDB.deleteStoryToWrittenlanguage(story.id, writtenlanguageId).then(() => {
+									let index = story.metadata.writtenLanguages.indexOf(language);
+									story.metadata.writtenLanguages.splice(index, 1);
+									_resolve();
+								}).catch((err) => {
+									_reject(err);
+								});
+							}));
+						}
+					}
+
+					Promise.all(promises).then(() => {
+						resolve(story);
+					}).catch((err) => {
+						reject(err);
+					});
+				});
+			});
+		}).then((story) => { // add or remove sign langugaes 
+			return new Promise((resolve, reject) => {
+				SignlanguageDB.getSignLanguages().then((signLanguages) => { // get all sign languages
+					let promises = [];
+
+					var nameBasedSignLanguages = {};
+					for(let i in signLanguages){
+						let language = signLanguages[i];
+						nameBasedSignLanguages[language.name.toLowerCase()] = language;
+					}
+ 					
+ 					// add new languages to the story
+					for(let i in storySignLanguages){
+						let language = storySignLanguages[i];
+						if(!story.metadata || !story.metadata.signLanguages || story.metadata.signLanguages.indexOf(language) == -1){
+							promises.push(new Promise((_resolve, _reject) => {
+								let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
+								StoryDB.addStoryToSignlanguage(story.id, signlanguageId).then(() => {
+									if(!story.metadata) story.metadata = {};
+									if(!story.metadata.signLanguages) story.metadata.signLanguages = [];
+									story.metadata.signLanguages.push(language);
+									_resolve();
+								}).catch((err) => {
+									_reject(err);
+								});
+							}))
+						}
+					}
+
+ 					// remove old languages to the story
+					if(story.metadata && story.metadata.signLanguages){
+						for(let i in story.metadata.signLanguages){
+							let language = story.metadata.signLanguages[i];
+							if(storySignLanguages.indexOf(language) != -1) continue;
+
+							promises.push(new Promise((_resolve, _reject) => {
+								let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
+								StoryDB.deleteStoryToSignlanguage(story.id, signlanguageId).then(() => {
+									let index = story.metadata.signLanguages.indexOf(language);
+									story.metadata.signLanguages.splice(index, 1);
+									_resolve();
+								}).catch((err) => {
+									_reject(err);
+								});
+							}));
+						}
+					}
+
+					Promise.all(promises).then(() => {
+						resolve(story);
+					}).catch((err) => {
+						reject(err);
+					});
+				});
+			});
+		}).then((story) => { // finish up
+			return res.send(story);
+		}).catch((err) => {
+			return res.send(err);
+		})
+	});
+
+// ******************************************************
+// Other Routes
+// ******************************************************
+	app.get('/api/writtenlanguages', (req, res) => {
+		WrittenlanguageDB.getWrittenLanguages().then((languages) => {
+			return res.send(languages);
+		}).catch((err) => {
+			return res.send(err);
+		});
+	});
+
+	app.get('/api/signlanguages', (req, res) => {
+		SignlanguageDB.getSignLanguages().then((languages) => {
+			return res.send(languages);
+		}).catch((err) => {
+			return res.send(err);
+		});
+	});
+
+	app.post('/api/writtenlanguage', ValidateUser, (req, res) => {
+		let language = req.body.language;
+
+		if(!language || language == '') {
+			return res.send('Language Error');
+		}
+
+		WrittenlanguageDB.addWrittenLanguage(language).then(function(languageId) {
+			return res.send(languageId + '');
+		}).catch(err => {
+			return res.send(err);
+		});
+	});
+
+	app.post('/api/signlanguage', ValidateUser, (req, res) => {
+		let language = req.body.language;
+
+		if(!language || language == '') {
+			return res.send('Language Error');
+		}
+
+		SignlanguageDB.addSignLanguage(language).then(function(languageId) {
+			return res.send(languageId + '');
+		}).catch(err => {
+			return res.send(err);
+		});
+	});
+
 }
 
 module.exports = apiRoutes;

@@ -1,0 +1,25 @@
+<div id="pages-content" class="editor-content-wrapper">
+	<h1 class="main-header">Build Pages</h1>
+	<div class="main-content">
+		<div class="quarter">
+			<div class="page-nav"></div>
+			<div id="pages-preview">
+				<div class="half"><button id="" class="add-page-button">+<br/>add page</button></div>
+			</div>
+			<div id="page-legend">
+				<div class="page-icon added"> = added</div>
+				<div class="page-icon missing"> = missing</div>
+				<div class="page-icon o-missing"> = missing: optional</div>
+			</div>
+		</div>
+		<div class="three-quarters">
+			<div class="page-nav">
+				<div class="quarter"><button class="page-nav-button active" page-type="written">Text & Image</button></div>
+				<div class="quarter"><button class="page-nav-button" page-type="sign">Sign</button></div>
+				<div class="quarter"><button class="page-nav-button" page-type="glossary">Glossary</button></div>
+			</div>
+			<div id="page-edit-content"></div>
+		</div>
+	</div>
+</div>
+<button id="save-cover" class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

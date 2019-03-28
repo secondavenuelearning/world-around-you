@@ -12,22 +12,24 @@ const pool = mdb.createPool({
 function SignlanguageDB() {
 }
 
-SignlanguageDB.prototype.db_add_signlanguage = function(name) {
+SignlanguageDB.prototype.addSignLanguage = function(name) {
     return new Promise(function(resolve,reject) {
 
 		pool.getConnection().then(conn => {
 
-		    conn.query("INSERT INTO signlanguage (name) VALUES ('"+name+"')").then((res) => {
-			conn.end();
-			resolve({id:res.insertId});
-			return;
-		    }).catch(err => {
-			//handle error
-			conn.end();
-			reject(err);
-			return;
-		    })
+			var query = 'INSERT INTO signlanguage (name) VALUES (?)';
 
+		    conn.query(query, [name]).then((res) => {
+				conn.end().then(() => {
+					resolve(res.insertId);
+					return;
+				});
+		    }).catch(err => {
+				conn.end().then(() => {
+					reject(err);
+					return;
+				});
+		    });
 		}).catch(err => {
 		    reject(err);
 		    return;

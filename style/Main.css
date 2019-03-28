@@ -1,5 +1,21 @@
 *{
 	box-sizing: border-box;	
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+*::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+/* Track */
+*::-webkit-scrollbar-track {
+	box-shadow: inset 0px 0px 2px 1px #004E74;
+}
+
+/* Handle */
+*::-webkit-scrollbar-thumb {
+	box-shadow: inset 0px 0px 5px 2px #004E74;
 }
 html, body{
 	margin: 0px;
@@ -11,10 +27,10 @@ header, footer, main{
 	width: 100%;
 }
 header{
-	height: 75px;
+	height: 93px;
 	background-color: #FFFFFF;
 	top: 0px;
-	border-bottom: 3px solid #004E74;
+	border-bottom: 3px solid rgba(155,155,155,.5);
 	z-index: 100;
 }
 main{
@@ -33,6 +49,10 @@ header #language-selector{
 	position: absolute;
 	top: 0px;
 	right: 15px;
+	width: 175px;
+}
+button:focus {
+  outline: none;
 }
 
 *[lang]:not(html){
@@ -46,6 +66,21 @@ header #language-selector{
     text-align: center;
     font-size: 25px;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     padding-top: 10px;
+}
+#throbber{
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(255, 255, 255, 0.5);
+}
+#throbber img{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
 }

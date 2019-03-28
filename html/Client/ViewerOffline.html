@@ -1,19 +1,27 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Story View Offline</title>
+    <meta name="description" content="Offline viewer for stories.">
+    <link rel="stylesheet" href="../../style/viewer.css">
+    
+    <script src="../../js/Client/ServiceWorkerDOM"></script>
+    <script src="../../js/jquery-ui.min.js"></script>
+    <script src="../../js/Client/viewerOffline.js"></script>
+    <script src="../../js/Client/Carousel.js"></script>
+    <script src="../../js/Client/StoryViewer.js"></script>
+    <script src="../../js/Client/HelperFunctions.js"></script>
+    <script src="../../js/Client/StoryPreview.js"></script>
+</head>
 
 <div id="viewer">
-    <div id="exit-fullscreen"></div>
 
-<div id="holder">
-            <span id="current">2</span>
-            <span id ="slash">/</span>
-            <span id="total">10</span>
-        </div>
-    <div id="viewer-content">
     <div class="viewerNav" id="back">
         <button>
             <img id="btn" src="../../img/icons/General/icon_Page_Back.svg">
             <img class="icon" id="sign" src="../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg">
             <img class="icon" id="cover" src="../../img/icons/StoryViewer/icon_SV_Page_Image.svg">
-            <span class="num">1</span>
+            <span id="num">1</span>
         </button>
     </div>
     <div class="content">
@@ -28,8 +36,8 @@
         
         <div id="storyToggle">
             <button>
-                <img id = "hide" src="../../img/icons/StoryViewer/icon_SV_ShowText.svg">
-                <img id = "show" src="../../img/icons/StoryViewer/icon_SV_HideText.svg">
+                <img id = "show" src="../../img/icons/StoryViewer/icon_SV_ShowText.svg">
+                <img id = "hide" src="../../img/icons/StoryViewer/icon_SV_HideText.svg">
             </button>
         </div>
         
@@ -42,17 +50,19 @@
             <img id="btn" src="../../img/icons/General/icon_Page_Next.svg">
             <img class="icon" id="sign" src="../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg">
             <img class="icon" id="cover" src="../../img/icons/StoryViewer/icon_SV_Page_Image.svg">
-            <span class="num">3</span>
+            <span id="num">3</span>
         </button>
     </div>
 </div>
-</div>
 <div id="viewerBar">
     <div id="index">
-        
+        <div id="holder">
+            <span id="current">2</span>
+            <span id ="slash">/</span>
+            <span id="total">10</span>
+        </div>
     </div>
     <div id="optionBtns">
-        <!--
         <div id ="writtenLang">
             <button>
                 <img src="../../img/icons/StoryViewer/icon_SV_WrittenLang.svg">
@@ -70,10 +80,10 @@
             <select>
             </select>
         </div>
-        -->
+        
         <div id ="fullscreen">
             <button>
-              <!--  <img src="../../img/icons/StoryViewer/icon_SV_Fullscreen.svg"> -->
+                <img src="../../img/icons/StoryViewer/icon_SV_Fullscreen.svg">
             </button>
         </div>
     </div>
@@ -81,7 +91,6 @@
 <div id="id01" class="modal">
         <form class="modal-content animate" action="/action_page.php">
             <div class="container">
-                <div id="exit-modal"></div>
                 <div id = "mediaContainer">
                     <div class = "media">
                         <video id = "videoContainer" autoplay muted src="">
@@ -91,10 +100,10 @@
                         <img id = "definitionImage" >
                     </div>
                 </div>
-                <div id = definitionContainer>
-                    <h1 id = "definitionWord"> Test</h1>
-                    <p id = "definitionText">
-                       The definition of test is a value used to see if it is working correctly.
+                 <div id = definitionContainer>
+                <h1 id = "definitionWord"> Test</h1>
+                <p id = "definitionText">
+                   The definition of test is a value used to see if it is working correctly.
                    </p>
                 </div>
             </div>
@@ -138,3 +147,5 @@
 
 <div id="more-stories"></div>
 <div id="more-author"></div>
+
+</html>

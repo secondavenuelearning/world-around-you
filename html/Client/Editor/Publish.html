@@ -1,0 +1,28 @@
+<% 
+	var missingPageContent = false;
+	if(data.length == 0){
+		missingPageContent = true;
+	}
+	_.each(data, function(page){
+		var hasWritten, hasSign;
+		_.each(page.text, function(){
+			hasWritten = true;
+		});
+		_.each(page.video, function(){
+			hasSign = true;
+		});
+		if(!hasWritten || !hasSign) missingPageContent = true;
+	});
+%>
+<div id="publish" class="editor-content-wrapper">
+	<h1 class="main-header">Publish Story</h1>
+	<div class="main-content">
+		<div id="pages"></div>		
+		<div id="page-legend">
+			<div class="page-icon added"> = added</div>
+			<div class="page-icon missing"> = missing</div>
+			<div class="page-icon o-missing"> = missing: optional</div>
+		</div>
+	</div>
+</div>
+<button id="publish-story" class="save-button" <%- missingPageContent ? 'disabled' : '' %>>Publish Story</button>

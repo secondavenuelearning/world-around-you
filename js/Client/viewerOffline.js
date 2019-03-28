@@ -1,12 +1,3 @@
-import 'style/Viewer.css!';
-import html from 'html/Client/Viewer.html!text';
-
-import StoryPreview from 'js/Client/StoryPreview';
-import Carousel from 'js/Client/Carousel.js';
-import StoryViewer from 'js/Client/StoryViewer.js';
-import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-import FiltersBar from 'js/Client/Filter.js';
-
 var totalLikes;
 var canLike = true;
 
@@ -77,6 +68,7 @@ $(document).ready(function () {
     //update main section of page
 
     $('main').html(html);
+    console.log("VIEWER");
     
     SetVideoTitle("Test");
     SetAuthorInfo("Chase", "img/icons/user.png");
@@ -108,7 +100,7 @@ $(document).ready(function () {
             });
             storyOne.push(sp);
         }
-        new Carousel("#more-stories", storyOne, 4, false, false, "Similar Stories");
+        new Carousel("#more-stories", storyOne, 4, false, false, "More Stories");
             
         }).fail((err) => {
 
@@ -142,7 +134,6 @@ $(document).ready(function () {
 
     });
     
-    FiltersBar('index', true);
    /* var storyTwo = [];
     for (var i = 0; i < 9; i++) {
         let sp = new StoryPreview({
@@ -165,10 +156,6 @@ $(document).ready(function () {
                 modal.style.display = "none";
             }
         }
-        document.getElementById("exit-modal").onclick = function () {
-            modal.style.display = "none";
-        };
-        
 
     var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";

@@ -2,10 +2,66 @@
 #viewer {
     background-color: #004e74;
     width: 100%;
-    height: calc(100% - 90px);
+    height: 60%;
     padding: 20px;
 }
+#viewer-page-bar{
+    display: inline;
+    position: relative;
+    text-align: center;
+    height: 50px;
+    width: 100%;
+    background-color: #004e74;
+    margin-top: 20px;
+}
+#holder{
+    position: relative;
+    background-color: white;
+    width: 207px;
+    height: 40px;
 
+    border: 1px;
+    border-radius: 30px;
+    margin: 0px auto;
+    border-radius: 30px;
+    top: 6px;
+}
+.holder-fullscreen{
+    top: -10px !important;
+}
+#exit-fullscreen{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-image: url('../img/icons/General/icon_Close.svg');
+    display: none;
+}
+#exit-fullscreen:hover{
+    background-image: url('../img/icons/General/icon_Close_hoverDown.svg');
+}
+#exit-fullscreen.fullscreen-active{
+    display: block;
+}
+#exit-modal{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-image: url('../img/icons/General/icon_Close.svg');
+    right: 0px;
+}
+#exit-modal:hover{
+    background-image: url('../img/icons/General/icon_Close_hoverDown.svg');
+}
+#viewer-content{
+    position: relative;
+    height: calc(100% - 60px);
+    width: 100%;
+    margin-top: 23px;
+}
+.viewer-content-fullscreen{
+    height: calc(100% - 40px) !important;
+    margin-top: 5px !important;
+}
 #Description {
     font-size: 20px;
 }
@@ -15,7 +71,7 @@
 #viewerBar {
     background-color: #0098ba;
     width: 100%;
-    height: 70px;
+    height: 55px;
 }
 
 #viewerBar #index {
@@ -25,32 +81,26 @@
     text-align: center;
     height: 100%;
     width: 100%;
-    padding: 10px;
+    padding: 0px;
 }
 
-#viewerBar #index #holder {
-    display: inline-block;
-    background-color: white;
-
-    height: 100%;
-
-    border: 1px;
-    border-radius: 30px;
-}
-
-#viewerBar span {
+#holder span {
     color: #004e74;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 45px;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-size: 35px;
     font-weight: bold;
-    padding: 0 25px;
+    width: 30%;
+    text-align: center;
+    margin: -5px auto;
+    float: left;
+    /*padding: 0 25px;*/
 }
 
-#viewerBar span#current {
+#holder span#current {
     color: #0098ba;
 }
 
-#viewerBar span#slash {
+#holder span#slash {
     
     padding: 0;
     
@@ -71,6 +121,22 @@
 
 }
 
+#fullscreen button{
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-image: url('../img/icons/StoryViewer/icon_SV_Fullscreen.svg');
+}
+#fullscreen button:hover{
+    background-image: url('../img/icons/StoryViewer/icon_SV_Fullscreen_hoverDown.svg');
+}
+
+#fullscreen.fullscreen-active button{
+    background-image: url('../img/icons/StoryViewer/icon_SV_FullScreen_Reverse.svg') !important;
+}
+#fullscreen.fullscreen-active button:hover{
+    background-image: url('../img/icons/StoryViewer/icon_SV_FullScreen_Reverse_hoverDown.svg') !important;
+}
+
 #viewerBar #optionBtns
 {
     display: inline-block;
@@ -80,7 +146,7 @@
     float: right;
 
     position: relative;
-    top: -70px;
+    top: -55px;
 }
 
 #viewerBar #optionBtns div
@@ -94,8 +160,8 @@
 
 #viewerBar #optionBtns button
 {
-    height: 60px;
-    width: 60px;
+    height: 48px;
+    width: 48px;
     
     display: inline-block;
     
@@ -108,8 +174,8 @@
 }
 
 #viewerBar #optionBtns button img {
-    height: 60px;
-    width: 60px;
+    height: 48px;
+    width: 48px;
 }
 
 #viewerBar #optionBtns select
@@ -128,6 +194,17 @@
     
     background-color: #004e74;
     color: white;
+}
+
+.filters{
+    margin-top: -15px;
+    visibility: visible;
+}
+.filters.fullscreen-active{
+    visibility: hidden;
+}
+.filters .container{
+    height: auto;
 }
 
 /* viewer forward/backward buttons */
@@ -190,6 +267,7 @@
     padding: 10px;
     padding-bottom: 2px;
     padding-top: 8px;
+    margin-top: 15px;
 }
 
 .viewerNav#back .icon {
@@ -202,25 +280,26 @@
     float: left;
 }
 
-.viewerNav #num {
+.viewerNav .num {
     display: inline-block;
     width: 70%;
 
     color: #0098ba;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-weight: bold;
-    font-size: 40px;
+    font-size: 30px;
 
     padding-left: 10px;
     padding-right: 10px;
+    top: -5px;
 }
 
-.viewerNav#back #num {
+.viewerNav#back .num {
     position: relative;
     float: right;
 }
 
-.viewerNav#forward #num {
+.viewerNav#forward .num {
     position: relative;
     float: left;
 }
@@ -271,7 +350,7 @@
     margin-left: 1px;
 
     color: white;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-size: 30px;
 
     position: relative;
@@ -292,7 +371,7 @@
     
 
     height: 50%;
-    max-height: calc(50% - 20px);
+    max-height: 90%;
     width: 100%;
     
     transition: height .6s;
@@ -335,14 +414,14 @@
     padding: 5px;
     padding-left: 30px;
     padding-right: 30px;
-    line-height: 40px;
+    line-height: 1.9em;
     
     overflow-y: auto;
     
     transition: height .6s, opacity .4s;
     
     
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-size: 24px;
     color: white;
 }
@@ -360,7 +439,7 @@
     width: 100%;
     
     position: relative;
-    top: calc(-50px);
+    top: -54px;
     
     opacity: .9;
 }
@@ -372,13 +451,13 @@
     border: 1px;
     border-radius: 50% 50% 0 0;
     border-color: #004e74;
-    background-color: #004e74;
 
     position: relative;
     left: calc(25px - 50%);
     z-index: 3;
 
     float: right;
+    background: none;
 }
 
 .content #storyToggle button img {
@@ -393,16 +472,14 @@
 {
     position: relative;
     
-    padding-left: 5px;
-    padding-right: 5px;
-    
     background-color: #004e74;
     border-color: #004e74;
     border-style: solid;
-    border-radius: 15px;
-
-    
+    border-radius: 15px;  
     transition: border-color .6s;
+    border-width: 2px;
+    padding: 5px;
+    padding-top: 0px;
 }
 
 .glossary:hover
@@ -501,7 +578,7 @@
     width: 110px;
 
     vertical-align: middle;
-
+    margin: 5px;
 }
 
 #uploader {}
@@ -551,21 +628,62 @@
     top: 3px;
 }
 
+#more-stories .dot {
+    height: 15px;
+    width: 15px;
+}
+#more-author .dot{
+    height: 15px;
+    width: 15px;
+}
 #more-stories {
-    height: 30%;
-
-
-
+    height: 21%;
 }
-
 #more-author {
-    height: 30%;
+    height: 21%;
 }
+@media (min-width:900px) {
+    #more-stories {
+        height: 24%;
+    }
+    #more-author {
+        height: 24%;
+    }
+}
+@media (min-width:1100px) {
+    #more-stories {
+        height: 29%;
+    }
+    #more-author {
+        height: 29%;
+    }
+}
+.carousel-nav-img{
+    width: 45px !important;
+}
+.carousel-nav.right .carousel-nav-img{
+    margin-left: -65% !important;
+}
+.carousel-nav.left .carousel-nav-img{
+    margin-left: 65% !important;
+}
+.image-holder .pageTitle{
+    text-align: left;
+    height: 35px !important;
+    padding-bottom: 5px;
+    padding-top: 2px !important;
+    font-size: 1.4em;
+}
+
 
 .carousel {
     width: 100%;
 
 
+}
+
+.carousel-panel{
+    width: calc(103% / 4) !important;
 }
 
 /* The Modal (background) */
@@ -583,7 +701,7 @@ input[type=email] {
 .modal {
 
 
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     text-align: center;
     background-color: #0098ba;
     color: #ffffff;
@@ -671,14 +789,14 @@ input[type=email] {
     border-right: 200px;
     border-color: white;
     
-    float: right;
+    float: left;
     text-align: left;
     
     background-color: #a0eaf7;
 
     font-size: 30px;
     font-style: bold;
-    
+    margin-left: 0px;
 }
 #definitionContainer h1{
     color: #004e74;
@@ -688,16 +806,21 @@ input[type=email] {
     display: block;
     width: 30%;
     height: 90%;
-    
     margin: 2.5%;
-    
-
     border-style: none;
     border-radius: 10px;
     float: left;
+    margin-left: 2%;
+}
 }
 
 .media{
+    height: 50%;
+    
+    padding: 5px;
+}
+
+#mediaContainer .media{
     height: 50%;
     
     padding: 5px;
@@ -717,10 +840,14 @@ input[type=email] {
     max-height: 90%;
 }
 #mediaContainer img{
+    /*
     height: 100%;
     width: auto;
-    
     max-width: 100%;
+    */
+    width: auto;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 /* Add Zoom Animation */

@@ -33,21 +33,21 @@
     border-bottom-width: 0px;
     border-top-width: 0px;
     padding-bottom: 40px;
-    border-radius: 25px;
+    border-radius: 7px;
     background-color: #004e74;
 }
 
 .carousel.single .left{
-    margin-left: 20%;
+    margin-left: 10%;
 }
 
 .carousel.single .right{
-    margin-right: 20%;
+    margin-right: 10%;
 }
 
 .carousel.single .image-holder
 {
-    width: 40%;
+    width: 60%;
 }
 
 .carousel.single .image-holder.outerIndicator
@@ -82,30 +82,31 @@
 
 /* Page Indicator */
 .pageTitle.overlay{
-      background-color: #004e74;
+    background-color: rgba(0,78,116,.85);
     padding-top: 0px;
     z-index: 1;
     width: 100%;
-    height: 30px;
-    opacity: .7;
+    height: 35px;
     transition: opacity .5s;
     color: White;
-    top: 45px;
-    
+    top: 35px;
+}
+.pageTitle.overlay span{
+    font-size: 23px;
 }
 .pageTitle{
-     background-color: #004e74;
+    background-color: #004e74;
     padding-top: 5px;
 
     width: 100%;
     height: 25px;
-    font-size: 25px;
+    
     color: White;
     position: relative;
     
     text-align: center;
     
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
 
 .page-indicator.overlay
@@ -118,7 +119,7 @@
     opacity: .7;
     
     position: relative;
-    top: -82px; 
+    top: -64px; 
 }
 
 .page-indicator
@@ -180,7 +181,9 @@
 .image-holder .story-preview{
     width: 100%;
     height: 100%;
-    /*background-color: #004e74;*/
+    background-color: #004e74;
+    
+    padding: 0px;
 }
 .image-holder .story-preview .cover-image-container{
     width: calc(100% - 30px);
