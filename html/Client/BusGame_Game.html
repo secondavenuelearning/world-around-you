@@ -1,0 +1,27 @@
+
+<div id="top" class="lane">
+    <div class="inner">
+        <div class="vehicle car"><img src="<%- Top.Car %>"></div>
+        <div class="vehicle bus">
+            <img src="<%- Top.Bus %>">
+            <div class="windows">
+                <div class="window hidden first"><%= Top.Windows[0] %></div>
+                <div class="window hidden"><%= Top.Windows[1] %></div>
+                <div class="window hidden"><%= Top.Windows[2] %></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="bottom" class="lane">
+    <div class="inner">
+        <div class="vehicle bus">
+            <img src="<%- Bottom.Bus %>">
+            <div class="windows">
+                <div class="window hidden"><%= Bottom.Windows[0] %></div>
+                <div class="window hidden"><%= Bottom.Windows[1] %></div>
+                <div class="window hidden last"><%= Bottom.Windows[2] %></div>
+            </div>
+        </div>
+        <div class="vehicle car"><img src="<%- Bottom.Car %>"></div>
+    </div>
+</div>
