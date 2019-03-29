@@ -100,9 +100,6 @@ $(document).ready(function () {
 
 			editorPageIndex += dir;
 
-			$('#editor-nav-previous').prop('disabled', editorPageIndex == 0);
-			$('#editor-nav-next').prop('disabled', editorPageIndex == EDITORPAGES.length - 1);
-
 			renderEditorContent();
 		});
 
@@ -111,6 +108,10 @@ $(document).ready(function () {
 			url: `./api/story?id=${storyId}`
 		}).done((_story) => {
 			story = _story;
+
+			// go to the publish page is the story is already visible
+			if(story.visible) editorPageIndex = EDITORPAGES.length - 1;
+
 			renderEditorContent();
 
 		}).fail((err) => {
@@ -122,6 +123,10 @@ $(document).ready(function () {
 
 function renderEditorContent(renderData){
 	if(!story) return;
+
+
+	$('#editor-nav-previous').prop('disabled', editorPageIndex == 0);
+	$('#editor-nav-next').prop('disabled', editorPageIndex == EDITORPAGES.length - 1);
 
 	$('#editor-content').html('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 
@@ -574,6 +579,21 @@ function renderPagesPage(renderData){
 						}));
 					});
 				}
+				if(page.glossary){
+					_.each(page.glossary, (glossaryList, lang) => {
+						_.each(glossaryList, (termObj, term) => {
+							if(!termObj.imageFile) return;
+
+							uploadPromises.push(new Promise((resolve, reject) => {
+								UploadFile(termObj.imageFile, `pgi-${storyId}-${page.id}-${lang}-${term}`).then((path) => {
+									page.glossary[lang][term].image = path;
+									delete page.glossary[lang][term].imageFile;
+									resolve();
+								});
+							}));
+						})
+					});
+				}
 
 				Promise.all(uploadPromises).then(() => {
 					let _data = {
@@ -588,6 +608,9 @@ function renderPagesPage(renderData){
 					}).done((_story) => {
 						if(_story){
 							story = _story;
+							renderData = {
+								currentPageIndex: currentPageIndex
+							}
 							ReRender();
 						}
 						else{
@@ -679,7 +702,6 @@ function renderPagesPage(renderData){
 		currentPageIndex = parseInt($el.attr('page-index'));
 		currentWrittenLanguage = story.metadata.writtenLanguages[0];
 		currentSignLanguage = story.metadata.signLanguages[0];
-		currentPageContent = 'written';
 
 		$('.page-nav-button').removeClass('active');
 		$(`.page-nav-button[page-type=${currentPageContent}]`).addClass('active');
@@ -688,24 +710,28 @@ function renderPagesPage(renderData){
 	}
 
 	// function to render the a page tab (editing text, video, or glossary terms)
-	var RenderPageContent = function($el){		
+	var RenderPageContent = function($el){
+		var page = data[currentPageIndex];	
 		if(currentPageContent == 'written'){
 			$('#page-edit-content').html(editWrittenTemplate({
-				page: data[currentPageIndex],
+				page,
 				story,
 				currentWrittenLanguage
 			}));
 		}
 		if(currentPageContent == 'sign'){
 			$('#page-edit-content').html(editSignTemplate({
-				page: data[currentPageIndex],
+				page,
 				story,
 				currentSignLanguage
 			}));
 		}
 		if(currentPageContent == 'glossary'){
+			// set the current glossary term to the first term
+			currentGlossaryTerm = page.glossary && page.glossary[currentWrittenLanguage] ? Object.keys(page.glossary[currentWrittenLanguage])[0] : '';
+
 			$('#page-edit-content').html(editGlossaryTemplate({
-				page: data[currentPageIndex],
+				page,
 				story,
 				currentWrittenLanguage,
 				currentSignLanguage,
@@ -714,20 +740,20 @@ function renderPagesPage(renderData){
 			let vid = $('#glossary-video-player')[0];
 			if(vid){
 				vid.ondurationchange = function(){
-					if(!data[currentPageIndex].glossary || !data[currentPageIndex].glossary[currentWrittenLanguage] 
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm] 
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
+					if(!page.glossary || !page.glossary[currentWrittenLanguage] 
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm] 
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm].video
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
 					UpdateVideoKnobs();
 				}
 				vid.ontimeupdate = function(){
-					if(!data[currentPageIndex].glossary || !data[currentPageIndex].glossary[currentWrittenLanguage] 
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm] 
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video
-						|| !data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
+					if(!page.glossary || !page.glossary[currentWrittenLanguage] 
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm] 
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm].video
+						|| !page.glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage]) return;
 
-					let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0,
-						endTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end || vid.duration;
+					let startTime = page.glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0,
+						endTime = page.glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end || vid.duration;
 
 					if(vid.currentTime < startTime || vid.currentTime > endTime)
 						vid.currentTime = startTime;
@@ -817,6 +843,26 @@ function renderPagesPage(renderData){
 			RenderPageContent();
 		})
 
+		$('#glossary-image-button').on('click', (evt) => {
+			$('#glossary-image-input').trigger('click');
+		});
+
+		$('#glossary-image-input').on('change', (evt) => {
+			var file = $('#glossary-image-input')[0].files[0];
+			// create a new file reader
+			var reader = new FileReader();
+
+			reader.onload = function(){
+				$('#glossary-image-container').css('background-image', `url(${reader.result})`);
+				data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].image = reader.result;
+				data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].imageFile = file;
+
+				$('.save-button').prop('disabled', false);
+				unsavedChanges = true;
+			}
+			reader.readAsDataURL(file);
+		});
+
 		$('#term-add-button').on('click', (evt) => {
 			RenderAddText(evt.currentTarget, 'glossaryTerm', null, (el) => {
 				if(!data[currentPageIndex].glossary) data[currentPageIndex].glossary = {};
@@ -894,6 +940,13 @@ function renderPagesPage(renderData){
 			});
 		});
 
+		$('#term-definition-input').on('keydown keyup', (evt) => {
+			data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].definition = $(evt.currentTarget).val();
+
+			$('.save-button').prop('disabled', false);
+			unsavedChanges = true;
+		});
+
 	}
 
 	var UpdateVideoKnobs = function(){
@@ -941,8 +994,6 @@ function renderPublishPage(){
 		$el = AddPagePreview($('#pages'), page, index);
 		$el.on('click', () => {
 			editorPageIndex--;
-			$('#editor-nav-previous').prop('disabled', editorPageIndex == 0);
-			$('#editor-nav-next').prop('disabled', editorPageIndex == EDITORPAGES.length - 1);
 			renderEditorContent({currentPageIndex: index});
 		});
 	});

@@ -1,5 +1,5 @@
 <div id="edit-glossary">
-	<% var currentGlossaryTermData = page.glossary && page.glossary[currentWrittenLanguage] && page.glossary && page.glossary[currentWrittenLanguage][currentGlossaryTerm] ? page.glossary[currentWrittenLanguage][currentGlossaryTerm] : {} %>
+	<% var currentGlossaryTermData = page.glossary && page.glossary[currentWrittenLanguage] && page.glossary[currentWrittenLanguage][currentGlossaryTerm] ? page.glossary[currentWrittenLanguage][currentGlossaryTerm] : {} %>
 	<div id="written-select-container" class="quarter">
 		<h2>Written Language</h2>
 		<div id="written-select">
@@ -26,41 +26,45 @@
 					<button id="term-add-button" class="add-text-button">+</button>
 				</div>
 			</div>
-			<div id="term-edit-container" class="third">
-				<textarea id="term-definition-input"><%= currentGlossaryTermData.definition %></textarea>
-			</div>
-			<div class="third">
-				<div id="glossary-image-container" class="cover-image-container" style="background-image: url(<%- currentGlossaryTermData.image ? currentGlossaryTermData.image : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
-					<div id="glossary-image-input-container" class="upload-input-container">
-						<input id="glossary-image-input" class="upload-input" type="file" name="coverimage" accept="image/*">
-						<button id="glossary-image-button" class="upload-button">Upload image</button>
+			<% if(currentGlossaryTerm && currentGlossaryTerm != ''){ %>
+				<div id="term-edit-container" class="third">
+					<textarea id="term-definition-input"><%= currentGlossaryTermData.definition %></textarea>
+				</div>
+				<div class="third">
+					<div id="glossary-image-container" class="cover-image-container" style="background-image: url(<%- currentGlossaryTermData.image ? currentGlossaryTermData.image : './img/icons/StoryBuilder/icon_SB_ImagePlaceholder.svg' %>);">
+						<div id="glossary-image-input-container" class="upload-input-container">
+							<input id="glossary-image-input" class="upload-input" type="file" name="coverimage" accept="image/*">
+							<button id="glossary-image-button" class="upload-button">Upload image</button>
+						</div>
 					</div>
 				</div>
-			</div>
+			<% } %>
 		</div>
 		<div>
-			<div id="sign-language-select-container" class="third">
-				<h2>Sign Language</h2>
-				<div id="sign-select">
-					<% _.each(story.metadata.signLanguages, function(language){ 
-						if(!page.video || !page.video[language]) return;
-					%>
-						<div><button class="sign-language-select-button glossary-select-button <%- language == currentSignLanguage ? 'active' : '' %> <%- currentGlossaryTermData.video && currentGlossaryTermData.video[language] ? 'added' : '' %>" select-type="currentSignLanguage" select-value="<%- language %>"><%- language %></button></div>
-					<% }) %>
-				</div>
-			</div>
-			<div id="glossary-video-container" class="two-thirds">
-				<div id="glossary-video-player-container">
-					<video id="glossary-video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
-					<div id="glossary-video-controller">
-						<div id="track"></div>
-						<div id="selected-track"></div>
-						<% var termVideo = currentGlossaryTermData.video && currentGlossaryTermData.video[currentSignLanguage] ? currentGlossaryTermData.video[currentSignLanguage] : {}; %>
-						<div id="start-knob" class="video-knob" knob-type="start"><div class="knob-time" style="display: none;"><%- termVideo.start ? termVideo.start + 's' : 'n/a' %></div></div>
-						<div id="end-knob" class="video-knob" knob-type="end"><div class="knob-time" style="display: none;"><%- termVideo.end ? termVideo.end + 's' : 'n/a' %></div></div>
+			<% if(currentGlossaryTerm && currentGlossaryTerm != ''){ %>
+				<div id="sign-language-select-container" class="third">
+					<h2>Sign Language</h2>
+					<div id="sign-select">
+						<% _.each(story.metadata.signLanguages, function(language){ 
+							if(!page.video || !page.video[language]) return;
+						%>
+							<div><button class="sign-language-select-button glossary-select-button <%- language == currentSignLanguage ? 'active' : '' %> <%- currentGlossaryTermData.video && currentGlossaryTermData.video[language] ? 'added' : '' %>" select-type="currentSignLanguage" select-value="<%- language %>"><%- language %></button></div>
+						<% }) %>
 					</div>
 				</div>
-			</div>
+				<div id="glossary-video-container" class="two-thirds">
+					<div id="glossary-video-player-container">
+						<video id="glossary-video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
+						<div id="glossary-video-controller">
+							<div id="track"></div>
+							<div id="selected-track"></div>
+							<% var termVideo = currentGlossaryTermData.video && currentGlossaryTermData.video[currentSignLanguage] ? currentGlossaryTermData.video[currentSignLanguage] : {}; %>
+							<div id="start-knob" class="video-knob" knob-type="start"><div class="knob-time" style="display: none;"><%- termVideo.start ? termVideo.start + 's' : 'n/a' %></div></div>
+							<div id="end-knob" class="video-knob" knob-type="end"><div class="knob-time" style="display: none;"><%- termVideo.end ? termVideo.end + 's' : 'n/a' %></div></div>
+						</div>
+					</div>
+				</div>
+			<% } %>
 		</div>
 	</div>
 
