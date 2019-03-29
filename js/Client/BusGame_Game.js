@@ -1,9 +1,12 @@
 import _ from 'underscore';
 import html from 'html/Client/BusGame_Directions.html!text';
+import gameHtml from 'html/Client/BusGame_Game.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default BusGame
 
 /* ----------------------- Global Variables ----------------------- */
+var template = _.template(gameHtml);
+
 var storyData;
 var score = 0;
 var firstClick = false;
@@ -11,6 +14,36 @@ var firstClick = false;
 var firstSelected;
 var secondSelected;
 var totalMatches;
+
+var termList = []; //hard values for testing
+var signLang;
+var writtenLang;
+
+var roundOrder;
+var roundTotalMatches = 0;
+var round = 
+[
+    //round data will be structured as such:
+    
+    //  { 
+    //    [term]: mediaType
+    //  },
+    // --repeats 2x per term
+    // --once for each mediaType ("vid" or "txt")
+    // >>>Data removed from this array once parsed into html objects
+];
+
+var activeAnimations = [];
+var animTags = 
+[
+    //anim tags structure:
+    
+    //  {
+    //     [id]:framesArray,
+    //     [id]:framesArray
+    //  }
+    // --repeats
+];
 var images = 
     {
         Cars: 
@@ -25,25 +58,6 @@ var images =
             FacingLeft: []
         }
     };
-
-var termList = []; //hard values for testing
-var signLang;
-var writtenLang;
-
-var roundOrder;
-var roundTotalMatches = 0;
-var round = 
-[
-    //round data will be structured as such:
-    
-    //  { 
-    //    "term": mediaType
-    //  },
-    // --repeats 2x per term
-    // --once for each mediaType ("vid" or "txt")
-];
-
-var activeAnimations = [];
 
 
 /* ----------------------- Constructor ----------------------- */
@@ -75,12 +89,6 @@ export function BusGame(storyObj, sign, written, terms)
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
     
-    
-    //build out lanes and add cars
-    BuildLanes();
-
-    
-    //start first round
     NextRound();
 }
 
@@ -174,107 +182,47 @@ function ExtendHeader()
     $('header #total').text("/" + totalMatches);
 }
 
-function BuildLanes()
+function BuildWindows()
 {
-    //build html
-    var laneHTML = "<div id=\"top\" class=\"lane\"><div class = \"inner\"></div></div>";
-    laneHTML += "<div id=\"bottom\" class=\"lane\"><div class = \"inner\"></div></div>";
-    
-    //replace main with the lanes
-    $('main').html(laneHTML);
-}
-
-function BuildCar(dir, lane)
-{
-    //chose image to use for car
-    var car = images.Cars[dir]; //get cars at the proper facing dir
-    car = car[Math.floor(Math.random() * (car.length))]; //get random car from the array
-    car = car[0];
-    
-    //build car html
-    var carHTML = "<div class = \"vehicle car\">";
-    carHTML += "<img src = \"" + car.src + "\">"
-    carHTML += "</div>";
-    
-    //add car to lane
-    $(lane).append(carHTML);
-    
-    /*update lane width
-    var laneWidth = $(lane).width();
-    laneWidth += 600;
-    $(lane).css('width', laneWidth); //*/
-}
-
-function BuildBus(dir, lane)
-{ console.log("building bus");
-    //chose image to use for bus
-    var bus = images.Buses[dir]; //get cars at the proper facing dir
-    bus = bus[Math.floor(Math.random() * (bus.length))]; //get random car from array
-    bus = bus[0]; //get first frame as the still photo
-    
-    //build car html
-    var busHTML = "<div class = \"vehicle bus\">";
-    busHTML += "<img src = \"" + bus.src + "\">";
-    busHTML += "<div class = \"windows\">";
+    var windowsHTML = [];
     
     //add html for each window
     for(var i = 0; i < 3; i++)
     {
-        //build window - acount for extra spacing betwen special case windows
-        if(dir == "FacingLeft" && i === 0) //first window on facing left bus
-        {
-            busHTML += "<div class = \"window  hidden first\">";
-        }
-        else if(dir == "FacingRight" && i === 2) //last widnow on facing right bus
-        {
-            busHTML += "<div class = \"window hidden last\">";
-        }
-        else //default
-        {
-            busHTML += "<div class = \"window hidden\">";
-        }
-        
         //get term and relvant data
         var randIndex = Math.floor(Math.random() * round.length); //random index of item
         var roundItem = round[randIndex]; //get item at index
         var term = Object.keys(roundItem); //should only be one so key is the term
         var mediaType = roundItem[term]; //media is value of the key(term)
 
+        var windowHTML = "";
         switch(mediaType)
         {
 
             case "txt": //term
                 var id = term + "Txt";
-                busHTML += "<span id = \"" + id + "\">" + term + "</span>"; 
+                windowHTML += "<span id = \"" + id + "\">" + term + "</span>"; 
 
             break;
 
             case "vid": //video
                 var id = term + "Vid";
                 var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
-                busHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
+                windowHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
             case "none": //no media
-                busHTML += "<div id = \"none\"></div>";
+                windowHTML += "<div id = \"none\"></div>";
             break;
         } 
         
         //remove used term from roundlist
         round.splice(randIndex, 1);
         
-        busHTML += "</div>"; //close window div 
+        windowsHTML.push(windowHTML);
     }
-    busHTML += "</div>"; //close windows div 
-    busHTML += "</div>"; //close bus div
     
-    //add bus to lane
-    $(lane).append(busHTML);
-    
-    /*update lane width
-    var laneWidth = $(lane).width();
-    laneWidth += 1080;
-    $(lane).css('width', laneWidth);//*/
+    return windowsHTML;
 }
 
 function SetupWindowConnections(){
@@ -347,12 +295,29 @@ function NextRound()
         DefineRound(roundLength);
         roundOrder.splice(randIndex, 1);
 
-        //builds vehicles for this round
-        BuildCar("FacingLeft", "#top .inner");
-        BuildBus("FacingLeft", "#top .inner"); //buses hold terms
-        BuildBus("FacingRight", "#bottom .inner"); //buses hold terms
-        BuildCar("FacingRight", "#bottom .inner");
+        //update html of page form template
+        var main = template(
+        {
+            Top:
+            {
+                Bus: ChooseRandomArrayElement(images.Buses.FacingLeft)[0].src,
+                Car: ChooseRandomArrayElement(images.Cars.FacingLeft)[0].src,
+                Windows: BuildWindows()
+            },
+            Bottom:
+            {
+                Bus: ChooseRandomArrayElement(images.Buses.FacingRight)[0].src,
+                Car: ChooseRandomArrayElement(images.Cars.FacingRight)[0].src,
+                Windows: BuildWindows()
+            }
+        });
+
+        this.$main = $(main);
+        $('main').html(this.$main);
+
+        //add clicking mechnaic functionality to windows
         SetupWindowConnections();
+        
         //add looping to the video
         var vids = $(".window video").toArray();
         vids.forEach(function(vid)
@@ -514,6 +479,18 @@ function Animate(id, frames, frame)
 }
 
 /* ----------------------- Helper Functions ----------------------- */
+function GetImgSourceFolder(imgSrc)
+{
+    
+}
+
+function ChooseRandomArrayElement(options)
+{
+    //chose image to use for bus
+    var selected = options[Math.floor(Math.random() * (options.length))]; 
+    return selected;
+}
+
 function LoopVideoClip(videoID, start, end)
 {
     var videoContainer = document.getElementById(videoID)
