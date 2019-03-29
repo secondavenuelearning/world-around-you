@@ -137,6 +137,7 @@ let apiRoutes = function(app){
 
 			for(let i=0; i<_stories.length; i++){
 				let story = _stories[i];
+
 				// Check for an exact match of the title 
 				if(SearchForMatch(term, story.metadata.title, true))
 					story.metadata.relevancy = 1;
@@ -147,16 +148,16 @@ let apiRoutes = function(app){
 				else if(SearchForMatch(term, story.metadata.title))
 					story.metadata.relevancy = 3;
 				// Check for the exact match of a tag
-				else if(SearchForMatch(term, story.metadata.tag, true))
+				else if(SearchForMatch(term, story.metadata.tags, true))
 					story.metadata.relevancy = 4;
 				// Check for the exact match of genre
-				else if(SearchForMatch(term, story.metadata.genre, true))
+				else if(SearchForMatch(term, story.metadata.genres, true))
 					story.metadata.relevancy = 5;
 				// Check for the occurance of the term a tag
-				else if(SearchForMatch(term, story.metadata.tag, true))
+				else if(SearchForMatch(term, story.metadata.tags, true))
 					story.metadata.relevancy = 6;
 				// Check for the occurance of the term a genre
-				else if(SearchForMatch(term, story.metadata.genre, true))
+				else if(SearchForMatch(term, story.metadata.genres, true))
 					story.metadata.relevancy = 7;
 				// Check for the occurance of the term a description
 				else if(SearchForMatch(term, story.metadata.description))

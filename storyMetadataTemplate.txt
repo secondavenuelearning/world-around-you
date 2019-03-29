@@ -1,0 +1,20 @@
+metadata = {
+	writtenLanguages: ['wLang1', 'wLang2'],
+	signLanguages: ['sLang1'],
+	description: {
+		'wLang1': 'string',
+		'wLang2': 'string'
+	},
+	genre: {
+		'wLang1': ['string', 'string'],
+		'wLang2': ['string']
+	},
+	tag: {
+		'wLang1': ['string', 'string'],
+		'wLang2': ['string']
+	},
+	title: {
+		'wLang1': 'string',
+		'wLang2': 'string'
+	}
+}

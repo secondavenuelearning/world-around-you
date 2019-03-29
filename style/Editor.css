@@ -70,27 +70,6 @@ body.dragging{
 	margin-bottom: 10px;
 	font-size: 1.25em;
 }
-.editor-content-wrapper .half, 
-.editor-content-wrapper .third, 
-.editor-content-wrapper .two-thirds, 
-.editor-content-wrapper .quarter, 
-.editor-content-wrapper .three-quarters{
-	float: left;
-	width: calc(50% - 20px);
-	margin: 10px;
-}
-.editor-content-wrapper .third{
-	width: calc((100% / 3 ) - 20px);
-}
-.editor-content-wrapper .two-thirds{
-	width: calc((100% * 2 / 3 ) - 20px);
-}
-.editor-content-wrapper .quarter{
-	width: calc((100% / 4 ) - 20px);
-}
-.editor-content-wrapper .three-quarters{
-	width: calc((100% * 3 / 4 ) - 20px);
-}
 #editor-content .save-button{
 	position: absolute;
 	top: calc(100% - 50px);

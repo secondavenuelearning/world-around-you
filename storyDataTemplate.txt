@@ -1,0 +1,121 @@
+[
+	{
+		image: 'file'
+		video (required): {
+			sign-language(1): 'video.file',
+			.
+			.
+			.
+			sign-language(n): 'video.file'
+		},
+		text (required): {
+			written-language(1): 'text',
+			.
+			.
+			.
+			written-language(n): 'text'
+		},
+		glossary (optional): {
+			.
+			.
+			.
+			written-language(n): {
+				term(1): {
+					definition: 'text',
+					image: 'file',
+					video:{
+						sign-language(1): {
+							start: starttime,
+							end: endtime
+						},
+						.
+						.
+						.
+						sign-language(n): {
+							start: starttime,
+							end: endtime
+						}
+					}
+				},
+				.
+				.
+				.
+				term(n): {
+					definition: 'text',
+					image: 'file',
+					video:{
+						sign-language(1): {
+							start: starttime,
+							end: endtime
+						},
+						.
+						.
+						.
+						sign-language(n): {
+							start: starttime,
+							end: endtime
+						}
+					}
+				}
+			}
+		}
+	},
+	{
+		video (required): {
+			sign-language(1): 'video.file',
+			.
+			.
+			.
+			sign-language(n): 'video.file'
+		},
+		text (required): {
+			written-language(1): 'text',
+			.
+			.
+			.
+			written-language(n): 'text'
+		},
+		glossary (optional): {
+			.
+			.
+			.
+			written-language(n): {
+				term(1): {
+					definition: 'text',
+					video:{
+						sign-language(1): {
+							start: starttime,
+							end: endtime
+						},
+						.
+						.
+						.
+						sign-language(n): {
+							start: starttime,
+							end: endtime
+						}
+					}
+				},
+				.
+				.
+				.
+				term(n): {
+					definition: 'text',
+					video:{
+						sign-language(1): {
+							start: starttime,
+							end: endtime
+						},
+						.
+						.
+						.
+						sign-language(n): {
+							start: starttime,
+							end: endtime
+						}
+					}
+				}
+			}
+		}
+	}
+]

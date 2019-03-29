@@ -1,0 +1,172 @@
+#story-viewer{
+	position: relative;
+	height: 100%;
+	width: 100%;
+    padding-top: 5px;
+    background-color: #004E74;
+    color: #FFFFFF;
+}
+#page-counter{
+	height: 50px;
+	margin: 5px;
+	text-align: center;
+
+	background-image: url(../img/icons/StoryViewer/bkgd_pageCounter.svg);
+	background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+#page-counter span{
+	font-size: 35px;
+	font-weight: bold;
+	width: 100px;
+    display: inline-block;
+}
+#page-counter #current{
+	color: #0098BA;
+}
+#page-counter #total{
+	color: #004E75;
+}
+
+#page-content{
+	height: calc(100% - 120px);
+}
+#page-content > div{
+	height: calc(100% - 20px);
+	position: relative;
+}
+.story-viewer-nav-button{
+	height: 100%;
+	width: 100%;
+	padding: 0px;
+
+    background: no-repeat;
+    border: none;
+    color: #0098BA;
+
+	background-repeat: no-repeat;
+	background-position: 50px center;
+	background-size: auto 45px;
+	text-align: left;
+}
+.story-viewer-nav-button > div{
+	font-size: 40px;
+	height: 50px;
+
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-size: auto 45px;
+
+}
+.story-viewer-nav-button .num{
+	position: absolute;
+	width: 100%;
+}
+.story-viewer-nav-button .icon.image{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Page_Image.svg);
+}
+.story-viewer-nav-button .icon.sign{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Page_SignLang.svg);
+}
+.story-viewer-nav-button:hover{
+	color: #FFFFFF;
+	font-weight: bold;
+	background-size: auto 50px;
+}
+.story-viewer-nav-button:hover .icon{
+	background-size: auto 50px;
+}
+.story-viewer-nav-button:hover .icon.image{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg);
+}
+.story-viewer-nav-button:hover .icon.sign{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg);
+}
+
+#story-viewer-next{
+	background-image: url(../img/icons/General/icon_Page_Next.svg);
+}
+#story-viewer-previous{
+	background-image: url(../img/icons/General/icon_Page_Back.svg);
+	text-align: right;
+	background-position: right 50px center;
+}
+#story-viewer-previous > div{
+	background-position: right center;
+}
+
+.story-viewer-page{
+	background-color: #002E45;
+}
+#page-overlay{
+	position: absolute;
+	width: 100%;
+	height: 40px;
+	text-align: center;
+	z-index: 1;
+
+    opacity: .7;
+    background-color: #002e45;
+    text-align: center;
+}
+#image-container{
+	height: 100%;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+}
+#image-container img{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+
+	max-height: 100%;
+	max-width: 100%;
+}
+#video-container{
+	height: calc(100% - 40px);
+	position: relative;
+	overflow: hidden;
+	padding: 5px;
+}
+#text-toggle-container{
+	height: 40px;
+}
+#text-container{
+	height: 0px;
+}
+
+#video-container.text-open{
+	height: calc(60% - 40px);
+}
+#text-container.text-open{
+	height: 40%;
+	padding: 15px 50px;
+	background-color: #0098ba;
+	font-size: 1.5em;
+	overflow: auto;
+}
+
+#video-container video{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+
+    max-height: calc(100% - 10px);
+    max-width: calc(100% - 10px);
+}
+
+
+
+#page-controller{
+	height: 60px;
+	padding: 5px;
+	text-align: center;
+	background-color: #0098BA;
+	box-shadow: inset 0px 4px 7px rgba(0,78,117,0.7);
+}

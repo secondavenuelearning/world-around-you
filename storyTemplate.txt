@@ -1,0 +1,10 @@
+{
+    "author": 'string',
+    "coverimage": 'urlString',
+    "data": storyData,
+    "datecreated": timestamp,
+    "datemodified": timestamp,
+    "id": int,
+    "metadata": storyMetadata,
+    "visible":  0 or 1
+}

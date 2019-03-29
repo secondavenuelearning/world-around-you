@@ -1,0 +1,37 @@
+<div class="story-viewer-nav sixth">
+	<% if(previousPageNumber){ %>
+		<button id="story-viewer-previous" class="story-viewer-nav-button" page-dir="-1">
+			<div class="icon <%- previousIcon %>"></div>
+			<div class="num"><%- previousPageNumber %></div>
+		</button>
+	<% } %>
+</div>
+<div class="story-viewer-page two-thirds">
+	<% if(currentIcon == 'image'){ %>
+		<div id="page-overlay">
+			<span class="icon <%- currentIcon %>"></span>
+			<span class="num"><%- currentPageNumber %></span>
+		</div>
+		<div id="image-container">
+			<img src="<%- page.image %>" />
+		</div>
+	<% } else { %>
+		<div id="video-container" class="text-open">
+			<video src="<%- page.video[currentSignLanguage] %>" controls loop autoplay muted></video>
+		</div>
+		<div id="text-toggle-container">
+			<button id="text-toggle"></button>
+		</div>
+		<div id="text-container" class="text-open">
+			<%= page.text[currentWrittenLanguage] %>
+		</div>
+	<% } %>
+</div>
+<div class="story-viewer-nav sixth">
+	<% if(nextPageNumber){ %>
+		<button id="story-viewer-next" class="story-viewer-nav-button" page-dir="1">
+			<div class="icon <%- nextIcon %>"></div>
+			<div class="num"><%- nextPageNumber %></div>
+		</button>
+	<% } %>
+</div>
