@@ -306,6 +306,8 @@ header #score span
     background-color: #0098ba;
     
     transition: opacity .7s;
+    
+    float: left;
 }
 
 .bus .windows .window:hover
