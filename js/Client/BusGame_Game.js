@@ -43,7 +43,7 @@ var round =
     // --once for each mediaType ("vid" or "txt")
 ];
 
-var stopAnimations = false; //bool for forcing animations to stop
+var activeAnimations = [];
 
 
 /* ----------------------- Constructor ----------------------- */
@@ -316,7 +316,7 @@ function SetupWindowConnections(){
                         else if(score === roundTotalMatches)
                         {
                             //goto next round
-                            //RoundTransition();
+                            RoundTransition();
                             console.log("round over");
                         }
                         
@@ -376,7 +376,7 @@ function NextRound()
 
 function RoundTransition()
 {   
-     window.requestAnimationFrame(function(timestamp)
+     var animID = window.requestAnimationFrame(function(timestamp)
     {
         Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
         Animate("#top .bus img", images.Buses.FacingLeft[0], null);
@@ -386,6 +386,8 @@ function RoundTransition()
         Move(timestamp, '#bottom .vehicle', null, "Right", 2000);
         Move(timestamp, '#top .vehicle', null, "Left", -2000);
     });
+    
+    activeAnimations.push(animID);
 }
 
 function WinScreen()
@@ -432,20 +434,32 @@ function WinScreen()
         // --once for each mediaType ("vid" or "txt")
     ];
 
-    stopAnimations = false; //bool for forcing animations to stop
 }
 
 
 /* ----------------------- Animation ----------------------- */
 function Move(timestamp, id, start, dir, endPos)
 {
+    //animID to return for calceing anim purposes
+    var animID = null;
+    
     //get all vehciles of this type
     var vehicles = $(id).toArray();
     
+    //use timestamp to step through the move positions
     if(!start) start = timestamp;
     var pos = timestamp - start;
     
-    if (pos < endPos) 
+    var atEnd = pos > endPos; //check for end of movement path
+    
+    //alter for left
+    if(dir === "Left") 
+    {
+        pos = pos * -1;//invert pos for moving left instead of right
+        atEnd = pos < endPos;
+    }
+    
+    if (!atEnd) 
     {
         vehicles.forEach(function(vehicle)
         { 
@@ -459,9 +473,11 @@ function Move(timestamp, id, start, dir, endPos)
     }
     else
     {
-        //stop animations
-        stopAnimations = true;
+        cancelAnimationFrame(activeAnimations[0]);
+        activeAnimations.pop();
+        $(id).remove();
     }
+
 }
 
 function Animate(id, frames, frame)
@@ -475,7 +491,7 @@ function Animate(id, frames, frame)
     
     var vImgs = $(id).toArray();
     
-    if(stopAnimations)
+    if(activeAnimations.length < 1)
     {
         //update animation
         vImgs.forEach(function(img)
