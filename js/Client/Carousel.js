@@ -65,7 +65,6 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 }
 
 function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset, isOverlay) {
-
     for (var x = 0; x < panels.length; x++) {
         var adjust = 0;
         if(isOverlay) { adjust = 0; }
@@ -97,7 +96,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     // this.id = index++;
     //var html = $("#template").html();
     var panelCount;
-    var panels = [, , ];
+    var panels = [];
     var pictures = [];
     var identifier;
     var startIndex = 0;
@@ -200,12 +199,22 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     
       $('#' + itemsID + " .dots").delegate('div', 'click', function () {
        $('#' + itemsID + " #current").removeAttr('id');
+       /*
         $(this).attr('id', 'current');
         startIndex = showing * $(this).index();
         endIndex = startIndex + (showing-1);
         console.log(startIndex);
-        offset = $(this).index();
-        drawPanels(panels, 0,0,0,0,0,"left",$(this).index(),true);
+        offset = parseInt($(this).index()) + panels;
+        console.log(offset);
+        drawPanels(panels, 0,0,0,0,0,"left",offset,true);
+        */
+        $(this).attr('id', 'current');
+            offset = parseInt($(this).index()) * showing;
+            startIndex = showing * $(this).index();
+
+            endIndex = startIndex + showing - 1;
+        
+        drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, "right", offset, isOverlay);
     });
     
     //add special functionality for overlays
@@ -217,14 +226,14 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '.7');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '.85');
         });
     }
     
     //add hover functionality to icons
     ImageHoverSwap(id + " .carousel-nav.left", id + " .carousel-nav.left .carousel-nav-img", "../../img/icons/General/icon_Page_Back.svg", "../../img/icons/General/icon_Page_Back_HoverDown.svg");
     
-     ImageHoverSwap(id + " .carousel-nav.right", id + " .carousel-nav.right .carousel-nav-img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
+    ImageHoverSwap(id + " .carousel-nav.right", id + " .carousel-nav.right .carousel-nav-img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
 
 }
 

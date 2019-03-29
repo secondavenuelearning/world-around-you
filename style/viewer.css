@@ -16,15 +16,13 @@
 }
 #holder{
     position: relative;
-    background-color: white;
     width: 207px;
-    height: 40px;
-
-    border: 1px;
-    border-radius: 30px;
+    height: 52px;
+    background-repeat: no-repeat;
+    background-size: 100%;
     margin: 0px auto;
-    border-radius: 30px;
     top: 6px;
+    background-image: url('../img/icons/StoryViewer/bkgd_pageCounter.svg');
 }
 .holder-fullscreen{
     top: -10px !important;
@@ -71,9 +69,9 @@
 #viewerBar {
     background-color: #0098ba;
     width: 100%;
-    height: 55px;
+    height: 60px;
+    box-shadow: inset 0px 4px 7px rgba(0,78,117,0.7);
 }
-
 #viewerBar #index {
     display: inline;
     position: relative;
@@ -89,9 +87,8 @@
     font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-size: 35px;
     font-weight: bold;
-    width: 30%;
+    width: 50%;
     text-align: center;
-    margin: -5px auto;
     float: left;
     /*padding: 0 25px;*/
 }
@@ -197,7 +194,7 @@
 }
 
 .filters{
-    margin-top: -15px;
+    margin-top: -11px;
     visibility: visible;
 }
 .filters.fullscreen-active{

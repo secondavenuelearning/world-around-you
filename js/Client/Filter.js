@@ -84,7 +84,9 @@ function FiltersBar(id, launguageOnly = false)
         $('.filters').append(sortByHTML);
         
         $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
-        $('#' + sortID + ' > #options').on('change', function(e) {UpdateSort(signID, e, sortID)});
+
+        $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e, sortID); ToggleOptionsVisible(sortID); 
+            $('#SortByFilter button span').html(filters[signID].FilterAgainst)});
     }
 //--Button Icon Hover Swapping
     //ImageHoverSwap("#sortByFilter button", "#sortByFilter img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
@@ -170,10 +172,10 @@ function BuildSelectFilter(filterID, filterName, filterOptions, icon)
     //build base filter div
     var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
     filterHTML += "\n";
-    filterHTML += "<button><img src=\"" + icon + "\">"
-    filterHTML += filterName + "<img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
+    filterHTML += "<button><img src=\"" + icon + "\"><span>"
+    filterHTML += filterName + "</span><img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
     filterHTML += "\n";
-    filterHTML += "<select id = \"options\">";
+    filterHTML += "<div id = \"options\">";
     filterHTML += "\n";
     
     //build options
@@ -187,7 +189,7 @@ function BuildSelectFilter(filterID, filterName, filterOptions, icon)
     }
     
     //close divs and the like
-    filterHTML += "</select>";
+    filterHTML += "</div>";
     filterHTML += "\n";
     filterHTML += "</div>";
     

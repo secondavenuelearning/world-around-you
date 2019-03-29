@@ -20,22 +20,22 @@ $(document).ready(function () {
         
         var storyPreviews = [];
 
-        for (var i = 0; i < stories.length; i++) {
-            let sp = new StoryPreview(stories[i], true);
-        // for (var i = 0; i < 27; i++) {
-        //     let sp = new StoryPreview({
-        //         id: i + 1,
-        //         metadata: {
-        //             title: {
-        //                 english: 'Aesop Fables: The Clever Donkey'
-        //             },
-        //             description: {
-        //                 english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
-        //             }                    
-        //         },
-        //         author: 'Massimo V.',
-        //         coverImage: 'img/carousel/from_this_author/1.png'
-        //     });
+        //for (var i = 0; i < stories.length; i++) {
+            //let sp = new StoryPreview(stories[i], true);
+         for (var i = 0; i < 27; i++) {
+             let sp = new StoryPreview({
+                 id: i + 1,
+                 metadata: {
+                     title: {
+                         english: 'Aesop Fables: The Clever Donkey'
+                     },
+                     description: {
+                         english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
+                     }                    
+                 },
+                 author: 'Massimo V.',
+                 coverImage: 'img/carousel/from_this_author/1.png'
+             });
             storyPreviews.push(sp);
         }
         // Needs an id for an already made element to populate, and a list of story previews

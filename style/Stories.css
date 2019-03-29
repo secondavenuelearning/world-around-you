@@ -11,7 +11,7 @@ body{
     text-align: center;
     font-size: 24px;
     font-weight: bold;
-    padding-top: 5px;
+    padding-top: 15px;
     margin-bottom: -10px; 
 }
 #filter-bar{
@@ -44,7 +44,7 @@ body{
     width: 75px;
     border-radius: 0px 25px 25px 0px;
     background-color: #004E74;
-    background-image: url('../../img/icons/search.png');
+    background-image: url('../../img/icons/search.svg');
     background-repeat: no-repeat;
     background-size: 50%;
     background-position: 30% 50%;

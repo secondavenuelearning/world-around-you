@@ -23,7 +23,7 @@ nav{
 nav > div{
 	position: relative;
 	float: right;
-	margin-left: 15px;
+	margin-left: 35px;
 	height: 48px;
 	width: 48px;
 }
@@ -105,6 +105,7 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 }
 #nav-search{
 	margin-left: 25px;
+	margin-right: 20px;
 	width: 250px;
 	bottom: 3px;
 }
@@ -129,7 +130,7 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 #nav-search #nav-submit-input{
 	position: absolute;
 	background-color: #0098BA;
-	background-image: url('../../img/icons/search.png');
+	background-image: url('../../img/icons/search.svg');
 	background-repeat: no-repeat;
 	background-size: 60%;
 	background-position: 40% 50%;
