@@ -65,7 +65,6 @@ function createPanelList(panels, showCount, startIndex, endIndex, pictures, hold
 }
 
 function drawPanels(panels, showCount, startIndex, endIndex, pictures, holder, direction, offset, isOverlay) {
-
     for (var x = 0; x < panels.length; x++) {
         var adjust = 0;
         if(isOverlay) { adjust = 0; }
@@ -97,7 +96,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     // this.id = index++;
     //var html = $("#template").html();
     var panelCount;
-    var panels = [, , ];
+    var panels = [];
     var pictures = [];
     var identifier;
     var startIndex = 0;
