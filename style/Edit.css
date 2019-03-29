@@ -76,5 +76,5 @@
 	background-color: #0098BA;
 }
 #nav-edit-icon{
-	background-image: url('../../img/icons/NavBar/nav_SB_hover_selected.svg');
+	background-image: url('../../img/icons/NavBar/nav_SB_hover_selected.svg') !important;
 }

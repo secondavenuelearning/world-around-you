@@ -1,3 +1,15 @@
+body.dragging{
+	-webkit-touch-callout: none; /* iOS Safari */
+	-webkit-user-select: none; /* Safari */
+	-khtml-user-select: none; /* Konqueror HTML */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* Internet Explorer/Edge */
+	user-select: none; /* Non-prefixed version, currently
+                  supported by Chrome and Opera */
+	cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
 #editor{
 	position: relative;
 	height: 100%;
@@ -246,6 +258,7 @@
 	right: 5px;
 	padding: 0px;
 	line-height: 0.5em;
+	background-color: #FFFFFF;
 }
 .editor-content-wrapper .page-preview .cover-image-container{
 }
@@ -273,7 +286,12 @@
 	color: #004D75;
 	font-weight: bold
 }
+.editor-content-wrapper .autocomplete-button{
 
+}
+.editor-content-wrapper .autocomplete-button:disabled{
+	display: none;
+}
 /* Language */
 	.assign-language{
 		font-size: 1.2em;
@@ -371,7 +389,7 @@
 	#pages-content .page-nav-button.active{
 		color: #004E74;
 		background: #9EE9F6;
-		font-weight: bold;	
+		font-weight: normal;	
 	}
 	#page-legend{
 		clear: left;
@@ -438,7 +456,7 @@
 	#edit-sign #video-container{
 		height: 50%;
 	}
-	#edit-sign #video-player, #edit-glossary #glossary-video-player{
+	#edit-sign #video-player{
 		max-width: 100%;
 		max-height: 100%;
 	}
@@ -456,13 +474,14 @@
 	}
 	#edit-glossary #text-edit #term-definition-input{
 		height: 100%;
+		border-color: #004E74;
 	}
 	#written-select button{
 		border: none;
 		border-radius: 5px 0px 0px 5px;
 	}
 	#written-select button.active{
-		font-weight: bold;
+		font-weight: normal;
 		background-color: #E0F9FD;
 		color: #004E74;
 	}
@@ -475,4 +494,139 @@
 	#edit-glossary #glossary-image-button{
 		padding-right: 10px;
 	}
+	#edit-glossary #term-select-container, #edit-glossary #sign-language-select-container{
+		margin-right: 0px;
+	}
+	#edit-glossary #term-edit-container, #edit-glossary #glossary-video-container{
+		margin-left: 0px;
+		width: calc(100% / 3);
+	}
+	#edit-glossary #glossary-video-container{
+		width: calc(100%  * 2 / 3);
+		max-height: calc(100% - 20px);
+	}
+	#term-select .add-text-container button{
+		padding: 2px;
+		font-size: 1em;
+		text-align: center;
+	}
+	#edit-glossary .term{
+		position: relative;
+	}
+	#edit-glossary .term-button, #edit-glossary .sign-language-select-button{
+		border: none;
+		border-radius: 5px 0px 0px 5px;
+	}
+	#edit-glossary .term-button.active, #edit-glossary .sign-language-select-button.active{
+		background-color: #004E74;
+		color: #FFFFFF;
+		font-weight: normal;
+	}
+	#edit-glossary .term-button.active + .term-delete-button{
+		background-image: url(../img/icons/General/icon_Delete_White.svg);
+	}
+	#edit-glossary .term-button.active + .term-delete-button:hover{
+		background-image: url(../img/icons/General/icon_Delete_LtBlue.svg);
+	}
+	#edit-glossary .term-delete-button{
+		position: absolute;
+		top: 50%;
+		left: 2px;
+		transform: translate(0px, -50%);
+
+		height: 20px;
+		width: 20px;
+
+		margin: 0px;
+		padding: 0px;
+		border-radius: 10px;
+
+		background-position: 0px 0px;
+		background-size: contain;
+	}
+	#edit-glossary #glossary-video-player-container{
+		height: 100%;
+		padding-bottom: 30px;
+		border: 2px solid #004E74;
+		border-radius: 5px;
+		position: relative;
+		background-color: #FFFFFF;
+	}
+	#glossary-video-player-container #glossary-video-player{
+		max-width: calc(100% - 2px);
+		max-height: calc(100% - 2px);
+		position: relative;
+		top: 2px;
+		left: 50%;
+		transform: translate(-50%, 0px);
+		border-radius: 3px;
+	}
+	#glossary-video-player-container #glossary-video-controller {
+		position: absolute;
+		left: 2%;
+		bottom: 5px;
+		height: 20px;
+		width: 96%;
+		border: 2px solid #B7B2AC;
+		border-top: none;
+		border-bottom: none;
+	}
+	#glossary-video-controller #track, #glossary-video-controller #selected-track{
+	    height: 2px;
+	    width: 100%;
+	    position: absolute;
+	    background: #B7B2AC;
+	    top: calc(50% - 1px);
+	}
+	#glossary-video-controller #selected-track{
+	    top: calc(50% - 2px);
+	    height: 4px;
+	    background: #004E74;
+	}
+	#glossary-video-controller .video-knob{
+		position: absolute;
+		height: 20px;
+		width: 20px;
+		transform: translate(-50%, -50%);
+		top: 50%;
+		left: 0%;
+		background-color: #004E74;
+		border-radius: 10px;
+		border: 2px solid #FFFFFF;
+
+		cursor: move; /* fallback if grab cursor is unsupported */
+		cursor: grab;
+		cursor: -moz-grab;
+		cursor: -webkit-grab;
+	}
+	#glossary-video-controller .video-knob:hover, #glossary-video-controller .video-knob.dragging{
+		background-color: #FFFFFF;
+		border-color: #004E74;
+	}
+	#glossary-video-controller #end-knob{
+		left: 100%;
+	}
+	.video-knob .knob-time {
+	    position: absolute;
+	    bottom: calc(100% + 3px);
+	    left: 50%;
+	    transform: translate(-50%, 0px);
+	    font-size: 0.75em;
+	    background: #FFFFFF;
+	    border: 1px solid;
+	    padding: 2px;
+	    border-radius: 5px;
+	}
+
 /*********/
+
+/* Publish */
+#publish .pages{
+	height: calc(100% - 100px);
+    overflow: auto;
+}
+#publish .page-preview-container{
+	float: left;
+	width: 25%;
+}
+/***********/

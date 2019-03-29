@@ -1,7 +1,7 @@
 const mdb = require('mariadb');
 
-const WrittenlanguageDB = require('./WrittenlanguageDB');
-const SignlanguageDB = require('./SignlanguageDB');
+const WrittenLanguageDB = require('./WrittenLanguageDB');
+const SignLanguageDB = require('./SignLanguageDB');
 
 const Settings = require('./Settings');
 const pool = mdb.createPool({
@@ -11,156 +11,6 @@ const pool = mdb.createPool({
 	database: Settings.dbName ,
 	connectionLimit: Settings.dbPoolConnectionLimit
 });
-
-function StoryDB(){
-
-}
-
-StoryDB.prototype.addStory = function() {
-	return new Promise((resolve, reject) => {
-		pool.getConnection().then(conn => {
-			conn.query('INSERT INTO story (id) VALUES (NULL)').then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-
-// ****************************************************************************
-// GET A STORY - ABOVE THIS LINE                                              *
-// ****************************************************************************
-
-// ****************************************************************************
-// GET A STORY                                                                *
-// ****************************************************************************
-
-StoryDB.prototype.addStoryToGenre = function(storyId,genreId) {
-
-	return new Promise(function(resolve,reject) {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("INSERT INTO story_to_genre (storyId, genreId) VALUES (?, ?)", [storyId, genreId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-
-	});
-}
-StoryDB.prototype.addStoryToSignlanguage = function(storyId,signlanguageId) {
-
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("INSERT INTO story_to_signlanguage (storyId, signlanguageId) VALUES (?, ?)", [storyId, signlanguageId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-
-	});
-}
-StoryDB.prototype.addStoryToTag = function(storyId,tagId) {
-
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("INSERT INTO story_to_tag (storyId, tagId) VALUES (?, ?)", [storyId, tagId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-
-	});
-}
-StoryDB.prototype.addStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			var query = 'INSERT INTO story_to_writtenlanguage (storyId,writtenlanguageId) VALUES (?, ?)';
-
-			conn.query(query, [storyId, writtenlanguageId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-
-	});
-}
-
-StoryDB.prototype.addStoryToUser = function(storyId,userId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("INSERT INTO story_to_user (storyId,userId) VALUES (?, ?)", [storyId, userId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-
-	});
-}
-
 
 function AddStoriesMetadata (storyResults){
 	return new Promise((resolve, reject) => {
@@ -173,7 +23,6 @@ function AddStoriesMetadata (storyResults){
 
 			for(let i=0; i<storyResults.length; i++){
 				let story = storyResults[i] || {};
-				console.log(story)
 				story.metadata = {
 					title: {},
 					description: {},
@@ -190,8 +39,8 @@ function AddStoriesMetadata (storyResults){
 
 			let writtenLanguages, signLanguages, languagePromises = [];
 
-			languagePromises.push(WrittenlanguageDB.getWrittenLanguages());
-			languagePromises.push(SignlanguageDB.getSignLanguages());
+			languagePromises.push(WrittenLanguageDB.getAll());
+			languagePromises.push(SignLanguageDB.getAll());
 
 			Promise.all(languagePromises).then((languageResults) => {
 				writtenLanguages = languageResults[0];
@@ -219,7 +68,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -244,7 +93,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -269,7 +118,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -294,7 +143,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -322,7 +171,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -350,7 +199,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -373,7 +222,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -396,7 +245,7 @@ function AddStoriesMetadata (storyResults){
 						}
 
 						return _resolve();
-					}).catch(err => {
+					}).catch((err) => {
 						return _reject(err);
 					});
 				}));
@@ -405,322 +254,324 @@ function AddStoriesMetadata (storyResults){
 					conn.end().then(() => {
 						return resolve(Object.values(stories));
 					});
-				}).catch(err => {
+				}).catch((err) => {
 					conn.end().then(() => {
 						return reject(err);
 					});
 				});
-			}).catch(err => {
+			}).catch((err) => {
 				conn.end().then(() => {
 					return reject(err);
 				});
 			});
-		}).catch(err => {
+		}).catch((err) => {
 			return reject(err);
 		});
 
 	});
 }
+function AddToAssociationTable(storyId, otherId, table, otherIdField){
+	return new Promise(function(resolve,reject) {
 
-StoryDB.prototype.getStory = function(storyId, userId){
-	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
 
-			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
-			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
-			storyQuery += ' WHERE id = ?';
+			let query = `INSERT INTO ${table} (storyId, ${otherIdField}) VALUES (?, ?)`;
 
-			conn.query(storyQuery, userId ? [userId, storyId] : [storyId]).then(storyResults => {
+			conn.query(query, [storyId, otherId]).then((result) => {
 				conn.end().then(() => {
-					AddStoriesMetadata(storyResults).then((stories) => {
-						return resolve(stories[0]);
-					}).catch(err => {
+					return resolve(result.insertId);
+				});
+			}).catch((err) => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch((err) => {
+			return reject(err);
+		});
+
+	});	
+}
+function DeleteFromAssociationTable(storyId, otherId, table, otherIdField){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			let query = `DELETE FROM ${table} WHERE storyId = ? AND ${otherIdField} = ?`;
+
+			conn.query(query, [storyId, otherId]).then((result) => {
+				conn.end().then(() => {
+					return resolve(true);
+				});
+			}).catch((err) => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch((err) => {
+			return reject(err);
+		});
+	});	
+}
+function SetTitleOrDescription(storyId, writtenlanguageId, name, table){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			new Promise((_resolve, _reject) => {
+
+				let query = `SELECT * from ${table} WHERE storyId = ? AND writtenlanguageId = ?`;
+
+				conn.query(query, [storyId, writtenlanguageId]).then((result) => {
+					_resolve(result[0]);
+				}).catch((err) => {
+					_reject(err);
+				})
+
+			}).then((entry) => {
+				let query = `INSERT INTO ${table} (storyId, writtenlanguageId, name) VALUES (?, ?, ?)`,
+					queryVars = [storyId, writtenlanguageId, name];
+
+				if(entry){
+					query = `UPDATE ${table} SET name = ? WHERE id = ?`;
+					queryVars = [name, entry.id];
+				}
+
+				conn.query(query, queryVars).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.insertId);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
 						return reject(err);
 					});
 				});
-			}).catch(err => {
+			}).catch((err) => {
 				conn.end().then(() => {
 					return reject(err);
 				});
 			});
-		}).catch(err => {
+
+		}).catch((err) => {
 			return reject(err);
 		});
-	});
+
+	});	
 }
 
-StoryDB.prototype.getStories = function(includeUnpublished, userId){
-	return new Promise((resolve, reject) => {
-		pool.getConnection().then(conn => {
+function StoryDB(){
+}
 
-			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
-			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
-			if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
-
-			conn.query(storyQuery, [userId]).then(storyResults => {
-				conn.end().then(() => {
-					AddStoriesMetadata(storyResults).then((stories) => {
-						return resolve(stories);
-					}).catch(err => {
+// Adds
+	StoryDB.prototype.add = function() {
+		return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
+				conn.query('INSERT INTO story (id) VALUES (NULL)').then((result) => {
+					conn.end().then(() => {
+						return resolve(result.insertId);
+					});
+				}).catch((err) => {
+					//handle error
+					conn.end().then(() => {
 						return reject(err);
 					});
 				});
-			}).catch(err => {
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.getStoryData = function(storyId){
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-			let query = "SELECT data from story WHERE id = ?";
-			conn.query(query, [storyId]).then(res => {
-				conn.end().then(() => {
-					return resolve(res[0] ? res[0].data : null);
-				});
-			}).catch(err => {
+			}).catch((err) => {
 				return reject(err);
 			});
-		}).catch(err => {
-			return reject(err);
 		});
+	}
+	StoryDB.prototype.addGenre = function(storyId, genreId) {
+		return AddToAssociationTable(storyId, genreId, 'story_to_genre', 'genreId');
+	}
+	StoryDB.prototype.addSignlanguage = function(storyId, signlanguageId) {
+		return AddToAssociationTable(storyId, signlanguageId, 'story_to_signlanguage', 'signlanguageId');
+	}
+	StoryDB.prototype.addTag = function(storyId, tagId) {
+		return AddToAssociationTable(storyId, tagId, 'story_to_tag', 'tagId');
+	}
+	StoryDB.prototype.addUser = function(storyId, userId) {
+		return AddToAssociationTable(storyId, userId, 'story_to_user', 'userId');
+	}
+	StoryDB.prototype.addWrittenlanguage = function(storyId, writtenlanguageId) {
+		return AddToAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
+	}
 
-	});
-}
+// Deletes
+	StoryDB.prototype.deleteDescrtion = function(storyId, writtenlanguageId) {
+		return DeleteFromAssociationTable(storyId, writtenlanguageId, 'description', 'writtenlanguageId');
+	}
+	StoryDB.prototype.deleteGenre = function(storyId, genreId) {
+		return DeleteFromAssociationTable(storyId, genreId, 'story_to_genre', 'genreId');
+	}
+	StoryDB.prototype.deleteSignLanguage = function(storyId, signLanguageId) {
+		return DeleteFromAssociationTable(storyId, signLanguageId, 'story_to_signlanguage', 'signlanguageId');
+	}
+	StoryDB.prototype.deleteTag = function(storyId, tagId) {
+		return DeleteFromAssociationTable(storyId, tagId, 'story_to_tag', 'tagId');
+	}
+	StoryDB.prototype.deleteTitle = function(storyId, writtenlanguageId) {
+		return DeleteFromAssociationTable(storyId, writtenlanguageId, 'title', 'writtenlanguageId');
+	}
+	StoryDB.prototype.deleteUser = function(storyId, userId) {
+		return DeleteFromAssociationTable(storyId, userId, 'story_to_user', 'userId');
+	}
+	StoryDB.prototype.deleteWrittenLanguage = function(storyId, writtenlanguageId) {
+		return DeleteFromAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
+	}
 
-StoryDB.prototype.getStoryToWrittenlanguage = function(storyId,writtenlanguageId) {
-	return new Promise((resolve, reject) => {
+// Get
+	StoryDB.prototype.get = function(storyId, userId){
+		return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
 
-		pool.getConnection().then(conn => {
+				let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+				if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
+				storyQuery += ' WHERE id = ?';
 
-			conn.query("SELECT * FROM story_to_writtenlanguage WHERE(storyId="+storyId+" AND writtenlanguageId="+writtenlanguageId+")").then((result) => {
-				conn.end().then(() => {
-					return resolve(JSON.stringify(result));
+				conn.query(storyQuery, userId ? [userId, storyId] : [storyId]).then(storyResults => {
+					conn.end().then(() => {
+						AddStoriesMetadata(storyResults).then((stories) => {
+							return resolve(stories[0]);
+						}).catch((err) => {
+							return reject(err);
+						});
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
 				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
+	}
+	StoryDB.prototype.getAll = function(includeUnpublished, userId){
+		return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
+
+				let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+				if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
+				if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
+
+				conn.query(storyQuery, [userId]).then(storyResults => {
+					conn.end().then(() => {
+						AddStoriesMetadata(storyResults).then((stories) => {
+							return resolve(stories);
+						}).catch((err) => {
+							return reject(err);
+						});
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
+				});
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
+	}
+	StoryDB.prototype.getData = function(storyId){
+		return new Promise((resolve, reject) => {
+
+			pool.getConnection().then(conn => {
+				let query = "SELECT data from story WHERE id = ?";
+				conn.query(query, [storyId]).then(res => {
+					conn.end().then(() => {
+						return resolve(res[0] ? JSON.parse(res[0].data.toString('utf8')) : null);
+					});
+				}).catch((err) => {
 					return reject(err);
 				});
+			}).catch((err) => {
+				return reject(err);
 			});
 
-		}).catch(err => {
-			return reject(err);
 		});
-	});
-}
+	}
 
-StoryDB.prototype.deleteStoryToWrittenlanguage = function(storyId, writtenlanguageId) {
-	return new Promise((resolve, reject) => {
+// Updates
+	StoryDB.prototype.setCover = function(id, author, coverImage) {
+		return new Promise((resolve, reject) => {
+			coverImage = coverImage || null;
 
-		pool.getConnection().then(conn => {
+			pool.getConnection().then(conn => {
 
-			var query = 'DELETE FROM story_to_writtenlanguage WHERE(storyId=? AND writtenlanguageId=?)';
-			conn.query(query, [storyId, writtenlanguageId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(true);
+				let query = 'UPDATE story SET author = ?, coverimage = ? WHERE id = ?';
+
+				conn.query(query, [author, coverImage, id]).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.affectedRows);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
 				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
+
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
+	}
+	StoryDB.prototype.setDescription = function(storyId, writtenlanguageId, name) {
+		return SetTitleOrDescription(storyId, writtenlanguageId, name, 'description');
+	}
+	StoryDB.prototype.setData = function(id, data) {
+		return new Promise((resolve, reject) => {
+
+			pool.getConnection().then(conn => {
+				data = typeof data == 'string' ? data : JSON.stringify(data);
+
+				let query = 'UPDATE story SET data = ?, visible = 0 WHERE id = ?';
+
+				conn.query(query, [data, id]).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.affectedRows);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
 				});
+
+			}).catch((err) => {
+				return reject(err);
 			});
 
-		}).catch(err => {
-			return reject(err);
 		});
-	});
-}
+	}
+	StoryDB.prototype.setTitle = function(storyId, writtenlanguageId, name) {
+		return SetTitleOrDescription(storyId, writtenlanguageId, name, 'title');
+	}
+	StoryDB.prototype.setVisible = function(storyId) {
+		return new Promise((resolve, reject) => {
 
-StoryDB.prototype.getStoryToSignlanguage = function(storyId,signlanguageId) {
-	return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
 
-		pool.getConnection().then(conn => {
+				let query = 'UPDATE story SET visible = 1 WHERE id = ?';
 
-			conn.query("SELECT * FROM story_to_signlanguage WHERE(storyId="+storyId+" AND signlanguageId="+signlanguageId+")").then((result) => {
-				conn.end().then(() => {
-					return resolve(JSON.stringify(result));
+				conn.query(query, [storyId]).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.affectedRows);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
 				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
+
+			}).catch((err) => {
+				return reject(err);
 			});
 
-		}).catch(err => {
-			return reject(err);
 		});
-	});
-}
+	}
 
-StoryDB.prototype.deleteStoryToSignlanguage = function(storyId, signlanguageId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			var query = 'DELETE FROM story_to_signlanguage WHERE(storyId=? AND signlanguageId=?)';
-			conn.query(query, [storyId, signlanguageId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(true);
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.addStoryCover = function(storyId,coverimage,author) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("UPDATE story SET coverimage='"+coverimage+"',author='"+author+"' WHERE(id="+storyId+")").then((result) => {
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
-				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.publishStory = function(storyId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("UPDATE story SET visible=1 WHERE(id="+storyId+")").then((result) => {
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
-				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.addStoryData = function(storyId,theblob) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("UPDATE story SET data='"+theblob+"' WHERE(id="+storyId+")").then((result) => {
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
-				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.addStoryDescriptionId = function(storyId,descriptionId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("UPDATE story SET descriptionId='"+descriptionId+"' WHERE(id="+storyId+")").then((result) => {
-
-				console.log("[Affected-Rows]["+res.affectedRows+"]");
-				conn.end().then(() => {
-					return resolve('{rows:'+res.affectedRows+'}');
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.getStoryToGenre = function(storyId,genreId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("SELECT * FROM story_to_genre WHERE(storyId="+storyId+" AND genreId="+genreId+")").then((result) => {
-				conn.end().then(() => {
-					return resolve(JSON.stringify(result));
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
-
-StoryDB.prototype.getStoryToTag = function(storyId,tagId) {
-	return new Promise((resolve, reject) => {
-
-		pool.getConnection().then(conn => {
-
-			conn.query("SELECT * FROM story_to_tag WHERE(storyId="+storyId+" AND tagId="+tagId+")").then((result) => {
-				conn.end().then(() => {
-					return resolve(JSON.stringify(result));
-				});
-			}).catch(err => {
-				//handle error
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
-		}).catch(err => {
-			return reject(err);
-		});
-	});
-}
 
 let _StoryDB = new StoryDB();
 module.exports = _StoryDB;

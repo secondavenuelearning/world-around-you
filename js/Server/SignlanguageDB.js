@@ -9,19 +9,19 @@ const pool = mdb.createPool({
 	connectionLimit: Settings.dbPoolConnectionLimit
 });
 
-function SignlanguageDB() {
+function SignLanguageDB() {
 }
 
-SignlanguageDB.prototype.addSignLanguage = function(name) {
-    return new Promise(function(resolve,reject) {
+SignLanguageDB.prototype.add = function(name) {
+    return new Promise(function(resolve, reject) {
 
 		pool.getConnection().then(conn => {
 
 			var query = 'INSERT INTO signlanguage (name) VALUES (?)';
 
-		    conn.query(query, [name]).then((res) => {
+		    conn.query(query, [name.toLowerCase()]).then((result) => {
 				conn.end().then(() => {
-					resolve(res.insertId);
+					resolve(result.insertId);
 					return;
 				});
 		    }).catch(err => {
@@ -37,18 +37,35 @@ SignlanguageDB.prototype.addSignLanguage = function(name) {
 
     });
 }
-
-SignlanguageDB.prototype.getSignLanguages = function(){
+SignLanguageDB.prototype.get = function(name) {
 	return new Promise((resolve, reject) => {
-
 		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM signlanguage WHERE name=?';
 
+			conn.query(query, [name.toLowerCase()]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result[0]);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch(err => {
+			return reject(err);
+		});
+	});
+}
+SignLanguageDB.prototype.getAll = function(){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
 			var query = 'SELECT * from signlanguage';
 
-			conn.query(query).then(res => {
+			conn.query(query).then(result => {
 				var signlanguages = {};
-				for(var i = 0; i < res.length; i++){
-					signlanguages[res[i].id] = res[i];
+				for(var i = 0; i < result.length; i++){
+					signlanguages[result[i].id] = result[i];
 				}
 				conn.end().then(() => {
 					resolve(signlanguages);
@@ -70,31 +87,7 @@ SignlanguageDB.prototype.getSignLanguages = function(){
 	});
 }
 
-SignlanguageDB.prototype.getsignlanguage = function(language) {
 
-	return new Promise(function(resolve,reject) {
-
-		pool.getConnection().then(conn => {
-
-			conn.query('SELECT * FROM signlanguage WHERE (name="'+language+'")').then((res) => {
-				conn.end();
-				resolve(JSON.stringify(res));
-				return;
-			}).catch(err => {
-				console.log(err);
-				//handle error
-				conn.end();
-				reject(err);
-				return;
-			});
-
-		}).catch(err => {
-			reject(err);
-			return;
-		});
-	});
-}
-
-let _SignlanguageDB = new SignlanguageDB();
-module.exports = _SignlanguageDB;
+let _SignLanguageDB = new SignLanguageDB();
+module.exports = _SignLanguageDB;
 
