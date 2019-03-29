@@ -9,6 +9,7 @@ var template = _.template(gameHtml);
 
 var storyData;
 var score = 0;
+var lastRoundScore = 0;
 var firstClick = false;
 
 var firstSelected;
@@ -16,6 +17,7 @@ var secondSelected;
 var totalMatches;
 
 var termList = []; //hard values for testing
+var termMap = {};
 var signLang;
 var writtenLang;
 
@@ -69,9 +71,13 @@ export function BusGame(storyObj, sign, written, terms)
     writtenLang = written;
     termList = terms;
     
-    //define how many matches the user will need this round
+    //define how many matches the user will each round
     roundOrder = createCountList(termList);
     totalMatches = (termList.length); //number between 0 and 10
+    
+    //figure out hwre each term is in the story data
+    termMap = MapTermsToPages(terms.slice(0));
+    console.log(termMap);
     
     //add score area to header
     ExtendHeader();
@@ -165,6 +171,41 @@ function DefineRound(numTerms)
     }
 }
 
+function MapTermsToPages(terms)
+{
+    var mapped = {};
+    
+    //loop pages of story data and look for terms - start form 1 to ignore title page
+    for(var page = 1; page < Object.keys(storyData).length; page++)
+    {
+        //get current glossary in current lang
+        var glossary = storyData[page].glossary[writtenLang];
+        
+        var termsLeft = terms;
+        
+        //loop through glossary terms
+        Object.keys(glossary).forEach(function(term)
+        {
+            //compare to terms in the game
+            for(var i = 0; i < terms.length; i++)
+            {
+                //compare glossary term to term at i
+                if(term == terms[i])
+                {
+                    //they match! - remove from terms left and add to the term map
+                    termsLeft.splice(i, 1);
+                    mapped[term] = page;
+                }
+            }
+        });
+        
+        //update terms
+        terms = termsLeft;
+    }
+    
+    return mapped;
+}
+
 /* ----------------------- Building Objects ----------------------- */
 function ExtendHeader()
 {
@@ -207,7 +248,7 @@ function BuildWindows()
 
             case "vid": //video
                 var id = term + "Vid";
-                var vidPath = "../../videos/Malakas_Maganda/fsl_luzon/1.mp4";
+                var vidPath = storyData[termMap[term]].video[signLang];
                 windowHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
             break;
 
@@ -258,7 +299,7 @@ function SetupWindowConnections(){
                             //goto win screen and clear as much data as possible
                             WinScreen(); 
                         }
-                        else if(score === roundTotalMatches)
+                        else if(score === roundTotalMatches + lastRoundScore)
                         {
                             //goto next round
                             RoundEndTransition();
@@ -292,6 +333,7 @@ function NextRound()
         var randIndex = Math.floor(Math.random() * roundOrder.length);
         var roundLength = roundOrder[randIndex];
         roundTotalMatches = roundLength;
+        lastRoundScore = score;
         DefineRound(roundLength);
         roundOrder.splice(randIndex, 1);
 
@@ -327,7 +369,7 @@ function NextRound()
             term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
 
             //get term data
-             var termData = storyData[1].glossary;
+             var termData = storyData[termMap[term]].glossary;
             termData = termData[writtenLang];
             termData = termData[term].video;
             termData = termData[signLang];

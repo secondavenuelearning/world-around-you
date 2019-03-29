@@ -16,7 +16,7 @@ var currentScreen = screens.Game;
 function initializeGameScene() {
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
-    var terms = ["world", "sea", "sky", "huge"];
+    var terms = ["world", "sea", "rain", "sky", "huge", "nowhere", "afterwards"];
     var storyObj = null;
         xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
