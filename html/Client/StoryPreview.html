@@ -5,6 +5,7 @@
 		</div>
 
 		<div class="meta-data-container">
+			<div class="story-game-button" onclick="event.preventDefault(); window.open('./Games', '_self'); "></div>
 			<% _.each(story.metadata.title, function(title, lang){ %>
 				<div class="title" lang="<%- lang %>"><%- title %></div>
 			<% }) %>

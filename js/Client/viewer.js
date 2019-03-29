@@ -1,7 +1,7 @@
 import 'style/Viewer.css!';
 import html from 'html/Client/Viewer.html!text';
 
-import StoryPreview from 'js/Client/StoryPreview';
+import StoryPreview from 'js/Client/StoryPreview.js';
 import Carousel from 'js/Client/Carousel.js';
 import StoryViewer from 'js/Client/StoryViewer.js';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';

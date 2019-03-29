@@ -108,7 +108,7 @@ function updatePageNumbers()
     }
     
     //update current
-    $('#index #current').text(pageIndex + 1);
+    $('#holder #current').text(pageIndex + 1);
     $('#currentOverlay span').text(pageIndex + 1);
     
     //update buttons
@@ -411,6 +411,9 @@ function ToggleStoryText()
         //$('#storyToggle').css('top', "calc(-100px)");
         $('#storyToggle #show').css('display', 'none');
         $('#storyToggle #hide').removeAttr('style');
+        if(fullscreen){
+            $('#storyToggle').css('top', '-37px');
+        }
     }
 }
 
@@ -465,6 +468,8 @@ function ToggleFullScreen()
         $('.filters').removeClass('fullscreen-active');
         $('#exit-fullscreen').removeClass('fullscreen-active');
 
+        $('#storyToggle').css('top', '-54px');
+
     }
     else
     {
@@ -495,6 +500,12 @@ function ToggleFullScreen()
         $('.filters').addClass('fullscreen-active');
         $('#exit-fullscreen').addClass('fullscreen-active');
 
+        var currentMode = textArea.hasClass('hideAnim');
+        if(currentMode){
+            $('#storyToggle').css('top', '-37px');
+        }else{
+            $('#storyToggle').css('top', '-54px');
+        }
 
     }
     

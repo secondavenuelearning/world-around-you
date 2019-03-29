@@ -23,7 +23,7 @@
     position: relative;
 }
 
-.filter button{
+.filter button, .filter select{
     border: solid;
     border-radius: 150px;
     border-color: #004e74;
@@ -46,7 +46,7 @@
   margin-left: 3%;
 }
 
-.filter button img
+.filter button img, .filter select img
 {
     height: 30px;
     width: 45px;
@@ -58,35 +58,35 @@
 }
 
 @media (min-width:900px) {
-  .filter button{
+  .filter button, .filter select{
       font-size: .8em;
       padding-top: 5%;
   }
-  .filter button img{
+  .filter button img, .filter select img{
       bottom: 10px;
       height: 36px;
       width: 54px;
   }
 }
 @media (min-width:1050px) {
-  .filter button{
+  .filter button, .filter select{
       font-size: 1em;
       padding-top: 3.5%;
   }
-  .filter button img{
+  .filter button img, .filter select img{
       bottom: 8px;
   }
 }
 @media (min-width:1200px) {
-  .filter button{
+  .filter button, .filter select{
       font-size: 1.3em;
       padding-top: 2%;
   }
-  .filter button img{
+  .filter button img, .filter select img{
       bottom: 4px;
   }
 }
-.filter button img.dropdownIcon
+.filter button img.dropdownIcon, .filter select img.dropdownIcon
 {
     height: 18px;
     width: 27px;
@@ -99,12 +99,12 @@
     bottom: 0px;
 }
 @media (min-width:900px) {
-  .filter button img.dropdownIcon{
+  .filter button img.dropdownIcon, .filter select img.dropdownIcon{
     height: 22px;
     width: 33px;
   }
 }
-.filter button:hover
+.filter button:hover, .filter select:hover
 {
     cursor: pointer;
     border-color: white;
@@ -115,7 +115,7 @@
     position: absolute;
     display: none;
     
-    width: calc(100% - 20px);
+    width: calc(100% - 46px);
     
     background-color: #195f81;
     
@@ -126,10 +126,11 @@
     padding: 5px;
     padding-top: 30px;
     top: 60%;
-    left: 10px;
+    left: 24px;
     
     margin-left: auto;
     margin-right: auto;
+    text-align: left;
 }
 
 /* Checkbox filters css 
@@ -173,7 +174,8 @@ Thanks: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_che
 }
 
 .container input:checked ~ .checkmark { /* When the checkbox is checked, add a blue background */
-  background-color: #004e74;
+  background-color: white;
+  
 }
 
 .checkmark:after { /* Create the checkmark/indicator (hidden when not checked) */
@@ -191,7 +193,7 @@ Thanks: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_che
   top: 2.5px;
   width: 5px;
   height: 10px;
-  border: solid white;
+  border: solid #004e74;
   border-width: 0 3px 3px 0;
   -webkit-transform: rotate(45deg);
   -ms-transform: rotate(45deg);

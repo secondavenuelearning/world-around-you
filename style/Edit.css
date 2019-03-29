@@ -11,12 +11,16 @@
 
 #new-story-info h2{
 	margin: 0px;
+	top: 10px;
+    position: relative;
 }
 
 #new-story-info p{
 	margin-top: 5px;
 	line-height: 1.3em;
     font-size: 1.3em;
+    position: relative;
+    top: 15px;
 }
 
 #new-story-info button{
@@ -56,7 +60,7 @@
 
 #get-started{
 	display: inline-block;
-	width: 250px;
+	width: calc((70% / 3) - 10px);
 	border-radius: 20px;
 	border: 2px solid gold;
 	padding: 5px;
