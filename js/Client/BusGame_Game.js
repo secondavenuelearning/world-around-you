@@ -6,6 +6,7 @@ export default BusGame
 
 /* ----------------------- Global Variables ----------------------- */
 var template = _.template(gameHtml);
+var templateData = {};
 
 var storyData;
 var score = 0;
@@ -77,7 +78,6 @@ export function BusGame(storyObj, sign, written, terms)
     
     //figure out hwre each term is in the story data
     termMap = MapTermsToPages(terms.slice(0));
-    console.log(termMap);
     
     //add score area to header
     ExtendHeader();
@@ -268,20 +268,16 @@ function BuildWindows()
 
 function SetupWindowConnections(){
     var windows = document.getElementsByClassName("window");
-    console.log(windows[0]);
     for(var x  = 0; x < windows.length; x++){
         windows[x].onclick = function(e) 
         {
             if(firstClick == false){
-                console.log("first");
                 firstSelected = e.target.parentElement;
-                console.log(e.target.parentElement);
                 firstClick = true;
                 firstSelected.classList.remove("hidden");
             }
             else if(firstClick==true){
                 secondSelected = e.target.parentElement;
-                  console.log(firstSelected.firstChild.id);
                 if(firstSelected.firstChild.id.substr(0,firstSelected.firstChild.id.length-3) == secondSelected.firstChild.id.substr(0,secondSelected.firstChild.id.length-3)){
                     secondSelected.classList.remove("hidden");
                    
@@ -303,7 +299,6 @@ function SetupWindowConnections(){
                         {
                             //goto next round
                             RoundEndTransition();
-                            console.log("round over");
                         }
                         
                     }
@@ -338,21 +333,38 @@ function NextRound()
         roundOrder.splice(randIndex, 1);
 
         //update html of page form template
-        var main = template(
+        templateData =
         {
             Top:
             {
-                Bus: ChooseRandomArrayElement(images.Buses.FacingLeft)[0].src,
-                Car: ChooseRandomArrayElement(images.Cars.FacingLeft)[0].src,
+                Bus: 
+                {
+                    Frames: ChooseRandomArrayElement(images.Buses.FacingLeft),
+                    Current: 0
+                },
+                Car:
+                {
+                    Frames: ChooseRandomArrayElement(images.Cars.FacingLeft),
+                    Current: 0
+                },
                 Windows: BuildWindows()
             },
             Bottom:
             {
-                Bus: ChooseRandomArrayElement(images.Buses.FacingRight)[0].src,
-                Car: ChooseRandomArrayElement(images.Cars.FacingRight)[0].src,
+                Bus: 
+                {
+                    Frames: ChooseRandomArrayElement(images.Buses.FacingRight),
+                    Current: 0
+                },
+                Car:
+                {
+                    Frames: ChooseRandomArrayElement(images.Cars.FacingRight),
+                    Current: 0
+                },
                 Windows: BuildWindows()
             }
-        });
+        };
+        var main = template(templateData);
 
         this.$main = $(main);
         $('main').html(this.$main);
@@ -382,14 +394,14 @@ function NextRound()
 }
 
 function RoundEndTransition()
-{   
+{
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
-        Animate("#bottom .bus img", images.Buses.FacingRight[1], null);
-        Animate("#top .bus img", images.Buses.FacingLeft[0], null);
-        Animate("#bottom .car img", images.Cars.FacingRight[0], null);
-        Animate("#top .car img", images.Cars.FacingLeft[1], null);
+        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null);
+        Animate("#top .bus img", templateData.Top.Bus.Frames, null);
+        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
+        Animate("#top .car img", templateData.Top.Car.Frames, null);
          
          //mark cars to be destoryed
          $('.vehicle').addClass('willDestory');
@@ -501,31 +513,15 @@ function Animate(id, frames, frame)
     
     var vImgs = $(id).toArray();
     
-    if(activeAnimations.length < 1)
+    //update animation
+    vImgs.forEach(function(img)
     {
-        //update animation
-        vImgs.forEach(function(img)
-        {
-            img.src = frames[0].src;
-        });
-    }
-    else
-    {
-        //update animation
-        vImgs.forEach(function(img)
-        {
-            frame = (frame + 1) % frames.length;
-            img.src = frames[frame].src;
-        });
-    }
+        frame = (frame + 1) % frames.length;
+        img.src = frames[frame].src;
+    });
 }
 
 /* ----------------------- Helper Functions ----------------------- */
-function GetImgSourceFolder(imgSrc)
-{
-    
-}
-
 function ChooseRandomArrayElement(options)
 {
     //chose image to use for bus
