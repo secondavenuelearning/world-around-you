@@ -188,7 +188,21 @@ let apiRoutes = function(app){
 		});
 	});
 
+	function ValidateStory(req, res, next) {		
+		let id = parseInt(req.body.id);
 
+		StoryDB.get(id).then((story) => {
+			if(story){
+				req.story = story;
+				next();
+			}
+			else{
+				res.send('[PH] Invalid story id');
+			}
+		}).catch((err) => {
+			res.send(err);
+		});
+	}
 	app.post('/api/story', ValidateUser, (req,res) => {
 		StoryDB.add().then(function(storyId) {
 			return res.send(storyId + '');
@@ -626,7 +640,7 @@ let apiRoutes = function(app){
 			res.send(err);
 		});
 	});	
-	app.post('/api/story/publish',function(req,res) {
+	app.post('/api/story/publish', ValidateUser, (req,res) => {
 		let id = parseInt(req.body.id);
 
 		new Promise((resolve, reject) => { // check if the story exists
@@ -641,12 +655,31 @@ let apiRoutes = function(app){
 				return reject(err);
 			});
 		}).then((story) =>{
-			StoryDB.setVisible(id).then(function(result) {
+			StoryDB.setVisible(id).then((result) => {
 				return res.send(story);
 			}).catch((err) =>{
 				res.send(err);
 			});
 		}).catch(err => {
+			res.send(err);
+		});
+	});
+	app.post('/api/story/view', ValidateStory, (req, res) => {
+		let id = parseInt(req.body.id);
+
+		StoryDB.addView(id).then((result) => {
+			return res.send(true);
+		}).catch((err) =>{
+			res.send(err);
+		});
+
+	});
+	app.post('/api/story/like', ValidateStory, (req, res) => {
+		let id = parseInt(req.body.id);
+
+		StoryDB.addLike(id).then((result) => {
+			return res.send(true);
+		}).catch((err) =>{
 			res.send(err);
 		});
 	});

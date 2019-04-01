@@ -1,0 +1,14 @@
+<div id="<%- id %>" class="custom-select">
+	<button class="custom-select-value"><%- defaultText %></button>
+	<div class="custom-select-options">
+		<% _.each(options, function(option){ %>
+			<div>
+				<% if(multiSelect){  %>
+					<input type="check" value="<%- option %>"><label><%- option %></label>
+				<% } else { %>
+					<button value="<%- option %>"><%- option %></button>
+				<% } %>
+			</div>
+		<% }) %>
+	</div>
+</div>

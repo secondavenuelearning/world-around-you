@@ -1,6 +1,7 @@
 import 'style/StoryViewer.css!';
 import _ from 'underscore';
-import ImageHoverSwap from 'js/Client/HelperFunctions.js';
+
+import CustomSelect  from 'js/Client/CustomSelect';
 
 import html from 'html/Client/StoryViewer.html!text';
 const template = _.template(html);
@@ -16,7 +17,6 @@ const glossaryTemplate = _.template(glossaryHtml);
 let story,
 	page,
 	pageIndex = -1,
-	totalPages = 0,
 	subPageIndex = 0,    
 	currentWrittenLanguage,
 	currentSignLanguage;
@@ -35,28 +35,60 @@ var fullscreen = false;
 /* ----------------------- Constructor ----------------------- */
 function SetStory(_story){
 	story = _story;
-	totalPages = Object.keys(story.data).length + 1;
-	pageIndex = -1;
-	subPageIndex = 0;
-
 	currentWrittenLanguage = story.metadata.writtenLanguages[0];
 	currentSignLanguage = story.metadata.signLanguages[0];
 }
 
 function Render(id){
 	$(`#${id}`).html(template({
-		currentPageNumber: pageIndex + 2,
-		totalPages
+		story
 	}));
 
 	$('#fullscreen-toggle').on('click', (evt) => {
-		if (document.fullscreen) {
-			document.exitFullscreen();
+		if (document.fullscreen || document.msFullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement) {
+			if (document.exitFullscreen) {
+				document.exitFullscreen();
+			} else if (document.mozCancelFullScreen) { /* Firefox */
+				document.mozCancelFullScreen();
+			} else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+				document.webkitExitFullscreen();
+			} else if (document.msExitFullscreen) { /* IE/Edge */
+				document.msExitFullscreen();
+			}
 		}
 		else {
-			$('#story-viewer')[0].requestFullscreen();
+			let viewer = $('#story-viewer')[0];
+			if (viewer.requestFullscreen) {
+				viewer.requestFullscreen();
+			} else if (viewer.mozRequestFullScreen) { /* Firefox */
+				viewer.mozRequestFullScreen();
+			} else if (viewer.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+				viewer.webkitRequestFullscreen();
+			} else if (viewer.msRequestFullscreen) { /* IE/Edge */
+				viewer.msRequestFullscreen();
+			}
 		}
-	})
+	});
+
+	let wlSelect = new CustomSelect('page-controller', {
+			id: 'written-language-select', 
+			options: story.metadata.writtenLanguages,
+			defaultText: currentWrittenLanguage
+		}),
+		slSelect = new CustomSelect('page-controller', {
+			id: 'sign-language-select', 
+			options: story.metadata.signLanguages,
+			defaultText: currentSignLanguage
+		});
+
+	$(wlSelect).on('change', (evt, value) => {
+		currentWrittenLanguage = value;
+		RenderPage();
+	});
+	$(slSelect).on('change', (evt, value) => {
+		currentSignLanguage = value;
+		RenderPage();
+	});
 
 	RenderPage();
 }
@@ -137,7 +169,7 @@ function RenderPage(){
 	});
 
 	$('#text-toggle').on('click', (evt) => {
-		$('#video-container').toggleClass('text-open');
+		$('.video-container').toggleClass('text-open');
 		$('#text-toggle-container').toggleClass('text-open');
 		$('#text-container').toggleClass('text-open');
 	});
@@ -235,58 +267,8 @@ function GenerateLanguageSelects()
 	});
 	
 }
-
-function BuildSelectOptions(select, options)
-{
-	var optionsHTML = "";
-	
-	//loop through options and create html
-	options.forEach(function(option)
-	{
-		optionsHTML += "<option value=\"" + option + "\">";
-		optionsHTML += option;
-		optionsHTML += "</option>";
-	});
-	
-	//add to slect object
-	select.html(optionsHTML);
-}
-
 /* ----------------------- Button Functionality ----------------------- */
-function changePage(pageNum)
-{
-	//validate requested page
-	if((pageNum < 0 && ShowingCover()) || (pageNum > totalPages - 1 && !ShowingCover()))
-	{
-		return;
-	}
-	
-	//check if we are paging forward or backward, call fucntion accordingly
-	if(pageNum > pageIndex)
-	{
-		NextScreen(pageNum);
-	}
-	else
-	{
-		LastScreen(pageNum);
-	}
-   
-	
-	//grey out nav on last and first items
-	greyOutNav();
-	
-	//parse data from story josn to the viewers elements
-	parsePage(pageIndex);
-	 if(ShowingCover()){
-		 var nav = document.getElementById("currentOverlay");
-		 nav.style.opacity = .7;
-	 }
-	else{
-		 var nav = document.getElementById("currentOverlay");
-		 nav.style.opacity = 0;
-	}
-	
-}
+
 
 function LastScreen(pageNum)
 {

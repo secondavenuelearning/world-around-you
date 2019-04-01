@@ -361,6 +361,26 @@ function SetTitleOrDescription(storyId, writtenlanguageId, name, table){
 	});	
 }
 
+function AddViewOrLike(storyId, table){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			let query = `INSERT INTO ${table} (storyId) VALUES (?)`;
+
+			conn.query(query, [storyId]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result.insertId);
+				});
+			}).catch((err) => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+		}).catch((err) => {
+			return reject(err);
+		});
+	});	
+}
+
 function StoryDB(){
 }
 
@@ -397,6 +417,12 @@ function StoryDB(){
 	}
 	StoryDB.prototype.addWrittenlanguage = function(storyId, writtenlanguageId) {
 		return AddToAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
+	}
+	StoryDB.prototype.addView = function(storyId) {
+		return AddViewOrLike(storyId, 'view');
+	}
+	StoryDB.prototype.addLike = function(storyId) {
+		return AddViewOrLike(storyId, 'liked');
 	}
 
 // Deletes

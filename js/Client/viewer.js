@@ -6,66 +6,13 @@ import LanguageSelector from 'js/Client/LanguageSelector';
 import StoryPreview from 'js/Client/StoryPreview.js';
 import Carousel from 'js/Client/Carousel.js';
 import StoryViewer from 'js/Client/StoryViewer.js';
-import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-import FiltersBar from 'js/Client/Filter.js';
 
 import html from 'html/Client/Viewer.html!text';
 const template = _.template(html);
 
 let storyId,
-    story;
-
-var totalLikes;
-var canLike = true;
-
-// temp
-    function updateLikes() {
-     
-        if (canLike) {
-            totalLikes++;
-            document.getElementById("likes").innerHTML = "Likes: " + totalLikes;
-            canLike = false;
-            
-        }
-        document.getElementById("likeClick").style.backgroundColor = "#0098ba";
-
-    }
-
-    function SetViewLikeCounts(viewCount, likeCount) {
-        document.getElementById("likes").innerHTML = "Likes: " + likeCount;
-        totalLikes = likeCount;
-        document.getElementById("likeClick").onclick = function () {
-          
-            if (canLike) {
-                totalLikes++;
-                document.getElementById("likes").innerHTML = "Likes: " + totalLikes;
-                canLike = false;
-            }
-
-        }
-     
-        console.log(canLike);
-
-        document.getElementById("views").innerHTML = "Views: " + viewCount;
-    }
-
-    function GenerateGenres(Genres) {
-        var holder = document.getElementById("genres");
-        for (var x = 0; x < Genres.length; x++) {
-            var innerText = "<div class = 'category'>" + Genres[x] + "</div>";
-            holder.innerHTML += innerText;
-
-        }
-    }
-
-    function GenerateTage(Tags) {
-        var holder = document.getElementById("tags");
-        for (var x = 0; x < Tags.length; x++) {
-            var innerText = "<div class = 'category'>#" + Tags[x] + "</div>";
-            holder.innerHTML += innerText;
-
-        }
-    }
+    story,
+    liked = false;
 
 function displaySimilarGenres(stories){
     let similarGenreStories = [],
@@ -103,23 +50,37 @@ $(document).ready(() => {
             story
         }));
         console.log(story);
+
         StoryViewer.SetStory(story);
         StoryViewer.Render('viewer');
-        // FiltersBar('index', true);
+
+
+        $.ajax({
+            method: 'post',
+            url: '/api/story/view',
+            data: {
+                id: story.id
+            }
+        });
+        $('#social-likes').on('click', () => {
+            if(liked) return;
+
+            liked = true;
+
+            $.ajax({
+                method: 'post',
+                url: '/api/story/like',
+                data: {
+                    id: story.id
+                }
+            }).done((stories) => {
+                $('#likes').html(story.metadata.likes + 1);
+            }).fail((err) => {
+                console.error(err);
+            });
+        })
+
         LanguageSelector.updateLanguageDisplay();
-
-
-        // var modal = document.getElementById('id01');
-
-        // // When the user clicks anywhere outside of the modal, close it
-        // window.onclick = function(event) {
-        //     if (event.target == modal) {
-        //         modal.style.display = "none";
-        //     }
-        // }
-        // document.getElementById("exit-modal").onclick = function () {
-        //     modal.style.display = "none";
-        // };
 
         $.ajax({
             method: 'get',

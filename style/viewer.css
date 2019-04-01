@@ -477,10 +477,10 @@
 
         background-color: #FFFFFF;
         color: #0098BA;
-        padding: 5px;
+        padding: 5px 10px;
         padding-left: 40px;
         background-repeat: no-repeat;
-        background-size: 30px;
+        background-size: 30px 30px;
         background-position: 5px center;
         font-size: 1.1em;
     }
