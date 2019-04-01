@@ -15,46 +15,34 @@ $(document).ready(function () {
         url: './api/stories'
     }).done((stories) => {
         console.log(stories);
-        var storyOne = [];
-        for (var i = 0; i < 9; i++) {
-            let sp = new StoryPreview({
-                id: i + 1,
-                metadata: {
-                    title: {
-                        english: 'Aesop Fables: The Clever Donkey'
-                    },
-                    description: {
-                        english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
-                    }                    
-                },
-                author: 'Massimo V.',
+
+        // sort stories by data created
+        stories.sort((a, b) => {
+            return a.datecreated > b.datecreated ? 1 : a.datecreated < b.datecreated ? -1 : 0;
                 coverimage: 'img/carousel/from_this_author/1.png'
-            });
-            storyOne.push(sp);
+        });
+        var newestStories = [];
+        for (let i = 0; i < 9 && i < stories.length; i++) {
+            let sp = new StoryPreview(stories[i]);
+            newestStories.push(sp);
             
         }
-        new Carousel("#new-stories", storyOne, 1, false,  true, "New Stories");
+        new Carousel("#new-stories", newestStories, 1, false,  true, "New Stories");
+
 
         FiltersBar('filter-bar');
 
+
+        // sort stories by title
+        stories.sort((a, b) => {
+            let clt = LanguageSelector.currentLanguageText();
+            return a.metadata.title[clt] > b.metadata.title[clt] ? 1 : a.metadata.title[clt] < b.metadata.title[clt] ? -1 : 0;
+                coverimage: 'img/carousel/from_this_author/1.png'
+        });
         var storyPreviews = [];
 
-        // for (var i = 0; i < stories.length; i++) {
-        //     let sp = new StoryPreview(stories[i]);
-        for (var i = 0; i < 27; i++) {
-            let sp = new StoryPreview({
-                id: i + 1,
-                metadata: {
-                    title: {
-                        english: 'Aesop Fables: The Clever Donkey'
-                    },
-                    description: {
-                        english: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque ex nibh, euismod in arcu quis, porttitor tincidunt ipsum. Orci varius natoque penatibus et magnis dis.'
-                    }                    
-                },
-                author: 'Massimo V.',
-                coverimage: 'img/carousel/from_this_author/1.png'
-            });
+        for (var i = 0; i < stories.length; i++) {
+            let sp = new StoryPreview(stories[i]);
             storyPreviews.push(sp);
         }
         StoryGrid("stories", storyPreviews);

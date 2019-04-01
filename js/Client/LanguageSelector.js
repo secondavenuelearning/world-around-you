@@ -44,5 +44,7 @@ var updateLanguageDisplay = function(){
 
 export default {
 	appendTo,
-	updateLanguageDisplay
+	updateLanguageDisplay,
+	currentLanguage: function(){return currentLanguage.toLowerCase()},
+	currentLanguageText: function(){return currentLanguageText.toLowerCase()}
 }
