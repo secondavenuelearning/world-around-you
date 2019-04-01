@@ -4,6 +4,7 @@ body{
 #new-stories{
 	background-color: #0098BA;
 	height: 70%;
+    padding-top: 35px;
 }
 #more-stories-title, #bookmarks-title{
     background-color: #A0EAF7;

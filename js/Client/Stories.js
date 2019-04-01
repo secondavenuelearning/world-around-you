@@ -28,7 +28,7 @@ $(document).ready(function () {
                     }                    
                 },
                 author: 'Massimo V.',
-                coverImage: 'img/carousel/from_this_author/1.png'
+                coverimage: 'img/carousel/from_this_author/1.png'
             });
             storyOne.push(sp);
             
@@ -53,7 +53,7 @@ $(document).ready(function () {
                     }                    
                 },
                 author: 'Massimo V.',
-                coverImage: 'img/carousel/from_this_author/1.png'
+                coverimage: 'img/carousel/from_this_author/1.png'
             });
             storyPreviews.push(sp);
         }

@@ -53,7 +53,7 @@
     background: none;
     background-repeat: no-repeat;
 	background-image: url('../../img/icons/NavBar/nav_games.svg');
-    
+
 }
 .story-game-button a{
 	display: block;
@@ -68,7 +68,7 @@
 	background-image: url('../../img/icons/NavBar/nav_games.svg');
 }
 .story-game-button:hover{
-	background-image: url('../../img/icons/NavBar/nav_games_hoverDown.svg');
+	background-image: url('../../img/icons/NavBar/nav_games_hoverDown2.svg');
 }
 
 

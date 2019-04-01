@@ -23,7 +23,7 @@ nav{
 nav > div{
 	position: relative;
 	float: right;
-	margin-left: 35px;
+	margin-left: 25px;
 	height: 48px;
 	width: 48px;
 }
@@ -43,6 +43,11 @@ nav > div:not(#nav-search):not(.active):hover{
 }
 #nav-stories-icon{
 	background-image: url('../../img/icons/NavBar/nav_stories.svg');
+}
+#nav-stories-div{
+	margin-right: 20px;
+	margin-left: 25px;
+
 }
 nav > div:not(#nav-search):not(.active):hover #nav-stories-icon{
 	background-image: url('../../img/icons/NavBar/nav_stories_hoverDown.svg');

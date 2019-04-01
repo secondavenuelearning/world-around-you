@@ -226,7 +226,7 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
             $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '0');
         }, function()
         {
-            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '.85');
+            $('#' + itemsID + ' > .image-holder > .pageTitle').css('opacity', '1');
         });
     }
     
