@@ -8,6 +8,8 @@ const template = _.template(html);
 import pageHtml from 'html/Client/StoryViewer_Page.html!text';
 const pagTemplate = _.template(pageHtml);
 
+import glossaryHtml from 'html/Client/GlossaryModal.html!text';
+const glossaryTemplate = _.template(glossaryHtml);
 
 
 /* ----------------------- Global Variables ----------------------- */
@@ -46,6 +48,15 @@ function Render(id){
 		currentPageNumber: pageIndex + 2,
 		totalPages
 	}));
+
+	$('#fullscreen-toggle').on('click', (evt) => {
+		if (document.fullscreen) {
+			document.exitFullscreen();
+		}
+		else {
+			$('#story-viewer')[0].requestFullscreen();
+		}
+	})
 
 	RenderPage();
 }
@@ -99,6 +110,8 @@ function RenderPage(){
 		currentSignLanguage
 	}));
 
+	$('#page-counter #current').html(currentPageNumber);
+
 	$('.story-viewer-nav-button').on('click', (evt) => {
 		let dir = $(evt.currentTarget).attr('page-dir');
 
@@ -122,180 +135,69 @@ function RenderPage(){
 		}
 		RenderPage();
 	});
+
+	$('#text-toggle').on('click', (evt) => {
+		$('#video-container').toggleClass('text-open');
+		$('#text-toggle-container').toggleClass('text-open');
+		$('#text-container').toggleClass('text-open');
+	});
+
+	GenerateGlossaryButtons(page);
 }
 
 
-/*
-	//attach global vars to their element
-	textArea = $('#story');
-	visuals = $('#visuals');
-	
-	//add onlick for story toggle
-	$('#storyToggle').on('click', function() {ToggleStoryText()});
-	
-	//add onclick for fullscreen toggling
-	$('#fullscreen').on('click', function() {ToggleFullScreen()});
-	$('#exit-fullscreen').on('click', function() {ToggleFullScreen()});
-	
-	//add onclick event for chaning pages onto the nav buttons
-	$('.viewerNav#back button').on('click', function() {changePage(pageIndex - 1)});
-	$('.viewerNav#forward button').on('click', function() {changePage(pageIndex + 1)});
-	
-	//set the total page number
-	totalPages = Object.keys(story).length;
-	$('#total').text(totalPages);
-	
-	//parse the first page
-	$('#visuals img').css("display", "block");
-	$('#visuals video').css("display", "none");
-	$('.viewerNav #cover.icon').css('display', 'none');
-	$('#storyToggle #show').css('display', 'none');
-	
-	GenerateLanguageSelects();
-	
-	parsePage(pageIndex);
-	$('#storyToggle').css('display', 'none');
-	ToggleStoryText(); //hide text for cover image
-	visuals.css('max-height', '100%');
-	greyOutNav(); //grey out back button bc on first item
-	
-	//add hover image swaping
-	ImageHoverSwap("#storyToggle button", "#storyToggle #show", "../../img/icons/StoryViewer/icon_SV_HideText.svg", "../../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg");
-	
-	ImageHoverSwap("#storyToggle button", "#storyToggle #hide", "../../img/icons/StoryViewer/icon_SV_ShowText.svg", "../../img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg");
-	
-	//ImageHoverSwap("#fullscreen button", "#fullscreen img", "../../img/icons/StoryViewer/icon_SV_Fullscreen.svg", "../../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg");
-	
-	ImageHoverSwap("#signLang", "#signLang img", "../../img/icons/StoryViewer/icon_SV_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_SignLang_HoverDown.svg");
-	
-	ImageHoverSwap("#writtenLang", "#writtenLang img", "../../img/icons/StoryViewer/icon_SV_WrittenLang.svg", "../../img/icons/StoryViewer/icon_SV_WrittenLang_HoverDown.svg");
-	
-	ImageHoverSwap("#forward.viewerNav", "#forward.viewerNav #sign.icon", "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg");
-	
-	ImageHoverSwap("#forward.viewerNav", "#forward.viewerNav #cover.icon", "../../img/icons/StoryViewer/icon_SV_Page_Image.svg", "../../img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg");
-	
-	 ImageHoverSwap("#back.viewerNav", "#back.viewerNav #sign.icon", "../../img/icons/StoryViewer/icon_SV_Page_SignLang.svg", "../../img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg");
-	
-	ImageHoverSwap("#back.viewerNav", "#back.viewerNav #cover.icon", "../../img/icons/StoryViewer/icon_SV_Page_Image.svg", "../../img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg");
-*/
 
+function GenerateGlossaryButtons(page){
+	if(!page) return;
 
-/* ----------------------- Data parsing ----------------------- */
-function parsePage(page)
-{ console.log("Parsing: " + page);
-	//update all the page numbers
-	updatePageNumbers();
-	
-	//set story text
-	$('#story').text(story[pageIndex].text[writtenLang]);
-	
-	//set image
-	$('#visuals img').attr('src', story[page].image);
-	
-	//set video
-	$('#visuals video').attr('src', story[page].video[signLang]);
- 
-	//search for glossary terms and make them buttons
-	GenerateGlossaryButtons();
-	
-}
+	let glossaryTerms = page.glossary ? page.glossary[currentWrittenLanguage] : [],
+		text = $('#text-container').html();
 
-function updatePageNumbers()
-{
-	var screen = 1;
-	if(!ShowingCover())
-	{
-		screen = 2;
-	}
-	
-	//update current
-	$('#holder #current').text(pageIndex + 1);
-	$('#currentOverlay span').text(pageIndex + 1);
-	
-	//update buttons
-	$('.viewerNav#forward .num').text(pageIndex + screen);
-	$('.viewerNav#back .num').text(pageIndex - (screen % 2) + 1);
-}
+	if(!text) return;
 
-function GenerateGlossaryButtons()
-{
-	var story = story[pageIndex].text[writtenLang];
-	
-	// Add glossary functionality
-	var glossary = {};
-	if(story[pageIndex].hasOwnProperty('glossary')) //check if we even have glossary items
-	{ 
-		glossary = story[pageIndex].glossary[writtenLang]; //get all glossary object for this lang
-
-		//build glossary regex
-		var glossaryRegex = "";
-		var terms = 1;
-		Object.keys(glossary).forEach(function(term){ //terms
-			glossaryRegex += term + "|";
-			terms++;
-		 });
-
-		glossaryRegex = glossaryRegex.slice(0, glossaryRegex.length - 1); //clean off last '|'
-		glossaryRegex = new RegExp(glossaryRegex, 'gi'); //convert to actual regular expression - gi is global (g) and not case sensitive(i)
-
-		//replace found regex terms with functional glossary items in the html
-		 story = story.replace(glossaryRegex, function(match){
-			var formattedTerm = '<span class=\"glossary\">' + match + '</span>';
-			return formattedTerm;
+	_.each(glossaryTerms, (term, name) => {
+		let regEx = new RegExp(name, 'i');
+		text = text.replace(regEx, (match) => {
+			return `<span class="glossary" glossary-term="${name}">${match}</span>`;
 		});
-		
-		//give modified text back to story element
-		textArea.html(story);
-		
-		//add button functionality
-		$('.glossary').on('click', function(e)
-		{
-			//parse data to modal pop up
-			var glossary = story[pageIndex].glossary[writtenLang];
-			var term = $(e.target).text().toLowerCase();
-				
-			setOverlayItems( term, //word
-				glossary[term].definition,
-				glossary[term].video[signLang].start,
-				glossary[term].video[signLang].end,
-				story[pageIndex].video[signLang],
-				glossary[term].image
-			);
-			
-			//call pop up
-			$('.modal').css("display", "block");
+	});
 
-			$('#videoLoop').focus();
+	$('#text-container').html(text);
+
+
+	//add button functionality
+	$('.glossary').on('click', (evt) => {
+
+		//parse data to modal pop up
+		let termName = $(evt.currentTarget).attr('glossary-term'),
+			term = glossaryTerms[termName];
+
+			console.log(termName, term, glossaryTerms)
+
+		$('#story-viewer').append(glossaryTemplate({
+			term,
+			page,
+			currentWrittenLanguage,
+			currentSignLanguage
+		}));
+
+		$('#exit-modal').on('click', (evt) => {
+			$('#glossary-modal').remove();
 		});
-	}
-}
 
-function setOverlayItems(word, definition, start, end, video, image)
-{
-	var videoContainer = document.getElementById("videoContainer")
-	var imageTag = document.getElementById("definitionImage");
-	var description = document.getElementById("definitionText");
-	var title = document.getElementById("definitionWord");
-	
-	videoContainer.src = video + "#t="+start+","+end;
-	videoContainer.addEventListener('loadedmetadata', function()
-	{
-		if(videoContainer.currentTime < start){
-			videoContainer.currentTime = start;
-		}
-		videoContainer.ontimeupdate = function(){
-			if(videoContainer.currentTime>=end){
-				videoContainer.currentTime = start;
-				videoContainer.play();
 
+		// loop the video between the desired times
+		let vid = $('#glossary-video')[0];
+		if(vid){
+			vid.ontimeupdate = function(){
+				let startTime = term.video[currentSignLanguage].start || 0,
+					endTime = term.video[currentSignLanguage].end || vid.duration;
+
+				if(vid.currentTime < startTime || vid.currentTime > endTime)
+					vid.currentTime = startTime;
 			}
 		}
-	}, false);
-	
-	imageTag.src = image;
-	description.innerHTML = definition;
-	title.innerHTML = word;
-	
+	});
 }
 
 function GenerateLanguageSelects()
@@ -478,180 +380,6 @@ function NextScreen(pageNum)
 		$('.viewerNav #cover.icon').css('display', 'none');
 		$('#storyToggle #show').css('display', 'none');
 		$('#storyToggle #hide').removeAttr('style');
-	}
-}
-
-function ToggleStoryText()
-{
-	//get current mode
-	var currentMode = textArea.hasClass('hideAnim');
-	
-	//check if showing or not
-	if(currentMode)
-	{
-		//set text and visuals back to default
-		textArea.removeClass("hideAnim");
-		visuals.removeAttr('style');
-		$('#storyToggle').removeAttr('style');
-		$('#storyToggle #hide').css('display', 'none');
-		$('#storyToggle #show').removeAttr('style');
-		
-	}
-	else
-	{
-		//turn off text area
-		//textArea.css("display", "none");
-		textArea.addClass('hideAnim');
-		
-		//expand video to be full size
-		visuals.css('height', '100%');
-		visuals.css('max-height', '90%');
-		visuals.css('width', '100%');
-		visuals.css('margin', '0px');
-		
-		//$('#storyToggle').css('top', "calc(-100px)");
-		$('#storyToggle #show').css('display', 'none');
-		$('#storyToggle #hide').removeAttr('style');
-		if(fullscreen){
-			$('#storyToggle').css('top', '-37px');
-		}
-	}
-}
-
-function ToggleOptions(tag)
-{
-	var selectObj = $(tag + ' select');
-	var buttonObj = $(tag + ' button');
-	
-	//get current mode
-	var currentMode = selectObj.css("display");
-	
-	 //check if showing or not
-	if(currentMode.toString() === "none")
-	{
-		selectObj.css('display', 'block');
-		
-		buttonObj.css("border-bottom-left-radius", "0");
-		buttonObj.css("border-bottom-right-radius", "0");
-		
-	}
-	else
-	{
-		//set text and visuals back to default
-		selectObj.removeAttr('style');
-		buttonObj.removeAttr('style');
-	}
-}
-
-function ToggleFullScreen()
-{
-	if(fullscreen)
-	{
-		//set fullscreen to be off
-		fullscreen = false;
-		
-		//show elements
-		$('header').removeAttr('style');
-		$('#details').removeAttr('style');
-		$('#more-stories').css('display', 'block');
-		$('#more-author').css('display', 'block');
-		$('footer').removeAttr('style');
-		
-		//move viewer elements back down under header
-		$('main').removeAttr('style');
-		$('#viewer').removeAttr('style');
-		$('#viewerBar').removeAttr('style');
-
-		$('#holder').removeClass('holder-fullscreen');
-		$('#viewer-content').removeClass('viewer-content-fullscreen');
-
-		$('#fullscreen').removeClass('fullscreen-active');
-		$('.filters').removeClass('fullscreen-active');
-		$('#exit-fullscreen').removeClass('fullscreen-active');
-
-		$('#storyToggle').css('top', '-54px');
-
-	}
-	else
-	{
-		//set fullscreen to on
-		fullscreen = true;
-		
-		//hide elements
-		$('header').css('display', 'none');
-		$('#details').css('display', 'none');
-		$('#more-stories').css('display', 'none');
-		$('#more-author').css('display', 'none');
-		$('footer').css('display', 'none');
-		
-		//move viewer elements up and make it fill
-		$('main').css('top', '0');
-		$('main').css('height', '100%');
-		$('#viewer').css('height', 'calc(100% - 70px');
-
-		$('#holder').addClass('holder-fullscreen');
-		$('#viewer-content').addClass('viewer-content-fullscreen');
-
-		
-		//scroll to the top so we dont have odd whitespace and remove anythign thats extra
-		$('main').scrollTop(0);
-		$('main').css('overflow', 'hidden');
-
-		$('#fullscreen').addClass('fullscreen-active');
-		$('.filters').addClass('fullscreen-active');
-		$('#exit-fullscreen').addClass('fullscreen-active');
-
-		var currentMode = textArea.hasClass('hideAnim');
-		if(currentMode){
-			$('#storyToggle').css('top', '-37px');
-		}else{
-			$('#storyToggle').css('top', '-54px');
-		}
-
-	}
-	
-}
-
-/* ---------------------- Button Extra Styling Functions ---------------------- */
-function greyOutNav()
-{
-	//special events
-	if(pageIndex == 0 && ShowingCover()) //first page should hide left button
-	{
-		//get back button and "grey" it out
-		$('.viewerNav#back button').css('opacity', '.3');
-		
-		//hide text
-		//$('.viewerNav#back span').text(1);
-		$('.viewerNav#back span').css('display', "none");
-		
-		//resize icon
-		$('.viewerNav#back .icon').css('height', '70%');
-		$('.viewerNav#back .icon').css('padding', '10%');
-		$('.viewerNav#back .icon').css('margin-top', '15px');
-
-	}
-	else if(pageIndex >= (totalPages - 1) && !ShowingCover()) //last page shoudl hide right button
-	{
-		//get forward button and "grey" it out
-		$('.viewerNav#forward button').css('opacity', '.3');
-		
-		//hide text
-		//$('.viewerNav#forward span').text(totalPages - 1);
-		$('.viewerNav#forward span').css('display', "none");
-		
-		//resize icon
-		$('.viewerNav#forward .icon').css('height', '70%');
-		$('.viewerNav#forward .icon').css('padding', '10%');
-		$('.viewerNav#forward .icon').css('margin-top', '15px');
-	}
-	else
-	{
-		$('.viewerNav button').removeAttr('style');
-		$('.viewerNav span').removeAttr('style');
-		$('.viewerNav .icon').removeAttr('margin-top');
-		$('.viewerNav .icon').removeAttr('padding');
-		$('.viewerNav .icon').removeAttr('height');
 	}
 }
 

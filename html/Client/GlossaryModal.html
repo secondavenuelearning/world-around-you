@@ -1,0 +1,22 @@
+<div id="glossary-modal">
+	<div id="term-container">
+		<div id="media-container" class="third">
+			<% if(term.video[currentSignLanguage]){ %>
+				<div class="video-container">
+					<video id="glossary-video" autoplay muted loop src="<%- page.video[currentSignLanguage] %>">
+					</video>
+				</div>
+			<% } %>
+			<% if(term.image){ %>
+				<div class="image-container">
+					<img src="<%- term.image %>">
+				</div>
+			<% } %>
+		</div>
+		<div id="definition-container" class="two-thirds">
+			<h1 id="word"><%- term.name %></h1>
+			<p id="definition"><%= term.definition %></p>
+		</div>
+		<button id="exit-modal"></button>
+	</div>
+</div>

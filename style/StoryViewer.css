@@ -6,6 +6,14 @@
     background-color: #004E74;
     color: #FFFFFF;
 }
+#story-viewer button{
+	border: none;
+	padding: 0px;
+}
+.story-viewer-nav, .story-viewer-page{
+	-webkit-transition: height, width .5s; /* Safari */
+	transition: height, width .5s;
+}
 #page-counter{
 	height: 50px;
 	margin: 5px;
@@ -98,6 +106,7 @@
 
 .story-viewer-page{
 	background-color: #002E45;
+	overflow: hidden;
 }
 #page-overlay{
 	position: absolute;
@@ -110,13 +119,13 @@
     background-color: #002e45;
     text-align: center;
 }
-#image-container{
+.image-container{
 	height: 100%;
 	width: 100%;
 	position: relative;
 	overflow: hidden;
 }
-#image-container img{
+.image-container img{
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -126,31 +135,15 @@
 	max-height: 100%;
 	max-width: 100%;
 }
-#video-container{
+.video-container{
 	height: calc(100% - 40px);
 	position: relative;
 	overflow: hidden;
 	padding: 5px;
+	-webkit-transition: height .5s; /* Safari */
+	transition: height .5s;
 }
-#text-toggle-container{
-	height: 40px;
-}
-#text-container{
-	height: 0px;
-}
-
-#video-container.text-open{
-	height: calc(60% - 40px);
-}
-#text-container.text-open{
-	height: 40%;
-	padding: 15px 50px;
-	background-color: #0098ba;
-	font-size: 1.5em;
-	overflow: auto;
-}
-
-#video-container video{
+.video-container video{
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -160,13 +153,149 @@
     max-height: calc(100% - 10px);
     max-width: calc(100% - 10px);
 }
+.video-container.text-open{
+	height: calc(60% - 40px);
+}
+#text-toggle-container{
+	height: 40px;
+}
+#text-toggle {
+    display: block;
+    height: 40px;
+    width: 40px;
+    margin: 0px auto;
 
+    background: none;
+	background-image: url(../img/icons/StoryViewer/icon_SV_HideText.svg);
+}
+#text-toggle:hover{
+	background-image: url(../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg);
+}
+#text-toggle-container.text-open #text-toggle{
+	background-image: url(../img/icons/StoryViewer/icon_SV_ShowText.svg);
+}
+#text-toggle-container.text-open #text-toggle:hover{
+	background-image: url(../img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg);
+}
+#text-container{
+	height: 0px;
+	overflow: hidden;
+	padding: 15px 50px;
+	background-color: #0098ba;
+	font-size: 1.5em;
 
-
+	-webkit-transition: height .5s; /* Safari */
+	transition: height .5s;
+}
+#text-container.text-open{
+	height: 40%;
+	overflow: auto;
+}
 #page-controller{
 	height: 60px;
 	padding: 5px;
 	text-align: center;
 	background-color: #0098BA;
 	box-shadow: inset 0px 4px 7px rgba(0,78,117,0.7);
+}
+#fullscreen-toggle{
+	position: absolute;
+	height: 40px;
+	width: 40px;
+
+	right: 10px;
+	bottom: 10px;
+
+	background: none;
+	background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen.svg);
+}
+#fullscreen-toggle:hover{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg);
+
+}
+#story-viewer:fullscreen #fullscreen-toggle{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg);
+}
+#story-viewer:fullscreen #fullscreen-toggle:hover{
+	background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg);
+}
+#story-viewer:fullscreen .story-viewer-nav{
+	width: 80px;
+}
+#story-viewer:fullscreen .story-viewer-page{
+	width: calc(100% - 220px);
+}
+.glossary
+{
+	cursor: default;
+    position: relative;
+    
+    background-color: #004e74;
+    border-color: #004e74;
+    border-style: solid;
+    border-radius: 15px;  
+    transition: border-color .6s;
+    border-width: 2px;
+    padding: 5px;
+    padding-top: 0px;
+}
+
+.glossary:hover
+{
+    border-color: white;
+}
+
+#glossary-modal{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+
+	height: 100%;
+	width: 100%;
+
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+#term-container{
+	position: absolute;
+	top: 12.5%;
+	left: 12.5%;
+    background-color: #fefefe;
+    border-radius: 20px;
+    padding: 10px;
+    width: 75%;
+    height: 75%;
+}
+#term-container > div {
+	height: calc(100% - 20px);
+}
+#media-container > div {
+	height: calc(50% - 10px);
+    background-color: #004E74;
+    border-radius: 10px;
+}
+#media-container .video-container{
+	margin-bottom: 20px;
+}
+#media-container .image-container{
+	margin-top: 20px;
+}
+#definition-container{
+	background-color: #A0EAF7;
+	border-radius: 10px;
+	color: #004E74;
+	padding: 10px 25px;
+	font-size: 1.25em;
+}
+
+#exit-modal{
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background: none;
+    background-image: url('../img/icons/General/icon_Close.svg');
+    right: 10px;
+}
+#exit-modal:hover{
+    background-image: url('../img/icons/General/icon_Close_hoverDown.svg');
 }

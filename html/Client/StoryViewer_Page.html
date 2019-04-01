@@ -12,14 +12,14 @@
 			<span class="icon <%- currentIcon %>"></span>
 			<span class="num"><%- currentPageNumber %></span>
 		</div>
-		<div id="image-container">
+		<div class="image-container">
 			<img src="<%- page.image %>" />
 		</div>
 	<% } else { %>
-		<div id="video-container" class="text-open">
+		<div class="video-container text-open">
 			<video src="<%- page.video[currentSignLanguage] %>" controls loop autoplay muted></video>
 		</div>
-		<div id="text-toggle-container">
+		<div id="text-toggle-container" class="text-open">
 			<button id="text-toggle"></button>
 		</div>
 		<div id="text-container" class="text-open">

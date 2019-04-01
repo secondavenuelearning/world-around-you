@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2019 at 02:28 PM
+-- Generation Time: Apr 01, 2019 at 04:14 PM
 -- Server version: 5.6.17
 -- PHP Version: 7.1.9
 
@@ -28,6 +28,34 @@ CREATE TABLE `description` (
   `name` varchar(256) NOT NULL,
   `writtenlanguageId` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `storyId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `game`
+--
+
+CREATE TABLE `game` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `gamedata`
+--
+
+CREATE TABLE `gamedata` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `gameId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `storyId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `data` blob,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -258,6 +286,21 @@ ALTER TABLE `description`
   ADD KEY `storyId` (`storyId`);
 
 --
+-- Indexes for table `game`
+--
+ALTER TABLE `game`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `name` (`name`);
+
+--
+-- Indexes for table `gamedata`
+--
+ALTER TABLE `gamedata`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `gameId` (`gameId`),
+  ADD KEY `storyId` (`storyId`);
+
+--
 -- Indexes for table `genre`
 --
 ALTER TABLE `genre`
@@ -387,6 +430,18 @@ ALTER TABLE `description`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `game`
+--
+ALTER TABLE `game`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `gamedata`
+--
+ALTER TABLE `gamedata`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `genre`
 --
 ALTER TABLE `genre`
@@ -486,6 +541,13 @@ ALTER TABLE `writtenlanguage`
 ALTER TABLE `description`
   ADD CONSTRAINT `description_ibfk_1` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`),
   ADD CONSTRAINT `description_ibfk_2` FOREIGN KEY (`writtenlanguageId`) REFERENCES `writtenlanguage` (`id`);
+
+--
+-- Constraints for table `gamedata`
+--
+ALTER TABLE `gamedata`
+  ADD CONSTRAINT `gamedata_ibfk_2` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`),
+  ADD CONSTRAINT `gamedata_ibfk_1` FOREIGN KEY (`gameId`) REFERENCES `game` (`id`);
 
 --
 -- Constraints for table `genre`
