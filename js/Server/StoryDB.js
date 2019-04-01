@@ -482,7 +482,7 @@ function StoryDB(){
 				let query = "SELECT data from story WHERE id = ?";
 				conn.query(query, [storyId]).then(res => {
 					conn.end().then(() => {
-						return resolve(res[0] ? JSON.parse(res[0].data.toString('utf8')) : null);
+						return resolve(res[0] && res[0].data ? JSON.parse(res[0].data.toString('utf8')) : null);
 					});
 				}).catch((err) => {
 					return reject(err);

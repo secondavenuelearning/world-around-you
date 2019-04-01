@@ -190,7 +190,7 @@ let apiRoutes = function(app){
 
 
 	app.post('/api/story', ValidateUser, (req,res) => {
-		StoryDB.addStory().then(function(storyId) {
+		StoryDB.add().then(function(storyId) {
 			return res.send(storyId + '');
 		}).catch(err => {
 			return res.send(err);
