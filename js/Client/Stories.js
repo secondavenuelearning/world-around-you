@@ -19,6 +19,7 @@ $(document).ready(function () {
         // sort stories by data created
         stories.sort((a, b) => {
             return a.datecreated > b.datecreated ? 1 : a.datecreated < b.datecreated ? -1 : 0;
+                coverimage: 'img/carousel/from_this_author/1.png'
         });
         var newestStories = [];
         for (let i = 0; i < 9 && i < stories.length; i++) {
@@ -36,6 +37,7 @@ $(document).ready(function () {
         stories.sort((a, b) => {
             let clt = LanguageSelector.currentLanguageText();
             return a.metadata.title[clt] > b.metadata.title[clt] ? 1 : a.metadata.title[clt] < b.metadata.title[clt] ? -1 : 0;
+                coverimage: 'img/carousel/from_this_author/1.png'
         });
         var storyPreviews = [];
 
