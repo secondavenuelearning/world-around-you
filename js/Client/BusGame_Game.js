@@ -302,7 +302,6 @@ function SetupWindowConnections(){
                      var blank = new Image();
                       
                         checkImages.push(blank);
-                        console.log(checkImages);
                         Animate("#checkMarkImage", checkImages, null, true);
                               score++;
                     document.getElementById("current").innerHTML = score;
@@ -310,8 +309,8 @@ function SetupWindowConnections(){
                         //check win state
                         if(score === totalMatches)
                         {
-                            //goto win screen and clear as much data as possible
-                            WinScreen(); 
+                            gameState = state.Win;
+                            RoundEndTransition() 
                         }
                         else if(score === roundTotalMatches + lastRoundScore)
                         {
@@ -416,7 +415,7 @@ function NextRound(firstRun = false)
 }
 
 function RoundEndTransition()
-{ console.log("end");
+{
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
@@ -426,18 +425,18 @@ function RoundEndTransition()
         Animate("#top .car img", templateData.Top.Car.Frames, null,false);
          
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", 0, 2000);
-        Move(timestamp, '#top .vehicle', null, "Left", 0, -2000);
+        Move(timestamp, '#bottom .vehicle', null, "Right", 0, screen.width);
+        Move(timestamp, '#top .vehicle', null, "Left", 0, (screen.width * -1));
     });
     
     activeAnimations.push(animID);
 }
 
 function RoundStartTransition()
-{ console.log("start");
+{
     //move vehicles off screen on proper side so they can drive in
-    $('#bottom .vehicle').css('left', '-2000px');
-    $('#top .vehicle').css('left', '2000px');
+    $('#bottom .vehicle').css('left', (screen.width * -1) + 'px');
+    $('#top .vehicle').css('left', screen.width + 'px');
     
     //animate and move vehicles back on screen
      var animID = window.requestAnimationFrame(function(timestamp)
@@ -447,13 +446,10 @@ function RoundStartTransition()
         Animate("#top .bus img", templateData.Top.Bus.Frames, null,false);
         Animate("#bottom .car img", templateData.Bottom.Car.Frames, null,false);
         Animate("#top .car img", templateData.Top.Car.Frames, null,false);
-         
-         //clear round matches - so a NextRound() is only called once
-         roundTotalMatches = 0;
-         
+
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2000);
-        Move(timestamp, '#top .vehicle', null, "Left", 2000, -2000);
+        Move(timestamp, '#bottom .vehicle', null, "Right", (screen.width * -1), (screen.width + 20));
+        Move(timestamp, '#top .vehicle', null, "Left", (screen.width), ((screen.width + 10) * -1));
     });
     
     activeAnimations.push(animID);
@@ -535,7 +531,6 @@ function Move(timestamp, id, start, dir, startPos, endPos)
         vehicles.forEach(function(vehicle)
         {  
             vehicle.style.left = startPos + pos + 'px';
-            console.log(vehicle.style.left + " = " + pos + " + " + startPos);
         });
         
         window.requestAnimationFrame(function(timestamp)
@@ -558,7 +553,8 @@ function Move(timestamp, id, start, dir, startPos, endPos)
                     gameState = state.Playing;
 
                     //run code
-                    NextRound(true);
+                    //RoundStartTransition();
+                    
                 break
 
                 case state.Playing:
@@ -572,9 +568,19 @@ function Move(timestamp, id, start, dir, startPos, endPos)
                 case state.End:
                     //chnage state
                     gameState = state.Start;
+                    
+                    //clear round matches - so a NextRound() is only called once
+                    roundTotalMatches = 0;
+         
 
                     //run code
+                    NextRound(true);
                     RoundStartTransition();
+                break;
+                    
+                case state.Win:
+                    //goto win screen and clear as much data as possible
+                    WinScreen();
                 break;
             }
         }
@@ -586,7 +592,7 @@ function Move(timestamp, id, start, dir, startPos, endPos)
 
 function Animate(id, frames, frame, noLoop)
 {
-    if(((activeAnimations.length > 0)&& !noLoop) || (noLoop && (frame < frames.length-1)))
+    if(((activeAnimations.length > 0)&& !noLoop && (frame < frames.length-1)) || (noLoop && (frame < frames.length-1)))
     {
         window.requestAnimationFrame(function(timestamp)
         {
@@ -604,10 +610,6 @@ function Animate(id, frames, frame, noLoop)
             img.src = frames[frame].src;
         });
     }
-    else{
-        
-    }
-   
 }
     
 
