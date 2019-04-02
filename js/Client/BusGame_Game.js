@@ -425,8 +425,8 @@ function RoundEndTransition()
         Animate("#top .car img", templateData.Top.Car.Frames, null,false);
          
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", 0, 2000);
-        Move(timestamp, '#top .vehicle', null, "Left", 0, -2000);
+        Move(timestamp, '#bottom .vehicle', null, "Right", 0, screen.width);
+        Move(timestamp, '#top .vehicle', null, "Left", 0, (screen.width * -1));
     });
     
     activeAnimations.push(animID);
@@ -435,8 +435,8 @@ function RoundEndTransition()
 function RoundStartTransition()
 {
     //move vehicles off screen on proper side so they can drive in
-    $('#bottom .vehicle').css('left', '-2000px');
-    $('#top .vehicle').css('left', '2000px');
+    $('#bottom .vehicle').css('left', (screen.width * -1) + 'px');
+    $('#top .vehicle').css('left', screen.width + 'px');
     
     //animate and move vehicles back on screen
      var animID = window.requestAnimationFrame(function(timestamp)
@@ -448,8 +448,8 @@ function RoundStartTransition()
         Animate("#top .car img", templateData.Top.Car.Frames, null,false);
 
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2020);
-        Move(timestamp, '#top .vehicle', null, "Left", 2000, -2010);
+        Move(timestamp, '#bottom .vehicle', null, "Right", (screen.width * -1), (screen.width + 20));
+        Move(timestamp, '#top .vehicle', null, "Left", (screen.width), ((screen.width + 10) * -1));
     });
     
     activeAnimations.push(animID);
