@@ -299,8 +299,11 @@ function SetupWindowConnections(){
                     }
                     else{
                         var checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
+                     var blank = new Image();
+                      
+                        checkImages.push(blank);
                         console.log(checkImages);
-                        Animate("#checkMarkImage", checkImages, null);
+                        Animate("#checkMarkImage", checkImages, null, true);
                               score++;
                     document.getElementById("current").innerHTML = score;
                         
@@ -417,10 +420,10 @@ function RoundEndTransition()
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
-        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null);
-        Animate("#top .bus img", templateData.Top.Bus.Frames, null);
-        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
-        Animate("#top .car img", templateData.Top.Car.Frames, null);
+        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null, false);
+        Animate("#top .bus img", templateData.Top.Bus.Frames, null, false);
+        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null, false);
+        Animate("#top .car img", templateData.Top.Car.Frames, null,false);
          
          //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", 0, 2000);
@@ -440,10 +443,10 @@ function RoundStartTransition()
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
-        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null);
-        Animate("#top .bus img", templateData.Top.Bus.Frames, null);
-        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
-        Animate("#top .car img", templateData.Top.Car.Frames, null);
+        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null,false);
+        Animate("#top .bus img", templateData.Top.Bus.Frames, null,false);
+        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null,false);
+        Animate("#top .car img", templateData.Top.Car.Frames, null,false);
          
          //clear round matches - so a NextRound() is only called once
          roundTotalMatches = 0;
@@ -581,13 +584,13 @@ function Move(timestamp, id, start, dir, startPos, endPos)
 
 }
 
-function Animate(id, frames, frame)
+function Animate(id, frames, frame, noLoop)
 {
-    if(activeAnimations.length > 0)
+    if(((activeAnimations.length > 0)&& !noLoop) || (noLoop && (frame < frames.length-1)))
     {
         window.requestAnimationFrame(function(timestamp)
         {
-            Animate(id, frames, frame);
+            Animate(id, frames, frame, noLoop);
         });
 
         if(!frame) frame = 0;
@@ -601,6 +604,10 @@ function Animate(id, frames, frame)
             img.src = frames[frame].src;
         });
     }
+    else{
+        
+    }
+   
 }
     
 
