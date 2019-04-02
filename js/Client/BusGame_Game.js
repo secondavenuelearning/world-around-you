@@ -298,6 +298,9 @@ function SetupWindowConnections(){
                         
                     }
                     else{
+                        var checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
+                        console.log(checkImages);
+                        Animate("#checkMarkImage", checkImages, null);
                               score++;
                     document.getElementById("current").innerHTML = score;
                         
