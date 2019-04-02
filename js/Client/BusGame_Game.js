@@ -428,7 +428,7 @@ function RoundEndTransition()
 }
 
 function RoundStartTransition()
-{ console.log("start");
+{
     //move vehicles off screen on proper side so they can drive in
     $('#bottom .vehicle').css('left', '-2000px');
     $('#top .vehicle').css('left', '2000px');
@@ -441,10 +441,7 @@ function RoundStartTransition()
         Animate("#top .bus img", templateData.Top.Bus.Frames, null);
         Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
         Animate("#top .car img", templateData.Top.Car.Frames, null);
-         
-         //clear round matches - so a NextRound() is only called once
-         roundTotalMatches = 0;
-         
+        
          //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2000);
         Move(timestamp, '#top .vehicle', null, "Left", 2000, -2000);
@@ -529,7 +526,6 @@ function Move(timestamp, id, start, dir, startPos, endPos)
         vehicles.forEach(function(vehicle)
         {  
             vehicle.style.left = startPos + pos + 'px';
-            console.log(vehicle.style.left + " = " + pos + " + " + startPos);
         });
         
         window.requestAnimationFrame(function(timestamp)
@@ -552,7 +548,8 @@ function Move(timestamp, id, start, dir, startPos, endPos)
                     gameState = state.Playing;
 
                     //run code
-                    NextRound(true);
+                    //RoundStartTransition();
+                    
                 break
 
                 case state.Playing:
@@ -566,8 +563,13 @@ function Move(timestamp, id, start, dir, startPos, endPos)
                 case state.End:
                     //chnage state
                     gameState = state.Start;
+                    
+                    //clear round matches - so a NextRound() is only called once
+                    roundTotalMatches = 0;
+         
 
                     //run code
+                    NextRound(true);
                     RoundStartTransition();
                 break;
             }
