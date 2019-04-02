@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import html from 'html/Client/BusGame_Directions.html!text';
+import html from 'html/Client/BusGame_Win.html!text';
 import gameHtml from 'html/Client/BusGame_Game.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default BusGame
