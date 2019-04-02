@@ -27,5 +27,17 @@
 	</button>
 	<% if(includeDelete){ %>
 		<button class="page-delete-button delete-button" page-index="<%- pageIndex %>"></button>
+	<% } else { %>
+		<button class="edit-button"></button>
+		<div class="preview-breakdown">
+			<div class="bold">Written</div>
+			<% _.each(page.text, function(text, lang){ %>
+				<div><%- lang %></div>
+			<% }) %>
+			<div class="bold">Sign</div>
+			<% _.each(page.video, function(vid, lang){ %>
+				<div><%- lang %></div>
+			<% }) %>
+		</div>
 	<% } %>
 </div>

@@ -16,11 +16,11 @@ $(document).ready(function () {
     }).done((stories) => {
         console.log(stories);
 
-        // sort stories by data created
-        stories.sort((a, b) => {
-            return a.datecreated > b.datecreated ? 1 : a.datecreated < b.datecreated ? -1 : 0;
-                coverimage: 'img/carousel/from_this_author/1.png'
-        });
+        // // sort stories by data created
+        // stories.sort((a, b) => {
+        //     return a.datecreated < b.datecreated ? 1 : a.datecreated > b.datecreated ? -1 : 0;
+        // });
+
         var newestStories = [];
         for (let i = 0; i < 9 && i < stories.length; i++) {
             let sp = new StoryPreview(stories[i]);

@@ -649,6 +649,9 @@ function renderPagesPage(renderData){
 			};
 			index = data.length;
 			data.push(page);
+
+			$('.save-button').prop('disabled', false);
+			unsavedChanges = true;
 		}
 
 		// add the page preview button
@@ -659,6 +662,9 @@ function renderPagesPage(renderData){
 			data.splice(_index, 1);
 			$el.remove();
 			ReIndexPages();
+
+			$('.save-button').prop('disabled', false);
+			unsavedChanges = true;
 		});
 		$('.add-page-button').parent().before($el);
 
@@ -728,7 +734,9 @@ function renderPagesPage(renderData){
 		}
 		if(currentPageContent == 'glossary'){
 			// set the current glossary term to the first term
-			currentGlossaryTerm = page.glossary && page.glossary[currentWrittenLanguage] ? Object.keys(page.glossary[currentWrittenLanguage])[0] : '';
+			if(!currentGlossaryTerm || currentGlossaryTerm == ''){
+				currentGlossaryTerm = page.glossary && page.glossary[currentWrittenLanguage] ? Object.keys(page.glossary[currentWrittenLanguage])[0] : '';
+			}
 
 			$('#page-edit-content').html(editGlossaryTemplate({
 				page,
@@ -874,6 +882,7 @@ function renderPagesPage(renderData){
 				};
 				currentGlossaryTerm = term;
 
+				unsavedChanges = true;
 				RenderPageContent();
 			});
 		});
@@ -927,6 +936,9 @@ function renderPagesPage(renderData){
 
 				let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0;
 				video.currentTime = startTime;
+
+				$('.save-button').prop('disabled', false);
+				unsavedChanges = true;
 
 				UpdateVideoKnobs();
 
@@ -992,7 +1004,7 @@ function renderPublishPage(){
 	}));
 	_.each(data, (page, index) => {
 		$el = AddPagePreview($('#pages'), page, index);
-		$el.on('click', () => {
+		$el.find('.edit-button').on('click', () => {
 			editorPageIndex--;
 			renderEditorContent({currentPageIndex: index});
 		});
@@ -1051,19 +1063,25 @@ function RenderAddText(beforeElement, dataType, autocompleteValues, saveCallback
 		});
 		$('.autocomplete-container').hide();
 		$('.add-text-input').on('keydown keyup', () => {
-			let value = $('.add-text-input').val();
-			if(value == ''){
-				$('.autocomplete-container').hide();
-				return;
-			}
+			$('.autocomplete-container').hide();
 
-			$('.autocomplete-container').show();
+			let value = $('.add-text-input').val();
+			if(value == '')
+				return;
+
+			let match = false;
 			$('.autocomplete-button').prop('disabled', true);
 			$('.autocomplete-button').each((i, el) => {
 				let _value = $(el).html();
-				var regExp = new RegExp(`^${value}`);
-				if(_value.match(regExp)) $(el).prop('disabled', false);
+				var regExp = new RegExp(`^${value}`, 'i');
+				if(_value.match(regExp)) {
+					match = true;
+					$(el).prop('disabled', false);
+				}
 			});
+
+			if(match) 
+				$('.autocomplete-container').show();
 		});
 	}
 

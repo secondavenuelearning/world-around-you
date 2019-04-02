@@ -44,6 +44,7 @@ footer{
 	height: 25px;
 	background-color: #0098ba;
 	bottom: 0px;
+	box-shadow: 0px -1px 2px 0px rgba(0,0,0,.5);
 }
 
 header #language-selector{
@@ -65,7 +66,9 @@ button:focus {
 *[lang]:not(html){
 	display: none;
 }
-
+.bold{
+	font-weight: bold;
+}
 #sectionHead
 {
     background-color: #a0eaf7;

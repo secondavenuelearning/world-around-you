@@ -855,10 +855,10 @@ let apiRoutes = function(app){
 	// Init upload
 	const upload = multer({
 		storage: storage,
-		limits: {fileSize:10000000000},
-		fileFilter: function(req, file, cb) {
-			checkFileType(file, cb);
-		}
+		limits: {fileSize:10000000000}
+		// fileFilter: function(req, file, cb) {
+		// 	checkFileType(file, cb);
+		// }
 	}).single('file');
 
 	// Check File Type
@@ -884,6 +884,7 @@ let apiRoutes = function(app){
 				res.send(err);
 			}
 			else {
+				console.log(req.file);
 				if(req.file == undefined) {
 					res.send({
 						msg: 'Error: No File Selected!'

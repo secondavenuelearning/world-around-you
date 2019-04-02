@@ -252,7 +252,14 @@ function AddStoriesMetadata (storyResults){
 
 				Promise.all(dataPromises).then(() => {
 					conn.end().then(() => {
-						return resolve(Object.values(stories));
+						let storiesArray = Object.values(stories);
+
+				        // sort stories by data created
+				        storiesArray = storiesArray.sort((a, b) => {
+				            return a.datecreated < b.datecreated ? 1 : a.datecreated > b.datecreated ? -1 : 0;
+				        });
+
+						return resolve(storiesArray);
 					});
 				}).catch((err) => {
 					conn.end().then(() => {
@@ -482,6 +489,7 @@ function StoryDB(){
 				let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
 				if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
 				if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
+				storyQuery += ' ORDER BY story.id DESC';
 
 				conn.query(storyQuery, [userId]).then(storyResults => {
 					conn.end().then(() => {

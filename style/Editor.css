@@ -60,7 +60,7 @@ body.dragging{
 	padding: 15px 25px;
 }
 .editor-content-wrapper .main-content{
-	height: calc(100% - 2em - 30px);
+	height: calc(100% - 75px);
 	padding: 25px;
 	overflow: auto;
 	overflow: overlay;
@@ -98,6 +98,7 @@ body.dragging{
 	background: rgba(0, 0, 0, .5);
 }
 #editor-content .add-text-button, #editor-content .add-page-button{
+	position: relative;
 	width: 100%;
     padding: 5px 40px;
     background: none;
@@ -109,9 +110,18 @@ body.dragging{
 
 	border: 2px dotted #0097BA;
 	border-radius: 10px;
-	font-size: 2em;
+	font-size: 1.75em;
 	line-height: .5em;
 	text-align: center;
+}
+#editor-content .add-text-button{
+	height: 30px;
+	background-image: url(../img/icons/General/icon_Add_LtBlue.svg);
+	background-size:  20px;
+	background-position: center center;
+}
+#editor-content .add-text-button:hover{
+	background-image: url(../img/icons/General/icon_Add_DkBlue.svg);
 }
 #editor-content .add-page-button{
 	padding: 5px;
@@ -157,7 +167,7 @@ body.dragging{
 	font-size: 1.2em;
 	background-repeat: no-repeat;
 	background-size: 1em;
-	background-position: 10px 50%;
+	background-position: 10px 11px;
 }
 .editor-content-wrapper button:hover{
 	font-weight: bold;
@@ -195,6 +205,7 @@ body.dragging{
     font-size: 1em;
     background-size: 1em;
     background-repeat: no-repeat;
+    background-position: left 5px;
 }
 .editor-content-wrapper .page-icon.added{
 	background-image: url('../img/icons/StoryBuilder/icon_SB_Complete_LtBlue.svg');
@@ -223,13 +234,16 @@ body.dragging{
     height: 1.2em;
     width: 1.2em;
     font-size: 1em;
-    background: #0097B6;
+    background: none;
     text-align: center;
     left: 5px;
     top: 5px;
     border-radius: 1.2em;
     line-height: 1.2em;
     color: #FFFFFF !important;
+}
+.editor-content-wrapper .page-number{
+    background-color: #0097B6;
     box-shadow: 0px 0px 2px 1px #fff;
 }
 .editor-content-wrapper .page-delete-button {
@@ -237,9 +251,50 @@ body.dragging{
 	right: 5px;
 	padding: 0px;
 	line-height: 0.5em;
-	background-color: #FFFFFF;
 }
 .editor-content-wrapper .page-preview .cover-image-container{
+}
+.editor-content-wrapper .preview-breakdown {
+	display: none;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    min-height: 100%;
+    padding: 10px;
+    background-color: #E0F9FD;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px 0 rgba(0, 0, 0, 0.5);
+    font-size: 1.25em;
+    cursor: pointer;
+}
+.editor-content-wrapper .preview-breakdown > div{
+	padding-left: 25px;
+}
+.editor-content-wrapper .preview-breakdown .bold{
+	background-image: url('../img/icons/StoryBuilder/icon_SB_Complete_DkBlue.svg');
+	background-size: 20px 20px;
+	background-position: left center;
+	background-repeat: no-repeat;
+}
+.page-preview:focus + .edit-button + .preview-breakdown{
+	display: block;
+}
+.editor-content-wrapper .edit-button {
+    position: absolute;
+    top: 20px;
+    right: calc(50% + 10px);
+    height: 30px;
+    width: 30px;
+    padding: 0px;
+    border: none;
+    background-image: url(../img/icons/NavBar/nav_SB.svg);
+    background-size: contain;
+    background-position: center center;
+    margin: 0px;
+}
+.editor-content-wrapper .edit-button:hover {
+	background-image: url(../img/icons/NavBar/nav_SB_hover_selected.svg);
 }
 .editor-content-wrapper .upload-input-container{
     position: absolute;
@@ -266,14 +321,56 @@ body.dragging{
 	font-weight: bold
 }
 .editor-content-wrapper .autocomplete-button{
-
+    border: none;
+    width: 100%;
+    text-align: left;
 }
 .editor-content-wrapper .autocomplete-button:disabled{
 	display: none;
 }
+.add-text-container{
+	position: relative;
+}
+.add-text-container button{
+	padding: 5px;
+	width: calc(50% - 5px);
+	float: left;
+	text-align: center;
+}
+.add-text-container .save-text{
+	margin-right: 5px;
+}
+.add-text-container .cancel-text{
+	margin-left: 5px;
+}
+
+.autocomplete-container{
+	display: none;
+}
+.add-text-input:focus + .autocomplete-container, .autocomplete-container:hover{
+	display: block;
+	position: absolute;
+	width: 100%;
+	top: calc(100% - 4px);
+	background: #ffff;
+	padding-top: 5px;
+	border: 2px solid #0097BA;
+	border-top: 1px solid #0097BA;
+	z-index: 1;
+}
+.autocomplete-button{
+	border: none;
+	width: 100%
+}
+
+
+
+
+
 /* Language */
 	.assign-language{
 		font-size: 1.2em;
+		padding: 0px 10px;
 	}
 	.selected-languages{
 		background-color: #E2F8FC;
@@ -385,7 +482,7 @@ body.dragging{
 	}
 	#page-legend{
 		height: 100px;
-		padding: 10px 5px;
+		padding: 20px 5px 10px;
 	}
 	#page-edit-content{
 		border: 15px solid #9EE9F6;
@@ -433,9 +530,15 @@ body.dragging{
 		height: 100%;
 	}
 	#edit-sign #video-container{
-		height: 50%;
+		height: 80%;
+		background-color: #004E74;
+		position: relative;
 	}
 	#edit-sign #video-player{
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
 		max-width: 100%;
 		max-height: 100%;
 	}
@@ -600,12 +703,12 @@ body.dragging{
 /*********/
 
 /* Publish */
-#publish .pages{
-	height: calc(100% - 100px);
-    overflow: auto;
-}
-#publish .page-preview-container{
-	float: left;
-	width: 25%;
-}
+	#publish .pages{
+		height: calc(100% - 100px);
+	    overflow: auto;
+	}
+	#publish .page-preview-container{
+		float: left;
+		width: 25%;
+	}
 /***********/

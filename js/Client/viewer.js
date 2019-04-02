@@ -25,7 +25,7 @@ function displaySimilarGenres(stories){
                 if(_genre == genre && _story.id != story.id) added = true;
             });
 
-            if(added) similarGenreStories.push(StoryPreview(_story))
+            if(added) similarGenreStories.push(new StoryPreview(_story))
         });
     });
 
@@ -46,15 +46,18 @@ $(document).ready(() => {
         url: `/api/story?id=${storyId}`
     }).done((_story) => {
         story = _story;
+
+        // add the main html to the page
         $('main').html(template({
             story
         }));
-        console.log(story);
 
+        // Render the story viewer
         StoryViewer.SetStory(story);
         StoryViewer.Render('viewer');
 
 
+        // add a view to the counter
         $.ajax({
             method: 'post',
             url: '/api/story/view',
@@ -62,6 +65,8 @@ $(document).ready(() => {
                 id: story.id
             }
         });
+
+        // like button function
         $('#social-likes').on('click', () => {
             if(liked) return;
 
@@ -78,10 +83,27 @@ $(document).ready(() => {
             }).fail((err) => {
                 console.error(err);
             });
-        })
+        });
+
+        // Share button function
+        $('#social-share').on('click', (evt) => {
+            let copyInput = $(`<input type="text" style="position: absolute; z-index: -1" value="${window.location.href}" />`);
+
+            $('body').append(copyInput);
+
+            copyInput[0].select();
+
+            document.execCommand("copy");
+
+            copyInput.remove();
+
+            alert('link copied.');
+        });
 
         LanguageSelector.updateLanguageDisplay();
 
+
+        // load and render similar stories
         $.ajax({
             method: 'get',
             url: '/api/stories'
@@ -90,7 +112,7 @@ $(document).ready(() => {
 
             _.each(stories, (_story) => {
                 if(_story.author != story.author || _story.id == story.id) return;
-                similarAuthorStories.push(StoryPreview(_story));
+                similarAuthorStories.push(new StoryPreview(_story));
             });
 
             if(similarAuthorStories.length > 0){
