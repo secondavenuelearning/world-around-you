@@ -302,7 +302,6 @@ function SetupWindowConnections(){
                      var blank = new Image();
                       
                         checkImages.push(blank);
-                        console.log(checkImages);
                         Animate("#checkMarkImage", checkImages, null, true);
                               score++;
                     document.getElementById("current").innerHTML = score;
@@ -310,8 +309,8 @@ function SetupWindowConnections(){
                         //check win state
                         if(score === totalMatches)
                         {
-                            //goto win screen and clear as much data as possible
-                            WinScreen(); 
+                            gameState = state.Win;
+                            RoundEndTransition() 
                         }
                         else if(score === roundTotalMatches + lastRoundScore)
                         {
@@ -416,7 +415,7 @@ function NextRound(firstRun = false)
 }
 
 function RoundEndTransition()
-{ console.log("end");
+{
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
@@ -577,6 +576,11 @@ function Move(timestamp, id, start, dir, startPos, endPos)
                     //run code
                     NextRound(true);
                     RoundStartTransition();
+                break;
+                    
+                case state.Win:
+                    //goto win screen and clear as much data as possible
+                    WinScreen();
                 break;
             }
         }
