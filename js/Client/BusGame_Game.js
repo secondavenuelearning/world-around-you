@@ -449,8 +449,8 @@ function RoundStartTransition()
         Animate("#top .car img", templateData.Top.Car.Frames, null,false);
 
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2000);
-        Move(timestamp, '#top .vehicle', null, "Left", 2000, -2000);
+        Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2020);
+        Move(timestamp, '#top .vehicle', null, "Left", 2000, -2010);
     });
     
     activeAnimations.push(animID);
@@ -588,7 +588,7 @@ function Move(timestamp, id, start, dir, startPos, endPos)
 
 function Animate(id, frames, frame, noLoop)
 {
-    if(((activeAnimations.length > 0)&& !noLoop) || (noLoop && (frame < frames.length-1)))
+    if(((activeAnimations.length > 0)&& !noLoop && (frame < frames.length-1)) || (noLoop && (frame < frames.length-1)))
     {
         window.requestAnimationFrame(function(timestamp)
         {
@@ -606,10 +606,6 @@ function Animate(id, frames, frame, noLoop)
             img.src = frames[frame].src;
         });
     }
-    else{
-        
-    }
-   
 }
     
 
