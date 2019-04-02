@@ -62,6 +62,17 @@ var images =
         }
     };
 
+//game state machine
+var state =
+{
+    Loading: 0,
+    Start: 1,
+    Playing: 2,
+    End: 3,
+    Win: 4
+}
+var gameState = state.Playing;
+
 
 /* ----------------------- Constructor ----------------------- */
 export function BusGame(storyObj, sign, written, terms)
@@ -95,7 +106,8 @@ export function BusGame(storyObj, sign, written, terms)
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
     
-    NextRound();
+    
+    NextRound(true);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -322,7 +334,7 @@ function SetupWindowConnections(){
 }
 
 /* ----------------------- Game Loop ----------------------- */
-function NextRound()
+function NextRound(firstRun = false)
 {
     //check fi this has already been doen this round
     if(roundTotalMatches === 0)
@@ -369,8 +381,12 @@ function NextRound()
         };
         var main = template(templateData);
 
-        this.$main = $(main);
-        $('main').html(this.$main);
+        if(firstRun)
+        { console.log("first run");
+            this.$main = $(main);
+            $('main').html(this.$main);
+        }
+        
 
         //add clicking mechnaic functionality to windows
         SetupWindowConnections();
@@ -397,7 +413,7 @@ function NextRound()
 }
 
 function RoundEndTransition()
-{
+{ console.log("end");
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
@@ -406,15 +422,35 @@ function RoundEndTransition()
         Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
         Animate("#top .car img", templateData.Top.Car.Frames, null);
          
-         //mark cars to be destoryed
-         $('.vehicle').addClass('willDestory');
+         //move cars
+        Move(timestamp, '#bottom .vehicle', null, "Right", 0, 2000);
+        Move(timestamp, '#top .vehicle', null, "Left", 0, -2000);
+    });
+    
+    activeAnimations.push(animID);
+}
+
+function RoundStartTransition()
+{ console.log("start");
+    //move vehicles off screen on proper side so they can drive in
+    $('#bottom .vehicle').css('left', '-2000px');
+    $('#top .vehicle').css('left', '2000px');
+    
+    //animate and move vehicles back on screen
+     var animID = window.requestAnimationFrame(function(timestamp)
+    {
+         //animate cars
+        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null);
+        Animate("#top .bus img", templateData.Top.Bus.Frames, null);
+        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null);
+        Animate("#top .car img", templateData.Top.Car.Frames, null);
          
          //clear round matches - so a NextRound() is only called once
          roundTotalMatches = 0;
          
          //move cars
-        Move(timestamp, '#bottom .vehicle', null, "Right", 2000);
-        Move(timestamp, '#top .vehicle', null, "Left", -2000);
+        Move(timestamp, '#bottom .vehicle', null, "Right", -2000, 2000);
+        Move(timestamp, '#top .vehicle', null, "Left", 2000, -2000);
     });
     
     activeAnimations.push(animID);
@@ -460,16 +496,26 @@ function WinScreen()
 
 
 /* ----------------------- Animation ----------------------- */
-function Move(timestamp, id, start, dir, endPos)
-{
-    //animID to return for calceing anim purposes
-    var animID = null;
-    
+function Move(timestamp, id, start, dir, startPos, endPos)
+{   
     //get all vehciles of this type
     var vehicles = $(id).toArray();
     
+    vehicles.forEach(function(vehicle)
+    { 
+        if(!start && vehicle.style.left != "") 
+        {
+            startPos = vehicle.style.left;
+            startPos = parseFloat(startPos);
+        }
+     });
+    
     //use timestamp to step through the move positions
-    if(!start) start = timestamp;
+    if(!start) 
+    {   
+        //save start time
+        start = timestamp;
+    }
     var pos = timestamp - start;
     
     var atEnd = pos > endPos; //check for end of movement path
@@ -484,45 +530,79 @@ function Move(timestamp, id, start, dir, endPos)
     if (!atEnd) 
     {
         vehicles.forEach(function(vehicle)
-        { 
-            vehicle.style.left = pos + 'px';
+        {  
+            vehicle.style.left = startPos + pos + 'px';
+            console.log(vehicle.style.left + " = " + pos + " + " + startPos);
         });
         
         window.requestAnimationFrame(function(timestamp)
         {
-            Move(timestamp, id, start, dir, endPos);
+            Move(timestamp, id, start, dir, startPos, endPos);
         });
     }
     else
     {
-        cancelAnimationFrame(activeAnimations[0]);
-        activeAnimations.pop();
-        $(id + '.willDestory').remove();
+        if(activeAnimations.length > 0)
+        { console.log("move end");
+         
+            cancelAnimationFrame(activeAnimations[0]);
+            activeAnimations.pop();
+
+            switch(gameState)
+            {
+                case state.Start:
+                    //chnage state for next run
+                    gameState = state.Playing;
+
+                    //run code
+                    NextRound(true);
+                break
+
+                case state.Playing:
+                    //change state
+                    gameState = state.End;
+
+                    //run script
+                    RoundEndTransition();
+                break;
+
+                case state.End:
+                    //chnage state
+                    gameState = state.Start;
+
+                    //run code
+                    RoundStartTransition();
+                break;
+            }
+        }
         
-        //start new round
-        NextRound();
+        
     }
 
 }
 
 function Animate(id, frames, frame)
 {
-    window.requestAnimationFrame(function(timestamp)
+    if(activeAnimations.length > 0)
     {
-        Animate(id, frames, frame);
-    });
-    
-    if(!frame) frame = 0;
-    
-    var vImgs = $(id).toArray();
-    
-    //update animation
-    vImgs.forEach(function(img)
-    {
-        frame = (frame + 1) % frames.length;
-        img.src = frames[frame].src;
-    });
+        window.requestAnimationFrame(function(timestamp)
+        {
+            Animate(id, frames, frame);
+        });
+
+        if(!frame) frame = 0;
+
+        var vImgs = $(id).toArray();
+
+        //update animation
+        vImgs.forEach(function(img)
+        {
+            frame = (frame + 1) % frames.length;
+            img.src = frames[frame].src;
+        });
+    }
 }
+    
 
 /* ----------------------- Helper Functions ----------------------- */
 function ChooseRandomArrayElement(options)
