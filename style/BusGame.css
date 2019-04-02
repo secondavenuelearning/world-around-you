@@ -1,20 +1,21 @@
 /* Hiding old header */
-header #language-selector, header #logo-wrapper, header nav
-{
+header #language-selector,
+header #logo-wrapper,
+header nav {
     display: none;
 }
 
-header
-{
+header {
     border: none;
 
     width: 100%;
-     height: 75px;
+    height: 75px;
     background-color: transparent;
 
 
 }
-.title span{
+
+.title span {
     width: 100%;
     height: 260px;
     padding-top: 100px;
@@ -22,54 +23,50 @@ header
     display: block;
     font-size: 120px;
 }
-@media only screen and (max-width: 600px){
-    .title span{
-             font-size: 80px;
+
+@media only screen and (max-width: 600px) {
+    .title span {
+        font-size: 80px;
     }
-    
+
 
 }
 
-footer
-{
+footer {
     display: none;
 }
 
 /* new header */
-header button
-{
+header button {
     height: 100px;
     width: 100px;
-    
+
     border-radius: 50%;
     border: 5px;
     border-style: solid;
-     border-color: black;
-    
+    border-color: black;
+
     float: right;
-    
+
     position: relative;
     left: 20px;
     top: -30px;
-    
+
     background-color: indianred;
 }
 
-header button img
-{
+header button img {
     height: 70%;
     width: 70%;
 }
 
-header #backBtn img
-{
+header #backBtn img {
     position: relative;
     top: 10px;
     left: -9px;
 }
 
-main
-{
+main {
     height: calc(100% + 75px);
     top: -75px;
     width: 100%;
@@ -77,296 +74,286 @@ main
     background-size: 100% 100%;
     background-repeat: repeat-x;
 }
-.Btn{
-   margin-top:10%;
+
+.Btn {
+    margin-top: 10%;
     display: inline-block;
 
 }
-.centered{
-  text-align: center;
-   
+
+.centered {
+    text-align: center;
+
 }
-.imageContainer img{
+
+.imageContainer img {
     height: 100%;
     width: 100%;
 }
-.imageContainer{
-     display: inline-block;
+
+.imageContainer {
+    display: inline-block;
     text-align: center;
-    height:130px;
+    height: 130px;
     width: 130px;
     margin-right: 40px;
 }
 
-#pageContent{
+#pageContent {
     display: block;
-    height : 40%;
+    height: 40%;
     width: 70%;
     background-color: #d0edfb;
     border: solid 7px;
-margin: 0 auto;
+    margin: 0 auto;
     border-color: #005291;
     border-radius: 10px;
     max-width: 900px;
-  margin-top: 20px;
+    margin-top: 20px;
     margin-bottom: 20px;
     font-size: 80px;
     padding-top: 25px;
     padding-left: 15px;
-   
-    
-    
+
+
+
 }
-#pageContentScore{
+
+#pageContentScore {
     display: block;
-    height : 40%;
+    height: 40%;
     width: 464px;
     background-color: #d0edfb;
     border: solid 7px;
-margin: 0 auto;
+    margin: 0 auto;
     border-color: #005291;
     border-radius: 10px;
     max-width: 800px;
-  margin-top: 20px;
+    margin-top: 20px;
     margin-bottom: 20px;
     font-size: 100px;
     padding-top: 25px;
     padding-left: 15px;
     text-align: center;
-   
-    
-    
+
+
+
 }
-@media only screen and (max-width: 900px){
-    #pageContent{
-             font-size: 65px;
+
+@media only screen and (max-width: 900px) {
+    #pageContent {
+        font-size: 65px;
     }
 
 
 }
-#bus{
- 
+
+#bus {
+
     height: auto;
     width: 100%;
- 
+
 }
-#checkMark{
+
+#checkMark {
     position: absolute;
-  width: 30%;
+    width: 30%;
     margin-left: 42%;
-  top: -10%;
+    top: -10%;
     height: 7%;
 }
-#checkMarkImage{
-height 50%;
+
+#checkMarkImage {
+    height 50%;
     width: 50%;
-   
+
 }
-#busStop{
+
+#busStop {
     width: 70%;
-    margin-left:15%;
+    margin-left: 15%;
     margin-top: 10px;
 }
+
 /* Main Menu */
 
 
 /* Core Game: header*/
-header #score
-{
+header #score {
     float: left;
-    
+
     position: relative;
     left: -20px;
     top: -30px;
-    
+
     font-size: 30px;
     text-align: center;
     color: white;
 }
 
-header #score span
-{
+header #score span {
     position: relative;
     top: 5px;
     left: 3px;
 }
 
 /* Core Game: lanes*/
-.lane
-{
+.lane {
     width: 100%;
-    
+
     position: absolute;
     bottom: 0px;
-    
+
     display: block;
-    
+
     overflow-y: hidden;
     overflow-x: hidden;
 }
 
-.lane .inner
-{
+.lane .inner {
     height: 300px;
     display: inline-block;
     position: relative;
 }
 
-#top
-{
+#top {
     bottom: 26%;
-    
+
 }
 
 /* Core Game: vehicles*/
-.vehicle
-{
+.vehicle {
     display: inline-block;
-    
+
     position: relative;
     bottom: 0;
     left: 0;
-    
+
     margin-left: 5px;
     margin-right: 5px;
-    
-    
+
+
 }
 
-.vehicle img
-{
+.vehicle img {
     display: inline-block;
     height: 100%;
     width: 100%;
 }
 
-.car
-{
-    
+.car {
+
     width: 34vw;
     height: auto;
 }
 
-.car img
-{
+.car img {
     position: relative;
     left: -15%;
-    
+
     width: 140%;
-    
+
 }
 
-#bottom .car img
-{
+#bottom .car img {
     position: relative;
-    left: -28%; 
+    left: -28%;
 }
 
-.bus
-{
+.bus {
     width: 60vw;
     height: auto;
 }
 
-.bus img
-{
+.bus img {
     height: 100%;
     width: 118%;
 }
 
-#bottom .bus img
-{
+#bottom .bus img {
     position: relative;
     left: -16%;
 }
 
-.bus .windows
-{
+.bus .windows {
     display: inline-block;
     height: 33%;
     width: 69%;
-    
+
     position: absolute;
     z-index: 10;
 }
 
-#top .windows
-{
+#top .windows {
     position: absolute;
     top: 26%;
     left: 30%;
 }
 
-#bottom .windows
-{
+#bottom .windows {
     position: absolute;
     top: 26%;
-    left: 6.6%; 
+    left: 6.6%;
 }
 
-.bus .windows .window
-{
+.bus .windows .window {
     display: inline-block;
-    
+
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
     margin-right: 2.8%;
-    
+
     border: 1px;
     border-radius: 15px;
-    
+
     background-color: #0098ba;
-    
+
     transition: opacity .7s;
-    
+
     float: left;
 }
 
-.bus .windows .window:hover
-{
+.bus .windows .window:hover {
     opacity: 1;
 }
 
-.bus .windows .window.first
-{
+.bus .windows .window.first {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
     margin-right: 4.2%;
 }
 
-.bus .windows .window.last
-{
+.bus .windows .window.last {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
     margin-left: 1.4%;
 }
 
-.window span, .window video, .window div
-{
+.window span,
+.window video,
+.window div {
     display: inline-block;
     height: calc(100%);
     width: calc(100%);
-    
+
     border: 1px;
     border-radius: 15px;
-    
+
     margin: 0px;
     padding: 0px;
     overflow: hidden;
 }
 
-.window  span
-{
+.window span {
     color: white;
     font-size: 50px;
     height: 100%;
-    
+
     text-align: center;
-    
+
     display: block;
 }
 
-.hidden
-{
+.hidden {
     opacity: 0;
 }
