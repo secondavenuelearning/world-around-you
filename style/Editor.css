@@ -236,8 +236,8 @@ body.dragging{
     font-size: 1em;
     background: none;
     text-align: center;
-    left: 5px;
-    top: 5px;
+    left: -5px;
+    top: 10px;
     border-radius: 1.2em;
     line-height: 1.2em;
     color: #FFFFFF !important;
@@ -425,8 +425,13 @@ body.dragging{
 	#metadata-content .two-thirds .quarter{
 		clear: left;
 	}
-	#metadata-content .two-thirds .three-quarters > *{
-		width: 100%;
+	.genre-or-tag{
+		float: left;
+		margin-right: 15px;
+	}
+	.genre-or-tag button{
+		padding: 5px 10px;
+		padding-left: 40px;
 	}
 /************/
 

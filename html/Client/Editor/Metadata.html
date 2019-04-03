@@ -24,7 +24,7 @@
 				<div class="quarter"><label>Genres</label></div>
 				<div class="three-quarters">
 					<% _.each(metadata.genres[currentWrittenLanguage], function(genre){ %>
-						<div><button class="delete-button" data-type="genres"><%- genre %></button></div>
+						<div class="genre-or-tag"><button class="delete-button" data-type="genres"><%- genre %></button></div>
 					<% }); %>
 					<div><button id="add-genre" class="add-text-button" data-type="genres"></button></div>
 				</div>
@@ -33,7 +33,7 @@
 				<div class="quarter"><label>Tags</label></div>
 				<div class="three-quarters">
 					<% _.each(metadata.tags[currentWrittenLanguage], function(tag){ %>
-						<div><button class="delete-button" data-type="tags"><%- tag %></button></div>
+						<div class="genre-or-tag"><button class="delete-button" data-type="tags"><%- tag %></button></div>
 					<% }); %>
 					<div><button id="add-tag" class="add-text-button" data-type="tags"></button></div>
 				</div>
