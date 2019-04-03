@@ -235,7 +235,7 @@ header #score span {
 
 }
 
-.vehicle img {
+.vehicle .vImg{
     display: inline-block;
     height: 100%;
     width: 100%;
@@ -247,7 +247,7 @@ header #score span {
     height: auto;
 }
 
-.car img {
+.car .vImg {
     position: relative;
     left: -15%;
 
@@ -255,7 +255,7 @@ header #score span {
 
 }
 
-#bottom .car img {
+#bottom .car .vImg {
     position: relative;
     left: -28%;
 }
@@ -265,20 +265,20 @@ header #score span {
     height: auto;
 }
 
-.bus img {
+.bus .vImg {
     height: 100%;
     width: 118%;
 }
 
-#bottom .bus img {
+#bottom .bus .vImg {
     position: relative;
     left: -16%;
 }
 
 .bus .windows {
     display: inline-block;
-    height: 33%;
-    width: 69%;
+    height: 35%;
+    width: 69.5%;
 
     position: absolute;
     z-index: 10;
@@ -286,14 +286,19 @@ header #score span {
 
 #top .windows {
     position: absolute;
-    top: 26%;
-    left: 30%;
+    top: 25%;
+    left: 29.5%;
 }
 
 #bottom .windows {
     position: absolute;
-    top: 26%;
-    left: 6.6%;
+    top: 25%;
+    left: 6.1%;
+}
+
+#green.bus .windows
+{
+    top: 21.8%;
 }
 
 .bus .windows .window {
@@ -301,20 +306,16 @@ header #score span {
 
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
-    margin-right: 2.8%;
+    margin-right: 2.5%;
 
     border: 1px;
     border-radius: 15px;
 
-    background-color: #0098ba;
+    
 
     transition: opacity .7s;
 
     float: left;
-}
-
-.bus .windows .window:hover {
-    opacity: 1;
 }
 
 .bus .windows .window.first {
@@ -326,7 +327,17 @@ header #score span {
 .bus .windows .window.last {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
-    margin-left: 1.4%;
+    margin-left: 1.8%;
+}
+
+.window .glass
+{
+    position:absolute;
+    width: calc((100% / 3) - 4.1%);
+    height: calc(100%);
+    margin-right: 2.8%;
+    z-index: 5;
+    transform: rotate(180deg);
 }
 
 .window span,
@@ -342,6 +353,8 @@ header #score span {
     margin: 0px;
     padding: 0px;
     overflow: hidden;
+    
+    background-color: #0098ba;
 }
 
 .window span {
@@ -352,8 +365,4 @@ header #score span {
     text-align: center;
 
     display: block;
-}
-
-.hidden {
-    opacity: 0;
 }
