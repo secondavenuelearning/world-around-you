@@ -235,7 +235,7 @@ header #score span {
 
 }
 
-.vehicle img {
+.vehicle .vImg{
     display: inline-block;
     height: 100%;
     width: 100%;
@@ -247,7 +247,7 @@ header #score span {
     height: auto;
 }
 
-.car img {
+.car .vImg {
     position: relative;
     left: -15%;
 
@@ -255,7 +255,7 @@ header #score span {
 
 }
 
-#bottom .car img {
+#bottom .car .vImg {
     position: relative;
     left: -28%;
 }
@@ -265,12 +265,12 @@ header #score span {
     height: auto;
 }
 
-.bus img {
+.bus .vImg {
     height: 100%;
     width: 118%;
 }
 
-#bottom .bus img {
+#bottom .bus .vImg {
     position: relative;
     left: -16%;
 }
@@ -313,10 +313,6 @@ header #score span {
     float: left;
 }
 
-.bus .windows .window:hover {
-    opacity: 1;
-}
-
 .bus .windows .window.first {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
@@ -327,6 +323,16 @@ header #score span {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
     margin-left: 1.4%;
+}
+
+.window .glass
+{
+    position:absolute;
+    width: calc((100% / 3) - 4.9%);
+    height: calc(100%);
+    margin-right: 2.8%;
+    z-index: 5;
+    transform: rotate(180deg);
 }
 
 .window span,
@@ -352,8 +358,4 @@ header #score span {
     text-align: center;
 
     display: block;
-}
-
-.hidden {
-    opacity: 0;
 }

@@ -288,23 +288,29 @@ function SetupWindowConnections(){
                 firstClick = true;
                 firstSelected.classList.remove("hidden");
             }
-            else if(firstClick==true){
+            else if(firstClick==true)
+            {
+                //get second selected
                 secondSelected = e.target.parentElement;
-                if(firstSelected.firstChild.id.substr(0,firstSelected.firstChild.id.length-3) == secondSelected.firstChild.id.substr(0,secondSelected.firstChild.id.length-3)){
+                
+                //check if the 2 selected match
+                if(firstSelected.children[1].id.substr(0,firstSelected.children[1].id.length-3) == secondSelected.children[1].id.substr(0,secondSelected.children[1].id.length-3))
+                {
+                    //show 2nd selected
                     secondSelected.classList.remove("hidden");
-                   
+
+                    //verify 
                     firstClick = false;
-                    if(firstSelected.firstChild.id == "none"){
-                        
-                    }
-                    else{
+                    if(firstSelected.children[1].id != "none")
+                    {
+      
                         var checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
-                     var blank = new Image();
+                        var blank = new Image();
                       
                         checkImages.push(blank);
                         Animate("#checkMarkImage", checkImages, null, true);
-                              score++;
-                    document.getElementById("current").innerHTML = score;
+                        score++;
+                        document.getElementById("current").innerHTML = score;
                         
                         //check win state
                         if(score === totalMatches)
@@ -319,13 +325,18 @@ function SetupWindowConnections(){
                         }
                         
                     }
-                     secondSelected = null;
+                    secondSelected = null;
                     firstSelected = null;
               
                 }
-                else{
+                else
+                {
                     firstSelected.classList.add("hidden");
                     firstClick = false;
+                    
+                    //roll up windows again
+                    var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/").reverse();
+                    Animate(firstSelected.children[0], rollWindow, null, true);
                 }
                
               
@@ -389,6 +400,7 @@ function NextRound(firstRun = false)
             $('main').html(this.$main);
         }
         
+        HoverWindows();
 
         //add clicking mechnaic functionality to windows
         SetupWindowConnections();
@@ -419,10 +431,10 @@ function RoundEndTransition()
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
-        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null, false);
-        Animate("#top .bus img", templateData.Top.Bus.Frames, null, false);
-        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null, false);
-        Animate("#top .car img", templateData.Top.Car.Frames, null,false);
+        Animate("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null, false);
+        Animate("#top .bus .vImg", templateData.Top.Bus.Frames, null, false);
+        Animate("#bottom .car .vImg", templateData.Bottom.Car.Frames, null, false);
+        Animate("#top .car .vImg", templateData.Top.Car.Frames, null,false);
          
          //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", 0, screen.width);
@@ -442,10 +454,10 @@ function RoundStartTransition()
      var animID = window.requestAnimationFrame(function(timestamp)
     {
          //animate cars
-        Animate("#bottom .bus img", templateData.Bottom.Bus.Frames, null,false);
-        Animate("#top .bus img", templateData.Top.Bus.Frames, null,false);
-        Animate("#bottom .car img", templateData.Bottom.Car.Frames, null,false);
-        Animate("#top .car img", templateData.Top.Car.Frames, null,false);
+        Animate("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null,false);
+        Animate("#top .bus .vImg", templateData.Top.Bus.Frames, null,false);
+        Animate("#bottom .car .vImg", templateData.Bottom.Car.Frames, null,false);
+        Animate("#top .car .vImg", templateData.Top.Car.Frames, null,false);
 
          //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", (screen.width * -1), (screen.width + 20));
@@ -491,6 +503,30 @@ function WinScreen()
     roundorder = null;
     round = [];
 
+}
+
+function HoverWindows()
+{
+    //get window animation
+    var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
+    var inverted = rollWindow.slice(0).reverse();
+    
+    //get all windows
+    $(".window").hover(function(e)
+    { 
+        if(e.target.parentElement.classList.contains("hidden"))
+        {
+            Animate(e.target, rollWindow, null, true);
+        }
+    },
+    function(e)
+    {   
+        //check if target has been clicked
+        if(e.target.parentElement.classList.contains("hidden"))
+        {
+           Animate(e.target, inverted, null, true); 
+        }
+    });
 }
 
 
@@ -604,9 +640,9 @@ function Animate(id, frames, frame, noLoop)
         var vImgs = $(id).toArray();
 
         //update animation
+        frame = (frame + 1) % frames.length;
         vImgs.forEach(function(img)
         {
-            frame = (frame + 1) % frames.length;
             img.src = frames[frame].src;
         });
     }
