@@ -389,7 +389,7 @@ function NextRound(firstRun = false)
             $('main').html(this.$main);
         }
         
-
+        FitText();
         //add clicking mechnaic functionality to windows
         SetupWindowConnections();
         
@@ -493,7 +493,19 @@ function WinScreen()
 
 }
 
-
+function FitText(){
+    var windows = $(".window");
+    console.log(windows);
+    windows.toArray().forEach(function(element){
+       if(element.children[1].id.substr(element.children[1].id.length-3,element.children[1].id.length) == "txt"){
+           while(element.children[1].offsetWidth< element.children[1].scrollWidth){
+               element.children[1].style.fontSize =  element.children[1].style.fontSize -1;
+           }
+           
+       } 
+    });
+    
+}
 /* ----------------------- Animation ----------------------- */
 function Move(timestamp, id, start, dir, startPos, endPos)
 {   
@@ -602,11 +614,11 @@ function Animate(id, frames, frame, noLoop)
         if(!frame) frame = 0;
 
         var vImgs = $(id).toArray();
-
+         frame = (frame + 1) % frames.length;
         //update animation
         vImgs.forEach(function(img)
         {
-            frame = (frame + 1) % frames.length;
+           
             img.src = frames[frame].src;
         });
     }
