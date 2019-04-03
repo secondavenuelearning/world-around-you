@@ -296,6 +296,11 @@ header #score span {
     left: 6.1%;
 }
 
+#green.bus .windows
+{
+    top: 21.8%;
+}
+
 .bus .windows .window {
     display: inline-block;
 

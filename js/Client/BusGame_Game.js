@@ -400,6 +400,12 @@ function NextRound(firstRun = false)
             $('main').html(this.$main);
         }
         
+        //specialcase check- green bus doesnt have rack ontop thus is a different height than the rest
+        if($('#bottom .bus .vImg')[0].src === images.Buses.FacingRight[0][0].src)
+        {
+            $('#bottom .bus').attr('id', 'green');
+        }
+        
         HoverWindows();
 
         //add clicking mechnaic functionality to windows
