@@ -277,8 +277,8 @@ header #score span {
 
 .bus .windows {
     display: inline-block;
-    height: 33%;
-    width: 69%;
+    height: 35%;
+    width: 69.5%;
 
     position: absolute;
     z-index: 10;
@@ -286,14 +286,14 @@ header #score span {
 
 #top .windows {
     position: absolute;
-    top: 26%;
-    left: 30%;
+    top: 25%;
+    left: 29.5%;
 }
 
 #bottom .windows {
     position: absolute;
-    top: 26%;
-    left: 6.6%;
+    top: 25%;
+    left: 6.1%;
 }
 
 .bus .windows .window {
@@ -301,12 +301,12 @@ header #score span {
 
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
-    margin-right: 2.8%;
+    margin-right: 2.5%;
 
     border: 1px;
     border-radius: 15px;
 
-    background-color: #0098ba;
+    
 
     transition: opacity .7s;
 
@@ -322,13 +322,13 @@ header #score span {
 .bus .windows .window.last {
     width: calc((100% / 3) - 5%);
     height: calc(100% - 2px);
-    margin-left: 1.4%;
+    margin-left: 1.8%;
 }
 
 .window .glass
 {
     position:absolute;
-    width: calc((100% / 3) - 4.9%);
+    width: calc((100% / 3) - 4.1%);
     height: calc(100%);
     margin-right: 2.8%;
     z-index: 5;
@@ -348,6 +348,8 @@ header #score span {
     margin: 0px;
     padding: 0px;
     overflow: hidden;
+    
+    background-color: #0098ba;
 }
 
 .window span {
