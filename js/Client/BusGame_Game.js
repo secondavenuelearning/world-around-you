@@ -527,7 +527,7 @@ function HoverWindows() {
 
     //get all windows
 
-    $(".window").hover(function(e)
+    $(".window .glass").hover(function(e)
     { 
         if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
         {
