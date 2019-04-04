@@ -357,17 +357,18 @@ header #score span {
     padding: 0px;
     overflow: hidden;
     
+    
+    
     background-color: #0098ba;
 }
 
 .window span {
     color: white;
-    font-size: 50px;
+    font-size: 40px;
     height: 100%;
-    
-    padding: 6px;
-
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
-
+   padding-top: 20%;
     display: block;
 }
