@@ -460,6 +460,8 @@ function RoundStartTransition() {
 function WinScreen() {
     //change to win screen
     $('main').html(html);
+    
+    gameState = state.Playing;
 
     //clear data of this script
     storyData = null;
@@ -468,7 +470,7 @@ function WinScreen() {
 
     firstSelected = null;
     secondSelected = null;
-    totalMatches = null;
+    totalMatches = 9999999;
     roundTotalMatches = 0;
     images = {
         Cars: {
