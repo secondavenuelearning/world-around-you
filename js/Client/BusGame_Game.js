@@ -75,6 +75,8 @@ export function BusGame(storyObj, sign, written, terms) {
     signLang = sign;
     writtenLang = written;
     termList = terms;
+    
+    roundTotalMatches = 0;
 
     //define how many matches the user will each round
     roundOrder = createCountList(termList);

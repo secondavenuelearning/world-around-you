@@ -40,6 +40,7 @@ function initializeGameScene() {
 
 function initializeTitle() {
      $('main').html(html);
+    $('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
     var play = document.getElementById("playButton");
     play.onclick = function () {
        initializeGameScene();
@@ -56,6 +57,7 @@ function initializeTitle() {
 }
 function initializeInstructions(){
     $('main').html(instructions);
+    $('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
        var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
