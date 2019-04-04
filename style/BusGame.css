@@ -24,7 +24,7 @@ header {
     font-size: 120px;
     
     color: #0098ba;
-    font-family: "Courier New";
+    font-family: "Arial Rounded MT Bold";
     font-weight: bolder;
 }
 
@@ -371,4 +371,12 @@ header #score span {
     text-align: center;
    padding-top: 20%;
     display: block;
+    font-family: "Arial Rounded MT Bold";
+}
+
+@font-face {
+font-family: 'Arial Rounded MT Bold';
+font-style: normal;
+font-weight: normal;
+src: local('Arial Rounded MT Bold'), url('../../fonts/ARLRDBD_0.woff') format('woff');
 }
