@@ -89,6 +89,8 @@ main {
 .imageContainer img {
     height: 100%;
     width: 100%;
+    
+    transition: top 1s;
 }
 
 .imageContainer {
@@ -97,6 +99,14 @@ main {
     height: 130px;
     width: 130px;
     margin-right: 40px;
+    
+    cursor: pointer;
+}
+
+.imageContainer:hover img
+{
+    position: relative;
+    top: -5px;
 }
 
 #pageContent {
