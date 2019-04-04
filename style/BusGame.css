@@ -123,9 +123,11 @@ main {
     max-width: 900px;
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 80px;
+    font-size: 70px;
     padding-top: 25px;
     padding-left: 15px;
+    
+    font-family: "Arial Rounded MT Bold";
 
 
 
@@ -143,12 +145,12 @@ main {
     max-width: 800px;
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 100px;
+    font-size: 70px;
     padding-top: 25px;
     padding-left: 15px;
     text-align: center;
 
-
+    font-family: "Arial Rounded MT Bold";
 
 }
 
