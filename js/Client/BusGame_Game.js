@@ -411,6 +411,9 @@ function NextRound(firstRun = false)
             $('main').html(this.$main);
         }
         
+
+        FitText();
+
         //specialcase check- green bus doesnt have rack ontop thus is a different height than the rest
         if($('#bottom .bus .vImg')[0].src === images.Buses.FacingRight[0][0].src)
         {
@@ -418,6 +421,7 @@ function NextRound(firstRun = false)
         }
         
         HoverWindows();
+
 
         //add clicking mechnaic functionality to windows
         SetupWindowConnections();
@@ -522,6 +526,21 @@ function WinScreen()
 
 }
 
+
+function FitText(){
+    var windows = $(".window");
+    console.log(windows);
+    windows.toArray().forEach(function(element){
+       if(element.children[1].id.substr(element.children[1].id.length-3,element.children[1].id.length) == "txt"){
+           while(element.children[1].offsetWidth< element.children[1].scrollWidth){
+               element.children[1].style.fontSize =  element.children[1].style.fontSize -1;
+           }
+           
+       } 
+    });
+    
+}
+
 function HoverWindows()
 {
     //get window animation
@@ -545,6 +564,7 @@ function HoverWindows()
         }
     });
 }
+
 
 
 /* ----------------------- Animation ----------------------- */
@@ -655,11 +675,12 @@ function Animate(id, frames, frame, noLoop)
         if(!frame) frame = 0;
 
         var vImgs = $(id).toArray();
-
+         frame = (frame + 1) % frames.length;
         //update animation
-        frame = (frame + 1) % frames.length;
+      
         vImgs.forEach(function(img)
         {
+
             img.src = frames[frame].src;
         });
     }
