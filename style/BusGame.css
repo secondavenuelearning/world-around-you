@@ -70,7 +70,7 @@ main {
     height: calc(100% + 75px);
     top: -75px;
     width: 100%;
-    background-image: url(../img/games/BusGame/background_BusGame-03.png);
+    background-image: url(../img/games/BusGame/menubackground_BusGame-05.png);
     background-size: 100% 100%;
     background-repeat: repeat-x;
 }

@@ -93,6 +93,9 @@ export function BusGame(storyObj, sign, written, terms)
     //add score area to header
     ExtendHeader();
     
+    //change mains bg image
+    $('main').css("background-image", "url(../img/games/BusGame/background_BusGame-03.png)");
+    
     //get all car and bus images
     images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Blue_Animation_Left/Frames/"));
     images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Red_Animation_Left/Frames/"));
@@ -285,8 +288,16 @@ function SetupWindowConnections(){
         {
             if(firstClick == false){
                 firstSelected = e.target.parentElement;
-                firstClick = true;
-                firstSelected.classList.remove("hidden");
+                
+                if(firstSelected.children[1].id !== "none")
+                {
+                    firstClick = true;
+                    firstSelected.classList.remove("hidden");
+                }
+                else
+                {
+                    firstSelected = null;
+                }
             }
             else if(firstClick==true)
             {
@@ -520,7 +531,7 @@ function HoverWindows()
     //get all windows
     $(".window").hover(function(e)
     { 
-        if(e.target.parentElement.classList.contains("hidden"))
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
         {
             Animate(e.target, rollWindow, null, true);
         }
@@ -528,7 +539,7 @@ function HoverWindows()
     function(e)
     {   
         //check if target has been clicked
-        if(e.target.parentElement.classList.contains("hidden"))
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
         {
            Animate(e.target, inverted, null, true); 
         }
