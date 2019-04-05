@@ -77,6 +77,7 @@ export function BusGame(storyObj, sign, written, terms) {
     signLang = sign;
     writtenLang = written;
     termList = terms;
+
     if (!('remove' in Element.prototype)) {
         Element.prototype.remove = function () {
             if (this.parentNode) {
@@ -84,6 +85,11 @@ export function BusGame(storyObj, sign, written, terms) {
             }
         };
     }
+
+    
+    roundTotalMatches = 0;
+
+
     //define how many matches the user will each round
     roundOrder = createCountList(termList);
     totalMatches = (termList.length); //number between 0 and 10
@@ -466,6 +472,8 @@ function RoundStartTransition() {
 function WinScreen() {
     //change to win screen
     $('main').html(html);
+    
+    gameState = state.Playing;
 
     //clear data of this script
     storyData = null;
@@ -474,7 +482,7 @@ function WinScreen() {
 
     firstSelected = null;
     secondSelected = null;
-    totalMatches = null;
+    totalMatches = 9999999;
     roundTotalMatches = 0;
     images = {
         Cars: {
@@ -531,17 +539,23 @@ function HoverWindows() {
 
     //get all windows
 
-    $(".window").hover(function (e) {
-            if (e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none") {
-                Animate(e.target, rollWindow, null, true);
-            }
-        },
-        function (e) {
-            //check if target has been clicked
-            if (e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none") {
-                Animate(e.target, inverted, null, true);
-            }
-        });
+
+    $(".window .glass").hover(function(e)
+    { 
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
+        {
+            Animate(e.target, rollWindow, null, true);
+        }
+    },
+    function(e)
+    {   
+        //check if target has been clicked
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
+        {
+           Animate(e.target, inverted, null, true); 
+        }
+    });
+
 
 }
 
