@@ -394,6 +394,12 @@ header #score span {
     font-family: "Arial Rounded MT Bold";
 }
 
+.window #none img
+{
+    height: 100%;
+    width: auto;
+}
+
 @font-face {
 font-family: 'Arial Rounded MT Bold';
 font-style: normal;

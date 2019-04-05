@@ -56,7 +56,9 @@ var images = {
     Buses: {
         FacingRight: [],
         FacingLeft: []
-    }
+    },
+    
+    Waving: []
 };
 
 //game state machine
@@ -117,6 +119,11 @@ export function BusGame(storyObj, sign, written, terms) {
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Red_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
+    
+    //get waving animations
+    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation1/Frames/"));
+    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
+    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
    blank = new Image();
@@ -273,7 +280,7 @@ function BuildWindows() {
                 break;
 
             case "none": //no media
-                windowHTML += "<div id = \"none\"></div>";
+                windowHTML += "<div id = \"none\"><img src =\"\"></div>";
                 break;
         }
 
@@ -429,6 +436,26 @@ function NextRound(firstRun = false) {
             //add looping
             LoopVideoClip(vid.id, termData.start, termData.end);
         });
+        
+        //fill empty windows
+        var emptyWindows = $(".window #none img").toArray();
+        emptyWindows.forEach(function(e)
+        {
+            //set waving person behind window
+            console.log(images.Waving);
+            Animate(e, ChooseRandomArrayElement(images.Waving), null, false);
+            
+            //for variations sake- flip waving animation sometimes
+            if(Math.random() > .5)
+            { console.log("flip");
+                $(e).css('transform', "scaleX(-1)");
+            }
+            
+            //roll down window
+            var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
+            Animate(e.parentElement.parentElement.children[0], rollWindow, null, true);
+            
+        });
     }
 }
 
@@ -436,10 +463,10 @@ function RoundEndTransition() {
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
         Animate("#checkMarkImage", checkImages, null, true);
-        Animate("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null, false);
-        Animate("#top .bus .vImg", templateData.Top.Bus.Frames, null, false);
-        Animate("#bottom .car .vImg", templateData.Bottom.Car.Frames, null, false);
-        Animate("#top .car .vImg", templateData.Top.Car.Frames, null, false);
+        AnimateMoving("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null);
+        AnimateMoving("#top .bus .vImg", templateData.Top.Bus.Frames, null);
+        AnimateMoving("#bottom .car .vImg", templateData.Bottom.Car.Frames, null);
+        AnimateMoving("#top .car .vImg", templateData.Top.Car.Frames, null);
 
         //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", 0, screen.width);
@@ -457,10 +484,10 @@ function RoundStartTransition() {
     //animate and move vehicles back on screen
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
-        Animate("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null, false);
-        Animate("#top .bus .vImg", templateData.Top.Bus.Frames, null, false);
-        Animate("#bottom .car .vImg", templateData.Bottom.Car.Frames, null, false);
-        Animate("#top .car .vImg", templateData.Top.Car.Frames, null, false);
+        AnimateMoving("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null);
+        AnimateMoving("#top .bus .vImg", templateData.Top.Bus.Frames, null);
+        AnimateMoving("#bottom .car .vImg", templateData.Bottom.Car.Frames, null);
+        AnimateMoving("#top .car .vImg", templateData.Top.Car.Frames, null);
 
         //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", (screen.width * -1), (screen.width + 20));
@@ -597,7 +624,7 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
         window.requestAnimationFrame(function (timestamp) {
             Move(timestamp, id, start, dir, startPos, endPos);
         });
-    } else {
+    } else { console.log(activeAnimations.length);
         if (activeAnimations.length > 0) {
             console.log("move end");
 
@@ -648,9 +675,31 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
 }
 
 function Animate(id, frames, frame, noLoop) {
-    if (((activeAnimations.length > 0) && !noLoop && (frame < frames.length - 1)) || (noLoop && (frame < frames.length - 1))) {
+    if (!noLoop || (frame < frames.length - 1)) 
+    {
         window.requestAnimationFrame(function (timestamp) {
             Animate(id, frames, frame, noLoop);
+        });
+
+        if (!frame) frame = 0;
+
+        var vImgs = $(id).toArray();
+        frame = (frame + 1) % frames.length;
+        //update animation
+
+        vImgs.forEach(function (img) {
+
+            img.src = frames[frame].src;
+        });
+    }
+}
+
+/* Nimate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
+function AnimateMoving(id, frames, frame) {
+    if ((activeAnimations.length > 0) || frame != 0)
+    {
+        window.requestAnimationFrame(function (timestamp) {
+            AnimateMoving(id, frames, frame);
         });
 
         if (!frame) frame = 0;
