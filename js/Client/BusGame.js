@@ -29,13 +29,20 @@ function initializeGameScene() {
     };
     xmlhttp.open("GET", dataURL);
     xmlhttp.send();
-
+    
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
         document.getElementById("score").remove();
         initializeTitle();
     }
+    if (!('remove' in Element.prototype)) {
+    Element.prototype.remove = function() {
+        if (this.parentNode) {
+            this.parentNode.removeChild(this);
+        }
+    };
+}
 }
 
 function initializeTitle() {

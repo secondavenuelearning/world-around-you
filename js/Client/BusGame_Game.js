@@ -16,7 +16,8 @@ var firstClick = false;
 var firstSelected;
 var secondSelected;
 var totalMatches;
-
+var checkImages;
+var blank;
 var termList = []; //hard values for testing
 var termMap = {};
 var signLang;
@@ -24,6 +25,7 @@ var writtenLang;
 
 var roundOrder;
 var roundTotalMatches = 0;
+
 var round = [
     //round data will be structured as such:
 
@@ -75,7 +77,13 @@ export function BusGame(storyObj, sign, written, terms) {
     signLang = sign;
     writtenLang = written;
     termList = terms;
-
+    if (!('remove' in Element.prototype)) {
+        Element.prototype.remove = function () {
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+        };
+    }
     //define how many matches the user will each round
     roundOrder = createCountList(termList);
     totalMatches = (termList.length); //number between 0 and 10
@@ -86,10 +94,10 @@ export function BusGame(storyObj, sign, written, terms) {
     //add score area to header
     ExtendHeader();
 
-    
+
     //change mains bg image
     $('main').css("background-image", "url(../img/games/BusGame/background_BusGame-03.png)");
-    
+
 
     //get all car and bus images
     images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Blue_Animation_Left/Frames/"));
@@ -104,7 +112,8 @@ export function BusGame(storyObj, sign, written, terms) {
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_DarkBlue_Animation_Right/Frames/"));
     images.Cars.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Cars/Car_Blue_Animation_Right/Frames/"));
 
-
+   checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
+   blank = new Image();
     NextRound(true);
 }
 
@@ -278,19 +287,14 @@ function SetupWindowConnections() {
             if (firstClick == false) {
                 firstSelected = e.target.parentElement;
 
-                
-                if(firstSelected.children[1].id !== "none")
-                {
+
+                if (firstSelected.children[1].id !== "none") {
                     firstClick = true;
                     firstSelected.classList.remove("hidden");
-                }
-                else
-                {
+                } else {
                     firstSelected = null;
                 }
-            }
-            else if(firstClick==true)
-            {
+            } else if (firstClick == true) {
 
                 //get second selected
                 secondSelected = e.target.parentElement;
@@ -304,11 +308,13 @@ function SetupWindowConnections() {
                     firstClick = false;
                     if (firstSelected.children[1].id != "none") {
 
-                        var checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
-                        var blank = new Image();
+
 
                         checkImages.push(blank);
-                        Animate("#checkMarkImage", checkImages, null, true);
+                        var animID = window.requestAnimationFrame(function (timestamp) {
+                            Animate("#checkMarkImage", checkImages, null, true);
+                        });
+
                         score++;
                         document.getElementById("current").innerHTML = score;
 
@@ -498,20 +504,20 @@ function FitText() {
     windows.toArray().forEach(function (element) {
         let currentSize = 30;
         if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
-       while(element.children[1].offsetWidth< element.children[1].scrollWidth){
-            if(element.children[1].style.getPropertyValue('font-size') == ""){
-                 element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
-            }
-           // console.log("Start: " + element.children[1].style.setProperty('font-size', '20px'));
-           // console.log("Start: " + element.children[1].style.getPropertyValue('font-size'));
-            
-            
+            while (element.children[1].offsetWidth < element.children[1].scrollWidth) {
+                if (element.children[1].style.getPropertyValue('font-size') == "") {
+                    element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
+                }
+                // console.log("Start: " + element.children[1].style.setProperty('font-size', '20px'));
+                // console.log("Start: " + element.children[1].style.getPropertyValue('font-size'));
 
-            currentSize = currentSize - 5;
-            element.children[1].style.setProperty('font-size', currentSize + "px");
-           
-            console.log(currentSize)
-             }
+
+
+                currentSize = currentSize - 5;
+                element.children[1].style.setProperty('font-size', currentSize + "px");
+
+                console.log(currentSize)
+            }
 
         }
     });
@@ -525,21 +531,17 @@ function HoverWindows() {
 
     //get all windows
 
-    $(".window").hover(function(e)
-    { 
-        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
-        {
-            Animate(e.target, rollWindow, null, true);
-        }
-    },
-    function(e)
-    {   
-        //check if target has been clicked
-        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
-        {
-           Animate(e.target, inverted, null, true); 
-        }
-    });
+    $(".window").hover(function (e) {
+            if (e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none") {
+                Animate(e.target, rollWindow, null, true);
+            }
+        },
+        function (e) {
+            //check if target has been clicked
+            if (e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none") {
+                Animate(e.target, inverted, null, true);
+            }
+        });
 
 }
 
