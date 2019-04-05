@@ -318,7 +318,7 @@ function SetupWindowConnections() {
 
                         checkImages.push(blank);
                         var animID = window.requestAnimationFrame(function (timestamp) {
-                            Animate("#checkMarkImage", checkImages, null, true);
+                            
                         });
 
                         score++;
@@ -435,6 +435,7 @@ function NextRound(firstRun = false) {
 function RoundEndTransition() {
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
+        Animate("#checkMarkImage", checkImages, null, true);
         Animate("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null, false);
         Animate("#top .bus .vImg", templateData.Top.Bus.Frames, null, false);
         Animate("#bottom .car .vImg", templateData.Bottom.Car.Frames, null, false);

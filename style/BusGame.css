@@ -64,7 +64,7 @@ header button img {
 
 header #backBtn img {
     position: relative;
-    top: -5px;
+    top: -7px;
     left: 5px;
 }
 
@@ -109,6 +109,10 @@ main {
 {
     position: relative;
     top: -5px;
+}
+#backBtn:hover {
+     position: relative;
+    top: -5px; 
 }
 
 #pageContent {
@@ -366,14 +370,16 @@ header #score span {
 
     border: 1px;
     border-radius: 15px;
-  
+    border-color: red;
     margin: 0px;
     padding: 0px;
+    
     overflow: hidden;
     
     
     
     background-color: #0098ba;
+     background-color: #002f3a;
 }
 
 .window span {
