@@ -24,7 +24,7 @@ function initializeGameScene() {
             storyObj = JSON.parse(this.responseText);
          
             //build story viwer functionality and pass in page data
-          BusGame(storyObj, "fsl_luzon", "English", terms);
+          BusGame.Start(storyObj, "fsl_luzon", "English", terms);
         }
     };
     xmlhttp.open("GET", dataURL);
@@ -46,8 +46,11 @@ function initializeGameScene() {
 }
 
 function initializeTitle() {
+    //set html
      $('main').html(html);
     $('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
+    
+    //hookup buttons
     var play = document.getElementById("playButton");
     play.onclick = function () {
        initializeGameScene();
@@ -61,6 +64,10 @@ function initializeTitle() {
     instruction.onclick = function () {
        initializeInstructions();
     };
+    
+    //prep and run animations
+    var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
+    BusGame.Animate("#busStop #bus", busFrames, null, false);
 }
 function initializeInstructions(){
     $('main').html(instructions);
@@ -87,4 +94,8 @@ $(document).ready(function () {
     instruction.onclick = function () {
        initializeInstructions();
     };
+    
+    //prep and run animations
+    var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
+    BusGame.Animate("#busStop #bus", busFrames, null, false);
 });

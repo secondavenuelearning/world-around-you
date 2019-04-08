@@ -2,7 +2,7 @@ import _ from 'underscore';
 import html from 'html/Client/BusGame_Win.html!text';
 import gameHtml from 'html/Client/BusGame_Game.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-export default BusGame
+export default { Start, GetImagesFromFolder, Animate, preloadImage }
 
 /* ----------------------- Global Variables ----------------------- */
 var template = _.template(gameHtml);
@@ -74,7 +74,7 @@ var gameState = state.Playing;
 
 
 /* ----------------------- Constructor ----------------------- */
-export function BusGame(storyObj, sign, written, terms) {
+export function Start(storyObj, sign, written, terms) {
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
@@ -144,7 +144,9 @@ function GetImagesFromFolder(folder) {
 
             data.forEach(function (datapoint) {
                 var path = "../.." + folder.toString() + "" + datapoint.toString();
-                files.push(preloadImage(path));
+                var img = new Image();
+                img.src = path;
+                files.push(img);
             });
         }
     });
