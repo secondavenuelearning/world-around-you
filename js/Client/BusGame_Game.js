@@ -339,6 +339,8 @@ function SetupWindowConnections() {
                         //add star
                         Animate(firstSelected.children[2], images.Star, null, true);
                         Animate(secondSelected.children[2], images.Star, null, true);
+                        firstSelected.children[2].classList.remove("hidden");
+                        secondSelected.children[2].classList.remove("hidden");
 
                         //check win state
                         if (score === totalMatches) {

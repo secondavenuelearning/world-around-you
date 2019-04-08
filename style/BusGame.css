@@ -383,6 +383,11 @@ header #score span {
     border-radius: 15px;
 }
 
+.window .star.hidden
+{
+    display: none;
+}
+
 .window span,
 .window video,
 .window div {
