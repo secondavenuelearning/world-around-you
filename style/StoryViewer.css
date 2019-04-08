@@ -325,13 +325,7 @@
 }
 
 .custom-select .custom-select-value{
-	    background-repeat: no-repeat;
+	background-repeat: no-repeat;
     background-size: 30px 30px;
     background-position: 10px center;
-}
-#written-language-select .custom-select-value{
-    background-image: url('../img/icons/General/icon_WrittenLang_White.svg');
-}
-#sign-language-select .custom-select-value{
-    background-image: url('../img/icons/General/icon_SignLang_White.svg');
 }

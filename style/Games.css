@@ -1,0 +1,86 @@
+h1, h2 {
+    margin: 0px;
+    padding: 5px;
+    text-align: center;
+    background-color: #0098BA;
+    color: #FFFFFF;
+    font-size: 1.5em;
+}
+h1{
+	padding-top: 25px;
+}
+h2{
+	font-size: 1.25em;
+}
+#game-search-filters {
+    text-align: center;
+    padding: 15px;
+    background-color: #0098BA;
+}
+#game-select .custom-select-value{
+	background-size: 40px;
+    background-position: left 5px center;
+	background-image: url(../img/icons/NavBar/nav_games_hoverDown.svg);
+}
+#build-container{
+	padding: 15px;
+	text-align: center;
+	background: #0098ba;
+    margin-bottom: 25px;
+    color: #FFFFFF;
+}
+#new-game-link{
+    display: inline-block;
+    width: calc((70% / 3) - 10px);
+    border-radius: 20px;
+    border: 2px solid gold;
+    padding: 5px;
+    background-color: #004E74;
+    font-size: 1.2em;
+    color: white;
+    text-decoration: none;
+}
+#game-sort, #game-results{
+	padding: 10px 10%;
+}
+.game-container{
+	color: #004E74;
+	margin-bottom: 25px;
+}
+.game-container > div{
+	margin: 5px 25px;
+}
+.game-link {
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    vertical-align: bottom;
+    background-size: contain;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.play-link{
+	background-image: url(../img/icons/NavBar/nav_games.svg);
+}
+.play-link:hover{
+	background-image: url(../img/icons/NavBar/nav_games_hoverDown.svg);
+}
+.edit-link{
+	height: 34px;
+	vertical-align: text-top;
+	background-image: url(../../img/icons/NavBar/nav_SB.svg);
+}
+.edit-link:hover{
+	background-image: url(../../img/icons/NavBar/nav_SB_hover_selected.svg);
+}
+.updated{
+	font-size: .8em;
+	margin-left: 34px;
+}
+a + .updated{
+	margin-left: 0px;
+}
+.name{
+    font-size: 1.2em
+}

@@ -29,9 +29,10 @@ var closeOnClick = function (event){
 	});
 
 	$el.find('.custom-select-options button').on('click', (evt) => {
-		let value = $(evt.currentTarget).val();
+		let value = $(evt.currentTarget).val(),
+			label = $(evt.currentTarget).html();
 
-		$el.find('.custom-select-value').html(value);
+		$el.find('.custom-select-value').html(label);
 
 		CS.value = value;
 		$(CS).trigger('change', [value]);

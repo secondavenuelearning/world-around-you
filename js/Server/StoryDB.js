@@ -413,7 +413,7 @@ function StoryDB(){
 	StoryDB.prototype.addGenre = function(storyId, genreId) {
 		return AddToAssociationTable(storyId, genreId, 'story_to_genre', 'genreId');
 	}
-	StoryDB.prototype.addSignlanguage = function(storyId, signlanguageId) {
+	StoryDB.prototype.addSignLanguage = function(storyId, signlanguageId) {
 		return AddToAssociationTable(storyId, signlanguageId, 'story_to_signlanguage', 'signlanguageId');
 	}
 	StoryDB.prototype.addTag = function(storyId, tagId) {
@@ -422,7 +422,7 @@ function StoryDB(){
 	StoryDB.prototype.addUser = function(storyId, userId) {
 		return AddToAssociationTable(storyId, userId, 'story_to_user', 'userId');
 	}
-	StoryDB.prototype.addWrittenlanguage = function(storyId, writtenlanguageId) {
+	StoryDB.prototype.addWrittenLanguage = function(storyId, writtenlanguageId) {
 		return AddToAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
 	}
 	StoryDB.prototype.addView = function(storyId) {
@@ -430,6 +430,23 @@ function StoryDB(){
 	}
 	StoryDB.prototype.addLike = function(storyId) {
 		return AddViewOrLike(storyId, 'liked');
+	}
+	StoryDB.prototype.addGamedata = function(storyId, gameId, writtenlanguageId, signlanguageId){
+		return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
+				let query = `INSERT INTO gamedata (storyId, gameId, writtenlanguageId, signlanguageId) VALUES (?, ?, ?, ?)`;
+				
+				conn.query(query, [storyId, gameId, writtenlanguageId, signlanguageId]).then(result => {
+					conn.end().then(() => {
+						return resolve(result.insertId);
+					});
+				}).catch((err) => {
+					return reject(err);
+				});
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
 	}
 
 // Deletes
@@ -511,12 +528,11 @@ function StoryDB(){
 	}
 	StoryDB.prototype.getData = function(storyId){
 		return new Promise((resolve, reject) => {
-
 			pool.getConnection().then(conn => {
 				let query = "SELECT data from story WHERE id = ?";
-				conn.query(query, [storyId]).then(res => {
+				conn.query(query, [storyId]).then(result => {
 					conn.end().then(() => {
-						return resolve(res[0] && res[0].data ? JSON.parse(res[0].data.toString('utf8')) : null);
+						return resolve(result[0] && result[0].data ? JSON.parse(result[0].data) : null);
 					});
 				}).catch((err) => {
 					return reject(err);
@@ -524,7 +540,30 @@ function StoryDB(){
 			}).catch((err) => {
 				return reject(err);
 			});
+		});
+	}
+	StoryDB.prototype.getGameData = function(storyId){
+		return new Promise((resolve, reject) => {
+			pool.getConnection().then(conn => {
+				let query = "SELECT * from gamedata WHERE storyId = ?";
 
+				conn.query(query, [storyId]).then(result => {
+					conn.end().then(() => {
+						let games = [];
+						for(var i in result){
+							let game = result[i];
+							game.data = game.data ? JSON.parse(game.data) : null;
+							games.push(game);
+						}
+						
+						return resolve(games);
+					});
+				}).catch((err) => {
+					return reject(err);
+				});
+			}).catch((err) => {
+				return reject(err);
+			});
 		});
 	}
 
@@ -584,12 +623,33 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setVisible = function(storyId) {
 		return new Promise((resolve, reject) => {
-
 			pool.getConnection().then(conn => {
 
 				let query = 'UPDATE story SET visible = 1 WHERE id = ?';
 
 				conn.query(query, [storyId]).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.affectedRows);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
+				});
+
+			}).catch((err) => {
+				return reject(err);
+			});
+		});
+	}
+	StoryDB.prototype.setGameData = function(gamedataId, data){
+		return new Promise((resolve, reject) => {
+
+			pool.getConnection().then(conn => {
+
+				let query = 'UPDATE gamedata SET data = ? WHERE id = ?';
+
+				conn.query(query, [data, gamedataId]).then((result) => {
 					conn.end().then(() => {
 						return resolve(result.affectedRows);
 					});

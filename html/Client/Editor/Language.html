@@ -10,7 +10,7 @@
 				<% }) %>
 				<div><button class="language-button add-language add-text-button" lang-type="written"></button></div>
 			</div>
-			<div class="half selected-languages">
+			<div class="half selected-languages selected-list">
 				<div class="selected-title">Selected</div>
 				<% _.each(writtenLanguages, function(language){ %>
 					<% if(storyWrittenLanguages.indexOf(language.name) == -1) return; %>
@@ -27,7 +27,7 @@
 				<% }) %>
 				<div><button class="language-button add-language add-text-button" lang-type="sign"></button></div>
 			</div>
-			<div class="half selected-languages">
+			<div class="half selected-languages selected-list">
 				<div class="selected-title">Selected</div>
 				<% _.each(signLanguages, function(language){ %>
 					<% if(storySignLanguages.indexOf(language.name) == -1) return; %>
