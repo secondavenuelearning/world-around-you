@@ -4,30 +4,28 @@ import _ from "underscore";
 var selectedPage = 1;
 var maxPage = -1;
 var storiesDiv;
-var offsetCount = 0;
+var thisID = '';
 
-function addStories(){
+function addStories(stories){
 	var childrenCount = document.getElementById(storiesDiv).childElementCount;
 	var countNode = 0;
 	var newDiv;
 	var pageNum = 0;
-	while(countNode < childrenCount){
+	for(var index in stories){
 		// Only 9 stories per page
-		if((countNode ) % 9 == 0){
+		if(index % 9 == 0){
 			pageNum++;
 			newDiv = document.createElement("div"); 
 			newDiv.id = 'grid-page' + pageNum;
 			$(newDiv).addClass("grid-page");
-
 			// Handles multiple pages
 			if(pageNum > 1){
 				$(newDiv).addClass("grid-page");
 				newDiv.style.transform = "translateX(100vw)";
 				var gridButton;
-				var gridButtons
+				var gridButtons;
 				// Creates pagination only if it doesn't exist already
 				if(pageNum == 2){
-
 					gridButtons = document.createElement("div"); 
 					gridButtons.id = "grid-buttons";
 					$('#' + storiesDiv).append(gridButtons);
@@ -55,13 +53,8 @@ function addStories(){
 				$(gridButtons).append(gridButton);
 			}
 			$('#' + storiesDiv).append(newDiv);
-
 		}
-		var sp = $('#' + storiesDiv + ' #story-preview-' + (countNode + offsetCount))[0];
-		$(newDiv).append(sp);
-		countNode++;
-
-
+		stories[index].appendTo(newDiv.id);
 	}
 	// Next button
 	gridButton = document.createElement("button"); 
@@ -131,17 +124,28 @@ function resizeStories(){
 }
 
 function StoryGrid(id, stories){
-	for(var i in stories){
-		stories[i].appendTo(id);
-	}
+	thisID = id;
 	storiesDiv = id;
-	offsetCount = parseInt(stories[0].id.match(/\d+/g));
+	if(stories[0] == null){
+		return;
+	}
 	// Calculate and setup pagination
-	addStories();
+	addStories(stories);
 
 	// Resize div for stories and pagination
 	$(window).off('.storygrid');
 	$(window).on('resize.storygrid', resizeStories);
+}
+
+StoryGrid.prototype.update = function(stories){
+	$('#' + storiesDiv).html("");
+	selectedPage = 1;
+	maxPage = -1;
+	StoryGrid(storiesDiv, stories);
+}
+
+StoryGrid.prototype.getId = function(){
+	return thisID;
 }
 
 export default StoryGrid

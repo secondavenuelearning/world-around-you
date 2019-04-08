@@ -5,7 +5,7 @@
 		<% _.each(options, function(option){ %>
 			<div>
 				<% if(multiSelect){  %>
-					<input type="check" value="<%- typeof option == 'string' ? option : option.value %>"><label><%- typeof option == 'string' ? option : option.label %></label>
+					<input type="checkbox" value="<%- typeof option == 'string' ? option : option.value %>"><label><%- typeof option == 'string' ? option : option.label %></label>
 				<% } else { %>
 					<button value="<%- typeof option == 'string' ? option : option.value %>"><%- typeof option == 'string' ? option : option.label %></button>
 				<% } %>

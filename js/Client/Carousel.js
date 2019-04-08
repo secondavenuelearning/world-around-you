@@ -259,9 +259,13 @@ function BuildIndexIndicator(isOverlay, carouselItemID, pages, panels, startInde
     }
     indicatorHTML += "<div class = \"dots\""; // dots bar
     indicatorHTML += "style=\"width: " + (pages*20) + "px;\">"; //size of each dot, multipled by dots
-    for(var i = 0; i < pages; i++)
-    {
-        indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot
+    if(pages > 1){
+        for(var i = 0; i < pages; i++)
+        {
+            indicatorHTML += "<div class = \"dot\"> </div>"; //actual dot
+        }
+    }else{
+        $('.carousel-nav').css('visibility', 'hidden');
     }
     indicatorHTML += "</div></div>";
     

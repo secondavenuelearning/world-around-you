@@ -15,9 +15,18 @@ function CustomSelect(parentId, settings){
 	$(`#${parentId}`).append($el);
 	let CS = this;
 
+// Function to handle closing the CustomSelect when clicking outside the element
+var closeOnClick = function (event){
+	if(event.target.closest('.custom-select-options') == null){
+		$el.find('.custom-select-options').hide(200);
+		$(document).off('click', closeOnClick);
+	}
+};
 	$el.find('.custom-select-value').on('click', () => {
 		$el.find('.custom-select-options').toggle(200);
-	})
+		event.stopPropagation();
+		$(document).on('click', closeOnClick);
+	});
 
 	$el.find('.custom-select-options button').on('click', (evt) => {
 		let value = $(evt.currentTarget).val(),
@@ -32,7 +41,7 @@ function CustomSelect(parentId, settings){
 	});
 
 	$el.find('.custom-select-options input').on('change', (evt) => {
-		values = [];
+		var values = [];
 		$el.find('input').each((i, el) => {
 			if(el.checked)
 				values.push(el.value);

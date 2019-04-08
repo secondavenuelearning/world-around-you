@@ -1,419 +1,209 @@
 import '../../style/Filter.css!';
 import _ from 'underscore';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
+import CustomSelect  from 'js/Client/CustomSelect';
+import LanguageSelector from 'js/Client/LanguageSelector';
+
 export default FiltersBar
 
 /* ----------------------- Global variables ----------------------- */
 var filters = {};
 var filterRegex;
 var finalResults;
-
-var database = //placeholder data obj
-[
-    {
-        Title: "Harry Potter and the Half Blood Prince",
-        Sign: ["fsl_luzon", "asl"],
-        Written: ["English", "British"],
-        Author: "JK Rowling",
-        DatePublished: "7/16/2005",
-        LastUpdated: "7/19/2009"
-    },
-    {
-        Title: "Harry Potter and the Cursed Child",
-        Sign: ["fsl_luzon", "asl", "fsl_visayas"],
-        Written: ["English", "British", "Tagalog"],
-        Author: "Jack Thorne",
-        DatePublished: "7/30/2016",
-        LastUpdated: "7/30/2016"
-    },
-    {
-        Title: "Joy of Cooking",
-        Sign: ["fsl_mindanao", "fsl_visayas"],
-        Written: ["English", "Tagalog"],
-        Author: "A",
-        DatePublished: "1/1/1931",
-        LastUpdated: "1/1/2006"
-    }
-];
-
+var toFilterWritten = [];
+var toFilterSign = [];
+var sortBy = '';
 /* ----------------------- Filter Building ----------------------- */
 /*
-Builds out filters bar for web pages that already have a div witht he "FIltersBar" id
+Builds out filters bar for web pages that already have a div with the "FiltersBar" id
+
+id - element ID of element on the page to build filters into
+filterTarget - Target element that will display Story Previews
+filterList - List of Story Previews that will be filtered and/or sorted
 */
-function FiltersBar(id, launguageOnly = false)
+
+function FiltersBar(id, filterTarget, filterList)
 {
-    //save full possible results
-    finalResults = database;
-    console.log(finalResults);
-    
-    //add child
-    $(`#${id}`).append("<div class=\"filters\"></div>");
-    
-//---SIGN LANGUAGE FILTER
-    //build html for filter
-    var signID = "SignLanguageFilter";
-    var signs = GetValues("Sign", database);//["fsl_luzon", "fsl_visayas", "fsl_mindanao"]; //note: hardcoded for now - later will get from json files or database
-    var signsHTML = BuildMultiSelectFilter(signID, "Sign Language", signs, "Sign", "img/icons/General/icon_SignLang_White.svg"); //build out html for signs filter
-    
-    //update pahe html to ahve this filter
-    $('.filters').append(signsHTML); //apend filter bar to have signs html
-    
-    //add click events for filter functionality
-    $('#' + signID + ' > button').on('click', function() {ToggleOptionsVisible(signID)}); //toggle showing filter options
-    $('#' + signID + ' > #options > label > input').on('click', function(e) {UpdateMultiSelectFilter(signID, e)}); //update filter
-    
-//---WRITTEN LANGUAGE FILTER
-    //build html for filter
-    var writtenID = "WrittenLanguageFilter";
-    var written = GetValues("Written", database); //note: hardcoded for now - later will get from json files or database
-    var writtenHTML = BuildMultiSelectFilter(writtenID, "Written Language", written, "Written", "img/icons/General/icon_WrittenLang_White.svg"); //build out html for signs filter
-    
-    //update page html to have this filter
-    $('.filters').append(writtenHTML); //apend filter bar to have signs html
-    
-    //add click events for filter functionality
-    $('#' + writtenID + ' > button').on('click', function() {ToggleOptionsVisible(writtenID)});
-    $('#' + writtenID + ' > #options > label > input').on('click', function(e) {UpdateMultiSelectFilter(writtenID, e)});
+    $.ajax({
+        method: 'get',
+        url: './api/writtenlanguages'
+    }).done((writtenLanguages) => {
+        $.ajax({
+            method: 'get',
+            url: './api/signlanguages'
+        }).done((signLanguages) => {
 
-    //---SORTING FILTER
-    if(!launguageOnly){
-        var sortID = "SortByFilter";
-        var sortByFields = ["Title", "Author", "DatePublished", "LastUpdated", "Relevance"];
-        var sortByHTML = BuildSelectFilter(sortID, "Sort By", sortByFields, "img/icons/General/icon_Filter.svg");
-        
-        $('.filters').append(sortByHTML);
-        
-        $('#' + sortID + ' > button').on('click', function() {ToggleOptionsVisible(sortID)});
-
-        $('#' + sortID + ' > #options').on('click', function(e) {UpdateSort(signID, e, sortID); ToggleOptionsVisible(sortID); 
-            $('#SortByFilter button span').html(filters[signID].FilterAgainst)});
-    }
-//--Button Icon Hover Swapping
-    //ImageHoverSwap("#sortByFilter button", "#sortByFilter img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
-    
-}
-
-/*
-Returns HTML as string for a filter field
-(filterID: tag to be used for divs id)
-(filterName: text on the filter dropdown button, also for checkbox name)
-(filterOptions: array of strings that define the values and text for each checkbox int he filter)
-*/
-function BuildMultiSelectFilter(filterID, filterName, filterOptions, filterTarget, icon)
-{
-    //varibles for this filters data
-    var thisFilter = 
-    {
-        Data: [],
-        ID: filterID,
-        Name: filterName,
-        Regex: "",
-        FilterAgainst: filterTarget,
-        Type: "Multi"
-        
-    }
-    
-    //build base filter div
-    var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
-    filterHTML += "\n";
-    filterHTML += "<button><img src=\"" + icon + "\">"
-    filterHTML += filterName + "<img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
-    filterHTML += "\n";
-    filterHTML += "<div id = \"options\">";
-    filterHTML += "\n";
-    
-    //build options
-    for(var i = 0; i < filterOptions.length; i++)
-    {
-        //build html
-        var optionName = filterName + i.toString();
-        filterHTML += "<label class = \"container\">" + filterOptions[i];
-        filterHTML += "<input type = \"checkbox\" ";
-        filterHTML += "name = \"" + optionName + "\"";
-        filterHTML += "value = \"" + filterOptions[i] + "\">";
-        filterHTML += "<span class=\"checkmark\"></span>";
-        filterHTML += "</label>";
-        
-        //update this filters data
-        thisFilter.Data[filterOptions[i]] = false;
-    }
-    
-    //close divs and the like
-    filterHTML += "</div>";
-    filterHTML += "\n";
-    filterHTML += "</div>";
-    
-    //add this fully built filter to array of filters
-    filters[thisFilter.ID] = thisFilter;
-    
-    //give back final built html
-    return filterHTML;
-}
-
-/*
-Returns HTML as string for a filter field
-(filterID: tag to be used for divs id)
-(filterName: text on the filter dropdown button)
-(filterOptions: array of strings that define the values and text for each select option)
-*/
-function BuildSelectFilter(filterID, filterName, filterOptions, icon)
-{
-    //varibles for this filters data
-    var thisFilter = 
-    {
-        Data: filterOptions,
-        ID: filterID,
-        Name: filterName,
-        Regex: "",
-        FilterAgainst: filterOptions[0],
-        Type: "Single"
-    }
-    
-    //build base filter div
-    var filterHTML = "<div class = \"filter\" id = \"" + filterID +"\">";
-    filterHTML += "\n";
-    filterHTML += "<button><img src=\"" + icon + "\"><span>"
-    filterHTML += filterName + "</span><img class=\"dropdownIcon\" src=\"img/icons/General/icon_DropDnArrow.svg\"></button>";
-    filterHTML += "\n";
-    filterHTML += "<div id = \"options\">";
-    filterHTML += "\n";
-    
-    //build options
-    for(var i = 0; i < filterOptions.length; i++)
-    {
-        //build html
-        filterHTML += "<option ";
-        filterHTML += "value = \"" + filterOptions[i] + "\">";
-        filterHTML += filterOptions[i];
-        filterHTML += "</option>";
-    }
-    
-    //close divs and the like
-    filterHTML += "</div>";
-    filterHTML += "\n";
-    filterHTML += "</div>";
-    
-    //add this fully built filter to array of filters
-    filters[thisFilter.ID] = thisFilter;
-    
-    //give back final built html
-    return filterHTML;
-}
-
-/* ----------------------- Options ----------------------- */
-
-/*
-Toggles filters options to be visible(display block, or none) based on parent filter
-(target: options parent object)
-*/
-function ToggleOptionsVisible(target)
-{
-    //get proper options object
-    var options = $('#' + target + '> #options');
-    
-    //get current mode
-    var currentMode = options.css("display");
-    
-    //check if showing or not
-    if(currentMode.toString() === "none")
-    {
-        options.css("display", "block");
-    }
-    else
-    {
-        options.css("display", "none");
-    }
-    
-}
-
-/*
-Gets unique values from database source, used for filling filter options
-(type: js object field name to select data from)
-(sourcedb: array of objects to look through)
-*/
-function GetValues(type, sourcedb)
-{
-    //instanitate variable to return and initla setup junk
-    var source = sourcedb;
-    var options = [];
-    
-    //loop through database for the givne type and add data as options
-    var index = 0;
-    source.forEach(function(val)
-    {
-        //check if value is an array itself- then get data points within array
-        if(Array.isArray(val[type]))
-        { 
-            val[type].forEach(function(childVal)
-            {
-                //check if its a unique value
-                if(!options.includes(childVal))
-                {
-                    //if so add to array of options
-                    options[index] = childVal;
-                    index++;
+            $(`#${id}`).append("<div id='theFilters' class=\"filters\"></div>");
+            var writtenLanguagesList = [];
+            for(var index in writtenLanguages){
+                if(!writtenLanguages[index]){
+                    continue;
                 }
+                writtenLanguagesList.push(writtenLanguages[index].name);
+            }
+            var signLanguagesList = [];
+            for(var index in writtenLanguages){
+                if(!signLanguages[index]){
+                    continue;
+                }
+                signLanguagesList.push(signLanguages[index].name);
+            }
+
+            let wlSelect = new CustomSelect('theFilters', {
+                id: 'written-language-select', 
+                options: writtenLanguagesList,
+                multiSelect: true,
+                defaultText: 'Written Language'
+            }),
+            slSelect = new CustomSelect('theFilters', {
+                id: 'sign-language-select', 
+                options: signLanguagesList,
+                multiSelect: true,
+                defaultText: 'Sign Language'
+            }),
+            sortBySelect = new CustomSelect('theFilters', {
+                id: 'sort-by-select', 
+                options: ["Title", "Author", "Date Published", "Last Updated"],
+                defaultText: 'Sort By'
             });
-        }
-        else
-        {
-            //check if its a unique value
-            if(!options.includes(val[type]))
-            {
-                //if so add to array of options
-                options[index] = val[type];
-                index++;
+            // Add icons
+            var icon = document.createElement("img");
+            $(icon).attr('src', 'img/icons/General/icon_WrittenLang_White.svg');
+            $('#written-language-select .custom-select-value' ).prepend(icon);
+            icon = document.createElement("img");
+            $(icon).attr('src', 'img/icons/General/icon_SignLang_White.svg'); 
+            $('#sign-language-select .custom-select-value' ).prepend(icon);
+            icon = document.createElement("img");
+            $(icon).attr('src', 'img/icons/General/icon_Filter.svg'); 
+            $('#sort-by-select .custom-select-value' ).prepend(icon);
+
+            $('#written-language-select').addClass('filter');
+            $('#sign-language-select').addClass('filter');
+            $('#sort-by-select').addClass('filter');
+            // Events for filtering and sorting
+            $(wlSelect).on('change', (evt, values) => {  
+                toFilterWritten = values;
+                updateFilter(filterTarget, filterList);
+            });
+            $(slSelect).on('change', (evt, values) => {
+                toFilterSign = values;
+                updateFilter(filterTarget, filterList);
+            });
+            $(sortBySelect).on('change', (evt, value) => {
+                sortBy = value;
+                updateFilter(filterTarget, filterList);
+            });
+        });
+    });
+}
+/*
+Function to apply a filter to the list of Story Previews
+*/
+function updateFilter(filterTarget, filterList){
+    var filteredList = [];
+    let itemList = Array.from(filterList);
+
+    if(toFilterWritten.length > 0){
+        for(var index = 0; index < itemList.length; index++){
+            for(var filterIndex = 0; filterIndex < toFilterWritten.length; filterIndex++){
+                if(itemList[index].story.metadata.writtenLanguages.includes(toFilterWritten[filterIndex])){
+                    filteredList.push(itemList[index]);
+                    itemList.splice(index, 1);
+                    index--;
+                    break;
+                }
             }
         }
-        
-        
-    });
-    
-    //give back array of options
-    return options;
-}
-
-/* ----------------------- Filter Functionality ----------------------- */
-
-/*
-Changes what video results user gets based on sign
-(filterData: property of filter in filters object to update)
-(target: html checkbox being clicked)
-*/
-function UpdateMultiSelectFilter(filterData, target)
-{
-    //update filter data obj
-    var obj = $(target.target)[0];
-    filters[filterData].Data[obj.value] = obj.checked;
-    
-    //create regex string out fo active filters
-    var thisFiltersRegex = "";
-    Object.keys(filters[filterData].Data).forEach(function(option)
-    {
-        if(filters[filterData].Data[option] == true)
-        {
-            thisFiltersRegex += option + "|";
+    }
+    if(toFilterSign.length > 0){
+        if(filteredList.length > 0){
+            itemList = Array.from(filteredList);
+            filteredList = [];
         }
-    });
-    
-    //set this filters regex with this regex object (or "" for nothing)
-    filters[filterData].Regex = thisFiltersRegex;
-    
-    //filter data
-    Filter(database);
-}
-
-/*
-Culls results that dont match filter perameters, if no filter then all results are returned. 
-(input: data source to be filtered)
-*/
-function Filter(input)
-{
-    var results = [];
-    var resultIndex = 0;
-    
-    
-    Object.keys(filters).forEach(function(key)
-    {
-        ////checking if actually need to filter
-        var regexObj = filters[key].Regex;
-        if(regexObj != "") 
-        {    
-            //we do- build regex and clear results
-            regexObj = regexObj.slice(0, regexObj.length - 1);
-            regexObj = new RegExp(regexObj, 'gi');
-            
-             //loop through each entry to check for matches to the inplace filters
-            input.forEach(function(entry)
-            {
-                var match = false;
-
-                //get relevant data and compare
-                var data = entry[filters[key].FilterAgainst];
-                if(Array.isArray(data)) //extra check for data being array as we need to iterate through its entires
-                { 
-                    data.forEach(function(dataPoint)
-                    {
-                        //check if data fits the regex model
-                        if(regexObj.test(dataPoint))
-                        {
-                            match = true;
-                        }
-                    });
-
+        for(var index = 0; index < itemList.length; index++){
+            for(var filterIndex = 0; filterIndex < toFilterSign.length; filterIndex++){
+                if(itemList[index].story.metadata.signLanguages.includes(toFilterSign[filterIndex])){
+                    filteredList.push(itemList[index]);
+                    itemList.splice(index, 1);
+                    index--;
+                    break;
                 }
-                else //single line piece of data
-                {
-                    //check if data fits the regex model
-                    if(regexObj.test(data))
-                    {
-                        match = true;
-                    }
-                }
-                
-                //check if the search reuslts in any matches - if so update results!
-                if(match && !results.includes(entry))
-                {
-                    //it does- at the whole entry to the results
-                    results[resultIndex] = entry;
-                    resultIndex++; //prep for next result
-                    input = results; //set input to results so next run uses updated data set
-                }
-            });
+            }
         }
-        else
-        {
-            results = input;
+    }
+    if(toFilterSign.length === 0 && toFilterWritten.length === 0){
+        if(sortBy){
+            runSort(itemList, filterTarget);
+        }else{
+            filterTarget.update(itemList);
         }
-        
-    });
-        
-    finalResults = Sort(results, "SortByFilter");
-    console.log(results);
+        document.getElementById(filterTarget.getId()).scrollIntoView();
+        return;
+    }
+
+    if(sortBy){
+        runSort(filteredList, filterTarget);
+    }else{
+        filterTarget.update(filteredList);
+    }
+    document.getElementById(filterTarget.getId()).scrollIntoView();
 }
-
-/* ----------------------- Sort Functionality ----------------------- */
-
 /*
-Updates sorting filters in filter object to be newly selected field
-(filterKey: parameter name in filters to update)
-(target: select dropdown to get new sorting field)
+Function to apply a filter to the list of Story Previews
 */
-function UpdateSort(filterKey, target)
-{
-    //change current sorting field
-    filters[filterKey].FilterAgainst = target.target.value; console.log(filters[filterKey].FilterAgainst);
-    
-    //update the data to be sorted by this new target
-    finalResults = Sort(finalResults, filterKey);
-    console.log(finalResults);
-}
-
-/*
-Organizes results in alphabetical/date order by sorting filter (like by title, author)
-(input: data source to sort)
-(filterKey: parameter name of sorting filter in filters to sort by)
-*/
-function Sort(input, filterKey)
-{ 
-    //sort alphabetically
-    input.sort(function(a, b)
-    {
-        //sort based on sortBy field selected
-        var currentSort = filters[filterKey].FilterAgainst;
-        if(a[currentSort] < b[currentSort])
-        {
-            return -1;
+function runSort(filteredList, filterTarget){
+    var aValue = '';
+    var bValue = '';
+    var localeCompareBool = false;
+    var answer = '';
+    filteredList.sort((a, b) => {
+        let clt = LanguageSelector.currentLanguageText();
+        window.temp2 = a.story.datecreated;
+        window.temp3 = b.story.datecreated;
+        switch(sortBy){
+            case 'Title':
+                aValue = a.story.metadata.title[clt];
+                bValue = b.story.metadata.title[clt];
+                localeCompareBool = true;       
+                break;
+            case 'Author':
+                aValue = a.story.author;
+                bValue = b.story.author;
+                localeCompareBool = true;
+                break;
+            case 'Date Published':
+                aValue = a.story.datecreated;
+                bValue = b.story.datecreated;
+                break;
+            case 'Last Updated':
+                aValue = a.story.datemodified;
+                bValue = b.story.datemodified;
+                break;
+            default:
+                aValue = a.story.metadata.title[clt];
+                bValue = b.story.metadata.title[clt];       
+                break;
         }
-        else
-        {
+        if(!aValue || aValue == null){
             return 1;
         }
-    });
+        if(!bValue || bValue == null){
+            return -1;
+        }
+        if(localeCompareBool){
+            answer = aValue.localeCompare(bValue, LanguageSelector.currentLanguage());
+        }else{
+            var aDate = new Date(aValue);
+            var bDate = new Date(bValue);
+            // Sort by newest first
+            answer = aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
 
-    //give back sorted input
-    return input;
+        }
+        return answer;
+    });
+    filterTarget.update(filteredList);
 }
+
 
 /* ----------------------- Array extra functions ----------------------- */
 //Adds includes method for browsers that dont support
@@ -424,8 +214,8 @@ if (!Array.prototype.includes) {
     value: function(obj) {
         var newArr = this.filter(function(el) {
           return el == obj;
-        });
+      });
         return newArr.length > 0;
-      }
-  });
+    }
+});
 }
