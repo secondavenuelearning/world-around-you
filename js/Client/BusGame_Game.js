@@ -75,6 +75,40 @@ var gameState = state.Playing;
 
 /* ----------------------- Constructor ----------------------- */
 export function Start(storyObj, sign, written, terms) {
+    //resets all data
+        //clear data of this script
+    storyData = null;
+    score = 0;
+    firstClick = false;
+
+    firstSelected = null;
+    secondSelected = null;
+    totalMatches = 9999999;
+    roundTotalMatches = 0;
+    images = {
+        Cars: {
+            FacingRight: [],
+            FacingLeft: []
+        },
+
+        Buses: {
+            FacingRight: [],
+            FacingLeft: []
+        },
+
+        Waving: [],
+        Star: [] //single array
+    };
+
+    termList = []; //hard values for testing
+    signLang = null;
+    writtenLang = null;
+
+    roundorder = null;
+    round = [];
+    
+    
+    
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
