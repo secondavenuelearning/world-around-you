@@ -301,10 +301,7 @@
     background-color: #004E74;
     border-radius: 10px;
 }
-#media-container .video-container{
-	margin-bottom: 20px;
-}
-#media-container .image-container{
+#media-container > div + div{
 	margin-top: 20px;
 }
 #definition-container{
