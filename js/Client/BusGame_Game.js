@@ -2,7 +2,7 @@ import _ from 'underscore';
 import html from 'html/Client/BusGame_Win.html!text';
 import gameHtml from 'html/Client/BusGame_Game.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-export default { Start, GetImagesFromFolder, Animate, preloadImage }
+export default { Start, GetImagesFromFolder, Animate}
 
 /* ----------------------- Global Variables ----------------------- */
 var template = _.template(gameHtml);
@@ -374,7 +374,7 @@ function SetupWindowConnections() {
 /* ----------------------- Game Loop ----------------------- */
 function NextRound(firstRun = false) {
     //check fi this has already been doen this round
-    if (roundTotalMatches === 0) {
+    if (roundTotalMatches === 0) { console.log("Loading next round");
         //generate round data
         var randIndex = Math.floor(Math.random() * roundOrder.length);
         var roundLength = roundOrder[randIndex];
@@ -384,6 +384,7 @@ function NextRound(firstRun = false) {
         roundOrder.splice(randIndex, 1);
 
         //update html of page form template
+        //templateData = null;
         templateData = {
             Top: {
                 Bus: {
@@ -453,12 +454,11 @@ function NextRound(firstRun = false) {
         emptyWindows.forEach(function(e)
         {
             //set waving person behind window
-            console.log(images.Waving);
             Animate(e, ChooseRandomArrayElement(images.Waving), null, false);
             
             //for variations sake- flip waving animation sometimes
             if(Math.random() > .5)
-            { console.log("flip");
+            {
                 $(e).css('transform', "scaleX(-1)");
             }
             
@@ -467,10 +467,12 @@ function NextRound(firstRun = false) {
             Animate(e.parentElement.parentElement.children[0], rollWindow, null, true);
             
         });
+                                  
+        console.log("Loading round finished setup");
     }
 }
 
-function RoundEndTransition() {
+function RoundEndTransition() { console.log("round end transition");
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
         Animate("#checkMarkImage", checkImages, null, true);
@@ -487,7 +489,7 @@ function RoundEndTransition() {
     activeAnimations.push(animID);
 }
 
-function RoundStartTransition() {
+function RoundStartTransition() { console.log("round start transition");
     //move vehicles off screen on proper side so they can drive in
     $('#bottom .vehicle').css('left', (screen.width * -1) + 'px');
     $('#top .vehicle').css('left', screen.width + 'px');
@@ -495,10 +497,10 @@ function RoundStartTransition() {
     //animate and move vehicles back on screen
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
-        AnimateMoving("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null);
-        AnimateMoving("#top .bus .vImg", templateData.Top.Bus.Frames, null);
-        AnimateMoving("#bottom .car .vImg", templateData.Bottom.Car.Frames, null);
-        AnimateMoving("#top .car .vImg", templateData.Top.Car.Frames, null);
+        AnimateMoving("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null, true);
+        AnimateMoving("#top .bus .vImg", templateData.Top.Bus.Frames, null, true);
+        AnimateMoving("#bottom .car .vImg", templateData.Bottom.Car.Frames, null, true);
+        AnimateMoving("#top .car .vImg", templateData.Top.Car.Frames, null, true);
 
         //move cars
         Move(timestamp, '#bottom .vehicle', null, "Right", (screen.width * -1), (screen.width + 20));
@@ -532,7 +534,10 @@ function WinScreen() {
         Buses: {
             FacingRight: [],
             FacingLeft: []
-        }
+        },
+
+        Waving: [],
+        Star: [] //single array
     };
 
     termList = []; //hard values for testing
@@ -547,7 +552,6 @@ function WinScreen() {
 
 function FitText() {
     var windows = $(".window");
-    console.log(windows);
     windows.toArray().forEach(function (element) {
         let currentSize = 30;
         if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
@@ -563,7 +567,6 @@ function FitText() {
                 currentSize = currentSize - 5;
                 element.children[1].style.setProperty('font-size', currentSize + "px");
 
-                console.log(currentSize)
             }
 
         }
@@ -635,12 +638,15 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
         window.requestAnimationFrame(function (timestamp) {
             Move(timestamp, id, start, dir, startPos, endPos);
         });
-    } else { console.log(activeAnimations.length);
+    } else {
         if (activeAnimations.length > 0) {
             console.log("move end");
-
-            cancelAnimationFrame(activeAnimations[0]);
-            activeAnimations.pop();
+            
+            for(var i = 0; i < activeAnimations.length; i++)
+            {
+                cancelAnimationFrame(activeAnimations[i]);
+            }
+            activeAnimations = [];
 
             switch (gameState) {
                 case state.Start:
@@ -706,11 +712,11 @@ function Animate(id, frames, frame, noLoop) {
 }
 
 /* Nimate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
-function AnimateMoving(id, frames, frame) {
-    if ((activeAnimations.length > 0) || (frame != 0))
+function AnimateMoving(id, frames, frame, finishRun = false) { console.log(frame);
+    if ((activeAnimations.length > 0) || (finishRun && (frame != 0)))
     {
         window.requestAnimationFrame(function (timestamp) {
-            AnimateMoving(id, frames, frame);
+            AnimateMoving(id, frames, frame, finishRun);
         });
 
         if (!frame) frame = 0;
@@ -749,12 +755,4 @@ function LoopVideoClip(videoID, start, end) {
             }
         }
     }, false);
-}
-
-//thanks: https://stackoverflow.com/questions/3646036/javascript-preloading-images
-function preloadImage(url) {
-    var img = new Image();
-    img.src = url;
-
-    return img;
 }
