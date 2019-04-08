@@ -1,7 +1,7 @@
 <div id="glossary-modal">
 	<div id="term-container">
 		<div id="media-container" class="third">
-			<% if(term.video[currentSignLanguage]){ %>
+			<% if(term.video && term.video[currentSignLanguage]){ %>
 				<div class="video-container">
 					<video id="glossary-video" autoplay muted loop src="<%- page.video[currentSignLanguage] %>">
 					</video>

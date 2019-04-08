@@ -20,11 +20,14 @@ function displaySimilarGenres(stories){
 
     _.each(story.metadata.genres[lang], (genre) => {
         _.each(stories, (_story) => {
+            if(_story.added) return;
+            
             let added = false;
             _.each(_story.metadata.genres[lang], (_genre) => {
                 if(_genre == genre && _story.id != story.id) added = true;
             });
 
+            _story.added = added;
             if(added) similarGenreStories.push(new StoryPreview(_story))
         });
     });

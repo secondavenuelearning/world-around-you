@@ -70,7 +70,7 @@ body.dragging{
 	margin-bottom: 10px;
 	font-size: 1.25em;
 }
-#editor-content .save-button{
+.save-button{
 	position: absolute;
 	top: calc(100% - 50px);
 	left: 25%;
@@ -82,10 +82,10 @@ body.dragging{
 	border-radius: 20px;
 	font-size: 1.25em;
 }
-#editor-content .save-button:hover{
+.save-button:hover{
 	font-weight: bold;
 }
-#editor-content .save-button:disabled{
+.save-button:disabled{
 	display: none;
 }
 
@@ -398,7 +398,7 @@ body.dragging{
 		font-size: 1.2em;
 		padding: 0px 10px;
 	}
-	.selected-languages{
+	.selected-list{
 		background-color: #E2F8FC;
 		border-radius: 15px;
 		padding-bottom: 10px;

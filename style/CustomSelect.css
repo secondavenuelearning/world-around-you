@@ -11,12 +11,16 @@
 
     color: #FFFFFF;
     background-color: #004E74;
+    background-size: 30px 30px;
+    background-position: left 10px center;
+    background-repeat: no-repeat;
     font-size: 1.3em;
     padding: 5px 40px;
     text-align: center;
     border: none;
     border-radius: 40px;
     border: 2px solid #004E74;
+
 }
 .custom-select-value:hover{
     border-color: #FFFFFF;
@@ -66,4 +70,12 @@
     color: #FFFFFF;
     background-color: #004E74;
     font-weight: bold;
+}
+
+/* custom Selects with specific ids */
+#written-language-select .custom-select-value{
+    background-image: url('../img/icons/General/icon_WrittenLang_White.svg');
+}
+#sign-language-select .custom-select-value{
+    background-image: url('../img/icons/General/icon_SignLang_White.svg');
 }

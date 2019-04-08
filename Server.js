@@ -14,11 +14,9 @@ let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
 let PageTemplate = _.template(PageHTML);
 
 
-const LikedDB = require('./js/Server/LikedDB.js');
 const StoryDB = require('./js/Server/StoryDB.js');
 const UserDB = require('./js/Server/UserDB.js');
 const UsertypeDB = require('./js/Server/UsertypeDB.js');
-const ViewDB = require('./js/Server/ViewDB.js');
 const GameDB = require('./js/Server/GameDB.js');
 const GamedataDB = require('./js/Server/GamedataDB.js');
 
@@ -170,31 +168,21 @@ var sess=null;
 			Page: 'Editor'
 		}));
 	});
+	app.get('/Game', ValidateUser, (req, res) => {
+		res.send(PageTemplate({
+			Page: 'Game'
+		}));
+	});
+	app.get('/GameEditor', ValidateUser, (req, res) => {
+		res.send(PageTemplate({
+			Page: 'GameEditor'
+		}));
+	});
 
 // ******************************************************
 // Get Requests
 // ******************************************************
 	ApiRoutes(app);
-
-
-
-// ***************
-// * LIKED - ADD *
-// ***************
-app.post('/add_liked',function(req,res) {
-
-	storyId=get_body_stuff(req.body,"storyId");
-	if((storyId==null)||(storyId==0)) {
-		res.send("<b>bad liked-storyId<b/>");
-		return;
-	}
-
-	LikedDB.db_add_liked(storyId).then(function(result) {
-		res.send("<div>liked '"+storyId+"' added to LikedDB["+result+"]</div>");
-	}).catch(err => {
-		res.send(err);
-	});
-});
 
 
 
@@ -262,32 +250,6 @@ app.post('/add_usertype',function(req,res) {
 		res.send(err);
 	});
 });
-
-
-// **************
-// * VIEW - ADD *
-// **************
-app.post('/add_view',function(req,res) {
-
-	storyId=get_body_stuff(req.body,"storyId");
-	if((storyId==null)||(storyId==0)) {
-		res.send("<b>bad view-storyId<b/>");
-		return;
-	}
-
-	ViewDB.db_add_view(storyId).then(function(result) {
-		res.send("<div>view '"+storyId+"' added to ViewDB["+result+"]</div>");
-	}).catch(err => {
-		res.send(err);
-	});
-});
-
-
-// ****************************************
-// ****************************************
-// * SAVE STORY API CALLS BELOW THIS LINE *
-// ****************************************
-// ****************************************
 
 
 // ************
@@ -468,18 +430,3 @@ function app_post_api_gamedata_part2(req,res,storyid,gameid,gamedata) {
 app.listen(Settings.port,function(){
 	console.log(`Listening on port ${Settings.port}`);
 });
-
-// ******************
-// * GET BODY STUFF *
-// ******************
-function get_body_stuff(body,name) {
-		ii = 0;
-		for(key in body) {
-				ii++;
-				//console.log("[GET]["+ii+"][body-key]["+key+"][body-value]["+body[key]+"]");
-		if(key==name) {
-			return body[key];
-		}
-		}
-	return null;
-}

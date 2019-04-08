@@ -1,0 +1,16 @@
+<% _.each(gameData, function(game){ %>
+	<div class='game-container'>
+		<div>
+			<% if(game.data){ %>
+				<a href="./Game?id=<%- game.id %>" class="game-link play-link"></a>
+			<% } %>
+			<span class="bold name"><%- game.data && game.data.name ? game.data.name : 'No Name' %></span>
+		</div>
+		<div>
+			<% if(user){ %>
+				<a href="./GameEditor?id=<%- game.id %>" class="game-link edit-link"></a>
+			<% } %>
+			<span class="updated">Last Updated: <%- new Date(game.datemodified).toLocaleDateString() %></span>
+		</div>
+	</div>
+<% }) %>

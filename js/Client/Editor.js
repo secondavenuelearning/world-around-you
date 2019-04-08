@@ -105,7 +105,7 @@ $(document).ready(function () {
 
 		$.ajax({
 			method: 'get',
-			url: `./api/story?id=${storyId}`
+			url: `/api/story?id=${storyId}`
 		}).done((_story) => {
 			story = _story;
 
@@ -155,7 +155,7 @@ function renderLanguagePage(){
 	promises.push(new Promise((resolve, reject) => {
 		$.ajax({
 			method: 'get',
-			url: `./api/writtenlanguages`
+			url: `/api/writtenlanguages`
 		}).done((_writtenLanguages) => {
 			writtenLanguages = _writtenLanguages;
 			resolve();
@@ -168,7 +168,7 @@ function renderLanguagePage(){
 	promises.push(new Promise((resolve, reject) => {
 		$.ajax({
 			method: 'get',
-			url: `./api/signlanguages`
+			url: `/api/signlanguages`
 		}).done((_signLanguages) => {
 			signLanguages = _signLanguages;
 			resolve();
@@ -230,7 +230,7 @@ function renderLanguagePage(){
 						return;
 					}
 
-					let url = `./api/${type}language`;
+					let url = `/api/${type}language`;
 					$.ajax({
 						url,
 						type: 'post',
@@ -259,7 +259,7 @@ function renderLanguagePage(){
 
 				$.ajax({
 					method: 'post',
-					url: 'api/story/languages',
+					url: '/api/story/languages',
 					data,
 				}).done((_story) => {
 					if(_story){
@@ -341,7 +341,7 @@ function renderCoverPage(){
 
 				$.ajax({
 					method: 'post',
-					url: 'api/story/cover',
+					url: '/api/story/cover',
 					data
 				}).done((_story) => {
 					if(_story){
@@ -374,7 +374,7 @@ function renderMetadataPage(){
 	promises.push(new Promise((resolve, reject) => {
 		$.ajax({
 			method: 'get',
-			url: `./api/genres`
+			url: `/api/genres`
 		}).done((_genres) => {
 			genres = _genres;
 			resolve();
@@ -387,7 +387,7 @@ function renderMetadataPage(){
 	promises.push(new Promise((resolve, reject) => {
 		$.ajax({
 			method: 'get',
-			url: `./api/tags`
+			url: `/api/tags`
 		}).done((_tags) => {
 			tags = _tags;
 			resolve();

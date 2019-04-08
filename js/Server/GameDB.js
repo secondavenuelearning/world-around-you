@@ -12,53 +12,99 @@ const pool = mdb.createPool({
 function GameDB() {
 }
 
-GameDB.prototype.addGame = function(name) {
-    return new Promise(function(resolve,reject) {
-
+GameDB.prototype.add = function(name) {
+    return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
+			var query = 'INSERT INTO game (name) VALUES (?)';
 
-		    conn.query("INSERT INTO game (name) VALUES ('"+name+"')").then((res) => {
-			conn.end();
-			resolve({id:res.insertId});
-			return;
+		    conn.query(query, [name.toLowerCase()]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result.insertId);
+				});
 		    }).catch(err => {
-			//handle error
-			conn.end();
-			reject(err);
-			return;
-		    })
-
+				conn.end().then(() => {
+					return reject(err);
+				});
+		    });
 		}).catch(err => {
-		    reject(err);
-		    return;
+		    return reject(err);
 		});
 
     });
 }
-
-GameDB.prototype.getGame = function(name) {
-
-	return new Promise(function(resolve,reject) {
-
+GameDB.prototype.get = function(name) {
+	return new Promise((resolve, reject) => {
 		pool.getConnection().then(conn => {
+			var query = 'SELECT * FROM game WHERE name=?';
 
-			conn.query('SELECT * FROM game WHERE (name="'+name+'")').then((res) => {
-				conn.end();
-				resolve(JSON.stringify(res));
-				return;
+			conn.query(query, [name.toLowerCase()]).then((result) => {
+				conn.end().then(() => {
+					return resolve(result[0]);
+				});
 			}).catch(err => {
-				console.log(err);
-				//handle error
-				conn.end();
-				reject(err);
-				return;
+				conn.end().then(() => {
+					return reject(err);
+				});
 			});
 
 		}).catch(err => {
-			reject(err);
-			return;
+			return reject(err);
 		});
 	});
+}
+GameDB.prototype.getAll = function(){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = 'SELECT * from game';
+
+			conn.query(query).then(result => {
+				var games = {};
+				for(var i = 0; i < result.length; i++){
+					games[result[i].id] = result[i];
+				}
+				conn.end().then(() => {
+					resolve(games);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch(err => {
+			conn.end().then(() => {
+				return reject(err);
+			});
+		});
+	});
+}
+GameDB.prototype.getGameData = function(id){
+	return new Promise((resolve, reject) => {
+		pool.getConnection().then(conn => {
+			var query = `SELECT gamedata.*, game.name, game.path, writtenlanguage.name as writtenLanguage, signlanguage.name as signLanguage 
+							FROM gamedata 
+							JOIN game ON game.id = gamedata.gameId 
+						    JOIN writtenlanguage ON writtenlanguage.id = gamedata.writtenlanguageId 
+						    JOIN signlanguage ON signlanguage.id = gamedata.signlanguageId 
+						    WHERE gamedata.id = ?`;
+
+			conn.query(query, [id]).then(result => {
+				conn.end().then(() => {
+					resolve(result[0]);
+				});
+			}).catch(err => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch(err => {
+			conn.end().then(() => {
+				return reject(err);
+			});
+		});
+	});
+
 }
 
 let _GameDB = new GameDB();

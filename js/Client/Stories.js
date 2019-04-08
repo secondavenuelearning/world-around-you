@@ -52,5 +52,4 @@ $(document).ready(function () {
     }).fail((err) => {
         alert('[PH] Something went wrong with the serve, please try again later');
     });
-
 });
