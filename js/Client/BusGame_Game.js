@@ -58,7 +58,8 @@ var images = {
         FacingLeft: []
     },
     
-    Waving: []
+    Waving: [],
+    Star: [] //single array
 };
 
 //game state machine
@@ -124,6 +125,8 @@ export function BusGame(storyObj, sign, written, terms) {
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation1/Frames/"));
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
+    
+    images.Star = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
    blank = new Image();
@@ -330,6 +333,10 @@ function SetupWindowConnections() {
 
                         score++;
                         document.getElementById("current").innerHTML = score;
+                        
+                        //add star
+                        Animate(firstSelected.children[2], images.Star, null, true);
+                        Animate(secondSelected.children[2], images.Star, null, true);
 
                         //check win state
                         if (score === totalMatches) {
@@ -696,7 +703,7 @@ function Animate(id, frames, frame, noLoop) {
 
 /* Nimate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
 function AnimateMoving(id, frames, frame) {
-    if ((activeAnimations.length > 0) || frame != 0)
+    if ((activeAnimations.length > 0) || (frame != 0))
     {
         window.requestAnimationFrame(function (timestamp) {
             AnimateMoving(id, frames, frame);

@@ -361,6 +361,18 @@ header #score span {
     transform: rotate(180deg);
 }
 
+.window .star
+{
+    position: relative;
+    top: -100%;
+    z-index: 6;
+    width: 100%;
+    
+    background-color: #002f3a;
+    border: 1px;
+    border-radius: 15px;
+}
+
 .window span,
 .window video,
 .window div {
@@ -370,15 +382,10 @@ header #score span {
 
     border: 1px;
     border-radius: 15px;
-    border-color: red;
     margin: 0px;
     padding: 0px;
     
     overflow: hidden;
-    
-    
-    
-    background-color: #0098ba;
      background-color: #002f3a;
 }
 
@@ -390,7 +397,6 @@ header #score span {
     padding-right: 10px;
     text-align: center;
    padding-top: 20%;
-    display: block;
     font-family: "Arial Rounded MT Bold";
 }
 
