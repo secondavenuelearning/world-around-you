@@ -318,7 +318,7 @@ function SetupWindowConnections() {
                 secondSelected = e.target.parentElement;
 
                 //check if the 2 selected match
-                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3)) {
+                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected) {
                     //show 2nd selected
                     secondSelected.classList.remove("hidden");
 
