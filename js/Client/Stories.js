@@ -14,13 +14,11 @@ $(document).ready(function () {
         method: 'get',
         url: './api/stories'
     }).done((stories) => {
-        console.log(stories);
-
-        // // sort stories by data created
-        // stories.sort((a, b) => {
-        //     return a.datecreated < b.datecreated ? 1 : a.datecreated > b.datecreated ? -1 : 0;
-        // });
-
+        // sort stories by data created
+        stories.sort((a, b) => {
+            return a.datecreated > b.datecreated ? 1 : a.datecreated < b.datecreated ? -1 : 0;
+            coverImage: 'img/carousel/from_this_author/1.png'
+        });
         var newestStories = [];
         for (let i = 0; i < 9 && i < stories.length; i++) {
             let sp = new StoryPreview(stories[i]);
@@ -28,29 +26,26 @@ $(document).ready(function () {
             
         }
         new Carousel("#new-stories", newestStories, 1, false,  true, "New Stories");
-
-
-        FiltersBar('filter-bar');
-
-
+        /*
         // sort stories by title
         stories.sort((a, b) => {
             let clt = LanguageSelector.currentLanguageText();
             return a.metadata.title[clt] > b.metadata.title[clt] ? 1 : a.metadata.title[clt] < b.metadata.title[clt] ? -1 : 0;
-                coverimage: 'img/carousel/from_this_author/1.png'
+            coverImage: 'img/carousel/from_this_author/1.png'
         });
+        */
         var storyPreviews = [];
-
-        for (var i = 0; i < stories.length; i++) {
-            let sp = new StoryPreview(stories[i]);
-            storyPreviews.push(sp);
+        if(stories.length > 0){
+            for (var i = 0; i < stories.length; i++) {
+                let sp = new StoryPreview(stories[i]);
+                storyPreviews.push(sp);
+            }
+            var storyGrid = new StoryGrid("stories", storyPreviews);
+            FiltersBar('filter-bar', storyGrid, storyPreviews);
         }
-        StoryGrid("stories", storyPreviews);
-        
-
         LanguageSelector.updateLanguageDisplay();
     }).fail((err) => {
-        alert('[PH] Something went wrong with the serve, please try again later');
+        alert('[PH] Something went wrong with the server, please try again later');
     });
 
 });

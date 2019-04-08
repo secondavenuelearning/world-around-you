@@ -4,7 +4,7 @@
 		<% _.each(options, function(option){ %>
 			<div>
 				<% if(multiSelect){  %>
-					<input type="check" value="<%- option %>"><label><%- option %></label>
+					<input type="checkbox" value="<%- option %>"><label><%- option %></label>
 				<% } else { %>
 					<button value="<%- option %>"><%- option %></button>
 				<% } %>

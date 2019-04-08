@@ -19,12 +19,13 @@ $(document).ready(function () {
         FiltersBar('filter-bar');
         
         var storyPreviews = [];
-        for (var i = 0; i < stories.length; i++) {
-            storyPreviews.push(new StoryPreview(stories[i], true));
+        if(stories.length > 0){
+            for (var i = 0; i < stories.length; i++) {
+                storyPreviews.push(new StoryPreview(stories[i], true));
+            }
+            // Needs an id for an already made element to populate, and a list of story previews
+            StoryGrid("stories", storyPreviews);
         }
-
-        // Needs an id for an already made element to populate, and a list of story previews
-        StoryGrid("stories", storyPreviews);
 
         LanguageSelector.updateLanguageDisplay();
     }).fail((err) => {
