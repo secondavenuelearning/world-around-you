@@ -16,7 +16,7 @@ $(document).ready(function () {
         url: './api/stories?unpublished=true'
     }).done((stories) => {
         //console.log(stories);
-        FiltersBar('filter-bar');
+        //FiltersBar('filter-bar');
         
         var storyPreviews = [];
         if(stories.length > 0){
@@ -24,7 +24,8 @@ $(document).ready(function () {
                 storyPreviews.push(new StoryPreview(stories[i], true));
             }
             // Needs an id for an already made element to populate, and a list of story previews
-            StoryGrid("stories", storyPreviews);
+            var storyGrid = new StoryGrid("stories", storyPreviews);
+            FiltersBar('filter-bar', storyGrid, storyPreviews);
         }
 
         LanguageSelector.updateLanguageDisplay();
