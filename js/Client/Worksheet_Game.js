@@ -28,7 +28,7 @@ var gameState = state.Playing;
 
 
 /* ----------------------- Constructor ----------------------- */
-export function Start(storyObj, sign, written, terms) {
+export function Start(storyObj, sign, written, gameData) {
     //resets all data
     storyData = null;
     score = 0;
@@ -42,10 +42,24 @@ export function Start(storyObj, sign, written, terms) {
     storyData = storyObj;
     signLang = sign;
     writtenLang = written;
-    termList = terms;
+    //termList = terms;
 
     //figure out hwre each term is in the story data
-    termMap = MapTermsToPages(terms.slice(0));
+    //termMap = MapTermsToPages(terms.slice(0));
+    
+    //build template
+    templateData =
+    {
+        Media: ["", "", ""],
+        Star: [new Image()],
+        Text: ["", ""]
+    };
+    
+    var main = template(templateData);
+    this.$main = $(main);
+    $('main').html(this.$main);
+    
+    
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -68,31 +82,6 @@ function GetImagesFromFolder(folder) {
 
     return files;
 }
-
-
-function createCountList(terms) {
-    var values = terms.length;
-    var order = [];
-    if ((values % 3) == 2) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
-            order.push(3);
-        }
-        order.push(2);
-    } else if ((values % 3) == 1) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
-            order.push(3);
-        }
-        order[order.length - 1] = 2;
-        order.push(2);
-    } else if ((values % 3) == 0) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
-            order.push(3);
-        }
-    }
-
-    return order;
-}
-
 
 function MapTermsToPages(terms) {
     var mapped = {};
@@ -127,29 +116,7 @@ function MapTermsToPages(terms) {
 /* ----------------------- Building Objects ----------------------- */
 
 /* ----------------------- Game Loop ----------------------- */
-function FitText() {
-    var windows = $(".window");
-    windows.toArray().forEach(function (element) {
-        let currentSize = 30;
-        if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
-            while (element.children[1].offsetWidth < element.children[1].scrollWidth) {
-                if (element.children[1].style.getPropertyValue('font-size') == "") {
-                    element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
-                }
-                // console.log("Start: " + element.children[1].style.setProperty('font-size', '20px'));
-                // console.log("Start: " + element.children[1].style.getPropertyValue('font-size'));
 
-
-
-                currentSize = currentSize - 5;
-                element.children[1].style.setProperty('font-size', currentSize + "px");
-
-            }
-
-        }
-    });
-
-}
 
 /* ----------------------- Animation ----------------------- */
 function Animate(id, frames, frame, noLoop) {
@@ -195,4 +162,24 @@ function LoopVideoClip(videoID, start, end) {
             }
         }
     }, false);
+}
+
+function FitText() {
+    var windows = $(".window");
+    windows.toArray().forEach(function (element) {
+        let currentSize = 30;
+        if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
+            while (element.children[1].offsetWidth < element.children[1].scrollWidth) {
+                if (element.children[1].style.getPropertyValue('font-size') == "") {
+                    element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
+                }
+                
+                currentSize = currentSize - 5;
+                element.children[1].style.setProperty('font-size', currentSize + "px");
+
+            }
+
+        }
+    });
+
 }
