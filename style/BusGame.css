@@ -1,0 +1,429 @@
+/* Hiding old header */
+header #language-selector,
+header #logo-wrapper,
+header nav {
+    display: none;
+}
+
+header {
+    border: none;
+
+    width: 100%;
+    height: 75px;
+    background-color: transparent;
+
+
+}
+
+.title span {
+    width: 100%;
+    height: 260px;
+    padding-top: 100px;
+    text-align: center;
+    display: block;
+    font-size: 120px;
+    
+    color: #0098ba;
+    font-family: "Arial Rounded MT Bold";
+    font-weight: bolder;
+}
+
+@media only screen and (max-width: 600px) {
+    .title span {
+        font-size: 80px;
+    }
+
+
+}
+
+footer {
+    display: none;
+}
+
+/* new header */
+header button {
+    height: 100px;
+    width: 100px;
+
+    float: right;
+    
+    background-color: transparent;
+    border: none;
+    
+    background-image: url(../img/games/BusGame/Menu/backarrowframe.png);
+    background-size: 100% 100%;
+    
+    font-family: "Arial Rounded MT Bold";
+
+}
+
+header button img {
+    height: auto;
+    width: 70%;
+}
+
+header #backBtn img {
+    position: relative;
+    top: -7px;
+    left: 5px;
+}
+
+main {
+    height: calc(100% + 75px);
+    top: -75px;
+    width: 100%;
+    background-image: url(../img/games/BusGame/menubackground_BusGame-05.png);
+    background-size: 100% 100%;
+    background-repeat: repeat-x;
+}
+
+.Btn {
+    margin-top: 10%;
+    display: inline-block;
+
+}
+
+.centered {
+    text-align: center;
+
+}
+
+.imageContainer img {
+    height: 100%;
+    width: 100%;
+    
+    transition: top 1s;
+}
+
+.imageContainer {
+    display: inline-block;
+    text-align: center;
+    height: 130px;
+    width: 130px;
+    margin-right: 40px;
+    
+    cursor: pointer;
+}
+
+.imageContainer:hover img
+{
+    position: relative;
+    top: -5px;
+}
+#backBtn:hover {
+     position: relative;
+    top: -5px; 
+}
+
+#pageContent {
+    display: block;
+    height: 40%;
+    width: 70%;
+    background-color: #d0edfb;
+    border: solid 7px;
+    margin: 0 auto;
+    border-color: #005291;
+    border-radius: 10px;
+    max-width: 900px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 70px;
+    padding-top: 25px;
+    padding-left: 15px;
+    
+    font-family: "Arial Rounded MT Bold";
+
+
+
+}
+
+#pageContentScore {
+    display: block;
+    height: 40%;
+    width: 464px;
+    background-color: #d0edfb;
+    border: solid 7px;
+    margin: 0 auto;
+    border-color: #005291;
+    border-radius: 10px;
+    max-width: 800px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 70px;
+    padding-top: 25px;
+    padding-left: 15px;
+    text-align: center;
+
+    font-family: "Arial Rounded MT Bold";
+
+}
+
+@media only screen and (max-width: 900px) {
+    #pageContent {
+        font-size: 65px;
+    }
+
+
+}
+
+#bus {
+
+    height: auto;
+    width: 100%;
+    
+    position: relative;
+    left: -5%;
+
+}
+
+#checkMark {
+    position: absolute;
+    width: 30%;
+    margin-left: 42%;
+    top: -10%;
+    height: 7%;
+}
+
+#checkMarkImage {
+    height 50%;
+    width: 50%;
+
+}
+
+#busStop {
+    width: 70%;
+    margin-left: 15%;
+    margin-top: 10px;
+    
+    position: absolute;
+    bottom: 15%;
+}
+
+.buttons
+{
+    position: absolute;
+    bottom: 30px;
+    right: calc(50% - 172px);
+}
+
+/* Main Menu */
+
+
+/* Core Game: header*/
+header #score {
+    float: left;
+
+    font-size: 50px;
+    text-align: center;
+    color: white;
+    
+    background-image: url(../img/games/BusGame/Menu/scoreframe.png);
+    
+}
+
+header #score span {
+    
+    position: relative;
+    left: -8px;
+    top: -8px;
+}
+
+/* Core Game: lanes*/
+.lane {
+    width: 100%;
+
+    position: absolute;
+    bottom: 0px;
+
+    display: block;
+
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+.lane .inner {
+    height: 300px;
+    display: inline-block;
+    position: relative;
+}
+
+#top {
+    bottom: 26%;
+
+}
+
+/* Core Game: vehicles*/
+.vehicle {
+    display: inline-block;
+
+    position: relative;
+    bottom: 0;
+    left: 0;
+
+    margin-left: 5px;
+    margin-right: 5px;
+
+
+}
+
+.vehicle .vImg{
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+
+.car {
+
+    width: 34vw;
+    height: auto;
+}
+
+.car .vImg {
+    position: relative;
+    left: -15%;
+
+    width: 140%;
+
+}
+
+#bottom .car .vImg {
+    position: relative;
+    left: -28%;
+}
+
+.bus {
+    width: 60vw;
+    height: auto;
+}
+
+.bus .vImg {
+    height: 100%;
+    width: 118%;
+}
+
+#bottom .bus .vImg {
+    position: relative;
+    left: -16%;
+}
+
+.bus .windows {
+    display: inline-block;
+    height: 35%;
+    width: 69.5%;
+
+    position: absolute;
+    z-index: 10;
+}
+
+#top .windows {
+    position: absolute;
+    top: 25%;
+    left: 29.5%;
+}
+
+#bottom .windows {
+    position: absolute;
+    top: 25%;
+    left: 6.1%;
+}
+
+#green.bus .windows
+{
+    top: 21.8%;
+}
+
+.bus .windows .window {
+    display: inline-block;
+
+    width: calc((100% / 3) - 5%);
+    height: calc(100% - 2px);
+    margin-right: 2.5%;
+
+    border: 1px;
+    border-radius: 15px;
+
+    
+
+    transition: opacity .7s;
+
+    float: left;
+}
+
+.bus .windows .window.first {
+    width: calc((100% / 3) - 5%);
+    height: calc(100% - 2px);
+    margin-right: 4.2%;
+}
+
+.bus .windows .window.last {
+    width: calc((100% / 3) - 5%);
+    height: calc(100% - 2px);
+    margin-left: 1.8%;
+}
+
+.window .glass
+{
+    position:absolute;
+    width: calc((100% / 3) - 4.1%);
+    height: calc(100%);
+    margin-right: 2.8%;
+    z-index: 5;
+    transform: rotate(180deg);
+}
+
+.window .star
+{
+    position: relative;
+    top: -100%;
+    z-index: 6;
+    width: 100%;
+    
+    background-color: #002f3a;
+    border: 1px;
+    border-radius: 15px;
+}
+
+.window .star.hidden
+{
+    display: none;
+}
+
+.window span,
+.window video,
+.window div {
+    display: inline-block;
+    height: calc(100%);
+    width: calc(100%);
+
+    border: 1px;
+    border-radius: 15px;
+    margin: 0px;
+    padding: 0px;
+    
+    overflow: hidden;
+     background-color: #002f3a;
+}
+
+.window span {
+    color: white;
+    font-size: 40px;
+    height: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+   padding-top: 20%;
+    font-family: "Arial Rounded MT Bold";
+}
+
+.window #none img
+{
+    height: 100%;
+    width: auto;
+}
+
+@font-face {
+font-family: 'Arial Rounded MT Bold';
+font-style: normal;
+font-weight: normal;
+src: local('Arial Rounded MT Bold'), url('../../fonts/ARLRDBD_0.woff') format('woff');
+}
