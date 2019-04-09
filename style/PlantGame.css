@@ -18,3 +18,17 @@
     height: calc(20% - 100px);
     background-color: red;
 }
+
+#drag
+{
+    position: absolute;
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    opacity: .7;
+}
+
+.hidden
+{
+    display: none;
+}

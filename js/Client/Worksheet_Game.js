@@ -57,6 +57,14 @@ export function Start(storyObj, sign, written, gameData) {
         termList.push(item.Term);
     });
     
+    //make drag blurb follow mouse
+    $(document).on('mousemove', function(e){
+        $('#drag').css({
+           left:  e.pageX,
+           top:   e.pageY - 75
+        });
+    });
+    
     NextRound();
 }
 
