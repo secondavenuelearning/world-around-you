@@ -1,17 +1,34 @@
 <div id="videos">
     <div id="videoContainer">
 
-        <video id="videoOne"></video>
-        <video id="videoTwo"></video>
-        <video id="videoThree"></video>
+        <div id="videoOne" class="media">
+            <video src="<%= Media[0] %>"></video>
+            <img src="<%= Star[0].src %>" >
+        </div>
+        <div id="videoTwo" class="media">
+            <video src="<%= Media[1] %>"></video>
+            <img src="<%= Star[0].src %>" >
+        </div>
+        <div id="videoThree" class="media">
+            <video src="<%= Media[2] %>"></video>
+            <img src="<%= Star[0].src %>" >
+        </div>
 
     </div>
 </div>
 <button id = "hint"></button>
 <div id="sentence">
-    
+    <span id = "begining"><%- Text[0] %></span>
+    <span id = "blank"></span>
+    <span id= "end"><%- Text[1] %></span>
 </div>
 
 <div id="flowerBed">
-    
+    <img id ="wall">
+    <div id = "flowers">
+    </div>
+</div>
+        
+<div id ="Drag">
+    <span></span>
 </div>

@@ -189,15 +189,15 @@ var sess=null;
     });
 
     //remove later- will be using stans /games entry point
-    app.get('/Games/Bus', (req, res) => {
+    app.get('/Bus', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'BusGame'
 		}));
 	});
 
-    app.get('/Games/WorkBook', (req, res) => {
+    app.get('/Worksheet', (req, res) => {
             res.send(PageTemplate({
-                Page: 'Workbook'
+                Page: 'Worksheet'
             }));
         });
 
