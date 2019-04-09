@@ -178,7 +178,6 @@ function RenderPage(){
 }
 
 
-
 function GenerateGlossaryButtons(page){
 	if(!page) return;
 
@@ -190,7 +189,7 @@ function GenerateGlossaryButtons(page){
 	_.each(glossaryTerms, (term, name) => {
 		let regEx = new RegExp(name, 'i');
 		text = text.replace(regEx, (match) => {
-			return `<span class="glossary" glossary-term="${name}">${match}</span>`;
+			return `<span class="glossary-term">${match}</span>`;
 		});
 	});
 
@@ -230,152 +229,6 @@ function GenerateGlossaryButtons(page){
 			}
 		}
 	});
-}
-
-function GenerateLanguageSelects()
-{
-	//get sign and written options from the json
-	writtenOptions = Object.keys(story[0].text);
-	signOptions = Object.keys(story[0].video);
-	
-	//build menus
-	BuildSelectOptions($('#writtenLang select'), writtenOptions);
-	BuildSelectOptions($('#signLang select'), signOptions);
-	
-	//add click events
-	$('#writtenLang button').on('click', function()
-	{   
-		//toggle dropdown visibility
-		ToggleOptions('#writtenLang');
-	});
-	$('#writtenLang select').on('change', function(e)
-	{
-		writtenLang = e.target.value;  
-		parsePage(pageIndex);
-		ToggleOptions('#writtenLang');
-	});
-	
-	$('#signLang button').on('click', function()
-	{
-		ToggleOptions('#signLang');
-	});
-	$('#signLang select').on('change', function(e)
-	{
-		signLang = e.target.value;
-		parsePage(pageIndex);
-		ToggleOptions('#signLang');
-	});
-	
-}
-/* ----------------------- Button Functionality ----------------------- */
-
-
-function LastScreen(pageNum)
-{
-	if(ShowingCover())
-	{
-		//change page index
-		pageIndex = pageNum;
-		
-		//change to show video
-		$('#visuals img').css("display", "none");
-		$('#visuals video').css("display", "block");
-		
-		//set text and visuals back to default
-		textArea.removeClass('hideAnim');
-		visuals.removeAttr('style');
-		$('#storyToggle').removeAttr('style');
-		
-		//update icons
-		$('.viewerNav #sign.icon').css('display', 'none');
-		$('.viewerNav #cover.icon').removeAttr('style');
-		$('#storyToggle #hide').css('display', 'none');
-		$('#storyToggle #show').removeAttr('style');
-	}
-	//we saw the video we need to parse the next page
-	else
-	{
-		//change to show img
-		$('#visuals img').css("display", "block");
-		$('#visuals video').css("display", "none");
-		
-		//turn off text area
-		textArea.addClass('hideAnim');;
-		$('#storyToggle').css('display', 'none');
-		
-		//expand video to be full size
-		visuals.css('height', '100%');
-		visuals.css('max-height', '100%');
-		visuals.css('width', '100%');
-		visuals.css('margin', '0px');
-		
-		//update icons
-		$('.viewerNav #sign.icon').removeAttr('style');
-		$('.viewerNav #cover.icon').css('display', 'none');
-		$('#storyToggle #show').css('display', 'none');
-		$('#storyToggle #hide').removeAttr('style');
-	}
-}
-
-function NextScreen(pageNum)
-{
-	 //check if we are on the video or img, and switch between those before changing pages
-	if(ShowingCover())
-	{
-		//change to show video
-		$('#visuals img').css("display", "none");
-		$('#visuals video').css("display", "block");
-		
-		//set text and visuals back to default
-		textArea.removeClass('hideAnim');;
-		visuals.removeAttr('style');
-		$('#storyToggle').removeAttr('style');
-		
-		//update icons
-		$('.viewerNav #sign.icon').css('display', 'none');
-		$('.viewerNav #cover.icon').removeAttr('style');
-		$('#storyToggle #hide').css('display', 'none');
-		$('#storyToggle #show').removeAttr('style');
-	}
-	//we saw the video we need to parse the next page
-	else
-	{
-		//change page index
-		pageIndex = pageNum;
-		
-		//change to show img
-		$('#visuals img').css("display", "block");
-		$('#visuals video').css("display", "none");
-		
-		//turn off text area
-		textArea.addClass('hideAnim');
-		$('#storyToggle').css('display', 'none');
-		
-		//expand video to be full size
-		visuals.css('height', '100%');
-		visuals.css('max-height', '100%');
-		visuals.css('width', '100%');
-		visuals.css('margin', '0px');
-		
-		//update icons
-		$('.viewerNav #sign.icon').removeAttr('style');
-		$('.viewerNav #cover.icon').css('display', 'none');
-		$('#storyToggle #show').css('display', 'none');
-		$('#storyToggle #hide').removeAttr('style');
-	}
-}
-
-/* ---------------------- Helper Functions ---------------------- */
-function ShowingCover()
-{
-	var isShowing = true;
-	
-	if($('#visuals img').css('display') == "none")
-	{
-		isShowing = false;
-	}
-	
-	return isShowing;
 }
 
 export default {

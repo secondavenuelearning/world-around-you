@@ -142,8 +142,8 @@ function RenderGameList(){
 			return a[currentSort] < b[currentSort] ? 1 : a[currentSort] > b[currentSort] ? -1 : 0;
 		}
 		else{
-			if(!a.data) return -1;
-			if(!b.data) return 1;
+			if(!a.data) return 1;
+			if(!b.data) return -1;
 
 			return a.data.name < b.data.name ? 1 : a.data.name > b.data.name ? -1 : 0;
 		}

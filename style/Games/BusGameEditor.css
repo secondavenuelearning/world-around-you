@@ -2,19 +2,20 @@
 	padding: 25px;
 	color: #075379;
 }
-#game-header{
+.title{
 	font-size: 1.5em;
 }
 #languages{
 	font-size: 1.25em;
 	margin-bottom: 25px;
 }
-.build-game{
-	font-size: 1.5em;
+#game-header .title{
 	margin-right: 25px;
 }
 .language{
-	margin: 5px 0px;
+	margin: 5px;
+	margin-left: 0px;
+
 	padding-left: 35px;
 
 	background-size:  30px 30px;
@@ -22,10 +23,10 @@
 	background-position: left center;
 }
 .written-language{
-	background-image: url(../img/icons/General/icon_WrittenLang_DkBlue.svg)
+	background-image: url(/img/icons/General/icon_WrittenLang_DkBlue.svg)
 }
 .sign-language{
-	background-image: url(../img/icons/General/icon_SignLang_DkBlue.svg)
+	background-image: url(/img/icons/General/icon_SignLang_DkBlue.svg)
 }
 .title{
 	font-size: 1.5em;

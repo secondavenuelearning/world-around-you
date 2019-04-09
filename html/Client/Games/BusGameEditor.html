@@ -1,13 +1,13 @@
 <div id="bus-game-editor" class="editor-content-wrapper">
 	<div id="game-header">
-		<span class="bold build-game">Build Game</span><span><%- game.name + ' : ' + game.story.metadata.title[game.writtenLanguage] %></span>
+		<span class="bold title">Build Game</span><span class="title"><%- game.name + ' : ' + game.story.metadata.title[game.writtenLanguage] %></span>
 	</div>
 	<div id="languages">
-		<div class="language written-language"><%- game.writtenLanguage %></div>
-		<div class="language sign-language"><%- game.signLanguage %></div>
+		<span class="language written-language"><%- game.writtenLanguage %></span>
+		<span class="language sign-language"><%- game.signLanguage %></span>
 	</div>
 	<div id="name">
-		<div class="bold title">Name</div>
+		<div class="bold title">Game Name</div>
 		<div><input id="name-input" type="text" value="<%- name %>"/></div>
 	</div>
 	<div id="terms">

@@ -1,0 +1,145 @@
+#sentence-game-editor{
+	padding: 25px;
+	color: #075379;
+}
+#sentence-game-editor > div{
+	clear: both;
+	height: 50px;
+}
+#sentence-game-editor #terms{
+	height: calc(100% - 150px);
+}
+#terms > div {
+	margin: 0px;
+	height: 100%;
+}
+#terms > .quarter{
+    margin: 15px 0px;
+    height: calc(100% - 30px);
+	margin-left: 10px;
+	width: calc(100% / 4);
+}
+#terms > .three-quarters{
+	margin-right: 10px;
+}
+.title{
+	font-size: 1.5em;
+}
+#languages{
+	font-size: 1.25em;
+}
+.language{
+	margin: 5px;
+	margin-left: 0px;
+
+	padding-left: 35px;
+
+	background-size:  30px 30px;
+	background-repeat: no-repeat;
+	background-position: left center;
+}
+.written-language{
+	background-image: url(/img/icons/General/icon_WrittenLang_DkBlue.svg);
+}
+.sign-language{
+	background-image: url(/img/icons/General/icon_SignLang_DkBlue.svg);
+}
+
+#edit-term{
+    border: 10px solid #9EE9F6;
+    height: 100%;
+    border-radius: 15px;
+    padding: 25px;
+}
+#term-selection{
+	height: 100%;
+	overflow: auto;
+	direction: rtl;
+}
+.term-button-container{
+	position: relative;
+}
+.term-button-container .term-button{
+	border: none;
+	border-radius: 15px 0px 0px 15px;
+	text-align: center;
+}
+.term-button-container .term-button.active{
+	background-color: #9EE9F6;
+	font-weight: bold;
+	color: #075379;
+}
+.term-button-container .term-delete-button{
+	position: absolute;
+    height: 30px;
+    width: 30px;
+    top: 10px;
+    left: 10px;
+    padding: 0px;
+    margin: 0px;
+    background-position: center center;
+    background-size: 20px 20px;
+}
+#term-display{
+	text-align: center;
+}
+#term-select-container{
+	height: 50px;
+}
+#sentence-container{
+	height: calc(50% - 50px);
+	padding: 10px;
+    border: 2px solid #0098ba;
+    border-radius: 5px;
+    overflow: auto;
+    font-size: 1.2em;
+}
+#sentence-container > div{
+	height: 100%;
+}
+.part-container{
+	float: left;
+	width: 40%;
+}
+.part-input{
+	text-decoration: underline;
+}
+#term-container{
+	height: calc(50% - 10px);
+	margin-top: 10px;
+    border: 2px solid #0097ba;
+    border-radius: 5px;
+}
+#term-container > div{
+	float: left;
+	position: relative;
+	height: 100%;
+	width: 50%;
+
+	overflow: auto;
+}
+#term-container #story-sentence{
+	padding: 10px;
+}
+#term-container #term-video {
+    background-color: #0097ba;
+    overflow: hidden;
+}
+#term-container video{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	max-width: calc(100% - 5px);
+	max-height: calc(100% - 5px);
+
+	transform: translate(-50%, -50%);
+}
+.glossary-term{
+	text-decoration: underline;
+	font-weight: bold;
+	color: #0097BA;
+}
+.placeholder{
+	opacity: 0.5;
+}

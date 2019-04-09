@@ -1,5 +1,5 @@
 import 'style/Editor.css!';
-import 'style/BusGameEditor.css!';
+import 'style/Games/BusGameEditor.css!';
 
 import _ from 'underscore';
 import urlParams from 'js/Client/UrlParams';
@@ -40,7 +40,7 @@ $(document).ready(() => {
 			});
 		});
 
-		name = game.data.name || '';
+		name = game.data ? game.data.name : 'No Name';
 		selectedList = game.data.terms || [];
 
 		Render();
