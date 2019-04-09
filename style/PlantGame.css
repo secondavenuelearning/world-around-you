@@ -75,14 +75,36 @@ header #backBtn img {
     width: 100%;
     height: calc(35%);
     background-color: green;
+    vertical-align: middle;
+   
 }
 #videos video{
+  width: 32%;
+    height: auto;
+}
+#videos img{
+    display: none;
+}
+#videoContainer{
+   
+     width: 90%;
+    height: 100%;
+padding-left: 10%;
+}
+#videoOne{
+      display: inline;
     width: 30%;
     height: auto;
 }
-#videoContainer{
-     width: 80%;
-    height: 100%;
+#videoTwo{
+      display: inline;
+    width: 30%;
+    height: auto;
+}
+#videoThree{
+      display: inline;
+    width: 30%;
+    height: auto;
 }
 #hintBtnContainer{
     
