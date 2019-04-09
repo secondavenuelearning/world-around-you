@@ -1,0 +1,8 @@
+#videos{
+    width: 100%;
+    height: calc(30% - 100px);
+}
+#hintBtnContainer{
+    width: 100%;
+    height: calc(10% - 100px);
+}
