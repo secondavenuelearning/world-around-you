@@ -141,7 +141,7 @@ var sess=null;
 	});
 	app.get('/Games', (req, res) => {
 		res.send(PageTemplate({
-			Page: 'BusGame'
+			Page: 'Games'
 		}));
 	});
 	app.get('/Login', (req, res) => {
@@ -187,6 +187,19 @@ var sess=null;
 
         res.send(folders);
     });
+
+    //remove later- will be using stans /games entry point
+    app.get('/Games/Bus', (req, res) => {
+		res.send(PageTemplate({
+			Page: 'BusGame'
+		}));
+	});
+
+    app.get('/Games/WorkBook', (req, res) => {
+            res.send(PageTemplate({
+                Page: 'Workbook'
+            }));
+        });
 
 // ******************************************************
 // Get Requests
