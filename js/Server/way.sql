@@ -3,10 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 05, 2019 at 06:36 PM
+-- Generation Time: Apr 09, 2019 at 07:12 PM
 -- Server version: 5.6.17
 -- PHP Version: 7.1.9
 
+SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -40,7 +41,7 @@ CREATE TABLE `description` (
 CREATE TABLE `game` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(256) DEFAULT NULL,
-  `filename` varchar(265) DEFAULT NULL,
+  `path` varchar(265) DEFAULT NULL,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -57,7 +58,7 @@ CREATE TABLE `gamedata` (
   `storyId` int(11) UNSIGNED NOT NULL DEFAULT '0',
   `writtenlanguageId` int(11) UNSIGNED NOT NULL,
   `signlanguageId` int(11) UNSIGNED NOT NULL,
-  `data` blob,
+  `data` text,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -113,7 +114,7 @@ CREATE TABLE `story` (
   `author` varchar(256) DEFAULT NULL,
   `coverimage` varchar(512) DEFAULT NULL,
   `visible` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
-  `data` blob,
+  `data` text,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -293,7 +294,7 @@ ALTER TABLE `description`
 ALTER TABLE `game`
   ADD PRIMARY KEY (`id`),
   ADD KEY `name` (`name`),
-  ADD KEY `filename` (`filename`);
+  ADD KEY `filename` (`path`);
 
 --
 -- Indexes for table `gamedata`
@@ -551,10 +552,10 @@ ALTER TABLE `description`
 -- Constraints for table `gamedata`
 --
 ALTER TABLE `gamedata`
-  ADD CONSTRAINT `gamedata_ibfk_4` FOREIGN KEY (`signlanguageId`) REFERENCES `signlanguage` (`id`),
   ADD CONSTRAINT `gamedata_ibfk_1` FOREIGN KEY (`gameId`) REFERENCES `game` (`id`),
   ADD CONSTRAINT `gamedata_ibfk_2` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`),
-  ADD CONSTRAINT `gamedata_ibfk_3` FOREIGN KEY (`writtenlanguageId`) REFERENCES `writtenlanguage` (`id`);
+  ADD CONSTRAINT `gamedata_ibfk_3` FOREIGN KEY (`writtenlanguageId`) REFERENCES `writtenlanguage` (`id`),
+  ADD CONSTRAINT `gamedata_ibfk_4` FOREIGN KEY (`signlanguageId`) REFERENCES `signlanguage` (`id`);
 
 --
 -- Constraints for table `genre`
@@ -627,4 +628,5 @@ ALTER TABLE `user`
 --
 ALTER TABLE `view`
   ADD CONSTRAINT `view_ibfk_1` FOREIGN KEY (`storyId`) REFERENCES `story` (`id`);
+SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
