@@ -189,7 +189,7 @@ function GenerateGlossaryButtons(page){
 	_.each(glossaryTerms, (term, name) => {
 		let regEx = new RegExp(name, 'i');
 		text = text.replace(regEx, (match) => {
-			return `<span class="glossary-term">${match}</span>`;
+			return `<span class="glossary" glossary-term="${name}">${match}</span>`;
 		});
 	});
 
