@@ -16,7 +16,38 @@ var currentScreen = screens.Game;
 function initializeGameScene() {
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
-    var terms = ["world", "sea", "rain", "sky", "huge", "nowhere", "afterwards"];
+    var gameData = 
+    [
+        {
+            Term: "world",
+            Sentance: ["The whole entire", "is flat."]
+        },
+        {
+            Term: "sea",
+            Sentance: ["California finally slipped into the", "."]
+        },
+        {
+            Term: "rain",
+            Sentance: ["", "Sleet or snow, we are open."]
+        },
+        {
+            Term: "sky",
+            Sentance: ["The sky", "is falling!!"]
+        },
+        {
+            Term: "huge",
+            Sentance: ["The bottom of the ocean is so", "; its terrifying."]
+        },
+        {
+            Term: "nowhere",
+            Sentance: ["Where you from? Asked the stranger.", "I replied."]
+        },
+        {
+            Term: "afterwards",
+            Sentance: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", ". I dont know."]
+        }  
+        
+    ];
     var storyObj = null;
         xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -24,7 +55,7 @@ function initializeGameScene() {
             storyObj = JSON.parse(this.responseText);
          
             //build story viwer functionality and pass in page data
-          Game.Start(storyObj, "fsl_luzon", "English", terms);
+          Game.Start(storyObj, "fsl_luzon", "English", gameData);
         }
     };
     xmlhttp.open("GET", dataURL);

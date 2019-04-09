@@ -15,6 +15,11 @@ var termMap = {};
 var signLang;
 var writtenLang;
 
+var rounds = [];
+var round = 0;
+
+var starAnim;
+
 
 //game state machine
 var state = {
@@ -36,30 +41,23 @@ export function Start(storyObj, sign, written, gameData) {
     signLang = null;
     writtenLang = null;
     
-    
-    
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
     writtenLang = written;
-    //termList = terms;
-
-    //figure out hwre each term is in the story data
-    //termMap = MapTermsToPages(terms.slice(0));
+    rounds = gameData;
     
-    //build template
-    templateData =
+    //get animation images
+    starAnim = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
+    
+    //get terms
+    gameData.forEach(function(item)
     {
-        Media: ["", "", ""],
-        Star: [new Image()],
-        Text: ["", ""]
-    };
+        //save term
+        termList.push(item.Term);
+    });
     
-    var main = template(templateData);
-    this.$main = $(main);
-    $('main').html(this.$main);
-    
-    
+    NextRound();
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -116,6 +114,72 @@ function MapTermsToPages(terms) {
 /* ----------------------- Building Objects ----------------------- */
 
 /* ----------------------- Game Loop ----------------------- */
+function NextRound()
+{
+    //get random terms
+    var options = [rounds[round].Term]; //options includes the corrcet option first
+    
+    for(var i = 0; i < 2; i++)
+    {
+        var page = Math.floor(Math.random() * (Object.keys(storyData).length - 1));
+        var terms = Object.keys(storyData[page].glossary[writtenLang]);
+        var term = ChooseRandomArrayElement(terms);
+        
+        //check if we ahve already used this term
+        if(!options.includes(term))
+        { //we havent- add it to options
+            options.push(term);
+        }
+        else //we have :( try again
+        {
+            i--;
+        }
+        
+    }
+    
+    //map the terms to where they are in the story data- this is mainly for the correct option
+    termMap = MapTermsToPages(options.slice(0));
+    
+    //shuffle options so the correct vid isnt the first one
+    shuffle(options);
+    
+    //build template
+    var pages = [termMap[options[0]], termMap[options[1]], termMap[options[2]]];
+    templateData =
+    {
+        ID: options,
+        Media: 
+        [
+            storyData[pages[0]].video[signLang],
+            storyData[pages[1]].video[signLang],
+            storyData[pages[2]].video[signLang]
+        ],
+        Star: starAnim[0].src,
+        Text: [rounds[round].Sentance[0], rounds[round].Sentance[1]]
+    };
+    
+    var main = template(templateData);
+    this.$main = $(main);
+    $('main').html(this.$main);
+    
+    //add looping to the video
+    var vids = $("#videos video").toArray();
+    vids.forEach(function (vid) {
+        //get term
+        var term = vid.id.toString();
+        term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
+
+        //get term data
+        var termData = storyData[termMap[term]].glossary;
+        termData = termData[writtenLang];
+        termData = termData[term].video;
+        termData = termData[signLang];
+
+
+        //add looping
+        LoopVideoClip(vid.id, termData.start, termData.end);
+    });
+}
 
 
 /* ----------------------- Animation ----------------------- */
@@ -183,3 +247,30 @@ function FitText() {
     });
 
 }
+
+/**
+ * Randomly shuffle an array
+ * https://stackoverflow.com/a/2450976/1293256
+ * @param  {Array} array The array to shuffle
+ * @return {String}      The first item in the shuffled array
+ */
+var shuffle = function (array) {
+
+	var currentIndex = array.length;
+	var temporaryValue, randomIndex;
+
+	// While there remain elements to shuffle...
+	while (0 !== currentIndex) {
+		// Pick a remaining element...
+		randomIndex = Math.floor(Math.random() * currentIndex);
+		currentIndex -= 1;
+
+		// And swap it with the current element.
+		temporaryValue = array[currentIndex];
+		array[currentIndex] = array[randomIndex];
+		array[randomIndex] = temporaryValue;
+	}
+
+	return array;
+
+};
