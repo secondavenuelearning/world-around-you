@@ -12,7 +12,7 @@ header {
     height: 75px;
     background-color: transparent;
 
-
+    box-shadow: none;
 }
 
 .title span {
