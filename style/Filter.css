@@ -29,7 +29,7 @@
     border-color: #004e74;
     
     font-size: .75em;
-    text-align: left;
+    text-align: center;
     
     background-color: #004e74;
     color: white;
@@ -88,7 +88,7 @@
   .filter button, .filter select{
       font-size: 1em;
       padding-top: 5%;
-      text-align: left;
+      text-align: center;
   }
   .filter button img, .filter select img{
       bottom: 7px;

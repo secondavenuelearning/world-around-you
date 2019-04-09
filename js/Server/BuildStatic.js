@@ -30,12 +30,13 @@ builder.loadConfig('../../config.js')
 
   // ready to build
 });
-*/
-builder.config({
 map: {
     jquery: 'jquery-1.2.3/jquery'
   }
+*/
+builder.config({
+
 });
-builder.buildStatic('js/Client/viewer.js', 'output-file.js', { minify: false, sourceMaps: false });
+builder.buildStatic('js/Client/viewer.js', 'output-file1.js', { minify: false, sourceMaps: false });
 
 //builder.bundle('app/* - app/corelibs.js', 'output-file.js', { minify: false, sourceMaps: true });

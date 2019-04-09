@@ -79,3 +79,7 @@
 #sign-language-select .custom-select-value{
     background-image: url('../img/icons/General/icon_SignLang_White.svg');
 }
+
+#sort-by-select .custom-select-value{
+    background-image: url('../img/icons/General/icon_Filter.svg');
+    }

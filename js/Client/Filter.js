@@ -67,6 +67,7 @@ function FiltersBar(id, filterTarget, filterList)
                 defaultText: 'Sort By'
             });
             // Add icons
+            /*
             var icon = document.createElement("img");
             $(icon).attr('src', 'img/icons/General/icon_WrittenLang_White.svg');
             $('#written-language-select .custom-select-value' ).prepend(icon);
@@ -76,7 +77,7 @@ function FiltersBar(id, filterTarget, filterList)
             icon = document.createElement("img");
             $(icon).attr('src', 'img/icons/General/icon_Filter.svg'); 
             $('#sort-by-select .custom-select-value' ).prepend(icon);
-
+*/
             $('#written-language-select').addClass('filter');
             $('#sign-language-select').addClass('filter');
             $('#sort-by-select').addClass('filter');
