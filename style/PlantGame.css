@@ -77,8 +77,9 @@ header #backBtn img {
     background-color: green;
 }
 #videos video{
-    width: 30%;
+    width: 100%;
     height: auto;
+    z-index: 6;
 }
 #videoContainer{
      width: 80%;
@@ -110,6 +111,12 @@ header #backBtn img {
     background-color: red;
 }
 
+.media
+{
+    display: inline-block;
+    width: calc(99% / 3);
+}
+
 #drag
 {
     position: absolute;
@@ -117,6 +124,18 @@ header #backBtn img {
     width: 100px;
     background-color: black;
     opacity: .7;
+    
+    pointer-events: none;
+}
+
+#blank
+{
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    color: transparent;
+    opacity: .7;
+    
 }
 
 .hidden

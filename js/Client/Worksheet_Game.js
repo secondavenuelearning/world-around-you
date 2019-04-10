@@ -10,7 +10,7 @@ var templateData = {};
 var storyData;
 var score = 0;
 
-var termList = []; //hard values for testing
+var termList = [];
 var termMap = {};
 var signLang;
 var writtenLang;
@@ -19,6 +19,9 @@ var rounds = [];
 var round = 0;
 
 var starAnim;
+
+//gameplay vaibales
+var dragging = false;
 
 
 //game state machine
@@ -45,27 +48,25 @@ export function Start(storyObj, sign, written, gameData) {
     storyData = storyObj;
     signLang = sign;
     writtenLang = written;
-    rounds = gameData;
+    rounds = gameData.sentences;
     
     //get animation images
     starAnim = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
     
     //get terms
-    gameData.forEach(function(item)
+    rounds.forEach(function(item)
     {
         //save term
         termList.push(item.Term);
     });
     
-    //make drag blurb follow mouse
-    $(document).on('mousemove', function(e){
-        $('#drag').css({
-           left:  e.pageX,
-           top:   e.pageY - 75
-        });
-    });
-    
+    //create a new round and update html
     NextRound();
+    
+    //add core game mechanic event functionality
+    DragAndDrop();
+    
+    
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -129,7 +130,7 @@ function NextRound()
     
     for(var i = 0; i < 2; i++)
     {
-        var page = Math.floor(Math.random() * (Object.keys(storyData).length - 1));
+        var page = Math.floor(Math.random() * (Object.keys(storyData).length - 2)) + 1;
         var terms = Object.keys(storyData[page].glossary[writtenLang]);
         var term = ChooseRandomArrayElement(terms);
         
@@ -163,7 +164,7 @@ function NextRound()
             storyData[pages[2]].video[signLang]
         ],
         Star: starAnim[0].src,
-        Text: [rounds[round].Sentance[0], rounds[round].Sentance[1]]
+        Text: [rounds[round].Sentence[0], rounds[round].Sentence[1]]
     };
     
     var main = template(templateData);
@@ -189,6 +190,72 @@ function NextRound()
     });
 }
 
+function DragAndDrop()
+{
+    //make drag blurb follow mouse
+    $(document).on('mousemove', function(e){
+        $('#drag').css({
+           left:  e.pageX - 50,
+           top:   e.pageY - 100
+        });
+    });
+    
+    //add click event for videos
+    $(".media video").on('mousedown', function(e)
+    {
+        //show drag again
+        $("#drag").removeClass("hidden");
+        
+        //hide video
+        $(e.target).addClass("hidden");
+        $(e.target).addClass("selected");
+        
+        //set dragging to true
+        dragging = true;
+        
+    });
+    
+    $(document).on('mouseup', function(e)
+    {
+        //check if we are dragging and mouseup is on the blank
+        if(dragging && $(e.target)[0] == $("#blank")[0])
+        {
+            //chekc if its the right term that was draggged in
+            var term = $(".selected")[0].id.toString();
+            term = term.substring(0, term.length - 3);
+            if(term == rounds[round].Term)
+            {
+                //show star and up score
+                score++;
+                $(".selected").siblings('img').removeClass("hidden");
+                $(".selected").removeClass("selected");
+                
+                
+            }
+            else //not the correct awnser- punish
+            {
+                //hide drag and show hidden video
+                $(".selected").removeClass("hidden");
+                $(".selected").removeClass("selected");
+                $("#drag").addClass("hidden");
+                
+                //some stuff w/ score??
+            }
+        }
+        else //we let go not on the blank
+        {
+            console.log("boo");
+            
+            //hide drag and show hidden video
+            $(".selected").removeClass("hidden");
+            $(".selected").removeClass("selected");
+            $("#drag").addClass("hidden");
+        }
+        
+        //we obvi arent dragign if the user let go of the mouse button
+        dragging = false;
+    });
+}
 
 /* ----------------------- Animation ----------------------- */
 function Animate(id, frames, frame, noLoop) {
@@ -282,3 +349,17 @@ var shuffle = function (array) {
 	return array;
 
 };
+
+//Adds includes method for browsers that dont support
+// thanks: https://stackoverflow.com/questions/31221341/ie-does-not-support-includes-method
+if (!Array.prototype.includes) {
+  Object.defineProperty(Array.prototype, "includes", {
+    enumerable: false,
+    value: function(obj) {
+        var newArr = this.filter(function(el) {
+          return el == obj;
+        });
+        return newArr.length > 0;
+      }
+  });
+}
