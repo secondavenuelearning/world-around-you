@@ -39,6 +39,7 @@ main{
 	overflow: auto;
 	position: fixed;
 	top: 90px;
+	min-height: 600px;
 }
 footer{
 	height: 25px;
@@ -50,8 +51,7 @@ footer{
 header #language-selector{
 	position: absolute;
 	top: 0px;
-	right: 15px;
-	width: 175px;
+	right: 0px;
 }
 button{
 	border: none;
@@ -119,4 +119,9 @@ button:focus {
 }
 .sixth{
 	width: calc((100% / 6 ) - 20px);
+}
+@media screen and (max-width: 1024px) and (max-height: 768px){
+	body{
+		font-size: 10pt;
+	}
 }

@@ -241,11 +241,11 @@
 #story-viewer:-moz-full-screen .story-viewer-page{width: calc(100% - 220px);}
 #story-viewer:-moz-full-screen .custom-select-options{padding-top: 5px; padding-bottom: 20px; top:initial; bottom: calc(100% - 15px);}
 
-#story-viewer:ms-fullscreen #fullscreen-toggle{background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg);}
-#story-viewer:ms-fullscreen #fullscreen-toggle:hover{background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg);}
-#story-viewer:ms-fullscreen .story-viewer-nav{width: 80px;}
-#story-viewer:ms-fullscreen .story-viewer-page{width: calc(100% - 220px);}
-#story-viewer:ms-fullscreen .custom-select-options{padding-top: 5px; padding-bottom: 20px; top:initial; bottom: calc(100% - 15px);}
+#story-viewer:-ms-fullscreen #fullscreen-toggle{background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg);}
+#story-viewer:-ms-fullscreen #fullscreen-toggle:hover{background-image: url(../img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg);}
+#story-viewer:-ms-fullscreen .story-viewer-nav{width: 80px;}
+#story-viewer:-ms-fullscreen .story-viewer-page{width: calc(100% - 220px);}
+#story-viewer:-ms-fullscreen .custom-select-options{padding-top: 5px; padding-bottom: 20px; top:initial; bottom: calc(100% - 15px);}
 
 
 .glossary
