@@ -14,6 +14,9 @@ header {
 
 
 }
+main{
+    height: calc(100% - 75px);
+}
 
 .title span {
     width: 100%;
@@ -146,8 +149,12 @@ header #backBtn img {
 #sentence{
  
     width: 100%;
-    height: calc(35%);
-    background-color: yellow;
+    height: calc(20%);
+    background-color: white;
+    font-size: 70px;
+    padding-left: 10%;
+    padding-right: 10%;
+    color: #005464;
 }
 
 #blank
@@ -164,7 +171,7 @@ header #backBtn img {
 #flowerBed{
     
     width: 100%;
-    height: calc(20%);
+    height: calc(23%);
     background-color: red;
 }
 
