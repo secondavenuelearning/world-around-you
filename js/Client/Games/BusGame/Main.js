@@ -1,8 +1,8 @@
-import 'style/BusGame.css!';
-import html from 'html/Client/BusGame_Title.html!text';
-import BusGame from 'js/Client/BusGame_Game.js';
-import header from 'html/Client/BusGame_Header.html!text';
-import instructions from 'html/Client/BusGame_Directions.html!text';
+import 'style/Games/BusGame/Main.css!';
+import BusGame from 'js/Client/Games/BusGame/Game.js';
+import html from 'html/Client/Games/BusGame/Title.html!text';
+import header from 'html/Client/Games/BusGame/Header.html!text';
+import instructions from 'html/Client/Games/BusGame/Directions.html!text';
 
 //sort of an enumaerator- nothing to contain but given strict options
 var screens = {
@@ -14,21 +14,27 @@ var screens = {
 var currentScreen = screens.Game;
 
 function initializeGameScene() {
-     var xmlhttp = new XMLHttpRequest();
-    var dataURL = "../../text/Malakas_Maganda.json";
-    var terms = ["world", "sea", "rain", "sky", "huge", "nowhere", "afterwards"];
-    var storyObj = null;
-        xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            //get data from json
-            storyObj = JSON.parse(this.responseText);
-         
-            //build story viwer functionality and pass in page data
-          BusGame.Start(storyObj, "fsl_luzon", "English", terms);
+    
+    new Promise((resolve, reject) => {
+        if(game){
+            resolve(game);
         }
-    };
-    xmlhttp.open("GET", dataURL);
-    xmlhttp.send();
+        else{
+            $.ajax({
+                method: 'get',
+                url: `api/game/data?id=${urlParams.id}`
+            }).done((_game) => {
+                resolve(_game);
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
+    }).then((_game) => {
+        //build story viwer functionality and pass in page data
+        BusGame.Start(_game);
+    }).catch((err) => {
+        console.error(err);
+    });
     
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {

@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import html from 'html/Client/BusGame_Win.html!text';
-import gameHtml from 'html/Client/BusGame_Game.html!text';
-import ImageHoverSwap from 'js/Client/HelperFunctions.js';
+import html from 'html/Client/Games/BusGame/Win.html!text';
+import gameHtml from 'html/Client/Games/BusGame/Game.html!text';
+
 export default { Start, GetImagesFromFolder, Animate}
 
 /* ----------------------- Global Variables ----------------------- */
@@ -74,7 +74,7 @@ var gameState = state.Playing;
 
 
 /* ----------------------- Constructor ----------------------- */
-export function Start(storyObj, sign, written, terms) {
+export function Start(game) {
     //resets all data
         //clear data of this script
     storyData = null;
@@ -100,20 +100,17 @@ export function Start(storyObj, sign, written, terms) {
         Star: [] //single array
     };
 
-    termList = []; //hard values for testing
-    signLang = null;
-    writtenLang = null;
-
     roundorder = null;
     round = [];
     
-    
+    console.log(game);
     
     //save story data to be globally acessable
-    storyData = storyObj;
-    signLang = sign;
-    writtenLang = written;
-    termList = terms;
+    storyData = game.story.data;
+    console.log(storyData);
+    signLang = game.signLanguage;
+    writtenLang = game.writtenLanguage;
+    termList = game.data.terms;
 
     if (!('remove' in Element.prototype)) {
         Element.prototype.remove = function () {
@@ -132,6 +129,7 @@ export function Start(storyObj, sign, written, terms) {
     totalMatches = (termList.length); //number between 0 and 10
 
     //figure out hwre each term is in the story data
+    let terms = JSON.parse(JSON.stringify(game.data.terms));
     termMap = MapTermsToPages(terms.slice(0));
 
     //add score area to header
@@ -314,6 +312,7 @@ function BuildWindows() {
 
             case "vid": //video
                 var id = term + "Vid";
+                console.log(term, termMap)
                 var vidPath = storyData[termMap[term]].video[signLang];
                 windowHTML += "<video id = \"" + id + "\" src =\"" + vidPath + "\" autoplay muted loop></video>";
                 break;
@@ -746,7 +745,7 @@ function Animate(id, frames, frame, noLoop) {
 }
 
 /* Nimate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
-function AnimateMoving(id, frames, frame, finishRun = false) { console.log(frame);
+function AnimateMoving(id, frames, frame, finishRun = false) {
     if ((activeAnimations.length > 0) || (finishRun && (frame != 0)))
     {
         window.requestAnimationFrame(function (timestamp) {

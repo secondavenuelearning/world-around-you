@@ -50,7 +50,7 @@ header button {
     background-color: transparent;
     border: none;
     
-    background-image: url(../img/games/BusGame/Menu/backarrowframe.png);
+    background-image: url(/img/games/BusGame/Menu/backarrowframe.png);
     background-size: 100% 100%;
     
     font-family: "Arial Rounded MT Bold";
@@ -72,7 +72,7 @@ main {
     height: calc(100% + 75px);
     top: -75px;
     width: 100%;
-    background-image: url(../img/games/BusGame/menubackground_BusGame-05.png);
+    background-image: url(/img/games/BusGame/menubackground_BusGame-05.png);
     background-size: 100% 100%;
     background-repeat: repeat-x;
 }
@@ -217,7 +217,7 @@ header #score {
     text-align: center;
     color: white;
     
-    background-image: url(../img/games/BusGame/Menu/scoreframe.png);
+    background-image: url(/img/games/BusGame/Menu/scoreframe.png);
     
 }
 
@@ -425,5 +425,5 @@ header #score span {
 font-family: 'Arial Rounded MT Bold';
 font-style: normal;
 font-weight: normal;
-src: local('Arial Rounded MT Bold'), url('../../fonts/ARLRDBD_0.woff') format('woff');
+src: local('Arial Rounded MT Bold'), url(/fonts/ARLRDBD_0.woff) format('woff');
 }

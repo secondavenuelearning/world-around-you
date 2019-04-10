@@ -1,10 +1,10 @@
 import 'style/Editor.css!';
-import 'style/Games/BusGameEditor.css!';
+import 'style/Games/BusGame/Editor.css!';
 
 import _ from 'underscore';
 import urlParams from 'js/Client/UrlParams';
 
-import html from 'html/Client/Games/BusGameEditor.html!text';
+import html from 'html/Client/Games/BusGame/Editor.html!text';
 const template = _.template(html);
 
 let game = window.game,
