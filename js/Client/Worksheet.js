@@ -16,38 +16,41 @@ var currentScreen = screens.Game;
 function initializeGameScene() {
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
-    var gameData = 
-    [
-        {
-            Term: "world",
-            Sentance: ["The whole entire", "is flat."]
-        },
-        {
-            Term: "sea",
-            Sentance: ["California finally slipped into the", "."]
-        },
-        {
-            Term: "rain",
-            Sentance: ["", "Sleet or snow, we are open."]
-        },
-        {
-            Term: "sky",
-            Sentance: ["The sky", "is falling!!"]
-        },
-        {
-            Term: "huge",
-            Sentance: ["The bottom of the ocean is so", "; its terrifying."]
-        },
-        {
-            Term: "nowhere",
-            Sentance: ["Where you from? Asked the stranger.", "I replied."]
-        },
-        {
-            Term: "afterwards",
-            Sentance: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", ". I dont know."]
-        }  
-        
-    ];
+    var gameData = {
+        name: "Test Data",
+        sentences: 
+        [
+            {
+                Term: "world",
+                Sentence: ["The whole entire", "is flat."]
+            },
+            {
+                Term: "sea",
+                Sentence: ["California finally slipped into the", "."]
+            },
+            {
+                Term: "rain",
+                Sentence: ["", "Sleet or snow, we are open."]
+            },
+            {
+                Term: "sky",
+                Sentence: ["The sky", "is falling!!"]
+            },
+            {
+                Term: "huge",
+                Sentence: ["The bottom of the ocean is so", "; its terrifying."]
+            },
+            {
+                Term: "nowhere",
+                Sentence: ["Where you from? Asked the stranger.", "I replied."]
+            },
+            {
+                Term: "afterwards",
+                Sentence: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", ". I dont know."]
+            }  
+
+        ]
+    }
     var storyObj = null;
         xmlhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {

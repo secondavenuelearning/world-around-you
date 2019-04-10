@@ -79,8 +79,9 @@ header #backBtn img {
    
 }
 #videos video{
-  width: 32%;
+    width: 32%;
     height: auto;
+
     padding-left: 3%;
     padding-top: 1.5%;
     padding-bottom: 1.5%;
@@ -88,6 +89,9 @@ header #backBtn img {
     	margin: 0 auto;
 		
     
+
+    z-index: 6;
+
 }
 #videos img{
     display: none;
@@ -139,6 +143,12 @@ header #backBtn img {
     background-color: red;
 }
 
+.media
+{
+    display: inline-block;
+    width: calc(99% / 3);
+}
+
 #drag
 {
     position: absolute;
@@ -146,10 +156,22 @@ header #backBtn img {
     width: 100px;
     background-color: black;
     opacity: .7;
+    
+    pointer-events: none;
+}
+
+#blank
+{
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    color: transparent;
+    opacity: .7;
+    
 }
 
 .hidden
 {
-    display: none;
+    opacity: 0;
 }
 
