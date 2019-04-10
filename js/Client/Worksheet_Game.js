@@ -239,6 +239,9 @@ function DragAndDrop()
 {
     //make drag blurb follow mouse
     $(document).on('mousemove', function(e){
+        event.preventDefault(); //dont slect things when dragging
+        
+        //update position of "dragged" word element
         $('#drag').css({
            left:  e.pageX - 50,
            top:   e.pageY - 115
@@ -248,6 +251,9 @@ function DragAndDrop()
     //add click event for videos
     $(".media").on('mousedown', function(e)
     {
+        //dont selecte things hwen dragging
+        event.preventDefault();
+        
         //show drag again
         $("#drag").removeClass("hidden");
         
