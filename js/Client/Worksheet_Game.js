@@ -8,9 +8,10 @@ var template = _.template(gameHtml);
 var templateData = {};
 
 var storyData;
-var score = 0;
 
-var termList = [];
+var score = 0;
+var availablePoints = 10;
+
 var termMap = {};
 var signLang;
 var writtenLang;
@@ -40,7 +41,6 @@ export function Start(storyObj, sign, written, gameData) {
     //resets all data
     storyData = null;
     score = 0;
-    termList = []; 
     signLang = null;
     writtenLang = null;
     
@@ -53,18 +53,18 @@ export function Start(storyObj, sign, written, gameData) {
     //get animation images
     starAnim = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
     
-    //get terms
-    rounds.forEach(function(item)
-    {
-        //save term
-        termList.push(item.Term);
-    });
-    
     //create a new round and update html
     NextRound();
     
     //add core game mechanic event functionality
     DragAndDrop();
+    
+    //add hint functionality
+    $("#hint").one('click', function()
+    { 
+        //run hint
+        Hint(); 
+    });
     
     
 }
@@ -120,9 +120,7 @@ function MapTermsToPages(terms) {
     return mapped;
 }
 
-/* ----------------------- Building Objects ----------------------- */
-
-/* ----------------------- Game Loop ----------------------- */
+/* ----------------------- Game Mechanics ----------------------- */
 function NextRound()
 {
     //get random terms
@@ -190,6 +188,29 @@ function NextRound()
     });
 }
 
+function Hint()
+{
+    //get incorrect options
+    var options = [];
+    templateData.ID.forEach(function(option)
+    {
+        if(option != rounds[round].Term)
+        {
+            options.push(option);
+        }
+    });
+ 
+    //chose which of them to omit
+    var omit = ChooseRandomArrayElement(options);
+    
+    //hide the omited item
+    omit = "#" + omit + "Vid"; //expand to proper ID
+    $(omit).addClass("hidden");
+    
+    //affect available points for this round
+    availablePoints -= 5;
+}
+
 function DragAndDrop()
 {
     //make drag blurb follow mouse
@@ -226,9 +247,13 @@ function DragAndDrop()
             if(term == rounds[round].Term)
             {
                 //show star and up score
-                score++;
+                score += availablePoints;
                 $(".selected").siblings('img').removeClass("hidden");
-                $(".selected").removeClass("selected");
+                
+                //animate star
+                Animate($(".selected").siblings('img'), starAnim, null, true);
+                
+                console.log(score);
                 
                 
             }
@@ -236,21 +261,21 @@ function DragAndDrop()
             {
                 //hide drag and show hidden video
                 $(".selected").removeClass("hidden");
-                $(".selected").removeClass("selected");
-                $("#drag").addClass("hidden");
                 
                 //some stuff w/ score??
+                availablePoints -= 2;
+                console.log(score);
             }
         }
         else //we let go not on the blank
         {
-            console.log("boo");
-            
             //hide drag and show hidden video
             $(".selected").removeClass("hidden");
-            $(".selected").removeClass("selected");
-            $("#drag").addClass("hidden");
         }
+        
+        //deselect and hide hidden
+        $(".selected").removeClass("selected");
+        $("#drag").addClass("hidden");
         
         //we obvi arent dragign if the user let go of the mouse button
         dragging = false;
