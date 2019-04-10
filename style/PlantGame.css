@@ -116,6 +116,8 @@ header #backBtn img {
     width: 100%;
     height: calc(10%);
     background-color: white;
+    display: flex;
+    align-items:center;
    
 }
 #hintBtnContainer button{
@@ -128,7 +130,10 @@ header #backBtn img {
     border-style: solid;
     border-color: white;
     border-radius: 30px;
-    margin-top: 12px;
+  vertical-align: middle;
+    background-color: #6BC546;
+    color:white;
+    font-size: 40px;
     
     
 }
