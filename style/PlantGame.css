@@ -68,7 +68,7 @@ header #backBtn img {
     left: 5px;
 }
 
-
+/* video section */
 #videos{
     top: 75px;
     display: block;
@@ -78,6 +78,7 @@ header #backBtn img {
     vertical-align: middle;
    
 }
+
 #videos .media{
     width: 32%;
     height: auto;
@@ -93,10 +94,6 @@ header #backBtn img {
     z-index: 6;
 
 }
-#videos img{
-    display: none;
-}
-
 #videos video
 {
     width: 100%;
@@ -108,6 +105,7 @@ header #backBtn img {
 
 }
 
+/* hints */
 #hintBtnContainer{
     
     width: 100%;
@@ -121,34 +119,13 @@ header #backBtn img {
     justify-content: center;
     
 }
+
+/* sentence */
 #sentence{
  
     width: 100%;
     height: calc(35%);
     background-color: yellow;
-}
-#flowerBed{
-    
-    width: 100%;
-    height: calc(20%);
-    background-color: red;
-}
-
-.media
-{
-    display: inline-block;
-    width: calc(99% / 3);
-}
-
-#drag
-{
-    position: absolute;
-    height: 30px;
-    width: 100px;
-    background-color: black;
-    opacity: .7;
-    
-    pointer-events: none;
 }
 
 #blank
@@ -159,6 +136,26 @@ header #backBtn img {
     color: transparent;
     opacity: .7;
     
+}
+
+/* flower bed */
+#flowerBed{
+    
+    width: 100%;
+    height: calc(20%);
+    background-color: red;
+}
+
+/* drag and drop */
+#drag
+{
+    position: absolute;
+    height: 30px;
+    width: 100px;
+    background-color: black;
+    opacity: .7;
+    
+    pointer-events: none;
 }
 
 .hidden
