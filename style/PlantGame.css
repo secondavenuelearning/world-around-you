@@ -74,7 +74,7 @@ header #backBtn img {
     display: block;
     width: 100%;
    
-    background-color: green;
+    background-color:#00B092;
     vertical-align: middle;
    
 }
@@ -87,6 +87,7 @@ header #backBtn img {
     padding-bottom: 1.5%;
     text-align: center;
     	margin: 0 auto;
+  
 		
     
 
@@ -100,6 +101,10 @@ header #backBtn img {
 #videos video
 {
     width: 100%;
+      border-style: solid;
+    border-width: 10px;
+    border-radius: 7px;
+    border-color: #00897C
 }
 #videoContainer{
    
@@ -112,13 +117,21 @@ header #backBtn img {
     
     width: 100%;
     height: calc(10%);
-    background-color: blue;
-    align-items: center;
-    justify-content: center;
+    background-color: white;
+   
 }
 #hintBtnContainer button{
-    display: flex;
-    justify-content: center;
+    
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 128px;
+    height: 50px;
+    border-style: solid;
+    border-color: white;
+    border-radius: 30px;
+    margin-top: 12px;
+    
     
 }
 #sentence{
