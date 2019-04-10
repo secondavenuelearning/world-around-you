@@ -21,6 +21,18 @@ var round = 0;
 
 var starAnim;
 
+var animations =
+{
+    Star: [], //single
+    Plants: [], //single
+    Bird: [], //single
+    Flowers: 
+    {
+        Windy: [],
+        Growing: []
+    }
+}
+
 //gameplay vaibales
 var dragging = false;
 
@@ -52,6 +64,18 @@ export function Start(storyObj, sign, written, gameData) {
     
     //get animation images
     starAnim = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
+    
+    animations =
+    {
+        Star: GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/"), //single
+        Plants: GetImagesFromFolder("/img/games/Worksheet/WindyPlants_Animation/"), //single
+        Bird: [], //single
+        Flowers: 
+        {
+            Windy: [],
+            Growing: []
+        }
+    }
     
     //create a new round and update html
     NextRound();
@@ -217,22 +241,27 @@ function DragAndDrop()
     $(document).on('mousemove', function(e){
         $('#drag').css({
            left:  e.pageX - 50,
-           top:   e.pageY - 100
+           top:   e.pageY - 115
         });
     });
     
     //add click event for videos
-    $(".media video").on('mousedown', function(e)
+    $(".media").on('mousedown', function(e)
     {
         //show drag again
         $("#drag").removeClass("hidden");
         
         //hide video
-        $(e.target).addClass("hidden");
+        $(e.target).children("video").addClass("hidden");
         $(e.target).addClass("selected");
         
         //set dragging to true
         dragging = true;
+        
+        //give drag its proper text
+        var term = $(".selected video")[0].id.toString();
+        term = term.substring(0, term.length - 3);
+        $("#drag span").text(term);
         
     });
     
@@ -242,16 +271,16 @@ function DragAndDrop()
         if(dragging && $(e.target)[0] == $("#blank")[0])
         {
             //chekc if its the right term that was draggged in
-            var term = $(".selected")[0].id.toString();
+            var term = $(".selected video")[0].id.toString();
             term = term.substring(0, term.length - 3);
             if(term == rounds[round].Term)
             {
                 //show star and up score
                 score += availablePoints;
-                $(".selected").siblings('img').removeClass("hidden");
+                $(".selected img").removeClass("hidden");
                 
                 //animate star
-                Animate($(".selected").siblings('img'), starAnim, null, true);
+                Animate($(".selected img"), starAnim, null, true);
                 
                 console.log(score);
                 
@@ -260,7 +289,7 @@ function DragAndDrop()
             else //not the correct awnser- punish
             {
                 //hide drag and show hidden video
-                $(".selected").removeClass("hidden");
+                $(".selected").children("video").removeClass("hidden");
                 
                 //some stuff w/ score??
                 availablePoints -= 2;
@@ -270,7 +299,7 @@ function DragAndDrop()
         else //we let go not on the blank
         {
             //hide drag and show hidden video
-            $(".selected").removeClass("hidden");
+            $(".selected video").removeClass("hidden");
         }
         
         //deselect and hide hidden
@@ -281,6 +310,8 @@ function DragAndDrop()
         dragging = false;
     });
 }
+
+/* ----------------------- Building Objects ----------------------- */
 
 /* ----------------------- Animation ----------------------- */
 function Animate(id, frames, frame, noLoop) {

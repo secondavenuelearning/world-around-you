@@ -105,6 +105,7 @@ header #backBtn img {
     width: 100%;
     height: auto;
     vertical-align: middle;
+    pointer-events: none;
 }
 
 #videos img
@@ -112,6 +113,7 @@ header #backBtn img {
     position: absolute;
     top: 0;
     width: 70%;
+    pointer-events: none;
 }
 
 /* hints */
@@ -167,12 +169,19 @@ header #backBtn img {
 #drag
 {
     position: absolute;
-    height: 30px;
-    width: 100px;
-    background-color: black;
-    opacity: .7;
+    background-color: #00897C;
     
     pointer-events: none;
+    
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #00897C;
+    
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    
+    padding: 5px 10px;
 }
 
 .hidden
@@ -184,6 +193,16 @@ header #backBtn img {
 {
     display: inline-block;
     opacity: 0;
+}
+
+.media.selected
+{
+    background-color: #00897C;
+    
+    border-style: solid;
+    border-width: 10px;
+    border-radius: 7px;
+    border-color: #005464 !important;
 }
 
 
