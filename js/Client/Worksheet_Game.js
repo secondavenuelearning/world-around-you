@@ -122,36 +122,37 @@ export function Start(storyObj, sign, written, gameData) {
         {
             Windy: 
             [ 
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower1_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower2_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower3_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower4_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower5_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower6_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower7_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower8_Wind_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower9_Wind_Animation/")
+                "/img/games/Worksheet/Flowers/Flower1_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower2_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower3_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower4_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower5_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower6_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower7_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower8_Wind_Animation/",
+                "/img/games/Worksheet/Flowers/Flower9_Wind_Animation/"
             ],
             Growing: 
             [
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower1_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower2_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower3_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower4_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower5_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower6_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower7_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower8_Growing_Animation/"),
-                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower9_Growing_Animation/")
+                "/img/games/Worksheet/Flowers/Flower1_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower2_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower3_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower4_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower5_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower6_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower7_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower8_Growing_Animation/",
+                "/img/games/Worksheet/Flowers/Flower9_Growing_Animation/"
             ]
         }
     }
     
+    //add flower bed (not part of normal build so flowers arent reset on round changes)
+    $('footer').html(flowerbedHtml);
+    
     //create a new round and update html
     NextRound();
     
-    //add flower bed (not part of normal build so flowers arent reset on round changes)
-    $('footer').html(flowerbedHtml);
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -203,6 +204,54 @@ function MapTermsToPages(terms) {
     }
 
     return mapped;
+}
+
+function PreLoadAnimChunk(anims, size)
+{
+    //get images for deifned number of items to be loaded
+    var start = 0;
+    for(var i = 0; i < size; i++)
+    {
+        //check if anim has already loaded
+        if(_.isString(anims[start + i]))
+        { //has not! load the image
+            anims[start + i] = GetImagesFromFolder(anims[start + i]);
+        }
+        else if(start < anims.length) //only cont if we have items left to check
+        {//loaded- dont count this towards the loop
+            //update start pos so next one moves forward but loop isnt started
+            start++; 
+            i--; //delay loop stopping
+        }
+    }
+}
+
+function LoadingFlowers()
+{
+    //get array of flowers
+    var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
+    
+    //loop through flowers and enable any new flowers players have gotten
+    for(var i = 0; i < Math.floor(flowers + flowerPower); i++) //only show full flowers! thus- Math.floor(flowers)
+    {
+        //check if the current flower has already bloomed
+        if($(bouquet[i]).hasClass("hidden"))
+        {   
+            //load next chunk of flowers
+            animations.Flowers.Growing[i] = GetImagesFromFolder(animations.Flowers.Growing[i]);
+        }
+        else
+        {
+            //unload old animations
+            if(_.isArray(animations.Flowers.Growing[i]))
+            {
+                animations.Flowers.Growing[i] = null;
+                animations.Flowers.Windy[i] = GetImagesFromFolder(animations.Flowers.Windy[i]);
+            }
+        }
+    }
+    
+    console.log(animations.Flowers.Growing);
 }
 
 /* ----------------------- Game Mechanics ----------------------- */
@@ -259,6 +308,9 @@ function NextRound()
     
     //clear notif
     $("#responseText").text("");
+    
+    //load animations as we need them
+    LoadingFlowers();
     
     //add looping to the video
     var vids = $("#videos video").toArray();
@@ -432,10 +484,10 @@ function UpdateFlowers()
             
             //animate flower
             Animate($(bouquet[i]), animations.Flowers.Growing[i], null, true);
+
         }
+
     }
-    
-    //load next chunk of flowers
 }
 
 function RunNotif(notifs)
@@ -471,11 +523,11 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     else if(roundLogicActive)
     {
         //wait a few secodna dn then progress to next round
-        setTimeout(function()
-        {
+        //setTimeout(function()
+        //{
             round++;
             NextRound(); 
-        }, 1500);
+        //}, 3000);
     }
 }
 
