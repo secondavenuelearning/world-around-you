@@ -30,6 +30,37 @@ var firstTry = true;
 var flowers = 0; //will be a decimal but actual flowers shwon will be math.floor version
 var flowerPower = 0;
 
+//tip strings up top
+var notif = 
+{
+    Good: 
+    [
+        "Good Job!",
+        "Great",
+        "Correct",
+        "Bravo",
+        "You're good at this!",
+        "Piece of cake", //maybe bad bc localization?
+        "Gold star!",
+        "Rad",
+        ":)"
+    ],
+    Bad: 
+    [
+        "Ouch",
+        "Try Again",
+        "Not quite...",
+        "*sad trombone*",
+        "Nope",
+        "Sorry",
+        "oof",
+        "Give it another shot",
+        "Thats not it",
+        "Return to sender",
+        ":("
+    ]
+};
+
 //animation
 var animations =
 {
@@ -41,7 +72,7 @@ var animations =
         Windy: [],
         Growing: []
     }
-}
+};
 
 //gameplay vaibales
 var dragging = false;
@@ -248,7 +279,7 @@ function NextRound()
     DragAndDrop();
     
     //add hint functionality
-    $("#hint").one('click', function()
+    $("#hint").on('click', function()
     { 
         //run hint
         Hint(); 
@@ -347,6 +378,9 @@ function DragAndDrop()
                 $("#blank").addClass("filled");
                 $("#blank").text(term);
                 
+                //update notif text
+                RunNotif(notif.Good);
+                
                 console.log(score);
                 
                 
@@ -359,6 +393,9 @@ function DragAndDrop()
                 //some stuff w/ score??
                 firstTry = false;
                 console.log(score);
+                
+                //update notif text
+                RunNotif(notif.Bad);
             }
         }
         else //we let go not on the blank
@@ -394,6 +431,15 @@ function UpdateFlowers()
             Animate($(bouquet[i]), animations.Flowers.Growing[i], null, true);
         }
     }
+}
+
+function RunNotif(notifs)
+{
+    //chose random element
+    var notif = ChooseRandomArrayElement(notifs);
+    
+    //replace notif text with selected
+    $("#responseText").text(notif);
 }
 
 /* ----------------------- Building Objects ----------------------- */

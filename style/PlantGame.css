@@ -49,35 +49,35 @@ main{
 }
 
 /* new header */
-header button {
-    height: 100px;
-    width: 100px;
-
+header button#backBtn {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    
     float: right;
     
-    background-color: transparent;
-    border: none;
+    height: 65px;
+    width: 80px;
+    background-color: #6BC546;
     
-    background-image: url(../img/games/BusGame/Menu/backarrowframe.png);
-    background-size: 100% 100%;
+    padding: 0;
     
-    font-family: "Arial Rounded MT Bold";
+    border-style: solid;
+    border-color: transparent;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
 
 }
 
-header button img {
+header button#backBtn img {
     height: auto;
     width: 70%;
-}
-
-header #backBtn img {
-    position: relative;
-    top: -7px;
-    left: 5px;
+    overflow: hidden;
 }
 
 header #score
 {
+    display: inline-block;
     position: relative;
     float: left;
     height: 65px;
@@ -98,6 +98,18 @@ header #score span
 {
     position: relative;
     left: 20px;
+}
+
+header #responseText
+{
+    display: inline-block;
+    margin-top: 15px;
+    width: calc(100% - 250px);
+    color: #005464;
+    font-size: 40px;
+    font-family: "Arial Rounded MT Bold";
+    text-align: center;
+    position: relative;
 }
 
 /* video section */
@@ -169,12 +181,17 @@ header #score span
     border-style: solid;
     border-color: white;
     border-radius: 30px;
+    border-width: 5px;
   vertical-align: middle;
     background-color: #6BC546;
     color:white;
-    font-size: 40px;
-    
-    
+    font-size: 35px;
+}
+
+#hintBtnContainer button:hover
+{
+    border-color: #005464;
+    transition: border-color .4s;
 }
 
 /* sentence */
