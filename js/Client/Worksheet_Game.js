@@ -101,7 +101,7 @@ export function Start(storyObj, sign, written, gameData) {
     score = 0;
     signLang = null;
     writtenLang = null;
-    
+    round = 0;
     //save story data to be globally acessable
     storyData = storyObj;
     signLang = sign;
