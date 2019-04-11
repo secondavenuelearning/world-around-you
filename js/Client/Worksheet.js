@@ -30,11 +30,11 @@ function initializeGameScene() {
             },
             {
                 Term: "rain",
-                Sentence: ["", "Sleet or snow, we are open."]
+                Sentence: ["", ",sleet or snow, we are open."]
             },
             {
                 Term: "sky",
-                Sentence: ["The sky", "is falling!!"]
+                Sentence: ["The", "is falling!!"]
             },
             {
                 Term: "huge",
@@ -46,7 +46,7 @@ function initializeGameScene() {
             },
             {
                 Term: "afterwards",
-                Sentence: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", ". I dont know."]
+                Sentence: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", "."]
             }  
 
         ]

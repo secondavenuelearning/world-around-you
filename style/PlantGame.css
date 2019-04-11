@@ -83,19 +83,19 @@ header #backBtn img {
 }
 
 #videoContainer{
-   
-     width: 100%;
+   width: 70%;
     height: 100%;
-
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #videos .media{
-    position: relative;
+   position: relative;
+    width: calc((94% / 3) - 20px);
     
-    width: calc(90% / 3);
     display: inline-block;
     margin: 1.5%;
-    vertical-align: middle;
+
     
     border-style: solid;
     border-width: 10px;
@@ -115,6 +115,7 @@ header #backBtn img {
 {
     position: absolute;
     top: 0;
+    left: 15%;
     width: 70%;
     pointer-events: none;
 }
@@ -171,12 +172,40 @@ header #backBtn img {
 
 /* flower bed */
 #flowerBed{
-    
+    position: absolute;
+    bottom: 0;
     width: 100%;
     height: calc(23%);
-    background-color: red;
 }
 
+#wall
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+}
+
+#flowers
+{
+    position: absolute;
+    bottom: 0;
+    width: 52%;
+    height: 100%;
+    left: 25%;
+}
+
+.flower
+{
+    position: absolute;
+    bottom: 0;
+    width: calc(100% / 9);
+}
+
+.flower.hidden
+{
+    display: inline-block; 
+}
 /* drag and drop */
 #drag
 {

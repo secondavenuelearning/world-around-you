@@ -4,23 +4,32 @@ import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default { Start, GetImagesFromFolder, Animate}
 
 /* ----------------------- Global Variables ----------------------- */
+//html and data passed to html
 var template = _.template(gameHtml);
 var templateData = {};
 
+//global access to raw story data
 var storyData;
 
-var score = 0;
-var availablePoints = 10;
-
-var termMap = {};
+//selected languages for this game
 var signLang;
 var writtenLang;
 
+//game round data and varibales
 var rounds = [];
 var round = 0;
 
-var starAnim;
+var termMap = {}; //where the terms used in the current round reside (page wise) int he sory data
 
+//scoring
+var score = 0;
+var maxScore = 0;
+var firstTry = true;
+
+var flowers = 0; //will be a decimal but actual flowers shwon will be math.floor version
+var flowerPower = 0;
+
+//animation
 var animations =
 {
     Star: [], //single
@@ -61,36 +70,49 @@ export function Start(storyObj, sign, written, gameData) {
     signLang = sign;
     writtenLang = written;
     rounds = gameData.sentences;
+    maxScore = gameData.sentences.length;
+    
+    //calc flower rate (ie points required to get a flower)
+    flowerPower = 10 / maxScore;
+    flowers = 0;
     
     //get animation images
-    starAnim = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
-    
     animations =
     {
         Star: GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/"), //single
         Plants: GetImagesFromFolder("/img/games/Worksheet/WindyPlants_Animation/"), //single
-        Bird: [], //single
+        Bird: GetImagesFromFolder("/img/games/Worksheet/Bird_Animation/"), //single
         Flowers: 
         {
-            Windy: [],
-            Growing: []
+            Windy: 
+            [ 
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower1_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower2_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower3_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower4_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower5_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower6_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower7_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower8_Wind_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower9_Wind_Animation/")
+            ],
+            Growing: 
+            [
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower1_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower2_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower3_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower4_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower5_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower6_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower7_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower8_Growing_Animation/"),
+                GetImagesFromFolder("/img/games/Worksheet/Flowers/Flower9_Growing_Animation/")
+            ]
         }
     }
     
     //create a new round and update html
     NextRound();
-    
-    //add core game mechanic event functionality
-    DragAndDrop();
-    
-    //add hint functionality
-    $("#hint").one('click', function()
-    { 
-        //run hint
-        Hint(); 
-    });
-    
-    
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -185,7 +207,7 @@ function NextRound()
             storyData[pages[1]].video[signLang],
             storyData[pages[2]].video[signLang]
         ],
-        Star: starAnim[0].src,
+        Star: animations.Star[0].src,
         Text: [rounds[round].Sentence[0], rounds[round].Sentence[1]]
     };
     
@@ -210,6 +232,16 @@ function NextRound()
         //add looping
         LoopVideoClip(vid.id, termData.start, termData.end);
     });
+    
+    //add core game mechanic event functionality
+    DragAndDrop();
+    
+    //add hint functionality
+    $("#hint").one('click', function()
+    { 
+        //run hint
+        Hint(); 
+    });
 }
 
 function Hint()
@@ -231,8 +263,8 @@ function Hint()
     omit = "#" + omit + "Vid"; //expand to proper ID
     $(omit).addClass("hidden");
     
-    //affect available points for this round
-    availablePoints -= 5;
+    //affect trys
+    firstTry = false;
 }
 
 function DragAndDrop()
@@ -281,12 +313,21 @@ function DragAndDrop()
             term = term.substring(0, term.length - 3);
             if(term == rounds[round].Term)
             {
-                //show star and up score
-                score += availablePoints;
+                //show star and ainmate
                 $(".selected img").removeClass("hidden");
+                Animate($(".selected img"), animations.Star, null, true, true); //has round logic
                 
-                //animate star
-                Animate($(".selected img"), starAnim, null, true);
+                //updaet scoring and flowers
+                if(firstTry) 
+                {
+                    //up flower count
+                    flowers += flowerPower;
+                    
+                    //add new flowers
+                    UpdateFlowers();
+                }
+                    
+                score++; //up score by one
                 
                 console.log(score);
                 
@@ -298,7 +339,7 @@ function DragAndDrop()
                 $(".selected").children("video").removeClass("hidden");
                 
                 //some stuff w/ score??
-                availablePoints -= 2;
+                firstTry = false;
                 console.log(score);
             }
         }
@@ -317,14 +358,34 @@ function DragAndDrop()
     });
 }
 
+function UpdateFlowers()
+{
+    //get array of flowers
+    var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
+    
+    //loop through flowers and enable any new flowers players have gotten
+    for(var i = 0; i < Math.floor(flowers); i++) //only show full flowers! thus- Math.floor(flowers)
+    {
+        //check if the current flower has already bloomed
+        if($(bouquet[i]).hasClass("hidden"))
+        {
+            //unhide this flower
+            $(bouquet[i]).removeClass("hidden");
+            
+            //animate flower
+            Animate($(bouquet[i]), animations.Flowers.Growing[i], null, true);
+        }
+    }
+}
+
 /* ----------------------- Building Objects ----------------------- */
 
 /* ----------------------- Animation ----------------------- */
-function Animate(id, frames, frame, noLoop) {
+function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     if (!noLoop || (frame < frames.length - 1)) 
     {
         window.requestAnimationFrame(function (timestamp) {
-            Animate(id, frames, frame, noLoop);
+            Animate(id, frames, frame, noLoop, roundLogicActive);
         });
 
         if (!frame) frame = 0;
@@ -337,6 +398,15 @@ function Animate(id, frames, frame, noLoop) {
 
             img.src = frames[frame].src;
         });
+    }
+    else if(roundLogicActive)
+    {
+        //wait a few secodna dn then progress to next round
+        setTimeout(function()
+        {
+            round++;
+            NextRound(); 
+        }, 1500);
     }
 }
 
