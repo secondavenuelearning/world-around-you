@@ -1,5 +1,6 @@
 import _ from 'underscore';
 import gameHtml from 'html/Client/PlantGame_Game.html!text';
+import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default { Start, GetImagesFromFolder, Animate}
 
@@ -73,7 +74,7 @@ export function Start(storyObj, sign, written, gameData) {
     maxScore = gameData.sentences.length;
     
     //calc flower rate (ie points required to get a flower)
-    flowerPower = 10 / maxScore;
+    flowerPower = 9 / maxScore; //9 is the number of flowers
     flowers = 0;
     
     //set header max score text
@@ -117,6 +118,9 @@ export function Start(storyObj, sign, written, gameData) {
     
     //create a new round and update html
     NextRound();
+    
+    //add flower bed (not part of normal build so flowers arent reset on round changes)
+    $('footer').html(flowerbedHtml);
 }
 
 /* ----------------------- Data parsing ----------------------- */
