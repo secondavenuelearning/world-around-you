@@ -77,13 +77,16 @@ function initializeGameScene() {
         }
     };
 }
+    var score = document.getElementById("score");
+    score.style.display = "block";
 }
 
 function initializeTitle() {
     //set html
      $('main').html(html);
     //$('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
-    
+    var score = document.getElementById("score");
+    score.style.display = "none";
     //hookup buttons
     var play = document.getElementById("playButton");
     play.onclick = function () {
@@ -128,6 +131,8 @@ $(document).ready(function () {
     instruction.onclick = function () {
        initializeInstructions();
     };
+      var score = document.getElementById("score");
+    score.style.display = "none";
     
     //prep and run animations
    // var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
