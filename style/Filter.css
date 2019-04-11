@@ -28,7 +28,6 @@
     border-radius: 150px;
     border-color: #004e74;
     
-    font-size: .75em;
     text-align: center;
     
     background-color: #004e74;
@@ -37,8 +36,6 @@
     width: 100%;
     height: 100%;
     
-    padding: 5%;
-    padding-top: 7%;
     position: relative;
     z-index: 1;
 }
@@ -84,7 +81,7 @@
     float: left;
     vertical-align: middle;
 }
-@media (min-width:950px) {
+/*@media (min-width:950px) {
   .filter button, .filter select{
       font-size: 1em;
       padding-top: 5%;
@@ -121,7 +118,7 @@
   .filter button img, .filter select img{
       bottom: 2px;
   }
-}
+}*/
 .filter button img.dropdownIcon, .filter select img.dropdownIcon
 {
     height: 18px;

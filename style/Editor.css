@@ -24,7 +24,7 @@ body.dragging{
 	border: none;
 	background-color: #0097BA;
 	background-repeat: no-repeat;
-	background-size: 50%;
+	background-size: 50% 50%;
 	background-position: 50%;
 }
 #editor-nav-previous{
@@ -89,7 +89,7 @@ body.dragging{
 	display: none;
 }
 
-#editor-content .modal{
+.editor-content-wrapper .modal{
 	position: absolute;
 	top: 0px;
 	left: 0px;
@@ -97,7 +97,7 @@ body.dragging{
 	width: 100%;
 	background: rgba(0, 0, 0, .5);
 }
-#editor-content .add-text-button, #editor-content .add-page-button{
+.editor-content-wrapper .add-text-button, .editor-content-wrapper .add-page-button{
 	position: relative;
 	width: 100%;
     padding: 5px 40px;
@@ -105,7 +105,7 @@ body.dragging{
     margin: 5px 0px;
     color: #0097BA;
     background-repeat: no-repeat;
-    background-size: 1em;
+    background-size: 1em 1em;
     background-position: 10px 50%;
 
 	border: 2px dotted #0097BA;
@@ -114,22 +114,22 @@ body.dragging{
 	line-height: .5em;
 	text-align: center;
 }
-#editor-content .add-text-button{
+.editor-content-wrapper .add-text-button{
 	height: 30px;
 	background-image: url(../img/icons/General/icon_Add_LtBlue.svg);
-	background-size:  20px;
+	background-size: 20px 20px;
 	background-position: center center;
 }
-#editor-content .add-text-button:hover{
+.editor-content-wrapper .add-text-button:hover{
 	background-image: url(../img/icons/General/icon_Add_DkBlue.svg);
 }
-#editor-content .add-page-button{
+.editor-content-wrapper .add-page-button{
 	padding: 5px;
 	font-size: 1.5em;
 	line-height: 1em;
 	clear: right;
 }
-#editor-content .add-text-button:hover, #editor-content .add-page-button:hover{
+.editor-content-wrapper .add-text-button:hover, .editor-content-wrapper .add-page-button:hover{
     color: #004D75;
 	border-color: #004D75;
 }
@@ -166,8 +166,8 @@ body.dragging{
 	border-radius: 5px;
 	font-size: 1.2em;
 	background-repeat: no-repeat;
-	background-size: 1em;
-	background-position: 10px 11px;
+	background-size: 15px 15px;
+	background-position: 10px center;
 }
 .editor-content-wrapper button:hover{
 	font-weight: bold;
@@ -203,9 +203,9 @@ body.dragging{
 .editor-content-wrapper .page-icon{
 	padding-left: calc(1em + 2px);
     font-size: 1em;
-    background-size: 1em;
+    background-size: 1em 1em;
     background-repeat: no-repeat;
-    background-position: left 5px;
+    background-position: left center;
 }
 .editor-content-wrapper .page-icon.added{
 	background-image: url('../img/icons/StoryBuilder/icon_SB_Complete_LtBlue.svg');
@@ -227,7 +227,7 @@ body.dragging{
 .editor-content-wrapper .page-preview .half{
 	margin: 5px;
 	height: 100%;
-	width: calc((100% / 2) - 10px);
+	width: calc((100% / 2) - 10.01px);
 }
 .editor-content-wrapper .page-number, .editor-content-wrapper .page-delete-button{
     position: absolute;
@@ -305,6 +305,7 @@ body.dragging{
     text-align: center;
     height: 100%;
     width: 50%;
+    background: #004E74;
     background: #004E74E0;
     border-radius: 10px;
     color: #FFFFFF;
@@ -338,6 +339,9 @@ body.dragging{
 	background: none;
 	background-repeat: no-repeat;
 	background-image: url('../img/icons/General/icon_Upload.svg');
+	background-position: 0px center;
+	background-size: 40px 40px;
+
 	color: #0097BA;
 	font-size: 1.2em;
 }
@@ -422,7 +426,7 @@ body.dragging{
 		color: #0097BA;
 		font-size: 1em;
 		background-repeat: no-repeat;
-		background-size: 1em;
+		background-size: 1em 1em;
 		background-position: 10px 50%;
 	}
 	.language-button:hover{
@@ -525,6 +529,9 @@ body.dragging{
 	#pages-preview .page-preview{
 		border-radius: 10px 0px 0px 10px;
 		margin: 0px;
+	}
+	#pages-preview .page-preview:hover:not(.active){
+		font-weight: bold;
 	}
 	#pages-preview .page-preview.active{
 		background-color: #9EE9F6;

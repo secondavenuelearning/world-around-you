@@ -6,7 +6,7 @@ if(urlParams.id){
 		url: `api/game/data?id=${urlParams.id}`
 	}).done((game) => {
 		window.game = game;
-		System.import(`./js/Client/Games/${game.path}.js`);
+		System.import(`./js/Client/Games/${game.path}/Main.js`);
 	}).catch((err) => {
 		console.error(err);
 	});
