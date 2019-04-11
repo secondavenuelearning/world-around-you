@@ -79,10 +79,6 @@ main{
 
 }
 
-footer {
-    display: none;
-}
-
 /* new header */
 header button {
     height: 100px;
@@ -238,8 +234,8 @@ header #score span
     border-color: #005464;
     border-radius: 30px;
     border-width: 5px;
+    background-color: #92BEB0;
     
-    background-color: #00897C;
     
     color: transparent;
     
@@ -249,6 +245,11 @@ header #score span
 {
     color: white;
     padding: 0px 10px;
+}
+
+#blank:hover
+{
+    background-color: #00897C;
 }
 
 /* flower bed */
@@ -272,15 +273,15 @@ header #score span
     position: absolute;
     bottom: 0;
     width: 52%;
-    height: 100%;
     left: 25%;
 }
 
 .flower
 {
-    position: absolute;
+    position: relative;
     bottom: 0;
-    width: calc(100% / 9);
+    display: inline-block;
+    width: calc(100% / 10)
 }
 
 .flower.hidden
