@@ -2,7 +2,8 @@ import 'style/PlantGame.css!';
 import html from 'html/Client/PlantGame.html!text';
 import Game from 'js/Client/Worksheet_Game.js';
 import header from 'html/Client/PlantGame_Header.html!text';
-import instructions from 'html/Client/BusGame_Directions.html!text';
+import instructions from 'html/Client/PlantGame_Instructions.html!text';
+import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
 
 //sort of an enumaerator- nothing to contain but given strict options
 var screens = {
@@ -12,7 +13,7 @@ var screens = {
     Win: 3
 };
 var currentScreen = screens.Game;
-
+$('footer').html(flowerbedHtml);
 function initializeGameScene() {
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
@@ -67,7 +68,7 @@ function initializeGameScene() {
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
-        document.getElementById("score").remove();
+       
         initializeTitle();
     }
     if (!('remove' in Element.prototype)) {
@@ -85,7 +86,7 @@ function initializeTitle() {
     //set html
      $('main').html(html);
     //$('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
-    var score = document.getElementById("score");
+        var score = document.getElementById("score");
     score.style.display = "none";
     //hookup buttons
     var play = document.getElementById("playButton");
