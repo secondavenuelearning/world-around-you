@@ -76,6 +76,10 @@ export function Start(storyObj, sign, written, gameData) {
     flowerPower = 10 / maxScore;
     flowers = 0;
     
+    //set header max score text
+    $("#score #total").text("/ " + maxScore);
+    $("#score #current").text("0");
+    
     //get animation images
     animations =
     {
@@ -169,6 +173,9 @@ function MapTermsToPages(terms) {
 /* ----------------------- Game Mechanics ----------------------- */
 function NextRound()
 {
+    //reset some things
+    firstTry = true;
+    
     //get random terms
     var options = [rounds[round].Term]; //options includes the corrcet option first
     
@@ -325,9 +332,12 @@ function DragAndDrop()
                     
                     //add new flowers
                     UpdateFlowers();
-                }
                     
-                score++; //up score by one
+                    score++; //up score by one
+                
+                    //update score text
+                    $("#score #current").text(score);
+                }
                 
                 //apply term to blank
                 $("#blank").addClass("filled");

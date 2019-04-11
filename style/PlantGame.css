@@ -1,3 +1,12 @@
+/* fonts */
+@font-face {
+font-family: 'Arial Rounded MT Bold';
+font-style: normal;
+font-weight: normal;
+src: local('Arial Rounded MT Bold'), url('../../fonts/ARLRDBD_0.woff') format('woff');
+}
+
+
 /* Hiding old header */
 header #language-selector,
 header #logo-wrapper,
@@ -69,6 +78,30 @@ header #backBtn img {
     position: relative;
     top: -7px;
     left: 5px;
+}
+
+header #score
+{
+    position: relative;
+    float: left;
+    height: 65px;
+    width: 150px;
+    background-color: #6BC546;
+    
+    border-style: solid;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    
+    
+    color: white;
+    font-size: 50px;
+    font-family: "Arial Rounded MT Bold";
+}
+
+header #score span
+{
+    position: relative;
+    left: 20px;
 }
 
 /* video section */
@@ -153,12 +186,16 @@ header #backBtn img {
  
     width: 100%;
     height: calc(20%);
-    background-color: white;
     font-size: 60px;
     padding-left: 10%;
     padding-right: 10%;
     color: #005464;
     text-align: center;
+    
+    position: relative;
+    z-index: 2;
+    
+    font-family: "Arial Rounded MT Bold";
 }
 
 #blank
@@ -223,6 +260,7 @@ header #backBtn img {
 #drag
 {
     position: absolute;
+    z-index: 3;
     background-color: #00897C;
     
     pointer-events: none;
@@ -234,6 +272,7 @@ header #backBtn img {
     color: white;
     font-size: 40px;
     text-align: center;
+    font-family: "Arial Rounded MT Bold";
     
     padding: 5px 10px;
 }
