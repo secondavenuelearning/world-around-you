@@ -23,6 +23,37 @@ header {
 
 
 }
+.centered {
+    text-align: center;
+  margin-top: 5%;
+
+}
+.imageContainer img {
+    height: 100%;
+    width: 100%;
+    
+    transition: top 1s;
+}
+
+.imageContainer {
+    display: inline-block;
+    text-align: center;
+    height: 130px;
+    width: 130px;
+    margin-right: 40px;
+    
+    cursor: pointer;
+}
+
+.imageContainer:hover img
+{
+    position: relative;
+    top: -5px;
+}
+#backBtn:hover {
+     position: relative;
+    top: -5px; 
+}
 main{
     height: calc(100% - 75px);
 }
@@ -34,8 +65,8 @@ main{
     text-align: center;
     display: block;
     font-size: 120px;
-    
-    color: #0098ba;
+    background-color: #00B092;
+    color: #FFFFFF;
     font-family: "Arial Rounded MT Bold";
     font-weight: bolder;
 }
