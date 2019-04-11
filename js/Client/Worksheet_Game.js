@@ -1,6 +1,7 @@
 import _ from 'underscore';
 import gameHtml from 'html/Client/PlantGame_Game.html!text';
 import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
+import winHtml from 'html/Client/PlantGame_Win.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default { Start, GetImagesFromFolder, Animate}
 
@@ -8,6 +9,10 @@ export default { Start, GetImagesFromFolder, Animate}
 //html and data passed to html
 var template = _.template(gameHtml);
 var templateData = {};
+
+//win template
+var winTemplate = _.template(winHtml);
+var winTemplateData = {};
 
 //global access to raw story data
 var storyData;
@@ -250,8 +255,6 @@ function LoadingFlowers()
             }
         }
     }
-    
-    console.log(animations.Flowers.Growing);
 }
 
 /* ----------------------- Game Mechanics ----------------------- */
@@ -339,6 +342,21 @@ function NextRound()
         //run hint
         Hint(); 
     });
+}
+
+function Win()
+{
+    //build win template
+    winTemplateData=
+    {
+        Score: score,
+        Max: maxScore
+    };
+    var win = winTemplate(winTemplateData);
+    
+    //go to win screen
+    $("main").html(win);
+    
 }
 
 function Hint()
@@ -436,8 +454,6 @@ function DragAndDrop()
                 //update notif text
                 RunNotif(notif.Good);
                 
-                console.log(score);
-                
                 
             }
             else //not the correct awnser- punish
@@ -447,7 +463,6 @@ function DragAndDrop()
                 
                 //some stuff w/ score??
                 firstTry = false;
-                console.log(score);
                 
                 //update notif text
                 RunNotif(notif.Bad);
@@ -522,12 +537,19 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     }
     else if(roundLogicActive)
     {
-        //wait a few secodna dn then progress to next round
-        //setTimeout(function()
-        //{
-            round++;
-            NextRound(); 
-        //}, 3000);
+        //updaet round
+        round++;
+        
+        //goto next round or win screen
+        if(round < rounds.length)
+        {
+            NextRound();
+        }
+        else
+        {
+            Win();
+        }
+             
     }
 }
 
