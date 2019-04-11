@@ -1,4 +1,5 @@
-import 'style/Viewer.css!';
+import 'style/Main.css!';
+import 'style/viewer.css!';
 import _ from "underscore";
 import urlParams from 'js/Client/UrlParams';
 import LanguageSelector from 'js/Client/LanguageSelector';
@@ -11,12 +12,12 @@ import html from 'html/Client/Viewer.html!text';
 const template = _.template(html);
 
 let storyId,
-    story,
-    liked = false;
+story,
+liked = false;
 
 function displaySimilarGenres(stories){
     let similarGenreStories = [],
-        lang = LanguageSelector.currentLanguageText();
+    lang = LanguageSelector.currentLanguageText();
 
     _.each(story.metadata.genres[lang], (genre) => {
         _.each(stories, (_story) => {
@@ -49,6 +50,15 @@ $(document).ready(() => {
         url: `/api/story?id=${storyId}`
     }).done((_story) => {
         story = _story;
+        console.log("story");
+        window.story = story;
+        console.log(story);
+        if (typeof(Storage) !== "undefined") {
+          // Code for localStorage/sessionStorage.
+          localStorage.setItem("3", JSON.stringify(story));
+        } else {
+          // Sorry! No Web Storage support..
+        }
 
         // add the main html to the page
         $('main').html(template({
