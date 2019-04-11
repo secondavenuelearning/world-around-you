@@ -169,7 +169,7 @@ var sess=null;
 			Page: 'Editor'
 		}));
 	});
-	app.get('/Game', ValidateUser, (req, res) => {
+	app.get('/Game', (req, res) => {
 		res.send(PageTemplate({
 			Page: 'Game'
 		}));
