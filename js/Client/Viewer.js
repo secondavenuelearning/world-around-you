@@ -1,6 +1,6 @@
 import 'style/Main.css!';
-import 'style/viewer.css!';
-import _ from "underscore";
+import 'style/Viewer.css!';
+import _ from 'underscore';
 import urlParams from 'js/Client/UrlParams';
 import LanguageSelector from 'js/Client/LanguageSelector';
 
