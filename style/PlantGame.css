@@ -154,20 +154,33 @@ header #backBtn img {
     width: 100%;
     height: calc(20%);
     background-color: white;
-    font-size: 70px;
+    font-size: 60px;
     padding-left: 10%;
     padding-right: 10%;
     color: #005464;
+    text-align: center;
 }
 
 #blank
 {
-    height: 30px;
-    width: 100px;
-    background-color: black;
-    color: transparent;
-    opacity: .7;
+    height: 10px;
+    width: 80px;
     
+    border-style: solid;
+    border-color: #005464;
+    border-radius: 30px;
+    border-width: 5px;
+    
+    background-color: #00897C;
+    
+    color: transparent;
+    
+}
+
+#blank.filled
+{
+    color: white;
+    padding: 0px 10px;
 }
 
 /* flower bed */
@@ -219,7 +232,7 @@ header #backBtn img {
     border-color: #00897C;
     
     color: white;
-    font-size: 30px;
+    font-size: 40px;
     text-align: center;
     
     padding: 5px 10px;

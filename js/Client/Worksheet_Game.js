@@ -329,6 +329,10 @@ function DragAndDrop()
                     
                 score++; //up score by one
                 
+                //apply term to blank
+                $("#blank").addClass("filled");
+                $("#blank").text(term);
+                
                 console.log(score);
                 
                 
