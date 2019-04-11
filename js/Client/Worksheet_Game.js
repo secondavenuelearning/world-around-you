@@ -257,6 +257,9 @@ function NextRound()
     this.$main = $(main);
     $('main').html(this.$main);
     
+    //clear notif
+    $("#responseText").text("");
+    
     //add looping to the video
     var vids = $("#videos video").toArray();
     vids.forEach(function (vid) {
@@ -431,6 +434,8 @@ function UpdateFlowers()
             Animate($(bouquet[i]), animations.Flowers.Growing[i], null, true);
         }
     }
+    
+    //load next chunk of flowers
 }
 
 function RunNotif(notifs)

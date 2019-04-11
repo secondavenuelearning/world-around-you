@@ -262,6 +262,7 @@ header #responseText
 {
     color: white;
     padding: 0px 10px;
+    background-color: #00897C;
 }
 
 #blank:hover
