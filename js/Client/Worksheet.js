@@ -14,7 +14,10 @@ var screens = {
 };
 var currentScreen = screens.Game;
 $('footer').html(flowerbedHtml);
+var anim;
+var busFrames = Game.GetImagesFromFolder("/img/games/Worksheet/TitleScreen_Animation/");
 function initializeGameScene() {
+      window.cancelAnimationFrame(anim);
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
     var gameData = {
@@ -64,7 +67,8 @@ function initializeGameScene() {
     };
     xmlhttp.open("GET", dataURL);
     xmlhttp.send();
-    
+    console.log(anim);
+  
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
@@ -86,6 +90,9 @@ function initializeTitle() {
     //set html
      $('main').html(html);
     //$('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
+    anim = window.requestAnimationFrame(function (timestamp){
+        Game.Animate("#wall", busFrames, null, false);
+    });
         var score = document.getElementById("score");
     score.style.display = "none";
     //hookup buttons
@@ -136,6 +143,9 @@ $(document).ready(function () {
     score.style.display = "none";
     
     //prep and run animations
-   // var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
-   // BusGame.Animate("#busStop #bus", busFrames, null, false);
+    anim = window.requestAnimationFrame(function (timestamp){
+        Game.Animate("#wall", busFrames, null, false);
+    });
+   
+   
 });
