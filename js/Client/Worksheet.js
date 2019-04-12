@@ -89,6 +89,7 @@ function initializeGameScene() {
 function initializeTitle() {
     //set html
      $('main').html(html);
+    $('footer').html(flowerbedHtml);
     
     $("#wall").addClass("titleWall");
     Game.Animate(".titleWall", busFrames, null, false);
@@ -109,7 +110,6 @@ function initializeTitle() {
     instruction.onclick = function () {
        initializeInstructions();
     };
-    
     //prep and run animations
    // var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
     //BusGame.Animate("#busStop #bus", busFrames, null, false);
