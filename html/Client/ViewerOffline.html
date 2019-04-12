@@ -1,116 +1,25 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title>Story View Offline</title>
-    <meta name="description" content="Offline viewer for stories.">
-    
-    <script>
-/*
-    self.addEventListener('fetch', function(e) {
-    console.log('[demoPWA - ServiceWorker] Fetch event fired.', e.request.url);
-    e.respondWith(
-        localStorage.getItem("3").then(function(response) {
-        //caches.match(e.request).then(function(response) {
-            if (response) {
-                console.log('[demoPWA - ServiceWorker] Retrieving from cache...');
-                return response;
-            }
-            console.log('[demoPWA - ServiceWorker] Retrieving from URL...');
-            return fetch(e.request).catch(function (e) {
-               //you might want to do more error checking here too,
-               //eg, check what e is returning..
-               alert('You appear to be offline, please try again when back online');
-            });
-        })
-    );
-});
-
-
-self.addEventListener('fetch', function(event) {
-    var req = event.request.clone();
-    if (req.clone().method == "GET") {
-        event.respondWith(  
-         
-        // Get the response from the network
-        return fetch(req.clone()).then(function(response) {
-           // And store it in the cache for later
-        return cache.put(req.clone(), response);
-        }); 
-        );
-    }
-});
-
-*/
-
-self.addEventListener('fetch', function(event) {
-    var request = event.request;
-    if (request.method === 'GET') {
-        event.respondWith(
-            fetch(request).catch(function(error) {
-                console.error(
-          '[onfetch] Failed. Serving cached offline fallback ' +
-          error
-        );
-                return localStorage.getItem("3");
-                 //return caches.open('offline').then(function(cache) {
-         // return cache.match('offline.html');
-        //});
-      })
-    );
-  }
-});
-</script>
-    
-    <script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="/static/jquery-min.js">\x3C/script>');</script>
-    
-    <script src="/static/jquery-ui.min.js"></script>
-    <script src="../../output-file2.js"></script>
-
-    
+	<meta charset="utf-8">
+	<title>Story View Offline</title>
+	<meta name="description" content="Offline viewer for stories.">
+	
+	<script>
+		window.offline = true;
+	</script>
+	
+	<script type="text/javascript">window.jQuery || document.write('<script type="text/javascript" src="/static/jquery-min.js">\x3C/script>');</script>	
+	<script src="/static/jquery-ui.min.js"></script>
+	<script src="/js/Offline/Header_Offline.js"></script>
+	<script src="/js/Offline/Viewer_Offline.js"></script>
 </head>
 
-
-<div id="viewer">
-</div>
-<div id="details">
-    <div id="title">
-        <% _.each(story.metadata.title, function(title, lang){ %>
-            <span lang="<%- lang %>"><%- title %></span>
-        <% }) %>
-    </div>
-    <div id="author"><%- story.author %></div>
-    <div id="social">
-        <button id="social-views" class="social">Views <span id="views"><%- story.metadata.views %></span></button>
-        <button id="social-likes" class="social">Likes <span id="likes"><%- story.metadata.likes %></span></button>
-        <button id="social-save" class="social socialExport">Save</button>
-        <button id="social-share" class="social socialExport">Share</button>
-    </div>
-    <div id="description">
-        <% _.each(story.metadata.description, function(description, lang){ %>
-            <span lang="<%- lang %>"><%- description %></span>
-        <% }) %>
-    </div>
-    <div id="genres" class="metadata-list"> Genres:
-        <% _.each(story.metadata.genres, function(genreList, lang){ %>
-            <span lang="<%- lang %>">
-                <% _.each(genreList, function(genre){ %>
-                    <a class="genre" href="./Search?search=<%- genre %>"><%- genre %></a>
-                <% }) %>
-            </span>
-        <% }) %>
-    </div>
-    <div id="tags" class="metadata-list"> Tags:
-        <% _.each(story.metadata.tags, function(tagList, lang){ %>
-            <span lang="<%- lang %>">
-                <% _.each(tagList, function(tag){ %>
-                    <a class="tag" href="./Search?search=<%- tag %>">#<%- tag %></a>
-                <% }) %>
-            </span>
-        <% }) %>
-    </div>
-</div>
-<div id="more-author"></div>
-<div id="more-stories"></div>
+<body class="offline">
+	<header></header>
+	<main></main>
+	<footer>Offline Viewer</footer>
+</body>
 
 
 </html>

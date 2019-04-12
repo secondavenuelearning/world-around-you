@@ -170,7 +170,7 @@
 	background-image: url(../img/icons/StoryViewer/icon_SV_HideText.svg);
 }
 #text-toggle:hover{
-	background-image: url(../img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg);
+	background-image: url(../img/icons/StoryViewer/icon_SV_HideText_HoverDown.svg);
 }
 #text-toggle-container.text-open #text-toggle{
 	background-image: url(../img/icons/StoryViewer/icon_SV_ShowText.svg);

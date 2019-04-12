@@ -1,34 +1,36 @@
 <div id="logo-wrapper">
 	<a href="./Stories"><span lang='en'><img id="logo" src="../../img/icons/NavBar/WAY_logo.svg"></span></a>
 </div>
-<nav>    
-	<div class="" id="nav-stories-div"><a href="./Stories"><button class="nav-icon" id="nav-stories-icon"></button></a></div>
-	<!--<div class=""><a href="./Games"><button class="nav-icon" id="nav-games-icon"></button></a></div>-->
-	<div class="" id="nav-user">
-        
-		<button class="nav-icon" id="nav-user-icon"></button>
-		<span id="nav-user-links">
-			<% if(user){ %>
-				<div><a href="./Bookmarks">
-					<span lang="en">Bookmarks</span>
-				</a></div>
-				<div><a href="./Logout">
-					<span lang="en">Log Out</span>
-				</a></div>
-			<% } else { %>
-				<div><a href="./Login">
-					<span lang="en">Log In</span>
-				</a></div>
-			<% } %>
-		</span>
-	</div>
-	<div class="" id="nav-search">
-		<form action="./Search">
-			<input id="nav-serach-input" type="text" name="search" />
-			<input id="nav-submit-input" type="submit" value="" />
-		</form>
-	</div>
-	<% if(user){ %>
-		<div class=""><a href="./Edit"><button class="nav-icon" id="nav-edit-icon"></button></a></div>
-	<% } %>
-</nav>
+<% if(!offline){ %>
+	<nav>
+		<div class="" id="nav-stories-div"><a href="./Stories"><button class="nav-icon" id="nav-stories-icon"></button></a></div>
+		<!--<div class=""><a href="./Games"><button class="nav-icon" id="nav-games-icon"></button></a></div>-->
+		<div class="" id="nav-user">
+			
+			<button class="nav-icon" id="nav-user-icon"></button>
+			<span id="nav-user-links">
+				<% if(user){ %>
+					<div><a href="./Bookmarks">
+						<span lang="en">Bookmarks</span>
+					</a></div>
+					<div><a href="./Logout">
+						<span lang="en">Log Out</span>
+					</a></div>
+				<% } else { %>
+					<div><a href="./Login">
+						<span lang="en">Log In</span>
+					</a></div>
+				<% } %>
+			</span>
+		</div>
+		<div class="" id="nav-search">
+			<form action="./Search">
+				<input id="nav-serach-input" type="text" name="search" />
+				<input id="nav-submit-input" type="submit" value="" />
+			</form>
+		</div>
+		<% if(user){ %>
+			<div class=""><a href="./Edit"><button class="nav-icon" id="nav-edit-icon"></button></a></div>
+		<% } %>
+	</nav>
+<% } %>

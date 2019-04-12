@@ -18,7 +18,90 @@ $__System.registerDynamic("c", [], false, function ($__require, $__exports, $__m
 
   return _retrieveGlobal();
 });
-$__System.register('d', [], function (_export) {
+$__System.register('d', ['e'], function (_export) {
+	'use strict';
+
+	var _, online;
+
+	function SetStorage(storageName, obj) {
+		if (typeof Storage === "undefined") {
+			console.error('No storage for this browser.');
+			return;
+		}
+
+		localStorage.setItem(storageName, JSON.stringify(obj));
+	}
+
+	function GetStorage(storageName) {
+		if (typeof Storage === "undefined") {
+			console.error('No storage for this browser.');
+			return;
+		}
+
+		var jsonString = localStorage.getItem(storageName);
+		return jsonString ? JSON.parse(jsonString) : null;
+	}
+
+	function AddToAssetList(storageName, listOrItem) {
+		var list = GetStorage(storageName) || [];
+
+		if (typeof listOrItem == 'string') {
+			list.push(listOrItem);
+		} else {
+			_.each(listOrItem, function (item) {
+				if (list.indexOf(item) == -1) list.push(item);
+			});
+		}
+
+		SetStorage(storageName, list);
+		return list;
+	}
+
+	function RemoveFromAssetList(storageName, listOrItem) {
+		var list = GetStorage(storageName);
+
+		if (typeof listOrItem == 'string') {
+			var index = list.indexOf(listOrItem);
+			if (index != -1) list.splice(index, 1);
+		} else {
+			_.each(listOrItem, function (item) {
+				var index = list.indexOf(item);
+				if (index != -1) list.splice(index, 1);
+			});
+		}
+
+		SetStorage(storageName, list);
+		return list;
+	}
+
+	function SaveServiceWorker(url, assets) {
+		UpUp.start({
+			'content-url': url,
+			'assets': assets,
+			'service-worker-url': '/upup.sw.min.js'
+		});
+	}
+
+	return {
+		setters: [function (_e) {
+			_ = _e['default'];
+		}],
+		execute: function () {
+			online = !window.offline;
+
+			if (online) $('body').append('<script src="/upup.min.js"></script>');
+			_export('default', {
+				SetStorage: SetStorage,
+				GetStorage: GetStorage,
+				AddToAssetList: AddToAssetList,
+				RemoveFromAssetList: RemoveFromAssetList,
+				SaveServiceWorker: SaveServiceWorker
+			});
+		}
+	};
+});
+
+$__System.register('f', [], function (_export) {
 	'use strict';
 
 	var params, queryArray, i, string, splitString, key, value;
@@ -45,14 +128,14 @@ $__System.register('d', [], function (_export) {
 	};
 });
 
-$__System.registerDynamic("e", [], false, function ($__require, $__exports, $__module) {
+$__System.registerDynamic("10", [], false, function ($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
 
   (function ($__global) {})(this);
 
   return _retrieveGlobal();
 });
-$__System.register("f", [], function (_export, _context) {
+$__System.register("11", [], function (_export, _context) {
   "use strict";
 
   var __useDefault;
@@ -68,14 +151,14 @@ $__System.register("f", [], function (_export, _context) {
     }
   };
 });
-$__System.registerDynamic("10", [], false, function ($__require, $__exports, $__module) {
+$__System.registerDynamic("12", [], false, function ($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
 
   (function ($__global) {})(this);
 
   return _retrieveGlobal();
 });
-$__System.register('11', [], function (_export) {
+$__System.register('13', [], function (_export) {
 	'use strict';
 
 	return {
@@ -86,7 +169,7 @@ $__System.register('11', [], function (_export) {
 	};
 });
 
-$__System.register("12", [], function (_export, _context) {
+$__System.register("14", [], function (_export, _context) {
   "use strict";
 
   var __useDefault;
@@ -102,18 +185,18 @@ $__System.register("12", [], function (_export, _context) {
     }
   };
 });
-$__System.register('13', ['10', '11', '12', '14'], function (_export) {
+$__System.register('15', ['12', '13', '14', 'e'], function (_export) {
 	'use strict';
 
 	var languages, html, _, template, _currentLanguage, _currentLanguageText, $el, appendTo, updateLanguageDisplay;
 
 	return {
-		setters: [function (_2) {}, function (_4) {
-			languages = _4['default'];
-		}, function (_5) {
-			html = _5['default'];
-		}, function (_3) {
-			_ = _3['default'];
+		setters: [function (_2) {}, function (_3) {
+			languages = _3['default'];
+		}, function (_4) {
+			html = _4['default'];
+		}, function (_e) {
+			_ = _e['default'];
 		}],
 		execute: function () {
 
@@ -178,10 +261,10 @@ $__System.register('13', ['10', '11', '12', '14'], function (_export) {
 	};
 });
 
-$__System.register('15', ['13', '14', 'e', 'f'], function (_export) {
+$__System.register('16', ['10', '11', '15', 'e'], function (_export) {
 	'use strict';
 
-	var LanguageSelector, _, html, index, template, interval;
+	var html, LanguageSelector, _, index, template, interval;
 
 	function resizePrviews() {
 		clearInterval(interval);
@@ -216,12 +299,12 @@ $__System.register('15', ['13', '14', 'e', 'f'], function (_export) {
 	}
 
 	return {
-		setters: [function (_3) {
-			LanguageSelector = _3['default'];
-		}, function (_2) {
-			_ = _2['default'];
-		}, function (_e) {}, function (_f) {
-			html = _f['default'];
+		setters: [function (_2) {}, function (_3) {
+			html = _3['default'];
+		}, function (_4) {
+			LanguageSelector = _4['default'];
+		}, function (_e) {
+			_ = _e['default'];
 		}],
 		execute: function () {
 			index = 0;
@@ -242,14 +325,14 @@ $__System.register('15', ['13', '14', 'e', 'f'], function (_export) {
 	};
 });
 
-$__System.registerDynamic("16", [], false, function ($__require, $__exports, $__module) {
+$__System.registerDynamic("17", [], false, function ($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
 
   (function ($__global) {})(this);
 
   return _retrieveGlobal();
 });
-$__System.register("17", [], function (_export, _context) {
+$__System.register("18", [], function (_export, _context) {
   "use strict";
 
   var __useDefault;
@@ -265,7 +348,7 @@ $__System.register("17", [], function (_export, _context) {
     }
   };
 });
-$__System.register('18', ['14'], function (_export) {
+$__System.register('19', ['e'], function (_export) {
     'use strict';
 
     var _;
@@ -283,8 +366,8 @@ $__System.register('18', ['14'], function (_export) {
         });
     }
     return {
-        setters: [function (_2) {
-            _ = _2['default'];
+        setters: [function (_e) {
+            _ = _e['default'];
         }],
         execute: function () {
             _export('default', ImageHoverSwap);
@@ -292,10 +375,10 @@ $__System.register('18', ['14'], function (_export) {
     };
 });
 
-$__System.register("19", ["14", "16", "17", "18"], function (_export) {
+$__System.register("1a", ["17", "18", "19", "e"], function (_export) {
     "use strict";
 
-    var _, html, ImageHoverSwap, imageLink, index, numberToShow;
+    var html, ImageHoverSwap, _, imageLink, index, numberToShow;
 
     function createPanelList(panels, showCount, startIndex, endIndex, pictures, holder, justImage) {
         if (justImage == true) {
@@ -566,12 +649,12 @@ $__System.register("19", ["14", "16", "17", "18"], function (_export) {
     }
 
     return {
-        setters: [function (_3) {
-            _ = _3["default"];
-        }, function (_2) {}, function (_4) {
-            html = _4["default"];
-        }, function (_5) {
-            ImageHoverSwap = _5["default"];
+        setters: [function (_2) {}, function (_3) {
+            html = _3["default"];
+        }, function (_4) {
+            ImageHoverSwap = _4["default"];
+        }, function (_e) {
+            _ = _e["default"];
         }],
         execute: function () {
             imageLink = 'img/carousel/1.jpg';
@@ -583,184 +666,398 @@ $__System.register("19", ["14", "16", "17", "18"], function (_export) {
     };
 });
 
-$__System.registerDynamic("1a", [], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  // 7.2.1 RequireObjectCoercible(argument)
-  module.exports = function (it) {
-    if (it == undefined) throw TypeError("Can't call method on  " + it);
-    return it;
-  };
-});
-$__System.registerDynamic('1b', ['1a'], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  var defined = $__require('1a');
-  module.exports = function (it) {
-    return Object(defined(it));
-  };
-});
-$__System.registerDynamic('1c', [], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-  var global = module.exports = typeof window != 'undefined' && window.Math == Math ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-  if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-});
-$__System.registerDynamic('1d', [], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  module.exports = function (it) {
-    if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-    return it;
-  };
-});
-$__System.registerDynamic('1e', ['1d'], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  var aFunction = $__require('1d');
-  module.exports = function (fn, that, length) {
-    aFunction(fn);
-    if (that === undefined) return fn;
-    switch (length) {
-      case 1:
-        return function (a) {
-          return fn.call(that, a);
-        };
-      case 2:
-        return function (a, b) {
-          return fn.call(that, a, b);
-        };
-      case 3:
-        return function (a, b, c) {
-          return fn.call(that, a, b, c);
-        };
-    }
-    return function () {
-      return fn.apply(that, arguments);
-    };
-  };
-});
-$__System.registerDynamic('1f', ['1c', '20', '1e'], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  var global = $__require('1c'),
-      core = $__require('20'),
-      ctx = $__require('1e'),
-      PROTOTYPE = 'prototype';
-  var $export = function (type, name, source) {
-    var IS_FORCED = type & $export.F,
-        IS_GLOBAL = type & $export.G,
-        IS_STATIC = type & $export.S,
-        IS_PROTO = type & $export.P,
-        IS_BIND = type & $export.B,
-        IS_WRAP = type & $export.W,
-        exports = IS_GLOBAL ? core : core[name] || (core[name] = {}),
-        target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE],
-        key,
-        own,
-        out;
-    if (IS_GLOBAL) source = name;
-    for (key in source) {
-      own = !IS_FORCED && target && key in target;
-      if (own && key in exports) continue;
-      out = own ? target[key] : source[key];
-      exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key] : IS_BIND && own ? ctx(out, global) : IS_WRAP && target[key] == out ? function (C) {
-        var F = function (param) {
-          return this instanceof C ? new C(param) : C(param);
-        };
-        F[PROTOTYPE] = C[PROTOTYPE];
-        return F;
-      }(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-      if (IS_PROTO) (exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
-    }
-  };
-  $export.F = 1;
-  $export.G = 2;
-  $export.S = 4;
-  $export.P = 8;
-  $export.B = 16;
-  $export.W = 32;
-  module.exports = $export;
-});
-$__System.registerDynamic("21", [], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  module.exports = function (exec) {
-    try {
-      return !!exec();
-    } catch (e) {
-      return true;
-    }
-  };
-});
-$__System.registerDynamic('22', ['1f', '20', '21'], true, function ($__require, exports, module) {
-    var global = this || self,
-        GLOBAL = global;
-    /* */
-    var $export = $__require('1f'),
-        core = $__require('20'),
-        fails = $__require('21');
-    module.exports = function (KEY, exec) {
-        var fn = (core.Object || {})[KEY] || Object[KEY],
-            exp = {};
-        exp[KEY] = exec(fn);
-        $export($export.S + $export.F * fails(function () {
-            fn(1);
-        }), 'Object', exp);
-    };
-});
-$__System.registerDynamic('23', ['1b', '22'], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  var toObject = $__require('1b');
-  $__require('22')('keys', function ($keys) {
-    return function keys(it) {
-      return $keys(toObject(it));
-    };
-  });
-});
-$__System.registerDynamic('20', [], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  var core = module.exports = { version: '1.2.6' };
-  if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-});
-$__System.registerDynamic('24', ['23', '20'], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  $__require('23');
-  module.exports = $__require('20').Object.keys;
-});
-$__System.registerDynamic("25", ["24"], true, function ($__require, exports, module) {
-  var global = this || self,
-      GLOBAL = global;
-  /* */
-  module.exports = { "default": $__require("24"), __esModule: true };
-});
-$__System.registerDynamic("26", [], false, function ($__require, $__exports, $__module) {
+$__System.registerDynamic("1b", [], false, function ($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
 
   (function ($__global) {})(this);
 
   return _retrieveGlobal();
 });
-$__System.registerDynamic("27", [], false, function ($__require, $__exports, $__module) {
+$__System.registerDynamic("1c", [], false, function ($__require, $__exports, $__module) {
   var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
 
   (function ($__global) {})(this);
 
   return _retrieveGlobal();
 });
-$__System.registerDynamic('28', [], true, function ($__require, exports, module) {
+$__System.register("1d", [], function (_export, _context) {
+  "use strict";
+
+  var __useDefault;
+
+  return {
+    setters: [],
+    execute: function () {
+      _export("__useDefault", __useDefault = "<% defaultText = defaultText ? defaultText : (multiSelect ? '' : (typeof options[0] == 'string' ? options[0] : options[0].label)) %>\r\n<div id=\"<%- id %>\" class=\"custom-select\">\r\n\t<button class=\"custom-select-value\"><%- defaultText %></button>\r\n\t<div class=\"custom-select-options\">\r\n\t\t<% _.each(options, function(option){ %>\r\n\t\t\t<div>\r\n\t\t\t\t<% if(multiSelect){  %>\r\n\t\t\t\t\t<input type=\"checkbox\" value=\"<%- typeof option == 'string' ? option : option.value %>\"><label><%- typeof option == 'string' ? option : option.label %></label>\r\n\t\t\t\t<% } else { %>\r\n\t\t\t\t\t<button value=\"<%- typeof option == 'string' ? option : option.value %>\"><%- typeof option == 'string' ? option : option.label %></button>\r\n\t\t\t\t<% } %>\r\n\t\t\t</div>\r\n\t\t<% }) %>\r\n\t</div>\r\n</div>");
+
+      _export("__useDefault", __useDefault);
+
+      _export("default", __useDefault);
+    }
+  };
+});
+$__System.register('1e', ['1c', 'e', '1d'], function (_export) {
+	'use strict';
+
+	var _, html, template;
+
+	function CustomSelect(parentId, settings) {
+		var $el = $(template({
+			id: settings.id,
+			options: settings.options,
+			multiSelect: settings.multiSelect,
+			defaultText: settings.defaultText || ''
+		}));
+
+		$('#' + parentId).append($el);
+		var CS = this;
+
+		// Function to handle closing the CustomSelect when clicking outside the element
+		var closeOnClick = function closeOnClick(event) {
+			if (event.target.closest('.custom-select-options') == null) {
+				$el.find('.custom-select-options').hide(200);
+				$(document).off('click', closeOnClick);
+			}
+		};
+		$el.find('.custom-select-value').on('click', function () {
+			$el.find('.custom-select-options').toggle(200);
+			event.stopPropagation();
+			$(document).on('click', closeOnClick);
+		});
+
+		$el.find('.custom-select-options button').on('click', function (evt) {
+			var value = $(evt.currentTarget).val(),
+			    label = $(evt.currentTarget).html();
+
+			$el.find('.custom-select-value').html(label);
+
+			CS.value = value;
+			$(CS).trigger('change', [value]);
+
+			$el.find('.custom-select-options').hide(200);
+		});
+
+		$el.find('.custom-select-options input').on('change', function (evt) {
+			var values = [];
+			$el.find('input').each(function (i, el) {
+				if (el.checked) values.push(el.value);
+			});
+
+			CS.values = values;
+			$(CS).trigger('change', [values]);
+		});
+	}
+
+	return {
+		setters: [function (_c) {}, function (_e) {
+			_ = _e['default'];
+		}, function (_d) {
+			html = _d['default'];
+		}],
+		execute: function () {
+			template = _.template(html);
+
+			_export('default', CustomSelect);
+		}
+	};
+});
+
+$__System.register("1f", [], function (_export, _context) {
+  "use strict";
+
+  var __useDefault;
+
+  return {
+    setters: [],
+    execute: function () {
+      _export("__useDefault", __useDefault = "<div id=\"story-viewer\">\r\n\t<div id=\"page-counter\">\r\n\t\t<span id=\"current\">1</span>\r\n\t\t<span id=\"total\"><%- Object.keys(story.data).length + 1 %></span>\r\n\t</div>\r\n\t<div id=\"page-content\">\r\n\t</div>\r\n\t<div id=\"page-controller\">\r\n\t</div>\r\n\t<button id=\"fullscreen-toggle\"></button>\r\n</div>");
+
+      _export("__useDefault", __useDefault);
+
+      _export("default", __useDefault);
+    }
+  };
+});
+$__System.register("20", [], function (_export, _context) {
+  "use strict";
+
+  var __useDefault;
+
+  return {
+    setters: [],
+    execute: function () {
+      _export("__useDefault", __useDefault = "<div class=\"story-viewer-nav sixth\">\r\n\t<% if(previousPageNumber){ %>\r\n\t\t<button id=\"story-viewer-previous\" class=\"story-viewer-nav-button\" page-dir=\"-1\">\r\n\t\t\t<div class=\"icon <%- previousIcon %>\"></div>\r\n\t\t\t<div class=\"num\"><%- previousPageNumber %></div>\r\n\t\t</button>\r\n\t<% } %>\r\n</div>\r\n<div class=\"story-viewer-page two-thirds\">\r\n\t<% if(currentIcon == 'image'){ %>\r\n\t\t<div id=\"page-overlay\">\r\n\t\t\t<span class=\"icon <%- currentIcon %>\"></span>\r\n\t\t\t<span class=\"num\"><%- currentPageNumber %></span>\r\n\t\t</div>\r\n\t\t<div class=\"image-container\">\r\n\t\t\t<img src=\"<%- page.image %>\" />\r\n\t\t</div>\r\n\t<% } else { %>\r\n\t\t<div class=\"video-container text-open\">\r\n\t\t\t<video src=\"<%- page.video[currentSignLanguage] %>\" controls loop autoplay muted></video>\r\n\t\t</div>\r\n\t\t<div id=\"text-toggle-container\" class=\"text-open\">\r\n\t\t\t<button id=\"text-toggle\"></button>\r\n\t\t</div>\r\n\t\t<div id=\"text-container\" class=\"text-open\">\r\n\t\t\t<%= page.text[currentWrittenLanguage] %>\r\n\t\t</div>\r\n\t<% } %>\r\n</div>\r\n<div class=\"story-viewer-nav sixth\">\r\n\t<% if(nextPageNumber){ %>\r\n\t\t<button id=\"story-viewer-next\" class=\"story-viewer-nav-button\" page-dir=\"1\">\r\n\t\t\t<div class=\"icon <%- nextIcon %>\"></div>\r\n\t\t\t<div class=\"num\"><%- nextPageNumber %></div>\r\n\t\t</button>\r\n\t<% } %>\r\n</div>");
+
+      _export("__useDefault", __useDefault);
+
+      _export("default", __useDefault);
+    }
+  };
+});
+$__System.register("21", [], function (_export, _context) {
+  "use strict";
+
+  var __useDefault;
+
+  return {
+    setters: [],
+    execute: function () {
+      _export("__useDefault", __useDefault = "<div id=\"glossary-modal\">\r\n\t<div id=\"term-container\">\r\n\t\t<div id=\"media-container\" class=\"third\">\r\n\t\t\t<% if(term.video && term.video[currentSignLanguage]){ %>\r\n\t\t\t\t<div class=\"video-container\">\r\n\t\t\t\t\t<video id=\"glossary-video\" autoplay muted loop src=\"<%- page.video[currentSignLanguage] %>\">\r\n\t\t\t\t\t</video>\r\n\t\t\t\t</div>\r\n\t\t\t<% } %>\r\n\t\t\t<% if(term.image){ %>\r\n\t\t\t\t<div class=\"image-container\">\r\n\t\t\t\t\t<img src=\"<%- term.image %>\">\r\n\t\t\t\t</div>\r\n\t\t\t<% } %>\r\n\t\t</div>\r\n\t\t<div id=\"definition-container\" class=\"two-thirds\">\r\n\t\t\t<h1 id=\"word\"><%- term.name %></h1>\r\n\t\t\t<p id=\"definition\"><%= term.definition %></p>\r\n\t\t</div>\r\n\t\t<button id=\"exit-modal\"></button>\r\n\t</div>\r\n</div>");
+
+      _export("__useDefault", __useDefault);
+
+      _export("default", __useDefault);
+    }
+  };
+});
+$__System.register('22', ['20', '21', '1b', 'e', '1e', '1f'], function (_export) {
+	'use strict';
+
+	var pageHtml, glossaryHtml, _, CustomSelect, html, template, pagTemplate, glossaryTemplate, story, page, pageIndex, subPageIndex, currentWrittenLanguage, currentSignLanguage, writtenLang, writtenOptions, signLang, signOptions, textArea, visuals, fullscreen;
+
+	/* ----------------------- Constructor ----------------------- */
+	function SetStory(_story) {
+		story = _story;
+		currentWrittenLanguage = story.metadata.writtenLanguages[0];
+		currentSignLanguage = story.metadata.signLanguages[0];
+	}
+
+	function Render(id) {
+		$('#' + id).html(template({
+			story: story
+		}));
+
+		$('#fullscreen-toggle').on('click', function (evt) {
+			if (document.fullscreen || document.msFullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement) {
+				if (document.exitFullscreen) {
+					document.exitFullscreen();
+				} else if (document.mozCancelFullScreen) {
+					/* Firefox */
+					document.mozCancelFullScreen();
+				} else if (document.webkitExitFullscreen) {
+					/* Chrome, Safari and Opera */
+					document.webkitExitFullscreen();
+				} else if (document.msExitFullscreen) {
+					/* IE/Edge */
+					document.msExitFullscreen();
+				}
+			} else {
+				var viewer = $('#story-viewer')[0];
+				if (viewer.requestFullscreen) {
+					viewer.requestFullscreen();
+				} else if (viewer.mozRequestFullScreen) {
+					/* Firefox */
+					viewer.mozRequestFullScreen();
+				} else if (viewer.webkitRequestFullscreen) {
+					/* Chrome, Safari and Opera */
+					viewer.webkitRequestFullscreen();
+				} else if (viewer.msRequestFullscreen) {
+					/* IE/Edge */
+					viewer.msRequestFullscreen();
+				}
+			}
+		});
+
+		var wlSelect = new CustomSelect('page-controller', {
+			id: 'written-language-select',
+			options: story.metadata.writtenLanguages,
+			defaultText: currentWrittenLanguage
+		}),
+		    slSelect = new CustomSelect('page-controller', {
+			id: 'sign-language-select',
+			options: story.metadata.signLanguages,
+			defaultText: currentSignLanguage
+		});
+
+		$(wlSelect).on('change', function (evt, value) {
+			currentWrittenLanguage = value;
+			RenderPage();
+		});
+		$(slSelect).on('change', function (evt, value) {
+			currentSignLanguage = value;
+			RenderPage();
+		});
+
+		RenderPage();
+	}
+
+	function RenderPage() {
+		var currentPageNumber = pageIndex + 2,
+		    page = pageIndex == -1 ? { image: story.coverimage } : story.data[pageIndex],
+		    maxSubIndex = page.image && page.video ? 1 : 0,
+		    previousPage = pageIndex == 0 ? { image: story.coverimage } : story.data[pageIndex - 1],
+		    nextPage = story.data[pageIndex + 1];
+
+		var currentIcon = undefined,
+		    previousIcon = undefined,
+		    previousPageNumber = undefined,
+		    nextIcon = undefined,
+		    nextPageNumber = undefined;
+
+		if (pageIndex == -1) {
+			currentIcon = 'image';
+			nextIcon = nextPage.image ? 'image' : 'sign';
+			nextPageNumber = 2;
+		} else {
+			if (subPageIndex != maxSubIndex) {
+				currentIcon = 'image';
+
+				previousPageNumber = currentPageNumber - 1;
+				previousIcon = previousPage.video ? 'sign' : 'image';
+
+				nextPageNumber = currentPageNumber;
+				nextIcon = 'sign';
+			} else {
+				currentIcon = 'sign';
+
+				previousPageNumber = maxSubIndex == 1 ? currentPageNumber : currentPageNumber - 1;
+				previousIcon = maxSubIndex == 1 ? 'image' : previousPage.video ? 'sign' : 'image';
+
+				if (nextPage) {
+					nextPageNumber = currentPageNumber + 1;
+					nextIcon = nextPage.image ? 'image' : 'sign';
+				}
+			}
+		}
+
+		$('#page-content').html(pagTemplate({
+			page: page,
+			currentIcon: currentIcon,
+			currentPageNumber: currentPageNumber,
+			previousIcon: previousIcon,
+			previousPageNumber: previousPageNumber,
+			nextIcon: nextIcon,
+			nextPageNumber: nextPageNumber,
+			currentWrittenLanguage: currentWrittenLanguage,
+			currentSignLanguage: currentSignLanguage
+		}));
+
+		$('#page-counter #current').html(currentPageNumber);
+
+		$('.story-viewer-nav-button').on('click', function (evt) {
+			var dir = $(evt.currentTarget).attr('page-dir');
+
+			if (dir > 0) {
+				if (subPageIndex == maxSubIndex) {
+					pageIndex++;
+					subPageIndex = 0;
+				} else {
+					subPageIndex++;
+				}
+			} else if (dir < 0) {
+				if (subPageIndex == maxSubIndex && maxSubIndex > 0) {
+					subPageIndex--;
+				} else {
+					pageIndex--;
+					subPageIndex = previousPage.image && previousPage.video ? 1 : 0;
+				}
+			}
+			RenderPage();
+		});
+
+		$('#text-toggle').on('click', function (evt) {
+			$('.video-container').toggleClass('text-open');
+			$('#text-toggle-container').toggleClass('text-open');
+			$('#text-container').toggleClass('text-open');
+		});
+
+		GenerateGlossaryButtons(page);
+	}
+
+	function GenerateGlossaryButtons(page) {
+		if (!page) return;
+
+		var glossaryTerms = page.glossary ? page.glossary[currentWrittenLanguage] : [],
+		    text = $('#text-container').html();
+
+		if (!text) return;
+
+		_.each(glossaryTerms, function (term, name) {
+			var regEx = new RegExp(name, 'i');
+			text = text.replace(regEx, function (match) {
+				return '<span class="glossary" glossary-term="' + name + '">' + match + '</span>';
+			});
+		});
+
+		$('#text-container').html(text);
+
+		//add button functionality
+		$('.glossary').on('click', function (evt) {
+
+			//parse data to modal pop up
+			var termName = $(evt.currentTarget).attr('glossary-term'),
+			    term = glossaryTerms[termName];
+
+			console.log(termName, term, glossaryTerms);
+
+			$('#story-viewer').append(glossaryTemplate({
+				term: term,
+				page: page,
+				currentWrittenLanguage: currentWrittenLanguage,
+				currentSignLanguage: currentSignLanguage
+			}));
+
+			$('#exit-modal').on('click', function (evt) {
+				$('#glossary-modal').remove();
+			});
+
+			// loop the video between the desired times
+			var vid = $('#glossary-video')[0];
+			if (vid) {
+				vid.ontimeupdate = function () {
+					var startTime = term.video[currentSignLanguage].start || 0,
+					    endTime = term.video[currentSignLanguage].end || vid.duration;
+
+					if (vid.currentTime < startTime || vid.currentTime > endTime) vid.currentTime = startTime;
+				};
+			}
+		});
+	}
+
+	return {
+		setters: [function (_2) {
+			pageHtml = _2['default'];
+		}, function (_3) {
+			glossaryHtml = _3['default'];
+		}, function (_b) {}, function (_e) {
+			_ = _e['default'];
+		}, function (_e2) {
+			CustomSelect = _e2['default'];
+		}, function (_f) {
+			html = _f['default'];
+		}],
+		execute: function () {
+			template = _.template(html);
+			pagTemplate = _.template(pageHtml);
+			glossaryTemplate = _.template(glossaryHtml);
+
+			/* ----------------------- Global Variables ----------------------- */
+			story = undefined;
+			page = undefined;
+			pageIndex = -1;
+			subPageIndex = 0;
+			currentWrittenLanguage = undefined;
+			currentSignLanguage = undefined;
+			writtenLang = "English";
+			signLang = "fsl_luzon";
+			fullscreen = false;
+
+			_export('default', {
+				SetStory: SetStory,
+				Render: Render
+			});
+		}
+	};
+});
+
+$__System.registerDynamic("23", [], false, function ($__require, $__exports, $__module) {
+  var _retrieveGlobal = $__System.registry.get("@@global-helpers").prepareGlobal($__module.id, null, null);
+
+  (function ($__global) {})(this);
+
+  return _retrieveGlobal();
+});
+$__System.registerDynamic('24', [], true, function ($__require, exports, module) {
   /* */
   "format cjs";
   //     Underscore.js 1.9.1
@@ -2467,688 +2764,428 @@ $__System.registerDynamic('28', [], true, function ($__require, exports, module)
     }
   })();
 });
-$__System.registerDynamic("14", ["28"], true, function ($__require, exports, module) {
+$__System.registerDynamic("e", ["24"], true, function ($__require, exports, module) {
   var global = this || self,
       GLOBAL = global;
-  module.exports = $__require("28");
+  module.exports = $__require("24");
 });
-$__System.register("29", [], function (_export, _context) {
-  "use strict";
-
-  var __useDefault;
-
-  return {
-    setters: [],
-    execute: function () {
-      _export("__useDefault", __useDefault = "<% defaultText = defaultText ? defaultText : (multiSelect ? '' : (typeof options[0] == 'string' ? options[0] : options[0].label)) %>\r\n<div id=\"<%- id %>\" class=\"custom-select\">\r\n\t<button class=\"custom-select-value\"><%- defaultText %></button>\r\n\t<div class=\"custom-select-options\">\r\n\t\t<% _.each(options, function(option){ %>\r\n\t\t\t<div>\r\n\t\t\t\t<% if(multiSelect){  %>\r\n\t\t\t\t\t<input type=\"checkbox\" value=\"<%- typeof option == 'string' ? option : option.value %>\"><label><%- typeof option == 'string' ? option : option.label %></label>\r\n\t\t\t\t<% } else { %>\r\n\t\t\t\t\t<button value=\"<%- typeof option == 'string' ? option : option.value %>\"><%- typeof option == 'string' ? option : option.label %></button>\r\n\t\t\t\t<% } %>\r\n\t\t\t</div>\r\n\t\t<% }) %>\r\n\t</div>\r\n</div>");
-
-      _export("__useDefault", __useDefault);
-
-      _export("default", __useDefault);
-    }
-  };
-});
-$__System.register('2a', ['14', '27', '29'], function (_export) {
+$__System.register('25', ['23', 'e'], function (_export) {
 	'use strict';
 
-	var _, html, template;
+	var _, selectedPage, maxPage, storiesDiv, thisID;
 
-	function CustomSelect(parentId, settings) {
-		var $el = $(template({
-			id: settings.id,
-			options: settings.options,
-			multiSelect: settings.multiSelect,
-			defaultText: settings.defaultText || ''
-		}));
+	function addStories(stories) {
+		var childrenCount = document.getElementById(storiesDiv).childElementCount;
+		var countNode = 0;
+		var newDiv;
+		var pageNum = 0;
+		for (var index in stories) {
+			// Only 9 stories per page
+			if (index % 9 == 0) {
+				pageNum++;
+				newDiv = document.createElement("div");
+				newDiv.id = 'grid-page' + pageNum;
+				$(newDiv).addClass("grid-page");
+				// Handles multiple pages
+				if (pageNum > 1) {
+					$(newDiv).addClass("grid-page");
+					newDiv.style.transform = "translateX(100vw)";
+					var gridButton;
+					var gridButtons;
+					// Creates pagination only if it doesn't exist already
+					if (pageNum == 2) {
+						gridButtons = document.createElement("div");
+						gridButtons.id = "grid-buttons";
+						$('#' + storiesDiv).append(gridButtons);
+						gridButton = document.createElement("button");
+						$(gridButton).attr("type", "button");
+						$(gridButton).addClass("grid-button");
+						$(gridButton).addClass("grid-button-selected");
+						gridButton.innerHTML = "1";
+						gridButton.id = "grid-" + 1 + "-button";
+						gridButton.addEventListener("click", swapGridPage);
+						$(gridButtons).append(gridButton);
+						// Previous button
+						gridButton = document.createElement("button");
+						$(gridButton).attr("type", "button");
+						gridButton.id = "grid-prev-button";
+						gridButton.addEventListener("click", swapGridPage);
+						$(gridButtons).prepend(gridButton);
+					}
+					gridButton = document.createElement("button");
+					$(gridButton).attr("type", "button");
+					$(gridButton).addClass("grid-button");
+					gridButton.innerHTML = pageNum;
+					gridButton.id = "grid-" + pageNum + "-button";
+					gridButton.addEventListener("click", swapGridPage);
+					$(gridButtons).append(gridButton);
+				}
+				$('#' + storiesDiv).append(newDiv);
+			}
+			stories[index].appendTo(newDiv.id);
+		}
+		// Next button
+		gridButton = document.createElement("button");
+		$(gridButton).attr("type", "image");
+		$(gridButton).attr("src", "img/icons/General/icon_Page_Next.svg");
+		gridButton.id = "grid-next-button";
+		gridButton.innerHTML = "";
+		gridButton.addEventListener("click", swapGridPage);
+		$(gridButtons).append(gridButton);
+		maxPage = pageNum;
+		// Timeout to make sure elements have been populated
+		setTimeout(function () {
+			resizeStories();
+		}, 100);
+	}
 
-		$('#' + parentId).append($el);
-		var CS = this;
+	function swapGridPage(event) {
+		var targetPage;
+		// Test for next and previous buttons
+		if (event.target.id == "grid-prev-button") {
+			targetPage = selectedPage - 1;
+		} else if (event.target.id == "grid-next-button") {
+			targetPage = selectedPage + 1;
+		} else {
+			targetPage = parseInt(event.target.id.match(/\d+/g));
+		}
 
-		// Function to handle closing the CustomSelect when clicking outside the element
-		var closeOnClick = function closeOnClick(event) {
-			if (event.target.closest('.custom-select-options') == null) {
-				$el.find('.custom-select-options').hide(200);
-				$(document).off('click', closeOnClick);
+		// Return if button clicked was same page you are on
+		if (targetPage === selectedPage) {
+			return;
+		}
+		if (targetPage > selectedPage) {
+			document.getElementById('grid-page' + selectedPage).style.animationName = 'gridLeftFadeOut';
+			document.getElementById('grid-page' + targetPage).style.animationName = 'gridLeftFadeIn';
+			$(".grid-button:nth-child(" + (selectedPage + 1) + ")").removeClass("grid-button-selected");
+			selectedPage = targetPage;
+			$(".grid-button:nth-child(" + (selectedPage + 1) + ")").addClass("grid-button-selected");
+		} else {
+			document.getElementById('grid-page' + selectedPage).style.animationName = 'gridRightFadeOut';
+			document.getElementById('grid-page' + targetPage).style.animationName = 'gridRightFadeIn';
+			$(".grid-button:nth-child(" + (selectedPage + 1) + ")").removeClass("grid-button-selected");
+			selectedPage = targetPage;
+			$(".grid-button:nth-child(" + (selectedPage + 1) + ")").addClass("grid-button-selected");
+		}
+		// Take care of next and previous buttons
+		if (selectedPage === 1) {
+			$("#grid-prev-button").css("visibility", "hidden");
+		} else {
+			$("#grid-prev-button").css("visibility", "visible");
+		}
+
+		if (selectedPage === maxPage) {
+			$("#grid-next-button").css("visibility", "hidden");
+		} else {
+			$("#grid-next-button").css("visibility", "visible");
+		}
+	}
+
+	// For resizing the stories div
+	function resizeStories() {
+		// Timeout to make sure elements have been populated
+		setTimeout(function () {
+			var height = $('#grid-page1').height();
+			$('#' + storiesDiv).css('height', height + 40 + 'px');
+		}, 100);
+	}
+
+	function StoryGrid(id, stories) {
+		thisID = id;
+		storiesDiv = id;
+		if (stories[0] == null) {
+			return;
+		}
+		// Calculate and setup pagination
+		addStories(stories);
+
+		// Resize div for stories and pagination
+		$(window).off('.storygrid');
+		$(window).on('resize.storygrid', resizeStories);
+	}
+
+	return {
+		setters: [function (_2) {}, function (_e) {
+			_ = _e['default'];
+		}],
+		execute: function () {
+			selectedPage = 1;
+			maxPage = -1;
+			thisID = '';
+			StoryGrid.prototype.update = function (stories) {
+				$('#' + storiesDiv).html("");
+				selectedPage = 1;
+				maxPage = -1;
+				StoryGrid(storiesDiv, stories);
+			};
+
+			StoryGrid.prototype.getId = function () {
+				return thisID;
+			};
+
+			_export('default', StoryGrid);
+		}
+	};
+});
+
+$__System.register("26", [], function (_export, _context) {
+  "use strict";
+
+  var __useDefault;
+
+  return {
+    setters: [],
+    execute: function () {
+      _export("__useDefault", __useDefault = "<% if(story){ %>\r\n\t<div id=\"viewer\">\r\n\t</div>\r\n\t<div id=\"details\">\r\n\t\t<div id=\"title\">\r\n\t\t\t<% _.each(story.metadata.title, function(title, lang){ %>\r\n\t\t\t\t<span lang=\"<%- lang %>\"><%- title %></span>\r\n\t\t\t<% }) %>\r\n\t\t</div>\r\n\t\t<div id=\"author\"><%- story.author %></div>\r\n\t\t<% if(online){ %>\r\n\t\t\t<div id=\"social\">\r\n\t\t\t\t<button id=\"social-views\" class=\"social\">Views <span id=\"views\"><%- story.metadata.views %></span></button>\r\n\t\t\t\t<button id=\"social-likes\" class=\"social\">Likes <span id=\"likes\"><%- story.metadata.likes %></span></button>\r\n\t\t\t\t<button id=\"social-save\" class=\"social socialExport\">Save</button>\r\n\t\t\t\t<button id=\"social-share\" class=\"social socialExport\">Share</button>\r\n\t\t\t</div>\r\n\t\t<% } %>\r\n\t\t<div id=\"description\">\r\n\t\t\t<% _.each(story.metadata.description, function(description, lang){ %>\r\n\t\t\t\t<span lang=\"<%- lang %>\"><%- description %></span>\r\n\t\t\t<% }) %>\r\n\t\t</div>\r\n\t\t<div id=\"genres\" class=\"metadata-list\"> Genres:\r\n\t\t\t<% _.each(story.metadata.genres, function(genreList, lang){ %>\r\n\t\t\t\t<span lang=\"<%- lang %>\">\r\n\t\t\t\t\t<% _.each(genreList, function(genre){ %>\r\n\t\t\t\t\t\t<% if(online){ %>\r\n\t\t\t\t\t\t\t<a class=\"genre\" href=\"./Search?search=<%- genre %>\"><%- genre %></a>\r\n\t\t\t\t\t\t<% } else{ %>\r\n\t\t\t\t\t\t\t<span class=\"genre\"><%- genre %></span>\r\n\t\t\t\t\t\t<% } %>\r\n\t\t\t\t\t<% }) %>\r\n\t\t\t\t</span>\r\n\t\t\t<% }) %>\r\n\t\t</div>\r\n\t\t<div id=\"tags\" class=\"metadata-list\"> Tags:\r\n\t\t\t<% _.each(story.metadata.tags, function(tagList, lang){ %>\r\n\t\t\t\t<span lang=\"<%- lang %>\">\r\n\t\t\t\t\t<% _.each(tagList, function(tag){ %>\r\n\t\t\t\t\t\t<% if(online){ %>\r\n\t\t\t\t\t\t\t<a class=\"tag\" href=\"./Search?search=<%- tag %>\">#<%- tag %></a>\r\n\t\t\t\t\t\t<% } else{ %>\r\n\t\t\t\t\t\t\t<span class=\"tag\">#<%- tag %></span>\r\n\t\t\t\t\t\t<% } %>\r\n\t\t\t\t\t<% }) %>\r\n\t\t\t\t</span>\r\n\t\t\t<% }) %>\r\n\t\t</div>\r\n\t</div>\r\n<% } %>\r\n\r\n<% if(online){ %>\r\n\t<div id=\"more-author\"></div>\r\n\t<div id=\"more-stories\"></div>\r\n<% } else { %>\r\n\t<div id=\"offline-stories-title\">Offline Stories</div>\r\n\t<div id=\"offline-stories\"></div>\r\n<% } %>");
+
+      _export("__useDefault", __useDefault);
+
+      _export("default", __useDefault);
+    }
+  };
+});
+$__System.register('a', ['15', '16', '22', '25', '26', 'b', 'c', 'e', 'd', 'f', '1a'], function (_export) {
+	'use strict';
+
+	var LanguageSelector, StoryPreview, StoryViewer, StoryGrid, html, _, OfflineWorker, urlParams, Carousel, template, OFFLINEPAGEASSETS, storyId, story, liked, offlineIds;
+
+	function displaySimilarGenres(stories) {
+		var similarGenreStories = [],
+		    lang = LanguageSelector.currentLanguageText();
+
+		_.each(story.metadata.genres[lang], function (genre) {
+			_.each(stories, function (_story) {
+				if (_story.added) return;
+
+				var added = false;
+				_.each(_story.metadata.genres[lang], function (_genre) {
+					if (_genre == genre && _story.id != story.id) added = true;
+				});
+
+				_story.added = added;
+				if (added) similarGenreStories.push(new StoryPreview(_story));
+			});
+		});
+
+		if (similarGenreStories.length > 0) {
+			$('#more-stories').show();
+			new Carousel('#more-stories', similarGenreStories, 4, false, false, 'Similar Stories');
+		} else {
+			$('#more-stories').hide();
+		}
+	}
+
+	function getStoryAssetList() {
+
+		var AddToList = function AddToList(objOrString, currentList) {
+			if (typeof objOrString == 'string') {
+				if (currentList.indexOf(objOrString) == -1 && objOrString.match(/\.jpg|\.png|\.gif|\.mp4|\.wmv|\.mov/g)) currentList.push(objOrString);
+
+				return currentList;
+			} else if (typeof objOrString == 'object') {
+				_.each(objOrString, function (obj) {
+					var newList = AddToList(obj, currentList);
+				});
+
+				return currentList;
 			}
 		};
-		$el.find('.custom-select-value').on('click', function () {
-			$el.find('.custom-select-options').toggle(200);
-			event.stopPropagation();
-			$(document).on('click', closeOnClick);
-		});
 
-		$el.find('.custom-select-options button').on('click', function (evt) {
-			var value = $(evt.currentTarget).val(),
-			    label = $(evt.currentTarget).html();
-
-			$el.find('.custom-select-value').html(label);
-
-			CS.value = value;
-			$(CS).trigger('change', [value]);
-
-			$el.find('.custom-select-options').hide(200);
-		});
-
-		$el.find('.custom-select-options input').on('change', function (evt) {
-			var values = [];
-			$el.find('input').each(function (i, el) {
-				if (el.checked) values.push(el.value);
-			});
-
-			CS.values = values;
-			$(CS).trigger('change', [values]);
-		});
+		var assetList = AddToList(story, []);
+		return assetList;
 	}
 
-	return {
-		setters: [function (_3) {
-			_ = _3['default'];
-		}, function (_2) {}, function (_4) {
-			html = _4['default'];
-		}],
-		execute: function () {
-			template = _.template(html);
+	function showStory() {
+		var online = !window.offline;
 
-			_export('default', CustomSelect);
-		}
-	};
-});
-
-$__System.register("2b", [], function (_export, _context) {
-  "use strict";
-
-  var __useDefault;
-
-  return {
-    setters: [],
-    execute: function () {
-      _export("__useDefault", __useDefault = "<div id=\"story-viewer\">\r\n\t<div id=\"page-counter\">\r\n\t\t<span id=\"current\">1</span>\r\n\t\t<span id=\"total\"><%- Object.keys(story.data).length + 1 %></span>\r\n\t</div>\r\n\t<div id=\"page-content\">\r\n\t</div>\r\n\t<div id=\"page-controller\">\r\n\t</div>\r\n\t<button id=\"fullscreen-toggle\"></button>\r\n</div>");
-
-      _export("__useDefault", __useDefault);
-
-      _export("default", __useDefault);
-    }
-  };
-});
-$__System.register("2c", [], function (_export, _context) {
-  "use strict";
-
-  var __useDefault;
-
-  return {
-    setters: [],
-    execute: function () {
-      _export("__useDefault", __useDefault = "<div class=\"story-viewer-nav sixth\">\r\n\t<% if(previousPageNumber){ %>\r\n\t\t<button id=\"story-viewer-previous\" class=\"story-viewer-nav-button\" page-dir=\"-1\">\r\n\t\t\t<div class=\"icon <%- previousIcon %>\"></div>\r\n\t\t\t<div class=\"num\"><%- previousPageNumber %></div>\r\n\t\t</button>\r\n\t<% } %>\r\n</div>\r\n<div class=\"story-viewer-page two-thirds\">\r\n\t<% if(currentIcon == 'image'){ %>\r\n\t\t<div id=\"page-overlay\">\r\n\t\t\t<span class=\"icon <%- currentIcon %>\"></span>\r\n\t\t\t<span class=\"num\"><%- currentPageNumber %></span>\r\n\t\t</div>\r\n\t\t<div class=\"image-container\">\r\n\t\t\t<img src=\"<%- page.image %>\" />\r\n\t\t</div>\r\n\t<% } else { %>\r\n\t\t<div class=\"video-container text-open\">\r\n\t\t\t<video src=\"<%- page.video[currentSignLanguage] %>\" controls loop autoplay muted></video>\r\n\t\t</div>\r\n\t\t<div id=\"text-toggle-container\" class=\"text-open\">\r\n\t\t\t<button id=\"text-toggle\"></button>\r\n\t\t</div>\r\n\t\t<div id=\"text-container\" class=\"text-open\">\r\n\t\t\t<%= page.text[currentWrittenLanguage] %>\r\n\t\t</div>\r\n\t<% } %>\r\n</div>\r\n<div class=\"story-viewer-nav sixth\">\r\n\t<% if(nextPageNumber){ %>\r\n\t\t<button id=\"story-viewer-next\" class=\"story-viewer-nav-button\" page-dir=\"1\">\r\n\t\t\t<div class=\"icon <%- nextIcon %>\"></div>\r\n\t\t\t<div class=\"num\"><%- nextPageNumber %></div>\r\n\t\t</button>\r\n\t<% } %>\r\n</div>");
-
-      _export("__useDefault", __useDefault);
-
-      _export("default", __useDefault);
-    }
-  };
-});
-$__System.register("2d", [], function (_export, _context) {
-  "use strict";
-
-  var __useDefault;
-
-  return {
-    setters: [],
-    execute: function () {
-      _export("__useDefault", __useDefault = "<div id=\"glossary-modal\">\r\n\t<div id=\"term-container\">\r\n\t\t<div id=\"media-container\" class=\"third\">\r\n\t\t\t<% if(term.video && term.video[currentSignLanguage]){ %>\r\n\t\t\t\t<div class=\"video-container\">\r\n\t\t\t\t\t<video id=\"glossary-video\" autoplay muted loop src=\"<%- page.video[currentSignLanguage] %>\">\r\n\t\t\t\t\t</video>\r\n\t\t\t\t</div>\r\n\t\t\t<% } %>\r\n\t\t\t<% if(term.image){ %>\r\n\t\t\t\t<div class=\"image-container\">\r\n\t\t\t\t\t<img src=\"<%- term.image %>\">\r\n\t\t\t\t</div>\r\n\t\t\t<% } %>\r\n\t\t</div>\r\n\t\t<div id=\"definition-container\" class=\"two-thirds\">\r\n\t\t\t<h1 id=\"word\"><%- term.name %></h1>\r\n\t\t\t<p id=\"definition\"><%= term.definition %></p>\r\n\t\t</div>\r\n\t\t<button id=\"exit-modal\"></button>\r\n\t</div>\r\n</div>");
-
-      _export("__useDefault", __useDefault);
-
-      _export("default", __useDefault);
-    }
-  };
-});
-$__System.register('2e', ['14', '25', '26', '2a', '2b', '2c', '2d'], function (_export) {
-	var _, _Object$keys, CustomSelect, html, pageHtml, glossaryHtml, template, pagTemplate, glossaryTemplate, story, page, pageIndex, subPageIndex, currentWrittenLanguage, currentSignLanguage, writtenLang, writtenOptions, signLang, signOptions, textArea, visuals, fullscreen;
-
-	/* ----------------------- Constructor ----------------------- */
-	function SetStory(_story) {
-		story = _story;
-		currentWrittenLanguage = story.metadata.writtenLanguages[0];
-		currentSignLanguage = story.metadata.signLanguages[0];
-	}
-
-	function Render(id) {
-		$('#' + id).html(template({
-			story: story
+		// add the main html to the page
+		$('main').html(template({
+			story: story,
+			online: online
 		}));
 
-		$('#fullscreen-toggle').on('click', function (evt) {
-			if (document.fullscreen || document.msFullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement) {
-				if (document.exitFullscreen) {
-					document.exitFullscreen();
-				} else if (document.mozCancelFullScreen) {
-					/* Firefox */
-					document.mozCancelFullScreen();
-				} else if (document.webkitExitFullscreen) {
-					/* Chrome, Safari and Opera */
-					document.webkitExitFullscreen();
-				} else if (document.msExitFullscreen) {
-					/* IE/Edge */
-					document.msExitFullscreen();
-				}
-			} else {
-				var viewer = $('#story-viewer')[0];
-				if (viewer.requestFullscreen) {
-					viewer.requestFullscreen();
-				} else if (viewer.mozRequestFullScreen) {
-					/* Firefox */
-					viewer.mozRequestFullScreen();
-				} else if (viewer.webkitRequestFullscreen) {
-					/* Chrome, Safari and Opera */
-					viewer.webkitRequestFullscreen();
-				} else if (viewer.msRequestFullscreen) {
-					/* IE/Edge */
-					viewer.msRequestFullscreen();
-				}
+		if (story) {
+			// Render the story viewer
+			StoryViewer.SetStory(story);
+			StoryViewer.Render('viewer');
+		}
+
+		LanguageSelector.updateLanguageDisplay();
+
+		// We dont need the rest of the functions if this is the offline mode
+		if (!online) {
+			showOfflineStories();
+			return;
+		}
+
+		var assetList = OfflineWorker.AddToAssetList('Viewer', OFFLINEPAGEASSETS);
+		OfflineWorker.SaveServiceWorker('/html/Client/ViewerOffline.html', assetList);
+
+		// add a view to the counter
+		$.ajax({
+			method: 'post',
+			url: '/api/story/view',
+			data: {
+				id: story.id
 			}
 		});
 
-		var wlSelect = new CustomSelect('page-controller', {
-			id: 'written-language-select',
-			options: story.metadata.writtenLanguages,
-			defaultText: currentWrittenLanguage
-		}),
-		    slSelect = new CustomSelect('page-controller', {
-			id: 'sign-language-select',
-			options: story.metadata.signLanguages,
-			defaultText: currentSignLanguage
+		// like button function
+		$('#social-likes').on('click', function () {
+			if (liked) return;
+
+			liked = true;
+
+			$.ajax({
+				method: 'post',
+				url: '/api/story/like',
+				data: {
+					id: story.id
+				}
+			}).done(function (stories) {
+				$('#likes').html(story.metadata.likes + 1);
+			}).fail(function (err) {
+				console.error(err);
+			});
 		});
 
-		$(wlSelect).on('change', function (evt, value) {
-			currentWrittenLanguage = value;
-			RenderPage();
-		});
-		$(slSelect).on('change', function (evt, value) {
-			currentSignLanguage = value;
-			RenderPage();
+		// Share button function
+		$('#social-share').on('click', function (evt) {
+			var copyInput = $('<input type="text" style="position: absolute; z-index: -1" value="' + window.location.href + '" />');
+
+			$('body').append(copyInput);
+
+			copyInput[0].select();
+
+			document.execCommand("copy");
+
+			copyInput.remove();
+
+			alert('link copied.');
 		});
 
-		RenderPage();
+		// Bookmark / Offline Save functionality
+		$('#social-save').on('click', function (evt) {
+			// Save the story JSON
+			OfflineWorker.SetStorage(storyId, story);
+
+			// Save the story assets with the service worker
+			var assetList = OfflineWorker.AddToAssetList('Viewer', getStoryAssetList());
+			OfflineWorker.SaveServiceWorker('/html/Client/ViewerOffline.html', assetList);
+
+			if (offlineIds.indexOf(storyId) == -1) {
+				offlineIds.unshift(storyId);
+				OfflineWorker.SetStorage('storyIds', offlineIds);
+			}
+
+			// TODO: Add the story to the user's bookmark if there is a user
+			// NOTE: Maybe we should have a separate button for this?
+		});
+
+		LanguageSelector.updateLanguageDisplay();
+
+		// load and render similar stories
+		$.ajax({
+			method: 'get',
+			url: '/api/stories'
+		}).done(function (stories) {
+			var similarAuthorStories = [];
+
+			_.each(stories, function (_story) {
+				if (_story.author != story.author || _story.id == story.id) return;
+				similarAuthorStories.push(new StoryPreview(_story));
+			});
+
+			if (similarAuthorStories.length > 0) {
+				$('#more-author').show();
+				new Carousel('#more-author', similarAuthorStories, 4, false, false, 'More from this Author');
+			} else {
+				$('#more-author').hide();
+			}
+			displaySimilarGenres(stories);
+			$(document).on('languageChange', function () {
+				displaySimilarGenres(stories);
+			});
+
+			LanguageSelector.updateLanguageDisplay();
+		}).fail(function (err) {
+			console.error(err);
+		});
 	}
 
-	function RenderPage() {
-		var currentPageNumber = pageIndex + 2,
-		    page = pageIndex == -1 ? { image: story.coverimage } : story.data[pageIndex],
-		    maxSubIndex = page.image && page.video ? 1 : 0,
-		    previousPage = pageIndex == 0 ? { image: story.coverimage } : story.data[pageIndex - 1],
-		    nextPage = story.data[pageIndex + 1];
+	function showOfflineStories() {
+		var storyPreviews = [];
+		_.each(offlineIds, function (id) {
+			var _story = OfflineWorker.GetStorage(id);
+			if (!_story) return;
 
-		var currentIcon = undefined,
-		    previousIcon = undefined,
-		    previousPageNumber = undefined,
-		    nextIcon = undefined,
-		    nextPageNumber = undefined;
+			var sp = new StoryPreview(_story);
+			storyPreviews.push(sp);
+		});
 
-		if (pageIndex == -1) {
-			currentIcon = 'image';
-			nextIcon = nextPage.image ? 'image' : 'sign';
-			nextPageNumber = 2;
+		if (storyPreviews.length > 0) {
+			var storyGrid = new StoryGrid("offline-stories", storyPreviews);
 		} else {
-			if (subPageIndex != maxSubIndex) {
-				currentIcon = 'image';
-
-				previousPageNumber = currentPageNumber - 1;
-				previousIcon = previousPage.video ? 'sign' : 'image';
-
-				nextPageNumber = currentPageNumber;
-				nextIcon = 'sign';
-			} else {
-				currentIcon = 'sign';
-
-				previousPageNumber = maxSubIndex == 1 ? currentPageNumber : currentPageNumber - 1;
-				previousIcon = maxSubIndex == 1 ? 'image' : previousPage.video ? 'sign' : 'image';
-
-				if (nextPage) {
-					nextPageNumber = currentPageNumber + 1;
-					nextIcon = nextPage.image ? 'image' : 'sign';
-				}
-			}
+			$('#offline-stories').addClass('empty');
+			$('#offline-stories').html('You have no saved stories.');
 		}
-
-		$('#page-content').html(pagTemplate({
-			page: page,
-			currentIcon: currentIcon,
-			currentPageNumber: currentPageNumber,
-			previousIcon: previousIcon,
-			previousPageNumber: previousPageNumber,
-			nextIcon: nextIcon,
-			nextPageNumber: nextPageNumber,
-			currentWrittenLanguage: currentWrittenLanguage,
-			currentSignLanguage: currentSignLanguage
-		}));
-
-		$('#page-counter #current').html(currentPageNumber);
-
-		$('.story-viewer-nav-button').on('click', function (evt) {
-			var dir = $(evt.currentTarget).attr('page-dir');
-
-			if (dir > 0) {
-				if (subPageIndex == maxSubIndex) {
-					pageIndex++;
-					subPageIndex = 0;
-				} else {
-					subPageIndex++;
-				}
-			} else if (dir < 0) {
-				if (subPageIndex == maxSubIndex && maxSubIndex > 0) {
-					subPageIndex--;
-				} else {
-					pageIndex--;
-					subPageIndex = previousPage.image && previousPage.video ? 1 : 0;
-				}
-			}
-			RenderPage();
-		});
-
-		$('#text-toggle').on('click', function (evt) {
-			$('.video-container').toggleClass('text-open');
-			$('#text-toggle-container').toggleClass('text-open');
-			$('#text-container').toggleClass('text-open');
-		});
-
-		GenerateGlossaryButtons(page);
-	}
-
-	function GenerateGlossaryButtons(page) {
-		if (!page) return;
-
-		var glossaryTerms = page.glossary ? page.glossary[currentWrittenLanguage] : [],
-		    text = $('#text-container').html();
-
-		if (!text) return;
-
-		_.each(glossaryTerms, function (term, name) {
-			var regEx = new RegExp(name, 'i');
-			text = text.replace(regEx, function (match) {
-				return '<span class="glossary" glossary-term="' + name + '">' + match + '</span>';
-			});
-		});
-
-		$('#text-container').html(text);
-
-		//add button functionality
-		$('.glossary').on('click', function (evt) {
-
-			//parse data to modal pop up
-			var termName = $(evt.currentTarget).attr('glossary-term'),
-			    term = glossaryTerms[termName];
-
-			console.log(termName, term, glossaryTerms);
-
-			$('#story-viewer').append(glossaryTemplate({
-				term: term,
-				page: page,
-				currentWrittenLanguage: currentWrittenLanguage,
-				currentSignLanguage: currentSignLanguage
-			}));
-
-			$('#exit-modal').on('click', function (evt) {
-				$('#glossary-modal').remove();
-			});
-
-			// loop the video between the desired times
-			var vid = $('#glossary-video')[0];
-			if (vid) {
-				vid.ontimeupdate = function () {
-					var startTime = term.video[currentSignLanguage].start || 0,
-					    endTime = term.video[currentSignLanguage].end || vid.duration;
-
-					if (vid.currentTime < startTime || vid.currentTime > endTime) vid.currentTime = startTime;
-				};
-			}
-		});
-	}
-
-	function GenerateLanguageSelects() {
-		//get sign and written options from the json
-		writtenOptions = _Object$keys(story[0].text);
-		signOptions = _Object$keys(story[0].video);
-
-		//build menus
-		BuildSelectOptions($('#writtenLang select'), writtenOptions);
-		BuildSelectOptions($('#signLang select'), signOptions);
-
-		//add click events
-		$('#writtenLang button').on('click', function () {
-			//toggle dropdown visibility
-			ToggleOptions('#writtenLang');
-		});
-		$('#writtenLang select').on('change', function (e) {
-			writtenLang = e.target.value;
-			parsePage(pageIndex);
-			ToggleOptions('#writtenLang');
-		});
-
-		$('#signLang button').on('click', function () {
-			ToggleOptions('#signLang');
-		});
-		$('#signLang select').on('change', function (e) {
-			signLang = e.target.value;
-			parsePage(pageIndex);
-			ToggleOptions('#signLang');
-		});
-	}
-	/* ----------------------- Button Functionality ----------------------- */
-
-	function LastScreen(pageNum) {
-		if (ShowingCover()) {
-			//change page index
-			pageIndex = pageNum;
-
-			//change to show video
-			$('#visuals img').css("display", "none");
-			$('#visuals video').css("display", "block");
-
-			//set text and visuals back to default
-			textArea.removeClass('hideAnim');
-			visuals.removeAttr('style');
-			$('#storyToggle').removeAttr('style');
-
-			//update icons
-			$('.viewerNav #sign.icon').css('display', 'none');
-			$('.viewerNav #cover.icon').removeAttr('style');
-			$('#storyToggle #hide').css('display', 'none');
-			$('#storyToggle #show').removeAttr('style');
-		}
-		//we saw the video we need to parse the next page
-		else {
-				//change to show img
-				$('#visuals img').css("display", "block");
-				$('#visuals video').css("display", "none");
-
-				//turn off text area
-				textArea.addClass('hideAnim');;
-				$('#storyToggle').css('display', 'none');
-
-				//expand video to be full size
-				visuals.css('height', '100%');
-				visuals.css('max-height', '100%');
-				visuals.css('width', '100%');
-				visuals.css('margin', '0px');
-
-				//update icons
-				$('.viewerNav #sign.icon').removeAttr('style');
-				$('.viewerNav #cover.icon').css('display', 'none');
-				$('#storyToggle #show').css('display', 'none');
-				$('#storyToggle #hide').removeAttr('style');
-			}
-	}
-
-	function NextScreen(pageNum) {
-		//check if we are on the video or img, and switch between those before changing pages
-		if (ShowingCover()) {
-			//change to show video
-			$('#visuals img').css("display", "none");
-			$('#visuals video').css("display", "block");
-
-			//set text and visuals back to default
-			textArea.removeClass('hideAnim');;
-			visuals.removeAttr('style');
-			$('#storyToggle').removeAttr('style');
-
-			//update icons
-			$('.viewerNav #sign.icon').css('display', 'none');
-			$('.viewerNav #cover.icon').removeAttr('style');
-			$('#storyToggle #hide').css('display', 'none');
-			$('#storyToggle #show').removeAttr('style');
-		}
-		//we saw the video we need to parse the next page
-		else {
-				//change page index
-				pageIndex = pageNum;
-
-				//change to show img
-				$('#visuals img').css("display", "block");
-				$('#visuals video').css("display", "none");
-
-				//turn off text area
-				textArea.addClass('hideAnim');
-				$('#storyToggle').css('display', 'none');
-
-				//expand video to be full size
-				visuals.css('height', '100%');
-				visuals.css('max-height', '100%');
-				visuals.css('width', '100%');
-				visuals.css('margin', '0px');
-
-				//update icons
-				$('.viewerNav #sign.icon').removeAttr('style');
-				$('.viewerNav #cover.icon').css('display', 'none');
-				$('#storyToggle #show').css('display', 'none');
-				$('#storyToggle #hide').removeAttr('style');
-			}
-	}
-
-	/* ---------------------- Helper Functions ---------------------- */
-	function ShowingCover() {
-		var isShowing = true;
-
-		if ($('#visuals img').css('display') == "none") {
-			isShowing = false;
-		}
-
-		return isShowing;
 	}
 
 	return {
-		setters: [function (_4) {
-			_ = _4['default'];
-		}, function (_2) {
-			_Object$keys = _2['default'];
-		}, function (_3) {}, function (_a) {
-			CustomSelect = _a['default'];
-		}, function (_b) {
-			html = _b['default'];
-		}, function (_c) {
-			pageHtml = _c['default'];
+		setters: [function (_2) {
+			LanguageSelector = _2['default'];
+		}, function (_3) {
+			StoryPreview = _3['default'];
+		}, function (_4) {
+			StoryViewer = _4['default'];
+		}, function (_5) {
+			StoryGrid = _5['default'];
+		}, function (_6) {
+			html = _6['default'];
+		}, function (_b) {}, function (_c) {}, function (_e) {
+			_ = _e['default'];
 		}, function (_d) {
-			glossaryHtml = _d['default'];
+			OfflineWorker = _d['default'];
+		}, function (_f) {
+			urlParams = _f['default'];
+		}, function (_a) {
+			Carousel = _a['default'];
 		}],
 		execute: function () {
-			'use strict';
-
 			template = _.template(html);
-			pagTemplate = _.template(pageHtml);
-			glossaryTemplate = _.template(glossaryHtml);
-
-			/* ----------------------- Global Variables ----------------------- */
+			OFFLINEPAGEASSETS = ['/upup.min.js', '/upup.sw.min.js', '/static/jquery-min.js', '/static/jquery-ui.min.js', '/js/Offline/Header_Offline.js', '/js/Offline/Viewer_Offline.js', '/img/icons/NavBar/WAY_logo.svg', '/img/icons/General/icon_Globe_White.svg', '/img/icons/General/icon_Page_Back.svg', '/img/icons/General/icon_Page_Next.svg', '/img/icons/General/icon_Close.svg', '/img/icons/General/icon_WrittenLang_White.svg', '/img/icons/General/icon_SignLang_White.svg', '/img/icons/General/icon_DropDnArrow.svg', '/img/icons/StoryViewer/bkgd_pageCounter.svg', '/img/icons/StoryViewer/icon_SV_CoverImage.svg', '/img/icons/StoryViewer/icon_SV_Fullscreen.svg', '/img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg', '/img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_Page_Image.svg', '/img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_Page_SignLang.svg', '/img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_ShowText.svg', '/img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_HideText.svg', '/img/icons/StoryViewer/icon_SV_HideText_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_WrittenLang.svg', '/img/icons/StoryViewer/icon_SV_WrittenLang_HoverDown.svg', '/img/icons/StoryViewer/icon_SV_SignLang.svg', '/img/icons/StoryViewer/icon_SV_SignLang_HoverDown.svg'];
+			storyId = undefined;
 			story = undefined;
-			page = undefined;
-			pageIndex = -1;
-			subPageIndex = 0;
-			currentWrittenLanguage = undefined;
-			currentSignLanguage = undefined;
-			writtenLang = "English";
-			signLang = "fsl_luzon";
-			fullscreen = false;
+			liked = false;
+			offlineIds = [];
+			$(document).ready(function () {
+				storyId = parseInt(urlParams.id);
+				offlineIds = OfflineWorker.GetStorage('storyIds') || [];
 
-			_export('default', {
-				SetStory: SetStory,
-				Render: Render
+				if (!window.offline) {
+					$.ajax({
+						method: 'get',
+						url: '/api/story?id=' + storyId
+					}).done(function (_story) {
+						story = _story;
+						showStory();
+					}).fail(function (err) {
+						console.error(err);
+					});
+				} else {
+					story = OfflineWorker.GetStorage(storyId);
+					showStory();
+					if (!story && !isNaN(storyId)) {
+						console.error('Story id (' + storyId + ') not saved for offline viewing.');
+					}
+				}
 			});
 		}
 	};
-});
-
-$__System.register("2f", [], function (_export, _context) {
-  "use strict";
-
-  var __useDefault;
-
-  return {
-    setters: [],
-    execute: function () {
-      _export("__useDefault", __useDefault = "<div id=\"viewer\">\r\n</div>\r\n<div id=\"details\">\r\n\t<div id=\"title\">\r\n\t\t<% _.each(story.metadata.title, function(title, lang){ %>\r\n\t\t\t<span lang=\"<%- lang %>\"><%- title %></span>\r\n\t\t<% }) %>\r\n\t</div>\r\n\t<div id=\"author\"><%- story.author %></div>\r\n\t<div id=\"social\">\r\n\t\t<button id=\"social-views\" class=\"social\">Views <span id=\"views\"><%- story.metadata.views %></span></button>\r\n\t\t<button id=\"social-likes\" class=\"social\">Likes <span id=\"likes\"><%- story.metadata.likes %></span></button>\r\n\t\t<button id=\"social-save\" class=\"social socialExport\">Save</button>\r\n\t\t<button id=\"social-share\" class=\"social socialExport\">Share</button>\r\n\t</div>\r\n\t<div id=\"description\">\r\n\t\t<% _.each(story.metadata.description, function(description, lang){ %>\r\n\t\t\t<span lang=\"<%- lang %>\"><%- description %></span>\r\n\t\t<% }) %>\r\n\t</div>\r\n\t<div id=\"genres\" class=\"metadata-list\"> Genres:\r\n\t\t<% _.each(story.metadata.genres, function(genreList, lang){ %>\r\n\t\t\t<span lang=\"<%- lang %>\">\r\n\t\t\t\t<% _.each(genreList, function(genre){ %>\r\n\t\t\t\t\t<a class=\"genre\" href=\"./Search?search=<%- genre %>\"><%- genre %></a>\r\n\t\t\t\t<% }) %>\r\n\t\t\t</span>\r\n\t\t<% }) %>\r\n\t</div>\r\n\t<div id=\"tags\" class=\"metadata-list\"> Tags:\r\n\t\t<% _.each(story.metadata.tags, function(tagList, lang){ %>\r\n\t\t\t<span lang=\"<%- lang %>\">\r\n\t\t\t\t<% _.each(tagList, function(tag){ %>\r\n\t\t\t\t\t<a class=\"tag\" href=\"./Search?search=<%- tag %>\">#<%- tag %></a>\r\n\t\t\t\t<% }) %>\r\n\t\t\t</span>\r\n\t\t<% }) %>\r\n\t</div>\r\n</div>\r\n<div id=\"more-author\"></div>\r\n<div id=\"more-stories\"></div>");
-
-      _export("__useDefault", __useDefault);
-
-      _export("default", __useDefault);
-    }
-  };
-});
-$__System.register('a', ['13', '14', '15', '19', 'b', 'c', 'd', '2e', '2f'], function (_export) {
-    'use strict';
-
-    var LanguageSelector, _, StoryPreview, Carousel, urlParams, StoryViewer, html, template, storyId, story, liked;
-
-    function displaySimilarGenres(stories) {
-        var similarGenreStories = [],
-            lang = LanguageSelector.currentLanguageText();
-
-        _.each(story.metadata.genres[lang], function (genre) {
-            _.each(stories, function (_story) {
-                if (_story.added) return;
-
-                var added = false;
-                _.each(_story.metadata.genres[lang], function (_genre) {
-                    if (_genre == genre && _story.id != story.id) added = true;
-                });
-
-                _story.added = added;
-                if (added) similarGenreStories.push(new StoryPreview(_story));
-            });
-        });
-
-        if (similarGenreStories.length > 0) {
-            $('#more-stories').show();
-            new Carousel('#more-stories', similarGenreStories, 4, false, false, 'Similar Stories');
-        } else {
-            $('#more-stories').hide();
-        }
-    }
-
-    return {
-        setters: [function (_3) {
-            LanguageSelector = _3['default'];
-        }, function (_2) {
-            _ = _2['default'];
-        }, function (_4) {
-            StoryPreview = _4['default'];
-        }, function (_5) {
-            Carousel = _5['default'];
-        }, function (_b) {}, function (_c) {}, function (_d) {
-            urlParams = _d['default'];
-        }, function (_e) {
-            StoryViewer = _e['default'];
-        }, function (_f) {
-            html = _f['default'];
-        }],
-        execute: function () {
-            template = _.template(html);
-            storyId = undefined;
-            story = undefined;
-            liked = false;
-            $(document).ready(function () {
-                storyId = parseInt(urlParams.id);
-
-                var _story = JSON.parse(localStorage.getItem("3"));
-              var testFunc = function (_story) {
-                    story = _story;
-                    console.log("story");
-                    window.story = story;
-                    console.log(story);
-                    if (typeof Storage !== "undefined") {
-                        // Code for localStorage/sessionStorage.
-                        localStorage.setItem("3", JSON.stringify(story));
-                    } else {}
-                    // Sorry! No Web Storage support..
-
-                    // add the main html to the page
-                    $('main').html(template({
-                        story: story
-                    }));
-
-                    // Render the story viewer
-                    StoryViewer.SetStory(story);
-                    StoryViewer.Render('viewer');
-
-                    // add a view to the counter
-                    $.ajax({
-                        method: 'post',
-                        url: '/api/story/view',
-                        data: {
-                            id: story.id
-                        }
-                    });
-
-                    // like button function
-                    $('#social-likes').on('click', function () {
-                        if (liked) return;
-
-                        liked = true;
-
-                        $.ajax({
-                            method: 'post',
-                            url: '/api/story/like',
-                            data: {
-                                id: story.id
-                            }
-                        }).done(function (stories) {
-                            $('#likes').html(story.metadata.likes + 1);
-                        }).fail(function (err) {
-                            console.error(err);
-                        });
-                    });
-
-                    // Share button function
-                    $('#social-share').on('click', function (evt) {
-                        var copyInput = $('<input type="text" style="position: absolute; z-index: -1" value="' + window.location.href + '" />');
-
-                        $('body').append(copyInput);
-
-                        copyInput[0].select();
-
-                        document.execCommand("copy");
-
-                        copyInput.remove();
-
-                        alert('link copied.');
-                    });
-
-                    LanguageSelector.updateLanguageDisplay();
-
-                    // load and render similar stories
-                    $.ajax({
-                        method: 'get',
-                        url: '/api/stories'
-                    }).done(function (stories) {
-                        var similarAuthorStories = [];
-
-                        _.each(stories, function (_story) {
-                            if (_story.author != story.author || _story.id == story.id) return;
-                            similarAuthorStories.push(new StoryPreview(_story));
-                        });
-
-                        if (similarAuthorStories.length > 0) {
-                            $('#more-author').show();
-                            new Carousel('#more-author', similarAuthorStories, 4, false, false, 'More from this Author');
-                        } else {
-                            $('#more-author').hide();
-                        }
-
-                        displaySimilarGenres(stories);
-                        $(document).on('languageChange', function () {
-                            displaySimilarGenres(stories);
-                        });
-                    }).fail(function (err) {
-                        console.error(err);
-                    });
-                }
-                testFunc(_story);
-
-            });
-
-        }
-    };
 });
 
 (function(c){if (typeof document == 'undefined') return; var d=document,a='appendChild',i='styleSheet',s=d.createElement('style');s.type='text/css';d.getElementsByTagName('head')[0][a](s);s[a](d.createTextNode(c));})
-("@import \"style/viewer.css\";*{box-sizing:border-box;font-family:Segoe UI,Arial,Helvetica,sans-serif}::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{box-shadow:inset 0 0 2px 1px #004e74}::-webkit-scrollbar-thumb{box-shadow:inset 0 0 5px 2px #004e74}body,html{margin:0;height:100%;width:100%}footer,header,main{position:fixed;width:100%}header{height:90px;background-color:#fff;top:0;box-shadow:0 4px 7px rgba(0,0,0,.5);z-index:100}main{height:calc(100% - 90px - 25px);overflow:auto;position:fixed;top:90px}footer{height:25px;background-color:#0098ba;bottom:0;box-shadow:0 -1px 2px 0 rgba(0,0,0,.5)}header #language-selector{position:absolute;top:0;right:15px;width:175px}button{border:none}button:hover{cursor:pointer}button:focus{outline:none}[lang]:not(html){display:none}#sectionHead,.bold{font-weight:700}#sectionHead{background-color:#a0eaf7;color:#004e74;text-align:center;font-size:25px;font-family:Segoe UI,Arial,Helvetica,sans-serif;padding-top:10px}#throbber{position:absolute;top:0;left:0;height:100%;width:100%;background-color:hsla(0,0%,100%,.5)}#throbber img{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.half,.quarter,.sixth,.third,.three-quarters,.two-thirds{float:left;width:calc(50% - 20px);margin:9.99px}.third{width:calc(33.33333% - 20px)}.two-thirds{width:calc(66.66667% - 20px)}.quarter{width:calc(25% - 20px)}.three-quarters{width:calc(75% - 20px)}.sixth{width:calc(16.66667% - 20px)}.story-preview{position:relative;display:inline-block;float:left;width:33.33333%;max-height:100%;padding:15px}.story-preview .cover-image-container,.story-preview .meta-data-container{position:absolute;height:calc(100% - 30px);width:calc(100% - 30px);background-color:#004e74;background-size:contain;background-repeat:no-repeat;background-position:50%}.story-preview .meta-data-container{display:none;background-color:#004E74F0;padding:10px}.story-preview .meta-data-container a{display:block;height:100%;overflow:auto;color:#fff;text-decoration:none}.story-preview:hover .meta-data-container{display:block}.story-preview .info-button{display:none;position:absolute;z-index:1;bottom:10px;left:10px}.story-preview .title{font-size:1.25em;margin-bottom:5px}.story-preview .author{font-size:.75em;margin-bottom:5px}.story-preview .description{font-size:1em}.story-preview .meta-data-container a.story-game-button{position:absolute;bottom:10px;right:10px;width:35px;height:35px;border:none;background:none;background-repeat:no-repeat;background-image:url('../img/icons/NavBar/nav_games.svg')}.story-preview .meta-data-container a.story-game-button:hover{background-image:url('../img/icons/NavBar/nav_games_hoverDown2.svg')}#language-selector select{background-color:#004e74;color:#fff;height:35px;width:200px;font-size:1.1em;padding:5px 25px;text-align:center;border:none;border-bottom-left-radius:15px;border-bottom-right-radius:15px;-webkit-appearance:none;text-align-last:center;-ms-text-align-last:center;-moz-text-align-last:center}#language-selector select:focus{border-radius:0}#language-selector img{position:absolute;left:10px;top:2px;height:25px}.carousel{height:100%;width:100%}.carousel .carousel-nav{position:relative;float:left;height:100%;width:10%;border:none;background:none}.carousel .image-holder{position:relative;float:left;height:calc(100% - 30px);width:80%;overflow:hidden;white-space:nowrap;display:inline-block}.carousel .carousel-panel{height:100%;-webkit-transition:all 2s ease 0s;transition:all 2s ease 0s}#new-stories .carousel .carousel-panel{padding-bottom:35px}.carousel .image-holder.outerIndicator{margin:15px;height:calc(100% - 30px);width:calc(80% - 30px);border:15px solid #004e74;border-bottom-width:0;border-top-width:0;padding-bottom:40px;border-radius:7px;background-color:#004e74}.carousel.single .left{margin-left:10%}.carousel.single .right{margin-right:10%}.carousel.single .image-holder{width:60%;background-color:#004e74}.carousel.single .image-holder.outerIndicator{width:calc(40% - 30px)}.image-holder img{display:inline-block}.carousel .carousel-nav-img{width:50%;-webkit-transition:background-color .6s,border-color .6s,width .3s,height .3s;transition:background-color .6s,border-color .6s,width .3s,height .3s;padding:5px;border-style:solid;border-radius:50%;border-color:#0098ba;background-color:#0098ba}.pageTitle.overlay{background-color:rgba(0,78,116,.85);padding-top:0;z-index:1;width:100%;height:35px;-webkit-transition:opacity .5s;transition:opacity .5s;color:#fff;top:35px;pointer-events:none;font-weight:700}#new-stories .pageTitle.overlay{top:7px}.pageTitle.overlay span{font-size:23px}.pageTitle{padding-top:5px;height:25px;color:#fff;text-align:center;font-family:Segoe UI,Arial,Helvetica,sans-serif}.page-indicator.overlay,.pageTitle{background-color:#004e74;width:100%;position:relative}.page-indicator.overlay{z-index:1;height:36px;opacity:1;top:-72px}.page-indicator{background-color:#004e74;width:100%;position:absolute;left:0;bottom:0}.dots{display:block;position:relative;text-align:center;width:auto!important}.dot{display:inline-block;border-style:solid;border-radius:50%;border-color:#0098ba;background-color:#0098ba;height:17px;width:17px;margin:7px 5px 5px}.dot#current{border-color:#fff;background-color:#fff;-webkit-transition:background-color 2s,border-color 2s;transition:background-color 2s,border-color 2s}.carousel.single .overlay~.carousel-panel .story-preview .cover-image-container{width:100%}.carousel.single .overlay~.carousel-panel .meta-data-container{-webkit-transform:translate(0);transform:translate(0);width:100%}.image-holder .story-preview{width:100%;height:100%;background-color:#004e74;padding:0}.image-holder .story-preview .cover-image-container{width:calc(100% - 30px)}.hovereable{display:inline-block;height:100%}.image-holder .meta-data-container{white-space:normal;width:100%}.carousel.single .story-game-button{width:60px;height:60px;bottom:50px;right:20px}#story-viewer{position:relative;height:100%;width:100%;padding-top:5px;background-color:#004e74;color:#fff}.story-viewer-nav,.story-viewer-page{transition:height,width .5s;-moz-transition:height,width .5s;-webkit-transition:height,width .5s;-ms-transition:height,width .5s}#page-counter{height:50px;margin:5px;text-align:center;background-image:url(img/icons/StoryViewer/bkgd_pageCounter.svg);background-size:contain;background-repeat:no-repeat;background-position:50%}#page-counter span{font-size:35px;font-weight:700;width:100px;display:inline-block}#page-counter #current{color:#0098ba}#page-counter #total{color:#004e75}#page-content{height:calc(100% - 120px)}#page-content>div{height:calc(100% - 20px);position:relative}.story-viewer-nav-button{height:100%;width:100%;padding:0;background:no-repeat;border:none;color:#0098ba;background-repeat:no-repeat;background-position:50px;background-size:25px 45px;text-align:left}.story-viewer-nav-button>div{font-size:40px;height:50px;background-repeat:no-repeat;background-position:0;background-size:45px 45px}.story-viewer-nav-button .num{position:absolute;width:100%}.story-viewer-nav-button .icon.image{background-image:url(img/icons/StoryViewer/icon_SV_Page_Image.svg)}.story-viewer-nav-button .icon.sign{background-image:url(img/icons/StoryViewer/icon_SV_Page_SignLang.svg)}.story-viewer-nav-button:hover{color:#fff;font-weight:700;background-size:30px 50px}.story-viewer-nav-button:hover .icon{background-size:50px 50px}.story-viewer-nav-button:hover .icon.image{background-image:url(img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg)}.story-viewer-nav-button:hover .icon.sign{background-image:url(img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg)}#story-viewer-next{background-image:url(img/icons/General/icon_Page_Next.svg)}#story-viewer-previous{background-image:url(img/icons/General/icon_Page_Back.svg);text-align:right;background-position:right 50px center}#story-viewer-previous>div{background-position:100%}.story-viewer-page{background-color:#002e45;overflow:hidden}#page-overlay{position:absolute;width:100%;height:40px;z-index:1;opacity:.7;background-color:#002e45;text-align:center}.image-container{height:100%;width:100%;position:relative;overflow:hidden}.image-container img{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);max-height:100%;max-width:100%}.video-container{height:calc(100% - 40px);position:relative;overflow:hidden;padding:5px;transition:height .5s;-moz-transition:height .5s;-webkit-transition:height .5s;-ms-transition:height .5s}.video-container video{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);max-height:calc(100% - 10px);max-width:calc(100% - 10px)}.video-container.text-open{height:calc(60% - 40px)}#text-toggle-container{height:40px}#text-toggle{display:block;height:40px;width:40px;margin:0 auto;background:none;background-image:url(img/icons/StoryViewer/icon_SV_HideText.svg)}#text-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_HideTex_HoverDown.svg)}#text-toggle-container.text-open #text-toggle{background-image:url(img/icons/StoryViewer/icon_SV_ShowText.svg)}#text-toggle-container.text-open #text-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg)}#text-container{height:0;overflow:hidden;padding:15px 50px;background-color:#0098ba;font-size:1.5em;transition:height .5s;-moz-transition:height .5s;-webkit-transition:height .5s;-ms-transition:height .5s}#text-container.text-open{height:40%;overflow:auto}#page-controller{height:60px;padding:5px;text-align:center;background-color:#0098ba;box-shadow:inset 0 4px 7px rgba(0,78,117,.7)}#fullscreen-toggle{position:absolute;height:40px;width:40px;right:10px;bottom:10px;border:none;background:none;background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen.svg)}#fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg)}#story-viewer:-ms-fullscreen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:fullscreen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-ms-fullscreen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:fullscreen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-ms-fullscreen .story-viewer-nav{width:80px}#story-viewer:fullscreen .story-viewer-nav{width:80px}#story-viewer:-ms-fullscreen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:fullscreen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-ms-fullscreen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:fullscreen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:full-screen .story-viewer-nav{width:80px}#story-viewer:full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:-webkit-full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-webkit-full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-webkit-full-screen .story-viewer-nav{width:80px}#story-viewer:-webkit-full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-webkit-full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:-moz-full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-moz-full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-moz-full-screen .story-viewer-nav{width:80px}#story-viewer:-moz-full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-moz-full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:ms-fullscreen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:ms-fullscreen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:ms-fullscreen .story-viewer-nav{width:80px}#story-viewer:ms-fullscreen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:ms-fullscreen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}.glossary{cursor:default;position:relative;background-color:#004e74;border:2px solid #004e74;border-radius:15px;transition:border-color .5s;-moz-transition:border-color .5s;-webkit-transition:border-color .5s;-ms-transition:border-color .5s;padding:5px;padding-top:0}.glossary:hover{border-color:#fff}#glossary-modal{position:fixed;top:0;left:0;height:100%;width:100%;background-color:rgba(0,0,0,.5);z-index:100}#term-container{position:absolute;top:12.5%;left:12.5%;background-color:#fefefe;border-radius:20px;padding:10px;width:75%;height:75%}#term-container>div{height:calc(100% - 20px)}#media-container>div{height:calc(50% - 10px);background-color:#004e74;border-radius:10px}#media-container>div+div{margin-top:20px}#definition-container{background-color:#a0eaf7;border-radius:10px;color:#004e74;padding:10px 25px;font-size:1.25em}#exit-modal{position:absolute;width:50px;height:50px;background:none;background-image:url('img/icons/General/icon_Close.svg');right:10px}#exit-modal:hover{background-image:url('img/icons/General/icon_Close_hoverDown.svg')}.custom-select .custom-select-value{background-repeat:no-repeat;background-size:30px 30px;background-position:10px}.custom-select{position:relative;display:inline-block}.custom-select-value{position:relative;z-index:1;width:250px;height:40px;margin:0 5px;color:#fff;background-color:#004e74;background-size:30px 30px;background-position:left 10px center;background-repeat:no-repeat;font-size:1.3em;padding:5px 40px;text-align:center;border:none;border-radius:40px;border:2px solid #004e74}.custom-select-value:hover{border-color:#fff}.custom-select-value:after{content:'';position:absolute;top:0;right:10px;height:40px;width:30px;background-image:url(img/icons/General/icon_DropDnArrow.svg);background-repeat:no-repeat;background-position:50%;background-size:contain}.custom-select-options{position:absolute;display:none;left:25px;top:calc(100% - 15px);width:calc(100% - 50px)!important;background-color:#a0eaf7;box-shadow:0 4px 7px rgba(0,0,0,.5),4px 0 7px rgba(0,0,0,.5);padding:5px 15px;padding-top:20px;border-radius:15px}.custom-select-options>div{margin:5px auto}.custom-select-options button,.custom-select-options input,.custom-select-options label{font-size:1.2em;text-align:left;color:#004e74}.custom-select-options button{display:block;width:100%;padding:3px;background:none}.custom-select-options button:hover{color:#fff;background-color:#004e74;font-weight:700}#written-language-select .custom-select-value{background-image:url('img/icons/General/icon_WrittenLang_White.svg')}#sign-language-select .custom-select-value{background-image:url('img/icons/General/icon_SignLang_White.svg')}#sort-by-select .custom-select-value{background-image:url('img/icons/General/icon_Filter.svg')}\n/*# sourceMappingURL=__.css.map */");
+("*{box-sizing:border-box;font-family:Segoe UI,Arial,Helvetica,sans-serif}::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{box-shadow:inset 0 0 2px 1px #004e74}::-webkit-scrollbar-thumb{box-shadow:inset 0 0 5px 2px #004e74}body,html{margin:0;height:100%;width:100%}footer,header,main{position:fixed;width:100%}header{height:90px;background-color:#fff;top:0;box-shadow:0 4px 7px rgba(0,0,0,.5);z-index:100}main{height:calc(100% - 90px - 25px);overflow:auto;position:fixed;top:90px;min-height:600px}footer{height:25px;background-color:#0098ba;bottom:0;box-shadow:0 -1px 2px 0 rgba(0,0,0,.5)}header #language-selector{position:absolute;top:0;right:0}button{border:none}button:hover{cursor:pointer}button:focus{outline:none}[lang]:not(html){display:none}#sectionHead,.bold{font-weight:700}#sectionHead{background-color:#a0eaf7;color:#004e74;text-align:center;font-size:25px;font-family:Segoe UI,Arial,Helvetica,sans-serif;padding-top:10px}#throbber{position:absolute;top:0;left:0;height:100%;width:100%;background-color:hsla(0,0%,100%,.5)}#throbber img{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.half,.quarter,.sixth,.third,.three-quarters,.two-thirds{float:left;width:calc(50% - 20px);margin:9.99px}.third{width:calc(33.33333% - 20px)}.two-thirds{width:calc(66.66667% - 20px)}.quarter{width:calc(25% - 20px)}.three-quarters{width:calc(75% - 20px)}.sixth{width:calc(16.66667% - 20px)}.offline footer{padding:2px 10px;text-align:right;color:#fff}@media screen and (max-width:1024px) and (max-height:768px){body{font-size:10pt}}#viewer{width:100%;height:70%}#details{width:50%;margin:5px auto 25px;text-align:left}#title{margin:5px 0;font-size:2em}#author{margin:5px 0;font-size:1.2em}.social{margin:5px 0;margin-right:10px;border-radius:25px;border:2px solid #0098ba;background-color:#fff;color:#0098ba;padding:5px 10px;padding-left:40px;background-repeat:no-repeat;background-size:30px 30px;background-position:5px;font-size:1.1em}.socialExport{color:#fff;background-color:#0098ba;border-color:#0098ba;width:110px}#social-views{background-image:url('/img/icons/SocialMedia/icon_SM_Views.svg')}#social-likes{background-image:url('/img/icons/SocialMedia/icon_SM_Likes.svg')}#social-save{background-image:url('/img/icons/SocialMedia/icon_SM_Save.svg')}#social-share{background-image:url('/img/icons/SocialMedia/icon_SM_Share.svg')}#description{margin:10px 0}.metadata-list{margin:5px 0;color:#004e75}.metadata-list a,.metadata-list span span{display:inline-block;border-radius:25px;background-color:#004e75;padding:5px 10px;font-size:1em;color:#fff;text-decoration:none}.metadata-list a:hover{text-decoration:underline}.category{border-radius:25px;border:2px;border-color:#004e74;border-style:solid;text-align:center;padding-right:10px;margin-right:10px;padding-left:10px;background-color:#004e74;display:inline-block;color:#fff}#more-author .dot,#more-stories .dot{height:15px;width:15px}#more-author,#more-stories{height:25%}.carousel-nav-img{width:45px!important}.carousel-nav.right .carousel-nav-img{margin-left:-65%!important}.carousel-nav.left .carousel-nav-img{margin-left:65%!important}.image-holder .pageTitle{text-align:left;height:35px!important;padding-bottom:5px;padding-top:2px!important;font-size:1.4em}#offline-stories-title{height:50px;padding:10px;background-color:#0098ba;text-align:center;font-size:1.5em;color:#fff}#offline-stories{height:calc(100% - 50px)}.story-preview{position:relative;display:inline-block;float:left;width:33.33333%;max-height:100%;padding:15px}.story-preview .cover-image-container,.story-preview .meta-data-container{position:absolute;height:calc(100% - 30px);width:calc(100% - 30px);background-color:#004e74;background-size:contain;background-repeat:no-repeat;background-position:50%}.story-preview .meta-data-container{display:none;background-color:#004E74F0;padding:10px}.story-preview .meta-data-container a{display:block;height:100%;overflow:auto;color:#fff;text-decoration:none}.story-preview:hover .meta-data-container{display:block}.story-preview .info-button{display:none;position:absolute;z-index:1;bottom:10px;left:10px}.story-preview .title{font-size:1.25em;margin-bottom:5px}.story-preview .author{font-size:.75em;margin-bottom:5px}.story-preview .description{font-size:1em}.story-preview .meta-data-container a.story-game-button{position:absolute;bottom:10px;right:10px;width:35px;height:35px;border:none;background:none;background-repeat:no-repeat;background-image:url('../img/icons/NavBar/nav_games.svg')}.story-preview .meta-data-container a.story-game-button:hover{background-image:url('../img/icons/NavBar/nav_games_hoverDown2.svg')}#language-selector select{background-color:#004e74;color:#fff;height:35px;width:200px;font-size:1.1em;padding:5px;padding-left:40px;text-align:center;border:none;border-bottom-left-radius:15px;-webkit-appearance:none;text-align-last:center;-ms-text-align-last:center;-moz-text-align-last:center}#language-selector select:focus{border-radius:0}#language-selector img{position:absolute;left:10px;top:2px;height:25px}.carousel{height:100%;width:100%}.carousel .carousel-nav{position:relative;float:left;height:100%;width:10%;border:none;background:none}.carousel .image-holder{position:relative;float:left;height:calc(100% - 30px);width:80%;overflow:hidden;white-space:nowrap;display:inline-block}.carousel .carousel-panel{height:100%;-webkit-transition:all 2s ease 0s;transition:all 2s ease 0s}#new-stories .carousel .carousel-panel{padding-bottom:35px}.carousel .image-holder.outerIndicator{margin:15px;height:calc(100% - 30px);width:calc(80% - 30px);border:15px solid #004e74;border-bottom-width:0;border-top-width:0;padding-bottom:40px;border-radius:7px;background-color:#004e74}.carousel.single .left{margin-left:10%}.carousel.single .right{margin-right:10%}.carousel.single .image-holder{width:60%;background-color:#004e74}.carousel.single .image-holder.outerIndicator{width:calc(40% - 30px)}.image-holder img{display:inline-block}.carousel .carousel-nav-img{width:50%;-webkit-transition:background-color .6s,border-color .6s,width .3s,height .3s;transition:background-color .6s,border-color .6s,width .3s,height .3s;padding:5px;border-style:solid;border-radius:50%;border-color:#0098ba;background-color:#0098ba}.pageTitle.overlay{background-color:rgba(0,78,116,.85);padding-top:0;z-index:1;width:100%;height:35px;-webkit-transition:opacity .5s;transition:opacity .5s;color:#fff;top:35px;pointer-events:none;font-weight:700}#new-stories .pageTitle.overlay{top:7px}.pageTitle.overlay span{font-size:23px}.pageTitle{padding-top:5px;height:25px;color:#fff;text-align:center;font-family:Segoe UI,Arial,Helvetica,sans-serif}.page-indicator.overlay,.pageTitle{background-color:#004e74;width:100%;position:relative}.page-indicator.overlay{z-index:1;height:36px;opacity:1;top:-72px}.page-indicator{background-color:#004e74;width:100%;position:absolute;left:0;bottom:0}.dots{display:block;position:relative;text-align:center;width:auto!important}.dot{display:inline-block;border-style:solid;border-radius:50%;border-color:#0098ba;background-color:#0098ba;height:17px;width:17px;margin:7px 5px 5px}.dot#current{border-color:#fff;background-color:#fff;-webkit-transition:background-color 2s,border-color 2s;transition:background-color 2s,border-color 2s}.carousel.single .overlay~.carousel-panel .story-preview .cover-image-container{width:100%}.carousel.single .overlay~.carousel-panel .meta-data-container{-webkit-transform:translate(0);transform:translate(0);width:100%}.image-holder .story-preview{width:100%;height:100%;background-color:#004e74;padding:0}.image-holder .story-preview .cover-image-container{width:calc(100% - 30px)}.hovereable{display:inline-block;height:100%}.image-holder .meta-data-container{white-space:normal;width:100%}.carousel.single .story-game-button{width:60px;height:60px;bottom:50px;right:20px}#story-viewer{position:relative;height:100%;width:100%;padding-top:5px;background-color:#004e74;color:#fff}.story-viewer-nav,.story-viewer-page{transition:height,width .5s;-moz-transition:height,width .5s;-webkit-transition:height,width .5s;-ms-transition:height,width .5s}#page-counter{height:50px;margin:5px;text-align:center;background-image:url(img/icons/StoryViewer/bkgd_pageCounter.svg);background-size:contain;background-repeat:no-repeat;background-position:50%}#page-counter span{font-size:35px;font-weight:700;width:100px;display:inline-block}#page-counter #current{color:#0098ba}#page-counter #total{color:#004e75}#page-content{height:calc(100% - 120px)}#page-content>div{height:calc(100% - 20px);position:relative}.story-viewer-nav-button{height:100%;width:100%;padding:0;background:no-repeat;border:none;color:#0098ba;background-repeat:no-repeat;background-position:50px;background-size:25px 45px;text-align:left}.story-viewer-nav-button>div{font-size:40px;height:50px;background-repeat:no-repeat;background-position:0;background-size:45px 45px}.story-viewer-nav-button .num{position:absolute;width:100%}.story-viewer-nav-button .icon.image{background-image:url(img/icons/StoryViewer/icon_SV_Page_Image.svg)}.story-viewer-nav-button .icon.sign{background-image:url(img/icons/StoryViewer/icon_SV_Page_SignLang.svg)}.story-viewer-nav-button:hover{color:#fff;font-weight:700;background-size:30px 50px}.story-viewer-nav-button:hover .icon{background-size:50px 50px}.story-viewer-nav-button:hover .icon.image{background-image:url(img/icons/StoryViewer/icon_SV_Page_Image_HoverDown.svg)}.story-viewer-nav-button:hover .icon.sign{background-image:url(img/icons/StoryViewer/icon_SV_Page_SignLang_HoverDown.svg)}#story-viewer-next{background-image:url(img/icons/General/icon_Page_Next.svg)}#story-viewer-previous{background-image:url(img/icons/General/icon_Page_Back.svg);text-align:right;background-position:right 50px center}#story-viewer-previous>div{background-position:100%}.story-viewer-page{background-color:#002e45;overflow:hidden}#page-overlay{position:absolute;width:100%;height:40px;z-index:1;opacity:.7;background-color:#002e45;text-align:center}.image-container{height:100%;width:100%;position:relative;overflow:hidden}.image-container img{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);max-height:100%;max-width:100%}.video-container{height:calc(100% - 40px);position:relative;overflow:hidden;padding:5px;transition:height .5s;-moz-transition:height .5s;-webkit-transition:height .5s;-ms-transition:height .5s}.video-container video{position:absolute;top:50%;left:50%;-webkit-transform:translate(-50%,-50%);transform:translate(-50%,-50%);max-height:calc(100% - 10px);max-width:calc(100% - 10px)}.video-container.text-open{height:calc(60% - 40px)}#text-toggle-container{height:40px}#text-toggle{display:block;height:40px;width:40px;margin:0 auto;background:none;background-image:url(img/icons/StoryViewer/icon_SV_HideText.svg)}#text-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_HideText_HoverDown.svg)}#text-toggle-container.text-open #text-toggle{background-image:url(img/icons/StoryViewer/icon_SV_ShowText.svg)}#text-toggle-container.text-open #text-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_ShowText_HoverDown.svg)}#text-container{height:0;overflow:hidden;padding:15px 50px;background-color:#0098ba;font-size:1.5em;transition:height .5s;-moz-transition:height .5s;-webkit-transition:height .5s;-ms-transition:height .5s}#text-container.text-open{height:40%;overflow:auto}#page-controller{height:60px;padding:10px;text-align:center;background-color:#0098ba;box-shadow:inset 0 4px 7px rgba(0,78,117,.7)}#fullscreen-toggle{position:absolute;height:40px;width:40px;right:10px;bottom:10px;border:none;background:none;background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen.svg)}#fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_HoverDown.svg)}#story-viewer:fullscreen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:fullscreen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:fullscreen .story-viewer-nav{width:80px}#story-viewer:fullscreen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:fullscreen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:full-screen .story-viewer-nav{width:80px}#story-viewer:full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:-webkit-full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-webkit-full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-webkit-full-screen .story-viewer-nav{width:80px}#story-viewer:-webkit-full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-webkit-full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:-moz-full-screen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-moz-full-screen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-moz-full-screen .story-viewer-nav{width:80px}#story-viewer:-moz-full-screen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-moz-full-screen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}#story-viewer:-ms-fullscreen #fullscreen-toggle{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse.svg)}#story-viewer:-ms-fullscreen #fullscreen-toggle:hover{background-image:url(img/icons/StoryViewer/icon_SV_Fullscreen_Reverse_HoverDown.svg)}#story-viewer:-ms-fullscreen .story-viewer-nav{width:80px}#story-viewer:-ms-fullscreen .story-viewer-page{width:calc(100% - 220px)}#story-viewer:-ms-fullscreen .custom-select-options{padding-top:5px;padding-bottom:20px;top:auto;bottom:calc(100% - 15px)}.glossary{cursor:default;position:relative;background-color:#004e74;border:2px solid #004e74;border-radius:15px;transition:border-color .5s;-moz-transition:border-color .5s;-webkit-transition:border-color .5s;-ms-transition:border-color .5s;padding:5px;padding-top:0}.glossary:hover{border-color:#fff}#glossary-modal{position:fixed;top:0;left:0;height:100%;width:100%;background-color:rgba(0,0,0,.5);z-index:100}#term-container{position:absolute;top:12.5%;left:12.5%;background-color:#fefefe;border-radius:20px;padding:10px;width:75%;height:75%}#term-container>div{height:calc(100% - 20px)}#media-container>div{height:calc(50% - 10px);background-color:#004e74;border-radius:10px}#media-container>div+div{margin-top:20px}#definition-container{background-color:#a0eaf7;border-radius:10px;color:#004e74;padding:10px 25px;font-size:1.25em}#exit-modal{position:absolute;width:50px;height:50px;background:none;background-image:url('img/icons/General/icon_Close.svg');right:10px}#exit-modal:hover{background-image:url('img/icons/General/icon_Close_hoverDown.svg')}.custom-select .custom-select-value{background-repeat:no-repeat;background-size:30px 30px;background-position:10px}.custom-select{position:relative;display:inline-block}.custom-select-value{position:relative;z-index:1;width:250px;height:40px;margin:0 5px;color:#fff;background-color:#004e74;background-size:30px 30px;background-position:left 10px center;background-repeat:no-repeat;font-size:1.3em;padding:5px 40px;text-align:center;border:none;border-radius:40px;border:2px solid #004e74}.custom-select-value:hover{border-color:#fff}.custom-select-value:after{content:'';position:absolute;top:0;right:10px;height:40px;width:30px;background-image:url(img/icons/General/icon_DropDnArrow.svg);background-repeat:no-repeat;background-position:50%;background-size:contain}.custom-select-options{position:absolute;display:none;left:25px;top:calc(100% - 15px);width:calc(100% - 50px)!important;background-color:#a0eaf7;box-shadow:0 4px 7px rgba(0,0,0,.5),4px 0 7px rgba(0,0,0,.5);padding:5px 15px;padding-top:20px;border-radius:15px}.custom-select-options>div{margin:5px auto}.custom-select-options button,.custom-select-options input,.custom-select-options label{font-size:1.2em;text-align:left;color:#004e74}.custom-select-options button{display:block;width:100%;padding:3px;background:none}.custom-select-options button:hover{color:#fff;background-color:#004e74;font-weight:700}#written-language-select .custom-select-value{background-image:url('img/icons/General/icon_WrittenLang_White.svg')}#sign-language-select .custom-select-value{background-image:url('img/icons/General/icon_SignLang_White.svg')}#sort-by-select .custom-select-value{background-image:url('img/icons/General/icon_Filter.svg')}#grid-buttons{position:absolute;bottom:5px;right:0}.grid-button{border-radius:50%;background-color:#a1ebf3;border:none;margin-left:5px;width:30px;height:30px;font-weight:700;font-size:1.3em;color:#004e74}.grid-button-selected{background-color:#004e75;position:relative;border:none;color:#fff}#grid-next-button{border-radius:50%;margin-left:20px;padding:7px;border:none;height:27px;width:18px;background:transparent url('img/icons/General/icon_Page_Next_hoverDown.svg') no-repeat 50%}#grid-next-button:active{background:transparent url('img/icons/General/icon_Page_Next_Grid_hoverDown.svg') no-repeat 50%}#grid-prev-button{border-radius:50%;background-color:#a1ebf3;margin-right:15px;padding:7px;visibility:hidden;border:none;height:27px;width:18px;background:transparent url('img/icons/General/icon_Page_Back_hoverDown.svg') no-repeat 50%}#grid-prev-button:active{background:transparent url('img/icons/General/icon_Page_Back_Grid_hoverDown.svg') no-repeat 50%}.grid-page{position:absolute;-webkit-animation-duration:.75s;animation-duration:.75s;width:100%;opacity:1;animation-timing-function:linear;animation-delay:0s;animation-fill-mode:forwards;animation-iteration-count:1;-webkit-animation-iteration-count:1;-webkit-animation-timing-function:linear;-webkit-animation-delay:0s;-webkit-animation-fill-mode:forwards;display:inline-block}#stories{overflow:hidden;overflow-x:hidden;position:relative;width:80%;margin:10px auto}@-webkit-keyframes gridLeftFadeOut{0%{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}to{opacity:0;-webkit-transform:translateX(-100vw);transform:translateX(-100vw)}}@keyframes gridLeftFadeOut{0%{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}to{opacity:0;-webkit-transform:translateX(-100vw);transform:translateX(-100vw)}}@-webkit-keyframes gridLeftFadeIn{0%{opacity:0;-webkit-transform:translateX(100vw);transform:translateX(100vw)}to{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes gridLeftFadeIn{0%{opacity:0;-webkit-transform:translateX(100vw);transform:translateX(100vw)}to{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}}@-webkit-keyframes gridRightFadeOut{0%{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}to{opacity:0;-webkit-transform:translateX(100vw);transform:translateX(100vw)}}@keyframes gridRightFadeOut{0%{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}to{opacity:0;-webkit-transform:translateX(100vw);transform:translateX(100vw)}}@-webkit-keyframes gridRightFadeIn{0%{opacity:0;-webkit-transform:translateX(-100vw);transform:translateX(-100vw)}to{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}}@keyframes gridRightFadeIn{0%{opacity:0;-webkit-transform:translateX(-100vw);transform:translateX(-100vw)}to{opacity:1;-webkit-transform:translateX(0);transform:translateX(0)}}\n/*# sourceMappingURL=__.css.map */");
 })
 (function(factory) {
   if (typeof define == 'function' && define.amd)

@@ -6,7 +6,7 @@ import LanguageSelector from 'js/Client/LanguageSelector';
 import StoryGrid from 'js/Client/StoryGrid.js';
 
 import html from 'html/Client/Stories.html!text';
-
+var online = true;
 
 $(document).ready(function () {
     $('main').html(html);

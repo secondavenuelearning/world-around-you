@@ -1,41 +1,59 @@
-<div id="viewer">
-</div>
-<div id="details">
-	<div id="title">
-		<% _.each(story.metadata.title, function(title, lang){ %>
-			<span lang="<%- lang %>"><%- title %></span>
-		<% }) %>
+<% if(story){ %>
+	<div id="viewer">
 	</div>
-	<div id="author"><%- story.author %></div>
-	<div id="social">
-		<button id="social-views" class="social">Views <span id="views"><%- story.metadata.views %></span></button>
-		<button id="social-likes" class="social">Likes <span id="likes"><%- story.metadata.likes %></span></button>
-		<button id="social-save" class="social socialExport">Save</button>
-		<button id="social-share" class="social socialExport">Share</button>
+	<div id="details">
+		<div id="title">
+			<% _.each(story.metadata.title, function(title, lang){ %>
+				<span lang="<%- lang %>"><%- title %></span>
+			<% }) %>
+		</div>
+		<div id="author"><%- story.author %></div>
+		<% if(online){ %>
+			<div id="social">
+				<button id="social-views" class="social">Views <span id="views"><%- story.metadata.views %></span></button>
+				<button id="social-likes" class="social">Likes <span id="likes"><%- story.metadata.likes %></span></button>
+				<button id="social-save" class="social socialExport">Save</button>
+				<button id="social-share" class="social socialExport">Share</button>
+			</div>
+		<% } %>
+		<div id="description">
+			<% _.each(story.metadata.description, function(description, lang){ %>
+				<span lang="<%- lang %>"><%- description %></span>
+			<% }) %>
+		</div>
+		<div id="genres" class="metadata-list"> Genres:
+			<% _.each(story.metadata.genres, function(genreList, lang){ %>
+				<span lang="<%- lang %>">
+					<% _.each(genreList, function(genre){ %>
+						<% if(online){ %>
+							<a class="genre" href="./Search?search=<%- genre %>"><%- genre %></a>
+						<% } else{ %>
+							<span class="genre"><%- genre %></span>
+						<% } %>
+					<% }) %>
+				</span>
+			<% }) %>
+		</div>
+		<div id="tags" class="metadata-list"> Tags:
+			<% _.each(story.metadata.tags, function(tagList, lang){ %>
+				<span lang="<%- lang %>">
+					<% _.each(tagList, function(tag){ %>
+						<% if(online){ %>
+							<a class="tag" href="./Search?search=<%- tag %>">#<%- tag %></a>
+						<% } else{ %>
+							<span class="tag">#<%- tag %></span>
+						<% } %>
+					<% }) %>
+				</span>
+			<% }) %>
+		</div>
 	</div>
-	<div id="description">
-		<% _.each(story.metadata.description, function(description, lang){ %>
-			<span lang="<%- lang %>"><%- description %></span>
-		<% }) %>
-	</div>
-	<div id="genres" class="metadata-list"> Genres:
-		<% _.each(story.metadata.genres, function(genreList, lang){ %>
-			<span lang="<%- lang %>">
-				<% _.each(genreList, function(genre){ %>
-					<a class="genre" href="./Search?search=<%- genre %>"><%- genre %></a>
-				<% }) %>
-			</span>
-		<% }) %>
-	</div>
-	<div id="tags" class="metadata-list"> Tags:
-		<% _.each(story.metadata.tags, function(tagList, lang){ %>
-			<span lang="<%- lang %>">
-				<% _.each(tagList, function(tag){ %>
-					<a class="tag" href="./Search?search=<%- tag %>">#<%- tag %></a>
-				<% }) %>
-			</span>
-		<% }) %>
-	</div>
-</div>
-<div id="more-author"></div>
-<div id="more-stories"></div>
+<% } %>
+
+<% if(online){ %>
+	<div id="more-author"></div>
+	<div id="more-stories"></div>
+<% } else { %>
+	<div id="offline-stories-title">Offline Stories</div>
+	<div id="offline-stories"></div>
+<% } %>
