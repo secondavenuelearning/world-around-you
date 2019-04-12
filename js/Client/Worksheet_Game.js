@@ -3,7 +3,11 @@ import gameHtml from 'html/Client/PlantGame_Game.html!text';
 import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
 import winHtml from 'html/Client/PlantGame_Win.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-export default { Start, GetImagesFromFolder, Animate}
+export default {
+    Start,
+    GetImagesFromFolder,
+    Animate
+}
 
 /* ----------------------- Global Variables ----------------------- */
 //html and data passed to html
@@ -36,10 +40,8 @@ var flowers = 0; //will be a decimal but actual flowers shwon will be math.floor
 var flowerPower = 0;
 
 //tip strings up top
-var notif = 
-{
-    Good: 
-    [
+var notif = {
+    Good: [
         "Good Job!",
         "Great",
         "Correct",
@@ -50,8 +52,7 @@ var notif =
         "Rad",
         ":)"
     ],
-    Bad: 
-    [
+    Bad: [
         "Ouch",
         "Try Again",
         "Not quite...",
@@ -67,13 +68,11 @@ var notif =
 };
 
 //animation
-var animations =
-{
+var animations = {
     Star: [], //single
     Plants: [], //single
     Bird: [], //single
-    Flowers: 
-    {
+    Flowers: {
         Windy: [],
         Growing: []
     }
@@ -110,25 +109,22 @@ export function Start(storyObj, sign, written, gameData) {
     writtenLang = written;
     rounds = gameData.sentences;
     maxScore = gameData.sentences.length;
-    
+
     //calc flower rate (ie points required to get a flower)
     flowerPower = 9 / maxScore; //9 is the number of flowers
     flowers = 0;
-    
+
     //set header max score text
     $("#score #total").text("/ " + maxScore);
     $("#score #current").text("0");
-    
+
     //get animation images
-    animations =
-    {
+    animations = {
         Star: GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/"), //single
         Plants: GetImagesFromFolder("/img/games/Worksheet/WindyPlants_Animation/"), //single
         Bird: GetImagesFromFolder("/img/games/Worksheet/Bird_Animation/"), //single
-        Flowers: 
-        {
-            Windy: 
-            [ 
+        Flowers: {
+            Windy: [
                 "/img/games/Worksheet/Flowers/Flower1_Wind_Animation/",
                 "/img/games/Worksheet/Flowers/Flower2_Wind_Animation/",
                 "/img/games/Worksheet/Flowers/Flower3_Wind_Animation/",
@@ -139,8 +135,7 @@ export function Start(storyObj, sign, written, gameData) {
                 "/img/games/Worksheet/Flowers/Flower8_Wind_Animation/",
                 "/img/games/Worksheet/Flowers/Flower9_Wind_Animation/"
             ],
-            Growing: 
-            [
+            Growing: [
                 "/img/games/Worksheet/Flowers/Flower1_Growing_Animation/",
                 "/img/games/Worksheet/Flowers/Flower2_Growing_Animation/",
                 "/img/games/Worksheet/Flowers/Flower3_Growing_Animation/",
@@ -153,16 +148,16 @@ export function Start(storyObj, sign, written, gameData) {
             ]
         }
     }
-    
+
     //add flower bed (not part of normal build so flowers arent reset on round changes)
     $('footer').html(flowerbedHtml);
-    
+
     //create a new round and update html
     NextRound();
     
     //start off windy anim
     setTimeout(function(){ WindyAnim(); }, untilWindy);
-    
+
 }
 
 /* ----------------------- Data parsing ----------------------- */
@@ -216,37 +211,31 @@ function MapTermsToPages(terms) {
     return mapped;
 }
 
-function PreLoadAnimChunk(anims, size)
-{
+function PreLoadAnimChunk(anims, size) {
     //get images for deifned number of items to be loaded
     var start = 0;
-    for(var i = 0; i < size; i++)
-    {
+    for (var i = 0; i < size; i++) {
         //check if anim has already loaded
-        if(_.isString(anims[start + i]))
-        { //has not! load the image
+        if (_.isString(anims[start + i])) { //has not! load the image
             anims[start + i] = GetImagesFromFolder(anims[start + i]);
-        }
-        else if(start < anims.length) //only cont if we have items left to check
-        {//loaded- dont count this towards the loop
+        } else if (start < anims.length) //only cont if we have items left to check
+        { //loaded- dont count this towards the loop
             //update start pos so next one moves forward but loop isnt started
-            start++; 
+            start++;
             i--; //delay loop stopping
         }
     }
 }
 
-function LoadingFlowers()
-{
+function LoadingFlowers() {
     //get array of flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
-    
+
     //loop through flowers and enable any new flowers players have gotten
-    for(var i = 0; i < Math.floor(flowers + flowerPower); i++) //only show full flowers! thus- Math.floor(flowers)
+    for (var i = 0; i < Math.floor(flowers + flowerPower); i++) //only show full flowers! thus- Math.floor(flowers)
     {
         //check if the current flower has already bloomed
-        if($(bouquet[i]).hasClass("hidden"))
-        {   
+        if ($(bouquet[i]).hasClass("hidden")) {
             //load next chunk of flowers
             animations.Flowers.Growing[i] = GetImagesFromFolder(animations.Flowers.Growing[i]);
         }
@@ -275,41 +264,36 @@ function NextRound()
     
     //reset some things
     firstTry = true;
-    
+
     //get random terms
     var options = [rounds[round].Term]; //options includes the corrcet option first
-    
-    for(var i = 0; i < 2; i++)
-    {
+
+    for (var i = 0; i < 2; i++) {
         var page = Math.floor(Math.random() * (Object.keys(storyData).length - 2)) + 1;
         var terms = Object.keys(storyData[page].glossary[writtenLang]);
         var term = ChooseRandomArrayElement(terms);
-        
+
         //check if we ahve already used this term
-        if(!options.includes(term))
-        { //we havent- add it to options
+        if (!options.includes(term)) { //we havent- add it to options
             options.push(term);
-        }
-        else //we have :( try again
+        } else //we have :( try again
         {
             i--;
         }
-        
+
     }
-    
+
     //map the terms to where they are in the story data- this is mainly for the correct option
     termMap = MapTermsToPages(options.slice(0));
-    
+
     //shuffle options so the correct vid isnt the first one
     shuffle(options);
-    
+
     //build template
     var pages = [termMap[options[0]], termMap[options[1]], termMap[options[2]]];
-    templateData =
-    {
+    templateData = {
         ID: options,
-        Media: 
-        [
+        Media: [
             storyData[pages[0]].video[signLang],
             storyData[pages[1]].video[signLang],
             storyData[pages[2]].video[signLang]
@@ -317,14 +301,14 @@ function NextRound()
         Star: animations.Star[0].src,
         Text: [rounds[round].Sentence[0], rounds[round].Sentence[1]]
     };
-    
+
     var main = template(templateData);
     this.$main = $(main);
     $('main').html(this.$main);
-    
+
     //clear notif
     $("#responseText").text("");
-    
+
     //add looping to the video
     var vids = $("#videos video").toArray();
     vids.forEach(function (vid) {
@@ -342,15 +326,14 @@ function NextRound()
         //add looping
         LoopVideoClip(vid.id, termData.start, termData.end);
     });
-    
+
     //add core game mechanic event functionality
     DragAndDrop();
-    
+
     //add hint functionality
-    $("#hint").on('click', function()
-    { 
+    $("#hint").on('click', function () {
         //run hint
-        Hint(); 
+        Hint();
     });
 }
 
@@ -358,158 +341,148 @@ function Win()
 {
     //load last of the flowers
     LoadingFlowers();
-    
+
     //build win template
-    winTemplateData=
-    {
+    winTemplateData = {
         Score: score,
         Max: maxScore
     };
+  
     var win = winTemplate(winTemplateData);
-    
+
     //go to win screen
+
     $("main").html(win);
-    
+    $("#responseText").text("");
+    var scoreTemp = document.getElementById("score");
+    scoreTemp.style.display = "none";
 }
 
-function Hint()
-{
+function Hint() {
     //get incorrect options
     var options = [];
-    templateData.ID.forEach(function(option)
-    {
-        if(option != rounds[round].Term)
-        {
+    templateData.ID.forEach(function (option) {
+        if (option != rounds[round].Term) {
             options.push(option);
         }
     });
- 
+
     //chose which of them to omit
     var omit = ChooseRandomArrayElement(options);
-    
+
     //hide the omited item
     omit = "#" + omit + "Vid"; //expand to proper ID
     $(omit).addClass("hidden");
-    
+
     //affect trys
     firstTry = false;
 }
 
-function DragAndDrop()
-{
+function DragAndDrop() {
     //make drag blurb follow mouse
-    $(document).on('mousemove', function(e){
+    $(document).on('mousemove', function (e) {
         event.preventDefault(); //dont slect things when dragging
-        
+
         //update position of "dragged" word element
         $('#drag').css({
-           left:  e.pageX - 50,
-           top:   e.pageY - 115
+            left: e.pageX - 50,
+            top: e.pageY - 115
         });
     });
-    
+
     //add click event for videos
-    $(".media").on('mousedown', function(e)
-    {
+    $(".media").on('mousedown', function (e) {
         //dont selecte things hwen dragging
         event.preventDefault();
-        
+
         //show drag again
         $("#drag").removeClass("hidden");
-        
+
         //hide video
         $(e.target).children("video").addClass("hidden");
         $(e.target).addClass("selected");
-        
+
         //set dragging to true
         dragging = true;
-        
+
         //give drag its proper text
         var term = $(".selected video")[0].id.toString();
         term = term.substring(0, term.length - 3);
         $("#drag span").text(term);
-        
+
     });
-    
-    $(document).on('mouseup', function(e)
-    {
+
+    $(document).on('mouseup', function (e) {
         //check if we are dragging and mouseup is on the blank
-        if(dragging && $(e.target)[0] == $("#blank")[0])
-        {
+        if (dragging && $(e.target)[0] == $("#blank")[0]) {
             //chekc if its the right term that was draggged in
             var term = $(".selected video")[0].id.toString();
             term = term.substring(0, term.length - 3);
-            if(term == rounds[round].Term)
-            {
+            if (term == rounds[round].Term) {
                 //show star and ainmate
                 $(".selected img").removeClass("hidden");
                 Animate($(".selected img"), animations.Star, null, true, true); //has round logic
-                
+
                 //updaet scoring and flowers
-                if(firstTry) 
-                {
+                if (firstTry) {
                     //up flower count
                     flowers += flowerPower;
-                    
+
                     //add new flowers
                     UpdateFlowers();
-                    
+
                     score++; //up score by one
-                
+
                     //update score text
                     $("#score #current").text(score);
                 }
-                
+
                 //apply term to blank
                 $("#blank").addClass("filled");
                 $("#blank").text(term);
-                
+
                 //update notif text
                 RunNotif(notif.Good);
-                
-                
-            }
-            else //not the correct awnser- punish
+
+
+            } else //not the correct awnser- punish
             {
                 //hide drag and show hidden video
                 $(".selected").children("video").removeClass("hidden");
-                
+
                 //some stuff w/ score??
                 firstTry = false;
-                
+
                 //update notif text
                 RunNotif(notif.Bad);
             }
-        }
-        else //we let go not on the blank
+        } else //we let go not on the blank
         {
             //hide drag and show hidden video
             $(".selected video").removeClass("hidden");
         }
-        
+
         //deselect and hide hidden
         $(".selected").removeClass("selected");
         $("#drag").addClass("hidden");
-        
+
         //we obvi arent dragign if the user let go of the mouse button
         dragging = false;
     });
 }
 
-function UpdateFlowers()
-{
+function UpdateFlowers() {
     //get array of flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
-    
+
     //loop through flowers and enable any new flowers players have gotten
-    for(var i = 0; i < Math.floor(flowers); i++) //only show full flowers! thus- Math.floor(flowers)
+    for (var i = 0; i < Math.floor(flowers); i++) //only show full flowers! thus- Math.floor(flowers)
     {
         //check if the current flower has already bloomed
-        if($(bouquet[i]).hasClass("hidden"))
-        {
+        if ($(bouquet[i]).hasClass("hidden")) {
             //unhide this flower
             $(bouquet[i]).removeClass("hidden");
-            
+
             //animate flower
             $(bouquet[i]).addClass("growing");
             Animate($(bouquet[i]).children("img"), animations.Flowers.Growing[i], null, true);
@@ -519,11 +492,10 @@ function UpdateFlowers()
     }
 }
 
-function RunNotif(notifs)
-{
+function RunNotif(notifs) {
     //chose random element
     var notif = ChooseRandomArrayElement(notifs);
-    
+
     //replace notif text with selected
     $("#responseText").text(notif);
 }
@@ -532,8 +504,7 @@ function RunNotif(notifs)
 
 /* ----------------------- Animation ----------------------- */
 function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
-    if (!noLoop || (frame < frames.length - 1)) 
-    {
+    if (!noLoop || (frame < frames.length - 1)) {
         window.requestAnimationFrame(function (timestamp) {
             Animate(id, frames, frame, noLoop, roundLogicActive);
         });
@@ -548,22 +519,17 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
 
             img.src = frames[frame].src;
         });
-    }
-    else if(roundLogicActive)
-    {
+    } else if (roundLogicActive) {
         //updaet round
         round++;
-        
+
         //goto next round or win screen
-        if(round < rounds.length)
-        {
+        if (round < rounds.length) {
             NextRound();
-        }
-        else
-        {
+        } else {
             Win();
         }
-             
+
     }
 }
 
@@ -621,7 +587,7 @@ function FitText() {
                 if (element.children[1].style.getPropertyValue('font-size') == "") {
                     element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
                 }
-                
+
                 currentSize = currentSize - 5;
                 element.children[1].style.setProperty('font-size', currentSize + "px");
 
@@ -640,35 +606,35 @@ function FitText() {
  */
 var shuffle = function (array) {
 
-	var currentIndex = array.length;
-	var temporaryValue, randomIndex;
+    var currentIndex = array.length;
+    var temporaryValue, randomIndex;
 
-	// While there remain elements to shuffle...
-	while (0 !== currentIndex) {
-		// Pick a remaining element...
-		randomIndex = Math.floor(Math.random() * currentIndex);
-		currentIndex -= 1;
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+        // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
 
-		// And swap it with the current element.
-		temporaryValue = array[currentIndex];
-		array[currentIndex] = array[randomIndex];
-		array[randomIndex] = temporaryValue;
-	}
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
 
-	return array;
+    return array;
 
 };
 
 //Adds includes method for browsers that dont support
 // thanks: https://stackoverflow.com/questions/31221341/ie-does-not-support-includes-method
 if (!Array.prototype.includes) {
-  Object.defineProperty(Array.prototype, "includes", {
-    enumerable: false,
-    value: function(obj) {
-        var newArr = this.filter(function(el) {
-          return el == obj;
-        });
-        return newArr.length > 0;
-      }
-  });
+    Object.defineProperty(Array.prototype, "includes", {
+        enumerable: false,
+        value: function (obj) {
+            var newArr = this.filter(function (el) {
+                return el == obj;
+            });
+            return newArr.length > 0;
+        }
+    });
 }
