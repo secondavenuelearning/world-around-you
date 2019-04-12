@@ -509,7 +509,7 @@ function RunNotif(notifs) {
 /* ----------------------- Animation ----------------------- */
 function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     if (!noLoop || (frame < frames.length - 1)) {
-        window.requestAnimationFrame(function (timestamp) {
+        var anim = window.requestAnimationFrame(function (timestamp) {
             Animate(id, frames, frame, noLoop, roundLogicActive);
         });
 

@@ -17,7 +17,7 @@ $('footer').html(flowerbedHtml);
 var anim;
 var busFrames = Game.GetImagesFromFolder("/img/games/Worksheet/TitleScreen_Animation/");
 function initializeGameScene() {
-      window.cancelAnimationFrame(anim);
+    $(".titleWall").removeClass("titleWall");
      var xmlhttp = new XMLHttpRequest();
     var dataURL = "../../text/Malakas_Maganda.json";
     var gameData = {
@@ -89,10 +89,10 @@ function initializeGameScene() {
 function initializeTitle() {
     //set html
      $('main').html(html);
-    //$('main').css("background-image", "url(../img/games/BusGame/menubackground_BusGame-05.png)");
-    anim = window.requestAnimationFrame(function (timestamp){
-        Game.Animate("#wall", busFrames, null, false);
-    });
+    
+    $("#wall").addClass("titleWall");
+    Game.Animate(".titleWall", busFrames, null, false);
+    
         var score = document.getElementById("score");
     score.style.display = "none";
     //hookup buttons
@@ -143,9 +143,8 @@ $(document).ready(function () {
     score.style.display = "none";
     
     //prep and run animations
-    anim = window.requestAnimationFrame(function (timestamp){
-        Game.Animate("#wall", busFrames, null, false);
-    });
+    $("#wall").addClass("titleWall");
+    Game.Animate(".titleWall", busFrames, null, false);
    
    
 });
