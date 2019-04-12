@@ -79,6 +79,8 @@ var animations =
     }
 };
 
+var untilWindy = 3000;
+
 //gameplay vaibales
 var dragging = false;
 
@@ -157,6 +159,9 @@ export function Start(storyObj, sign, written, gameData) {
     
     //create a new round and update html
     NextRound();
+    
+    //start off windy anim
+    setTimeout(function(){ WindyAnim(); }, untilWindy);
     
 }
 
@@ -247,11 +252,16 @@ function LoadingFlowers()
         }
         else
         {
-            //unload old animations
+            //unload old animations and repalce with new ones
             if(_.isArray(animations.Flowers.Growing[i]))
             {
-                animations.Flowers.Growing[i] = null;
+                //get new and set start frame
                 animations.Flowers.Windy[i] = GetImagesFromFolder(animations.Flowers.Windy[i]);
+                $(bouquet[i]).removeClass("growing");
+                $(bouquet[i]).addClass("windy");
+                
+                //unload old 
+                animations.Flowers.Growing[i] = null;
             }
         }
     }
@@ -260,6 +270,9 @@ function LoadingFlowers()
 /* ----------------------- Game Mechanics ----------------------- */
 function NextRound()
 {
+    //load animations as we need them
+    LoadingFlowers();
+    
     //reset some things
     firstTry = true;
     
@@ -312,9 +325,6 @@ function NextRound()
     //clear notif
     $("#responseText").text("");
     
-    //load animations as we need them
-    LoadingFlowers();
-    
     //add looping to the video
     var vids = $("#videos video").toArray();
     vids.forEach(function (vid) {
@@ -346,6 +356,9 @@ function NextRound()
 
 function Win()
 {
+    //load last of the flowers
+    LoadingFlowers();
+    
     //build win template
     winTemplateData=
     {
@@ -498,7 +511,8 @@ function UpdateFlowers()
             $(bouquet[i]).removeClass("hidden");
             
             //animate flower
-            Animate($(bouquet[i]), animations.Flowers.Growing[i], null, true);
+            $(bouquet[i]).addClass("growing");
+            Animate($(bouquet[i]).children("img"), animations.Flowers.Growing[i], null, true);
 
         }
 
@@ -553,6 +567,26 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     }
 }
 
+function WindyAnim()
+{
+    //animate background
+    Animate("#wall", animations.Plants, null, true);
+    
+    //animate all the flowers
+    var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
+    for(var i = 0; i < bouquet.length; i++)
+    {
+        //exclude hidden flowers
+        if(!$(bouquet[i]).hasClass("hidden") && (!$(bouquet[i]).hasClass("growing")))
+        {
+            Animate($(bouquet[i]).children("img"), animations.Flowers.Windy[i], null, true);
+        }
+    }
+    
+    //set next windy run
+    untilWindy = Math.floor(Math.random() * 30000) + 9000;
+    setTimeout(function(){ WindyAnim(); }, untilWindy);
+}
 
 /* ----------------------- Helper Functions ----------------------- */
 function ChooseRandomArrayElement(options) {

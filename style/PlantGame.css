@@ -289,8 +289,8 @@ header #responseText
 {
     position: absolute;
     bottom: 0;
-    width: 52%;
-    left: 25%;
+    width: 58%;
+    left: 23%;
 }
 
 .flower
@@ -299,6 +299,17 @@ header #responseText
     bottom: 0;
     display: inline-block;
     width: calc(100% / 10)
+}
+
+.flower img
+{
+    height: 100%;
+}
+
+.flower img[src*="Wind_Animation"]
+{
+    position: relative;
+    left: -22.5px;
 }
 
 .flower.hidden
