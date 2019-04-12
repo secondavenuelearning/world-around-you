@@ -281,17 +281,26 @@ header #responseText
    
 }
 footer{
-      z-index: -1;
+      z-index: -10;
 }
 
-#wall
+#wall, #bird
 {
     position: absolute;
     bottom: 0;
     width: 100%;
     height: auto;
+    z-index: -6;
    
 }
+
+#bird
+{
+    width: 60%;
+    bottom: 600%;
+    z-index: -5;
+}
+
 
 #flowers
 {

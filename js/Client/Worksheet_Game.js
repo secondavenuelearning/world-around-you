@@ -156,7 +156,11 @@ export function Start(storyObj, sign, written, gameData) {
     NextRound();
     
     //start off windy anim
-    setTimeout(function(){ WindyAnim(); }, untilWindy);
+    setTimeout(function()
+    { 
+        WindyAnim(); 
+        Animate("#bird", animations.Bird, null, true);
+    }, untilWindy);
 
 }
 
