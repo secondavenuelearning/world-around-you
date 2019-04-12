@@ -121,3 +121,6 @@
 #offline-stories{
     height: calc(100% - 50px);
 }
+#offline-stories.empty{
+    padding: 25px;
+}
