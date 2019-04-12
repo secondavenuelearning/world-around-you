@@ -425,17 +425,17 @@ function DragAndDrop() {
 
                 //updaet scoring and flowers
                 if (firstTry) {
-                    //up flower count
-                    flowers += flowerPower;
-
-                    //add new flowers
-                    UpdateFlowers();
-
                     score++; //up score by one
 
                     //update score text
                     $("#score #current").text(score);
                 }
+                
+                //up flower count
+                flowers += flowerPower;
+
+                //add new flowers
+                UpdateFlowers();
 
                 //apply term to blank
                 $("#blank").addClass("filled");

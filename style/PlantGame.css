@@ -50,10 +50,6 @@ header {
     position: relative;
     top: -5px;
 }
-#backBtn:hover {
-     position: relative;
-    top: -5px; 
-}
 main{
     height: calc(100% - 75px);
 }
@@ -103,6 +99,13 @@ header button#backBtn img {
     height: auto;
     width: 70%;
     overflow: hidden;
+}
+
+#backBtn:hover
+{
+    width: 90px;
+    position: relative;
+    top: 3;
 }
 
 header #score
