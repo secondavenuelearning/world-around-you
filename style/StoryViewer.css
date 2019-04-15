@@ -183,6 +183,7 @@
 	overflow: hidden;
 	padding: 15px 50px;
 	background-color: #0098ba;
+	line-height: 1.75em;
 	font-size: 1.5em;
 
 	transition: height .5s;
@@ -262,7 +263,7 @@
 	-webkit-transition: border-color .5s;
 	-ms-transition: border-color .5s;
     border-width: 2px;
-    padding: 5px;
+    padding: 0px 5px;
     padding-top: 0px;
 }
 

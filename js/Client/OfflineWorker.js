@@ -59,11 +59,16 @@ function RemoveFromAssetList(storageName, listOrItem){
 }
 
 function SaveServiceWorker(url, assets){
-	UpUp.start({
-		'content-url': url,
-		'assets': assets,
-		'service-worker-url': '/upup.sw.min.js'
-	});
+	if(UpUp){
+		UpUp.start({
+			'content-url': url,
+			'assets': assets,
+			'service-worker-url': '/upup.sw.min.js'
+		});
+	}
+	else{
+		console.error('No service worker found for your current browser.');
+	}
 }
 
 export default {

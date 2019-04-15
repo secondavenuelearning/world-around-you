@@ -737,7 +737,18 @@ body.dragging{
 	    padding: 2px;
 	    border-radius: 5px;
 	}
-
+	#term-select-container h2{
+		height: 30px;
+		margin-bottom: 0px;
+	}
+	#term-select-container #term-select{
+		height: calc(100% - 30px);
+		overflow: auto;
+		direction: rtl;
+	}
+	#term-select-container #term-select *{
+		direction: ltr;
+	}
 /*********/
 
 /* Publish */

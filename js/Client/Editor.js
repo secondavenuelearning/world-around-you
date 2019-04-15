@@ -78,8 +78,7 @@ $(document).ready(function () {
 				method: 'post',
 				url: '/api/story'
 			}).done((_storyId) => {
-				storyId = parseInt(_storyId);
-				return resolve();
+				window.location = window.location.origin + window.location.pathname + `?id=${_storyId}`;
 			}).fail((err) => {
 				console.error(err);
 				return alert('[PH] Error check the console');
@@ -308,7 +307,7 @@ function renderCoverPage(){
 			reader.readAsDataURL(file);
 		});
 
-		$('#author-input').on('keydown keyup', (evt) => {
+		$('#author-input').on('change keydown keyup', (evt) => {
 			var _author = $('#author-input').val();
 			if(author == _author) return;
 
@@ -423,7 +422,7 @@ function renderMetadataPage(){
 				ReRender(unsavedChanges);
 			});
 
-			$('#title-input, #description-input').on('keydown keyup', (evt) => {
+			$('#title-input, #description-input').on('change keydown keyup', (evt) => {
 				let $el = $(evt.currentTarget);
 				metadata[$el.attr('data-type')][currentWrittenLanguage] = $el.val();
 
@@ -781,7 +780,7 @@ function renderPagesPage(renderData){
 			RenderPageContent();
 		});
 
-		$('#page-text').on('keydown keyup', (evt) => {
+		$('#page-text').on('change keydown keyup', (evt) => {
 			if(!data[currentPageIndex].text) data[currentPageIndex].text = {};
 			data[currentPageIndex].text[currentWrittenLanguage] = $(evt.currentTarget).val();
 
@@ -952,7 +951,7 @@ function renderPagesPage(renderData){
 			});
 		});
 
-		$('#term-definition-input').on('keydown keyup', (evt) => {
+		$('#term-definition-input').on('change keydown keyup', (evt) => {
 			data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].definition = $(evt.currentTarget).val();
 
 			$('.save-button').prop('disabled', false);
@@ -1021,7 +1020,7 @@ function renderPublishPage(){
 			data
 		}).done((_story) => {
 			if(_story){
-				story = _story;
+				story.visible = 1;
 				$('.save-button').remove();
 				alert('Story Published')
 			}
@@ -1062,7 +1061,7 @@ function RenderAddText(beforeElement, dataType, autocompleteValues, saveCallback
 			$('.save-text').trigger('click');
 		});
 		$('.autocomplete-container').hide();
-		$('.add-text-input').on('keydown keyup', () => {
+		$('.add-text-input').on('change keydown keyup', () => {
 			$('.autocomplete-container').hide();
 
 			let value = $('.add-text-input').val();
