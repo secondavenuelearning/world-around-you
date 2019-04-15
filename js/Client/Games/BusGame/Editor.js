@@ -41,7 +41,7 @@ $(document).ready(() => {
 		});
 
 		name = game.data ? game.data.name : 'No Name';
-		selectedList = game.data.terms || [];
+		selectedList = game.data && game.data.terms ? game.data.terms : [];
 
 		Render();
 	})

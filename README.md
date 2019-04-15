@@ -7,38 +7,42 @@ This repo holds the style guides, wireframes, and prototype implementation of th
 
 In the reader's view, each dot along the main slider bar represents a page in the story. Each page has 3 components, or sub-pages: 1) photo, 2) signed video, and 3) glossary interactivity. A sample story is shown in this prototype: "Malakas and Maganda." 
 
-All dependencies are included. This prototype can run offline. 
+All dependencies are included. This prototype can run offline.
+
+
+## Dependencies
+
+- nodejs (https://nodejs.org/en/)
+- mysql database
+- git (https://git-scm.com/downloads)
+
 
 ## Repo architecture
 
 ```
-./
+|_ data_templates - Template describing how the JSON data is structured
 |
-|_ css — stylesheets
-    |_ fonts — font files
+|_ fonts — Font files
 |
-|_ img 
-    |_ carousel — placeholder images for the "up next" and "from Massimo V." thumbnail carousels
-    |_ glossary — placeholder images for sample vocabulary
-    |_ icons — all icons used on the page
-    |_ story_2 — photos from sample story "Malakas and Maganda" 
+|_ html 
+  |_ Client - Html templates used but the front end javascript
+  |_ Server - Html templates used but the back end javascript
 |
-|_ js (scripts, including all dependencies (e.g. jQuery))
-    |_ Load.js - starting point of js, initalizes verything an dhooks up features to page elements
-    |_ NavigationBar.js - functionality for the nav bar at the top
-    |_ viewer.js - video player and all assoctiated fucntions (video, text, slider bar, language buttons)
-    |_ ButtonHandlers.js - Left/Right arrow button functionality (will be upadted to general reuseable button funcs later maybe)
-    |_ Carousel.js - carousel scrolling functionality
+|_ img - Images used in the website
 |
-|_ readme_gifs — gifs for this README
+|_ js
+  |_ Client - Javascript files use in the front end of the website
+  |_ Offline - Javascript files use for when the site is offline
+  |_ Server - Javascript files use by the backed nodejs server
+    |_ _Settings.js - Base server settings file. Copy this file and name it "Settings.js" before starting the server
 |
-|_ style guides & wireframes — designer's instructions
+|_ style - CSS files for the website
 |
-|_ text — temporary JSON database
+|_ uploads - (git ignored folder) The image and video files uploaded by users for the stories
 |
-|_ videos
-    |_ fsl_luzon — signed videos from another sample story "The Lion and Mouse," repurposed to demonstrate switching sign languages within a story, e.g. the Filipino Sign Language Luzon regional dialect (but to clarify, the sign language in these videos is not FSL Luzon)
-    |_ fsl_visayas — signed videos from the sample story "Malakas and Maganda"
+|_ Server.js - Main file for nodejs server. (run this file in node to start the server)
+|
+|_ database.sql - Sql query to run to created the database for the site. Run this before starting the server.
 ```
 
 ## Operating instructions 
