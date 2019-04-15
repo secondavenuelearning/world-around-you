@@ -24,7 +24,7 @@ var storyData;
 //selected languages for this game
 var signLang;
 var writtenLang;
-
+var hintRun = 0;
 //game round data and varibales
 var rounds = [];
 var round = 0;
@@ -154,11 +154,10 @@ export function Start(storyObj, sign, written, gameData) {
 
     //create a new round and update html
     NextRound();
-    
+
     //start off windy anim
-    setTimeout(function()
-    { 
-        WindyAnim(); 
+    setTimeout(function () {
+        WindyAnim();
         Animate("#bird", animations.Bird, null, true);
     }, untilWindy);
 
@@ -242,17 +241,14 @@ function LoadingFlowers() {
         if ($(bouquet[i]).hasClass("hidden")) {
             //load next chunk of flowers
             animations.Flowers.Growing[i] = GetImagesFromFolder(animations.Flowers.Growing[i]);
-        }
-        else
-        {
+        } else {
             //unload old animations and repalce with new ones
-            if(_.isArray(animations.Flowers.Growing[i]))
-            {
+            if (_.isArray(animations.Flowers.Growing[i])) {
                 //get new and set start frame
                 animations.Flowers.Windy[i] = GetImagesFromFolder(animations.Flowers.Windy[i]);
                 $(bouquet[i]).removeClass("growing");
                 $(bouquet[i]).addClass("windy");
-                
+
                 //unload old 
                 animations.Flowers.Growing[i] = null;
             }
@@ -261,14 +257,13 @@ function LoadingFlowers() {
 }
 
 /* ----------------------- Game Mechanics ----------------------- */
-function NextRound()
-{
+function NextRound() {
     //load animations as we need them
     LoadingFlowers();
-    
+
     //reset some things
     firstTry = true;
-
+    hintRun = 0;
     //get random terms
     var options = [rounds[round].Term]; //options includes the corrcet option first
 
@@ -341,8 +336,7 @@ function NextRound()
     });
 }
 
-function Win()
-{
+function Win() {
     //load last of the flowers
     LoadingFlowers();
 
@@ -351,7 +345,7 @@ function Win()
         Score: score,
         Max: maxScore
     };
-  
+
     var win = winTemplate(winTemplateData);
 
     //go to win screen
@@ -376,10 +370,21 @@ function Hint() {
 
     //hide the omited item
     omit = "#" + omit + "Vid"; //expand to proper ID
-    $(omit).addClass("hidden");
+    console.log($(omit).attr('class'));
+    if ($(omit).attr('class') == "hidden" && hintRun<10) {
+        hintRun++;
+        Hint();
+        console.log(hintRun);
+
+        
+    } else {
+        $(omit).addClass("hidden");
+    }
+    //$(omit).addClass("hidden");
 
     //affect trys
     firstTry = false;
+    
 }
 
 function DragAndDrop() {
@@ -434,7 +439,7 @@ function DragAndDrop() {
                     //update score text
                     $("#score #current").text(score);
                 }
-                
+
                 //up flower count
                 flowers += flowerPower;
 
@@ -537,25 +542,24 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     }
 }
 
-function WindyAnim()
-{
+function WindyAnim() {
     //animate background
     Animate("#wall", animations.Plants, null, true);
-    
+
     //animate all the flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
-    for(var i = 0; i < bouquet.length; i++)
-    {
+    for (var i = 0; i < bouquet.length; i++) {
         //exclude hidden flowers
-        if(!$(bouquet[i]).hasClass("hidden") && (!$(bouquet[i]).hasClass("growing")))
-        {
+        if (!$(bouquet[i]).hasClass("hidden") && (!$(bouquet[i]).hasClass("growing"))) {
             Animate($(bouquet[i]).children("img"), animations.Flowers.Windy[i], null, true);
         }
     }
-    
+
     //set next windy run
     untilWindy = Math.floor(Math.random() * 30000) + 9000;
-    setTimeout(function(){ WindyAnim(); }, untilWindy);
+    setTimeout(function () {
+        WindyAnim();
+    }, untilWindy);
 }
 
 /* ----------------------- Helper Functions ----------------------- */
