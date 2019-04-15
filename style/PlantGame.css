@@ -243,7 +243,27 @@ header #responseText
     
     font-family: "Arial Rounded MT Bold";
 }
+#pageContent {
+    display: block;
+    height: 35%;
+    width: 70%;
+    background-color: #92BEB0;
+    border: solid 7px;
+    margin: 0 auto;
+    border-color: #005464;
+    border-radius: 10px;
+    max-width: 900px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 50px;
+    padding-top: 25px;
+    padding-left: 15px;
+    
+    font-family: "Arial Rounded MT Bold";
 
+
+
+}
 #blank
 {
     height: 10px;
