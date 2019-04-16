@@ -1,0 +1,400 @@
+/* fonts */
+@font-face {
+font-family: 'Arial Rounded MT Bold';
+font-style: normal;
+font-weight: normal;
+src: local('Arial Rounded MT Bold'), url('../../../fonts/ARLRDBD_0.woff') format('woff');
+}
+
+
+/* Hiding old header */
+header #language-selector,
+header #logo-wrapper,
+header nav {
+    display: none;
+}
+
+*{font-family: 'Arial Rounded MT Bold';}
+
+header {
+    border: none;
+
+    width: 100%;
+    height: 75px;
+    background-color: transparent;
+
+
+}
+.centered {
+    text-align: center;
+  margin-top: 5%;
+
+}
+.imageContainer img {
+    height: 100%;
+    width: 100%;
+    
+    transition: top 1s;
+}
+
+.imageContainer {
+    display: inline-block;
+    text-align: center;
+    height: 130px;
+    width: 130px;
+    margin-right: 40px;
+    
+    cursor: pointer;
+}
+
+.imageContainer:hover img
+{
+    position: relative;
+    top: -5px;
+}
+main{
+    height: calc(100% - 75px);
+}
+
+.title span {
+    width: 100%;
+    padding: 50px 20px;;
+    text-align: center;
+    display: block;
+    font-size: 120px;
+    background-color: #00B092;
+    color: #FFFFFF;
+    font-family: "Arial Rounded MT Bold";
+    font-weight: bolder;
+}
+
+@media only screen and (max-width: 600px) {
+    .title span {
+        font-size: 80px;
+    }
+
+
+}
+
+/* new header */
+header button#backBtn {
+    display: inline-block;
+    position: relative;
+    top: 3px;
+    
+    float: right;
+    
+    height: 65px;
+    width: 80px;
+    background-color: #6BC546;
+    
+    padding: 0;
+    
+    border-style: solid;
+    border-color: transparent;
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+
+}
+
+header button#backBtn img {
+    height: auto;
+    width: 70%;
+    overflow: hidden;
+}
+
+#backBtn:hover
+{
+    width: 90px;
+    position: relative;
+    top: 3;
+}
+
+header #score
+{
+    display: inline-block;
+    position: relative;
+    float: left;
+    height: 65px;
+    width: 150px;
+    background-color: #6BC546;
+    
+    border-style: solid;
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+    
+    
+    color: white;
+    font-size: 50px;
+    font-family: "Arial Rounded MT Bold";
+}
+
+header #score span
+{
+    position: relative;
+    left: 20px;
+}
+
+header #responseText
+{
+    display: inline-block;
+    margin-top: 15px;
+    width: calc(100% - 250px);
+    color: #005464;
+    font-size: 40px;
+    font-family: "Arial Rounded MT Bold";
+    text-align: center;
+    position: relative;
+}
+
+/* video section */
+#videos{
+    top: 75px;
+    display: block;
+    width: 100%;
+   
+    background-color:#00B092;
+    vertical-align: middle;
+   
+}
+
+#videoContainer{
+   width: 70%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#videos .media{
+   position: relative;
+    width: calc((94% / 3) - 20px);
+    
+    display: inline-block;
+    margin: 1.5%;
+
+    
+    border-style: solid;
+    border-width: 10px;
+    border-radius: 7px;
+    border-color: #00897C;
+
+}
+#videos video
+{
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+    pointer-events: none;
+}
+
+#videos img
+{
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    width: 70%;
+    pointer-events: none;
+}
+
+/* hints */
+#hintBtnContainer{
+    
+    width: 100%;
+    height: calc(10%);
+    background-color: white;
+    display: flex;
+    align-items:center;
+   
+}
+#hintBtnContainer button{
+    
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 128px;
+    height: 50px;
+    border-style: solid;
+    border-color: white;
+    border-radius: 30px;
+    border-width: 5px;
+  vertical-align: middle;
+    background-color: #6BC546;
+    color:white;
+    font-size: 35px;
+}
+
+#hintBtnContainer button:hover
+{
+    border-color: #005464;
+    transition: border-color .4s;
+}
+
+/* sentence */
+#sentence{
+ 
+    width: 100%;
+    height: calc(20%);
+    font-size: 60px;
+    padding-left: 10%;
+    padding-right: 10%;
+    color: #005464;
+    text-align: center;
+    
+    position: relative;
+    z-index: 2;
+    
+    font-family: "Arial Rounded MT Bold";
+}
+#pageContent {
+    display: block;
+    height: 35%;
+    width: 70%;
+    background-color: #92BEB0;
+    border: solid 7px;
+    margin: 0 auto;
+    border-color: #005464;
+    border-radius: 10px;
+    max-width: 900px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 50px;
+    padding-top: 25px;
+    padding-left: 15px;
+    
+    font-family: "Arial Rounded MT Bold";
+
+
+
+}
+#blank
+{
+    height: 10px;
+    width: 80px;
+    
+    border-style: solid;
+    border-color: #005464;
+    border-radius: 7px;
+    border-width: 5px;
+    background-color: #92BEB0;
+    
+    
+    color: transparent;
+    
+}
+
+#blank.filled
+{
+    color: white;
+    padding: 0px 10px;
+    background-color: #00897C;
+}
+
+#blank:hover
+{
+    background-color: #00897C;
+}
+
+/* flower bed */
+#flowerBed{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: calc(23%);
+   
+}
+footer{
+      z-index: -10;
+}
+
+#wall, #bird
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    z-index: -6;
+   
+}
+
+#bird
+{
+    width: 60%;
+    bottom: 600%;
+    z-index: -5;
+}
+
+
+#flowers
+{
+    position: absolute;
+    bottom: 0;
+    width: 58%;
+    left: 23%;
+}
+
+.flower
+{
+    position: relative;
+    bottom: 0;
+    display: inline-block;
+    width: calc(100% / 10)
+}
+
+.flower img
+{
+    height: 100%;
+}
+
+.flower img[src*="Wind_Animation"]
+{
+    position: relative;
+    left: -22.5px;
+}
+
+.flower.hidden
+{
+    display: inline-block; 
+}
+/* drag and drop */
+#drag
+{
+    position: absolute;
+    z-index: 3;
+    background-color: #00897C;
+    
+    pointer-events: none;
+    
+    border-style: solid;
+    border-radius: 10px;
+    border-color: #00897C;
+    
+    color: white;
+    font-size: 40px;
+    text-align: center;
+    font-family: "Arial Rounded MT Bold";
+    
+    padding: 5px 10px;
+}
+
+.hidden
+{
+    display: none;
+}
+
+.media video.hidden
+{
+    display: inline-block;
+    opacity: 0;
+}
+
+.media.selected
+{
+    background-color: #00897C;
+    
+    border-style: solid;
+    border-width: 10px;
+    border-radius: 7px;
+    border-color: #005464 !important;
+}
+
+
