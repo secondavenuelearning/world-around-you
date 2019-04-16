@@ -5,7 +5,12 @@ var selectedPage = 1;
 var maxPage = -1;
 var storiesDiv;
 var thisID = '';
-
+/*
+ Add stories to the grid and apply pagination if needed
+ No default sorting applied in this function, stories are shown in order they first entered the database, i.e. Date first created
+ 
+ stories - a list of story previews either raw from the database, or filtered and/or sorted
+ */
 function addStories(stories){
 	var childrenCount = document.getElementById(storiesDiv).childElementCount;
 	var countNode = 0;
@@ -44,6 +49,7 @@ function addStories(stories){
 					gridButton.addEventListener("click", swapGridPage);
 					$(gridButtons).prepend(gridButton);
 				}
+				// Handle page numbers when pagination exists already
 				gridButton = document.createElement("button"); 
 				$(gridButton).attr("type","button");
 				$(gridButton).addClass("grid-button");
@@ -69,7 +75,6 @@ function addStories(stories){
 	setTimeout(function(){
 		resizeStories();
 	}, 100);
-
 }
 
 function swapGridPage(event){
@@ -82,11 +87,11 @@ function swapGridPage(event){
 	}else{
 		targetPage = parseInt(event.target.id.match(/\d+/g));
 	}
-
 	// Return if button clicked was same page you are on
 	if(targetPage === selectedPage){
 		return;
 	}
+	// Apply animations for page change
 	if(targetPage > selectedPage){
 		document.getElementById('grid-page' + selectedPage).style.animationName = 'gridLeftFadeOut';
 		document.getElementById('grid-page' + targetPage).style.animationName = 'gridLeftFadeIn';
@@ -122,14 +127,19 @@ function resizeStories(){
 		$('#' + storiesDiv).css('height', (height + 40) + 'px');
 	}, 100);
 }
+/*
+Builds out grid of story previews for web pages that already have a div that will contain this grid
 
+id - element ID of element on the page to build the grid into
+stories - list of story previews that will be displayed
+*/
 function StoryGrid(id, stories){
 	thisID = id;
 	storiesDiv = id;
 	if(stories[0] == null){
 		return;
 	}
-	// Calculate and setup pagination
+	// Add stories to grid, calculate and setup pagination
 	addStories(stories);
 
 	// Resize div for stories and pagination
@@ -137,6 +147,7 @@ function StoryGrid(id, stories){
 	$(window).on('resize.storygrid', resizeStories);
 }
 
+// After filtering or sorting, create a new story grid with the correct story previews displayed
 StoryGrid.prototype.update = function(stories){
 	$('#' + storiesDiv).html("");
 	selectedPage = 1;

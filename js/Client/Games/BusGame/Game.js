@@ -110,7 +110,7 @@ export function Start(game) {
     console.log(storyData);
     signLang = game.signLanguage;
     writtenLang = game.writtenLanguage;
-    termList = game.data.terms;
+    termList = game.data.terms.slice(0);
 
     if (!('remove' in Element.prototype)) {
         Element.prototype.remove = function () {
@@ -130,7 +130,7 @@ export function Start(game) {
 
     //figure out hwre each term is in the story data
     let terms = JSON.parse(JSON.stringify(game.data.terms));
-    termMap = MapTermsToPages(terms.slice(0));
+    termMap = MapTermsToPages(terms);
 
     //add score area to header
     ExtendHeader();
@@ -248,29 +248,33 @@ function MapTermsToPages(terms) {
     var mapped = {};
 
     //loop pages of story data and look for terms - start form 1 to ignore title page
-    for (var page = 1; page < Object.keys(storyData).length; page++) {
-        //get current glossary in current lang
-        var glossary = storyData[page].glossary[writtenLang];
+    for (var page = 0; page < storyData.length; page++) {
+        
+        //check if this page has a glossary
+        if(storyData[page].hasOwnProperty('glossary'))
+        {
+            //get current glossary in current lang
+            var glossary = storyData[page].glossary[writtenLang];
 
-        var termsLeft = terms;
+            var termsLeft = terms;
 
-        //loop through glossary terms
-        Object.keys(glossary).forEach(function (term) {
-            //compare to terms in the game
-            for (var i = 0; i < terms.length; i++) {
-                //compare glossary term to term at i
-                if (term == terms[i]) {
-                    //they match! - remove from terms left and add to the term map
-                    termsLeft.splice(i, 1);
-                    mapped[term] = page;
+            //loop through glossary terms
+            Object.keys(glossary).forEach(function (term) {
+                //compare to terms in the game
+                for (var i = 0; i < terms.length; i++) {
+                    //compare glossary term to term at i
+                    if (term == terms[i]) {
+                        //they match! - remove from terms left and add to the term map
+                        termsLeft.splice(i, 1);
+                        mapped[term] = page;
+                    }
                 }
-            }
-        });
+            });
 
-        //update terms
-        terms = termsLeft;
+            //update terms
+            terms = termsLeft;
+        }
     }
-
     return mapped;
 }
 

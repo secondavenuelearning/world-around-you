@@ -15,6 +15,8 @@ header {
     box-shadow: none;
 }
 
+*{font-family: 'Arial Rounded MT Bold';}
+
 .title span {
     width: 100%;
     height: 260px;
@@ -425,5 +427,5 @@ header #score span {
 font-family: 'Arial Rounded MT Bold';
 font-style: normal;
 font-weight: normal;
-src: local('Arial Rounded MT Bold'), url(/fonts/ARLRDBD_0.woff) format('woff');
+src: local('Arial Rounded MT Bold'), url(../../../fonts/ARLRDBD_0.woff) format('woff');
 }
