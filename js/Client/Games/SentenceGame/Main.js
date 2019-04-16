@@ -1,9 +1,9 @@
-import 'style/PlantGame.css!';
-import html from 'html/Client/PlantGame.html!text';
-import Game from 'js/Client/Worksheet_Game.js';
-import header from 'html/Client/PlantGame_Header.html!text';
-import instructions from 'html/Client/PlantGame_Instructions.html!text';
-import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
+import 'style/Games/SentenceGame/Main.css!';
+import html from 'html/Client/Games/SentenceGame/Main.html!text';
+import Worksheet from 'js/Client/Games/SentenceGame/Game.js';
+import header from 'html/Client/Games/SentenceGame/Header.html!text';
+import instructions from 'html/Client/Games/SentenceGame/Directions.html!text';
+import flowerbedHtml from 'html/Client/Games/SentenceGame/Footer.html!text';
 
 //sort of an enumaerator- nothing to contain but given strict options
 var screens = {
@@ -15,59 +15,29 @@ var screens = {
 var currentScreen = screens.Game;
 $('footer').html(flowerbedHtml);
 var anim;
-var busFrames = Game.GetImagesFromFolder("/img/games/Worksheet/TitleScreen_Animation/");
+var busFrames = Worksheet.GetImagesFromFolder("/img/games/Worksheet/TitleScreen_Animation/");
 function initializeGameScene() {
     $(".titleWall").removeClass("titleWall");
-     var xmlhttp = new XMLHttpRequest();
-    var dataURL = "../../text/Malakas_Maganda.json";
-    var gameData = {
-        name: "Test Data",
-        sentences: 
-        [
-            {
-                Term: "world",
-                Sentence: ["The whole entire", "is flat."]
-            },
-            {
-                Term: "sea",
-                Sentence: ["California finally slipped into the", "."]
-            },
-            {
-                Term: "rain",
-                Sentence: ["", ",sleet or snow, we are open."]
-            },
-            {
-                Term: "sky",
-                Sentence: ["The", "is falling!!"]
-            },
-            {
-                Term: "huge",
-                Sentence: ["The bottom of the ocean is so", "; its terrifying."]
-            },
-            {
-                Term: "nowhere",
-                Sentence: ["Where you from? Asked the stranger.", "I replied."]
-            },
-            {
-                Term: "afterwards",
-                Sentence: ["I need to get a Bruins jersey, and hamilton tickets, and maybe a show", "."]
-            }  
-
-        ]
-    }
-    var storyObj = null;
-        xmlhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            //get data from json
-            storyObj = JSON.parse(this.responseText);
-         
-            //build story viwer functionality and pass in page data
-          Game.Start(storyObj, "fsl_luzon", "English", gameData);
+     new Promise((resolve, reject) => {
+        if(game){
+            resolve(game);
         }
-    };
-    xmlhttp.open("GET", dataURL);
-    xmlhttp.send();
-    console.log(anim);
+        else{
+            $.ajax({
+                method: 'get',
+                url: `api/game/data?id=${urlParams.id}`
+            }).done((_game) => {
+                resolve(_game);
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
+    }).then((_game) => {
+        //build story viwer functionality and pass in page data
+        Worksheet.Start(_game);
+    }).catch((err) => {
+        console.error(err);
+    });
   
     var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
@@ -92,7 +62,7 @@ function initializeTitle() {
     $('footer').html(flowerbedHtml);
     
     $("#wall").addClass("titleWall");
-    Game.Animate(".titleWall", busFrames, null, false);
+    Worksheet.Animate(".titleWall", busFrames, null, false);
     
         var score = document.getElementById("score");
     score.style.display = "none";
@@ -144,7 +114,7 @@ $(document).ready(function () {
     
     //prep and run animations
     $("#wall").addClass("titleWall");
-    Game.Animate(".titleWall", busFrames, null, false);
+    Worksheet.Animate(".titleWall", busFrames, null, false);
    
    
 });

@@ -3,7 +3,7 @@
 font-family: 'Arial Rounded MT Bold';
 font-style: normal;
 font-weight: normal;
-src: local('Arial Rounded MT Bold'), url('../../fonts/ARLRDBD_0.woff') format('woff');
+src: local('Arial Rounded MT Bold'), url('../fonts/ARLRDBD_0.woff') format('woff');
 }
 
 
@@ -13,6 +13,8 @@ header #logo-wrapper,
 header nav {
     display: none;
 }
+
+*{font-family: 'Arial Rounded MT Bold';}
 
 header {
     border: none;

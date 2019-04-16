@@ -1,7 +1,7 @@
 import _ from 'underscore';
-import gameHtml from 'html/Client/PlantGame_Game.html!text';
-import flowerbedHtml from 'html/Client/PlantGame_Game_FlowerBed.html!text';
-import winHtml from 'html/Client/PlantGame_Win.html!text';
+import gameHtml from 'html/Client/Games/SentenceGame/Game.html!text';
+import flowerbedHtml from 'html/Client/Games/SentenceGame/Footer.html!text';
+import winHtml from 'html/Client/Games/SentenceGame/Win.html!text';
 import ImageHoverSwap from 'js/Client/HelperFunctions.js';
 export default {
     Start,
@@ -96,7 +96,7 @@ var gameState = state.Playing;
 
 
 /* ----------------------- Constructor ----------------------- */
-export function Start(storyObj, sign, written, gameData) {
+export function Start(game) {
     //resets all data
     storyData = null;
     score = 0;
@@ -104,11 +104,11 @@ export function Start(storyObj, sign, written, gameData) {
     writtenLang = null;
     round = 0;
     //save story data to be globally acessable
-    storyData = storyObj;
-    signLang = sign;
-    writtenLang = written;
-    rounds = gameData.sentences;
-    maxScore = gameData.sentences.length;
+    storyData = game.story.data;
+    signLang = game.signLanguage
+    writtenLang = game.writtenLanguage;
+    rounds = game.data.sentences;
+    maxScore = game.data.sentences.length;
 
     //calc flower rate (ie points required to get a flower)
     flowerPower = 9 / maxScore; //9 is the number of flowers
@@ -269,18 +269,27 @@ function NextRound() {
     firstTry = true;
     hintRun = 0;
     //get random terms
-    var options = [rounds[round].Term]; //options includes the corrcet option first
+    var options = [rounds[round].term]; //options includes the corrcet option first
 
     for (var i = 0; i < 2; i++) {
-        var page = Math.floor(Math.random() * (Object.keys(storyData).length - 2)) + 1;
-        var terms = Object.keys(storyData[page].glossary[writtenLang]);
-        var term = ChooseRandomArrayElement(terms);
-
-        //check if we ahve already used this term
-        if (!options.includes(term)) { //we havent- add it to options
-            options.push(term);
-        } else //we have :( try again
+        var page = Math.floor(Math.random() * (storyData.length));
+        //check if page has a glossary
+        if(storyData[page].hasOwnProperty('glossary'))
         {
+            var terms = Object.keys(storyData[page].glossary[writtenLang]);
+            var term = ChooseRandomArrayElement(terms);
+
+            //check if we ahve already used this term
+            if (!options.includes(term)) { //we havent- add it to options
+                options.push(term);
+            } else //we have :( try again
+            {
+                i--;
+            }
+        }
+        else
+        {
+            //try again for a page with glossary terms
             i--;
         }
 
@@ -302,7 +311,7 @@ function NextRound() {
             storyData[pages[2]].video[signLang]
         ],
         Star: animations.Star[0].src,
-        Text: [rounds[round].Sentence[0], rounds[round].Sentence[1]]
+        Text: [rounds[round].part1, rounds[round].part2]
     };
 
     var main = template(templateData);
@@ -364,7 +373,7 @@ function Hint() {
     //get incorrect options
     var options = [];
     templateData.ID.forEach(function (option) {
-        if (option != rounds[round].Term) {
+        if (option != rounds[round].term) {
             options.push(option);
         }
     });
@@ -374,11 +383,9 @@ function Hint() {
 
     //hide the omited item
     omit = "#" + omit + "Vid"; //expand to proper ID
-    console.log($(omit).attr('class'));
     if ($(omit).attr('class') == "hidden" && hintRun<10) {
         hintRun++;
         Hint();
-        console.log(hintRun);
 
         
     } else {
@@ -431,7 +438,7 @@ function DragAndDrop() {
             //chekc if its the right term that was draggged in
             var term = $(".selected video")[0].id.toString();
             term = term.substring(0, term.length - 3);
-            if (term == rounds[round].Term) {
+            if (term == rounds[round].term) {
                 //show star and ainmate
                 $(".selected img").removeClass("hidden");
                 Animate($(".selected img"), animations.Star, null, true, true); //has round logic
