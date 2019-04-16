@@ -110,7 +110,7 @@ export function Start(game) {
     console.log(storyData);
     signLang = game.signLanguage;
     writtenLang = game.writtenLanguage;
-    termList = game.data.terms;
+    termList = game.data.terms.slice(0);
 
     if (!('remove' in Element.prototype)) {
         Element.prototype.remove = function () {
@@ -130,7 +130,7 @@ export function Start(game) {
 
     //figure out hwre each term is in the story data
     let terms = JSON.parse(JSON.stringify(game.data.terms));
-    termMap = MapTermsToPages(terms.slice(0));
+    termMap = MapTermsToPages(terms);
 
     //add score area to header
     ExtendHeader();
