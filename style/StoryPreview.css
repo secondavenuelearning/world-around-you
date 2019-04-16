@@ -22,6 +22,7 @@
 }
 .story-preview .meta-data-container a{
     display: block;
+	width: calc(100% - 35px);
 	height: 100%;
 	overflow: auto;
 	color: #FFFFFF;

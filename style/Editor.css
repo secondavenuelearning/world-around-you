@@ -14,6 +14,7 @@ body.dragging{
 	position: relative;
 	height: 100%;
 	width: 100%;
+	min-height: 500px;
 }
 .editor-nav-button, #editor-content{
 	float: left;
@@ -57,10 +58,11 @@ body.dragging{
 }
 .editor-content-wrapper h1{
 	margin: 0px;
-	padding: 15px 25px;
+	padding: 5px 25px;
+	height: 50px;
 }
 .editor-content-wrapper .main-content{
-	height: calc(100% - 75px);
+	height: calc(100% - 50px);
 	padding: 25px;
 	overflow: auto;
 	overflow: overlay;
@@ -325,7 +327,7 @@ body.dragging{
 
 .editor-content-wrapper .upload-input-container{
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 5px);
 }
 .editor-content-wrapper .upload-input{
 	display: none;
@@ -568,7 +570,7 @@ body.dragging{
 		height: 100%;
 	}
 	#edit-sign #video-container{
-		height: 80%;
+		height: calc(90% - 55px);
 		background-color: #0097BA;
 		position: relative;
 	}
@@ -752,7 +754,7 @@ body.dragging{
 /*********/
 
 /* Publish */
-	#publish .pages{
+	#publish #pages{
 		height: calc(100% - 100px);
 	    overflow: auto;
 	}
@@ -761,3 +763,10 @@ body.dragging{
 		width: 25%;
 	}
 /***********/
+
+
+@media screen and (max-width: 1280px), (max-height: 768px){
+	#publish .page-preview-container{
+		width: 33%;
+	}
+}

@@ -21,53 +21,46 @@ All dependencies are included. This prototype can run offline.
 
 ```
 |_ data_templates - Template describing how the JSON data is structured
-|
-|_ fonts — Font files
-|
+|_ fonts - Font files
 |_ html 
   |_ Client - Html templates used but the front end javascript
+    |_ Games - Folder to hold the directories for each game added to the website. Each game should be in it's own directory and contain a Editor.js and Main.js file for editing and launching the game.
   |_ Server - Html templates used but the back end javascript
-|
 |_ img - Images used in the website
-|
 |_ js
   |_ Client - Javascript files use in the front end of the website
   |_ Offline - Javascript files use for when the site is offline
   |_ Server - Javascript files use by the backed nodejs server
     |_ _Settings.js - Base server settings file. Copy this file and name it "Settings.js" before starting the server
-|
 |_ style - CSS files for the website
-|
 |_ uploads - (git ignored folder) The image and video files uploaded by users for the stories
-|
 |_ Server.js - Main file for nodejs server. (run this file in node to start the server)
-|
 |_ database.sql - Sql query to run to created the database for the site. Run this before starting the server.
 ```
 
-## Operating instructions 
+## Starting the server
+1. Download and install nodejs
+2. Download and install git
+3. Setup a mysql server
+4. In a command line console navigate to the repository
+5. Install all the node dependencies by running the following commands:
+    - npm install
+    - npm install jspm -g
+    - jspm install
+6. Create you database using the database.sql file
+7. Copy the file "js/Server/_Settings.js" file and name the new copy "js/Server/Settings.js"
+8. Edit the contents of the new Settings.js file to match the specifications of your server
+9. In the command line run node Server.js to start the server
 
-View demo at http://briennakh.me/world-around-you/.
-
-However, GitHub serves large files with a lag. Videos are considered large files. For optimal performance, download repo and run on a local server such as `php -S localhost:4000`.
-
-## Key functionalities
-
-- After hovering over menu buttons for 0.5 seconds, a text description appears. Users often will stay that long on a button if they are uncertain what it does.
-
-![Menu buttons interactivity](readme_gifs/menu_buttons.gif)
-
-- Pagine through full story either using arrows or slider bar.
-- Take entire panel fullscreen for an immersive user experience.
-
-![Fullscreen interactivity](readme_gifs/fullscreen.gif)
-
-- Pause or restart signed video by hovering over it. 
-- Change written language at any point.
-- On 1st page (after title page)
-    - Change sign language. Limitation: Make sure you change back to FSL: Luzon before going to any other page. 
-    - Click on glossary terms to view interactivity (video loop & photo corresponding to term). Click anywhere else on the screen to stop the video loop & return to original view. 
-- Drag to slide video thumbnail carousels, and hover over thumbnails for interactivity. 
-
-![Thumbnail carousel interactivity](readme_gifs/carousel.gif) 
-
+## Adding a game
+1. Create a new folder for your game in the 'js/Client/Games/' directory.
+2. In the database add an entry into the 'game' table for your game. The 'name' field is the name that will appear in the site, the 'path' field should be the name of the directory added in step 1.
+3. In the directory create 2 files 'Editor.js' and 'Main.js', to be used for editing and running the game respectively.
+4. In the Editor.js file, game data is save as a json string in the database and must include a propety called 'name' for display purposes.
+5. The api call to save game data is (post: /api/story/gamedata) and the data should be formatted to include the following:
+    ```
+    {
+        id: the 
+    }
+    ```
+6. The api call to get game data is (get: api/game/data?id={the id of the game data})

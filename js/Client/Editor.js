@@ -56,9 +56,9 @@ function resizeCover(noDelay){
 			let $el = $(el);
 
 			$el.css('width', '');
-			var width = parseFloat($el.width());
-
-			$el.css('height', `${9/16 * width}px`);
+			var width = Math.round(parseFloat($el.width()));
+			
+			$el.css('height', `${Math.floor(9/16 * width)}px`);
 		});
 	}, noDelay ? 1 : 40);	
 }
