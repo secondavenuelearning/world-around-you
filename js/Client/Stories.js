@@ -30,6 +30,7 @@ $(document).ready(function () {
                 storyPreviews.push(sp);
             }
             var storyGrid = new StoryGrid("stories", storyPreviews);
+            // Pass story grid as the object to be filtered
             FiltersBar('filter-bar', storyGrid, storyPreviews);
         }
         

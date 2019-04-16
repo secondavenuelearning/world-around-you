@@ -21,7 +21,6 @@ id - element ID of element on the page to build filters into
 filterTarget - Target element that will display Story Previews
 filterList - List of Story Previews that will be filtered and/or sorted
 */
-
 function FiltersBar(id, filterTarget, filterList)
 {
     $.ajax({
@@ -34,6 +33,7 @@ function FiltersBar(id, filterTarget, filterList)
         }).done((signLanguages) => {
 
             $(`#${id}`).append("<div id='theFilters' class=\"filters\"></div>");
+            // Create list from of languages from stories in the database.
             var writtenLanguagesList = [];
             for(var index in writtenLanguages){
                 if(!writtenLanguages[index]){
@@ -66,7 +66,7 @@ function FiltersBar(id, filterTarget, filterList)
                 options: ["Title", "Author", "Date Published", "Last Updated"],
                 defaultText: 'Sort By'
             });
-            // Add icons
+            // Add icons now handled in Custom Select
             /*
             var icon = document.createElement("img");
             $(icon).attr('src', 'img/icons/General/icon_WrittenLang_White.svg');
@@ -77,7 +77,7 @@ function FiltersBar(id, filterTarget, filterList)
             icon = document.createElement("img");
             $(icon).attr('src', 'img/icons/General/icon_Filter.svg'); 
             $('#sort-by-select .custom-select-value' ).prepend(icon);
-*/
+            */
             $('#written-language-select').addClass('filter');
             $('#sign-language-select').addClass('filter');
             $('#sort-by-select').addClass('filter');
@@ -98,12 +98,13 @@ function FiltersBar(id, filterTarget, filterList)
     });
 }
 /*
-Function to apply a filter to the list of Story Previews
+Function to apply a filter to the list of Story Previews.
 */
 function updateFilter(filterTarget, filterList){
     var filteredList = [];
     let itemList = Array.from(filterList);
 
+    //The algorithm prunes from the list of all stories and removes selections so they are not added twice.
     if(toFilterWritten.length > 0){
         for(var index = 0; index < itemList.length; index++){
             for(var filterIndex = 0; filterIndex < toFilterWritten.length; filterIndex++){
@@ -117,10 +118,12 @@ function updateFilter(filterTarget, filterList){
         }
     }
     if(toFilterSign.length > 0){
+        // If no filtering occured from the written language filter, load the entire unfiltered list.
         if(filteredList.length > 0){
             itemList = Array.from(filteredList);
             filteredList = [];
         }
+        // Assuming an already filtered list from the written language filter above, this filter check will be faster than the written language filter.
         for(var index = 0; index < itemList.length; index++){
             for(var filterIndex = 0; filterIndex < toFilterSign.length; filterIndex++){
                 if(itemList[index].story.metadata.signLanguages.includes(toFilterSign[filterIndex])){
@@ -132,6 +135,7 @@ function updateFilter(filterTarget, filterList){
             }
         }
     }
+    // If no filter options were chosen, return the entire list, otherwise list will return empty.
     if(toFilterSign.length === 0 && toFilterWritten.length === 0){
         if(sortBy){
             runSort(itemList, filterTarget);
@@ -150,7 +154,7 @@ function updateFilter(filterTarget, filterList){
     document.getElementById(filterTarget.getId()).scrollIntoView();
 }
 /*
-Function to apply a filter to the list of Story Previews
+Function to apply a sort to the list of Story Previews
 */
 function runSort(filteredList, filterTarget){
     var aValue = '';
@@ -158,9 +162,8 @@ function runSort(filteredList, filterTarget){
     var localeCompareBool = false;
     var answer = '';
     filteredList.sort((a, b) => {
+        // Get current language to search the list of story options by language
         let clt = LanguageSelector.currentLanguageText();
-        window.temp2 = a.story.datecreated;
-        window.temp3 = b.story.datecreated;
         switch(sortBy){
             case 'Title':
                 aValue = a.story.metadata.title[clt];
@@ -185,12 +188,14 @@ function runSort(filteredList, filterTarget){
                 bValue = b.story.metadata.title[clt];       
                 break;
         }
+        // If value does not exist because of language preference or otherwise, sort item to the bottom.
         if(!aValue || aValue == null){
             return 1;
         }
         if(!bValue || bValue == null){
             return -1;
         }
+        // Compares alphabetical sorting in different languages.
         if(localeCompareBool){
             answer = aValue.localeCompare(bValue, LanguageSelector.currentLanguage());
         }else{
@@ -198,13 +203,11 @@ function runSort(filteredList, filterTarget){
             var bDate = new Date(bValue);
             // Sort by newest first
             answer = aDate > bDate ? -1 : aDate < bDate ? 1 : 0;
-
         }
         return answer;
     });
     filterTarget.update(filteredList);
 }
-
 
 /* ----------------------- Array extra functions ----------------------- */
 //Adds includes method for browsers that dont support

@@ -22,7 +22,6 @@ $(document).ready(function () {
             if(evt.key == 'Enter')
                 $('#search-wrapper').submit();
         });
-        FiltersBar('filter-bar');
 
         if(stories.length == 0){
            $('#stories-header').html(`No results found for "${search}"`);
@@ -35,7 +34,9 @@ $(document).ready(function () {
             let sp = new StoryPreview(stories[i]);
             storyPreviews.push(sp);
         }
-        StoryGrid("stories", storyPreviews);
+        var storyGrid = new StoryGrid("stories", storyPreviews);
+        FiltersBar('filter-bar', storyGrid, storyPreviews);
+
         LanguageSelector.updateLanguageDisplay();
     });
 
