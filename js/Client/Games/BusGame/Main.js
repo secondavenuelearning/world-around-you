@@ -63,8 +63,8 @@ function initializeTitle() {
     };
       var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
-        console.log("click");
-        initializeTitle();
+       window.location = "/stories";
+        //initializeTitle();
     };
        var instruction = document.getElementById("instructionsButton");
     instruction.onclick = function () {
@@ -99,6 +99,12 @@ $(document).ready(function () {
       var instruction = document.getElementById("instructionsButton");
     instruction.onclick = function () {
        initializeInstructions();
+    };
+    
+     var backButton = document.getElementById("backBtn");
+    backButton.onclick = function () {
+       window.location = "/stories";
+        //initializeTitle();
     };
     
     //prep and run animations
