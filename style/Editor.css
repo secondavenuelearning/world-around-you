@@ -163,7 +163,6 @@ body.dragging{
 	text-align: left;
 	margin: 5px 0px;
 	color: #0097BA;
-	font-size: 1em;
 	border: 2px solid #0097BA;
 	border-radius: 5px;
 	font-size: 1.2em;
@@ -560,10 +559,10 @@ body.dragging{
 		height: calc(100% - 20px);
 	}
 	#pages-content #select-container{
-		height: 10%;
+		height: 40px;
 	}
 	#edit-written #text-container, #edit-sign #video-container{
-		height: 90%;
+		height: calc(100% - 40px);
 		position: relative;
 	}
 	#edit-written #page-text{
@@ -768,5 +767,8 @@ body.dragging{
 @media screen and (max-width: 1280px), (max-height: 768px){
 	#publish .page-preview-container{
 		width: 33%;
+	}
+	.editor-content-wrapper button{
+		font-size: .8em;
 	}
 }
