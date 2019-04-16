@@ -1,0 +1,31 @@
+<div id="videos">
+    <div id="videoContainer">
+
+        <div id="videoOne" class="media">
+            <video id = "<%= ID[0].toString() + "Vid" %>" src="<%= Media[0] %>" autoplay muted loop></video>
+            <img class = "hidden" src="<%= Star %>" >
+        </div>
+        <div id="videoTwo" class="media">
+            <video id = "<%= ID[1].toString() + "Vid" %>" src="<%= Media[1] %>" autoplay muted loop></video>
+            <img class = "hidden" src="<%= Star %>" >
+        </div>
+        <div id="videoThree" class="media">
+            <video id = "<%= ID[2].toString() + "Vid" %>" src="<%= Media[2] %>" autoplay muted loop></video>
+            <img class = "hidden" src="<%= Star %>" >
+        </div>
+
+    </div>
+</div>
+<div id = "hintBtnContainer">
+<button id = "hint">Hint</button>
+</div>
+
+<div id="sentence">
+    <span id = "begining"><%- Text[0] %></span>
+    <span id = "blank">______</span>
+    <span id= "end"><%- Text[1] %></span>
+</div>
+        
+<div id ="drag" class = "hidden">
+    <span></span>
+</div>
