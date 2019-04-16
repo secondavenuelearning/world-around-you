@@ -56,11 +56,13 @@ All dependencies are included. This prototype can run offline.
 1. Create a new folder for your game in the 'js/Client/Games/' directory.
 2. In the database add an entry into the 'game' table for your game. The 'name' field is the name that will appear in the site, the 'path' field should be the name of the directory added in step 1.
 3. In the directory create 2 files 'Editor.js' and 'Main.js', to be used for editing and running the game respectively.
-4. In the Editor.js file, game data is save as a json string in the database and must include a propety called 'name' for display purposes.
-5. The api call to save game data is (post: /api/story/gamedata) and the data should be formatted to include the following:
+
+### Writing the Editor
+In the Editor.js file, game data is save as a json string in the database and must include a propety called 'name' for display purposes.
+The api call to save game data is (post: /api/story/gamedata) and the data should be formatted to include the following:
     ```
     {
         id: the 
     }
     ```
-6. The api call to get game data is (get: api/game/data?id={the id of the game data})
+The api call to get game data is (get: api/game/data?id={the id of the game data})

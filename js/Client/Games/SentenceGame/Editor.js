@@ -189,6 +189,7 @@ function Render() {
 
 	// Save callback
 	$('.save-button').on('click', (evt) => {
+		if(termList.length < 3) return;
 		$.ajax({
 			method: 'post',
 			url: '/api/story/gamedata',
