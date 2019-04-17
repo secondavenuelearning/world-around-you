@@ -73,7 +73,13 @@ function initializeTitle() {
     
     //prep and run animations
     var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
-    BusGame.Animate("#busStop #bus", busFrames, null, false);
+     if(window.navigator.userAgent.indexOf("Edge") > -1){
+       
+       }
+    else{
+         BusGame.Animate("#busStop #bus", busFrames, null, false);
+    }
+ 
 }
 function initializeInstructions(){
     $('main').html(instructions);
@@ -109,5 +115,11 @@ $(document).ready(function () {
     
     //prep and run animations
     var busFrames = BusGame.GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Still/");
-    BusGame.Animate("#busStop #bus", busFrames, null, false);
+    if(window.navigator.userAgent.indexOf("Edge") > -1){
+       
+       }
+    else{
+         BusGame.Animate("#busStop #bus", busFrames, null, false);
+    }
+   
 });
