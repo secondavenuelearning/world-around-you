@@ -21,20 +21,30 @@ All dependencies are included. This prototype can run offline.
 
 ```
 |_ data_templates - Template describing how the JSON data is structured
+|
 |_ fonts - Font files
+|
 |_ html 
   |_ Client - Html templates used but the front end javascript
     |_ Games - Folder to hold the directories for each game added to the website. Each game should be in it's own directory and contain a Editor.js and Main.js file for editing and launching the game.
   |_ Server - Html templates used but the back end javascript
+|
 |_ img - Images used in the website
+|
 |_ js
   |_ Client - Javascript files use in the front end of the website
   |_ Offline - Javascript files use for when the site is offline
   |_ Server - Javascript files use by the backed nodejs server
     |_ _Settings.js - Base server settings file. Copy this file and name it "Settings.js" before starting the server
+|
 |_ style - CSS files for the website
+|
 |_ uploads - (git ignored folder) The image and video files uploaded by users for the stories
+|
 |_ Server.js - Main file for nodejs server. (run this file in node to start the server)
+|
+|_ BuildOfflineFiles.js Node script to build the files required for the offline viewer
+|
 |_ database.sql - Sql query to run to created the database for the site. Run this before starting the server.
 ```
 
@@ -57,12 +67,26 @@ All dependencies are included. This prototype can run offline.
 2. In the database add an entry into the 'game' table for your game. The 'name' field is the name that will appear in the site, the 'path' field should be the name of the directory added in step 1.
 3. In the directory create 2 files 'Editor.js' and 'Main.js', to be used for editing and running the game respectively.
 
-### Writing the Editor
-In the Editor.js file, game data is save as a json string in the database and must include a propety called 'name' for display purposes.
+### Writing the Editor.js file
+When your editor is lauch it will have access to a global "game" object which will include relevate information like the id of the gamedata, the story data, the languages of the game, and any previously save game data. 
+```
+{
+    id: int,
+    story: object,
+    writtenLanguage: string,
+    signLanguage: string,
+    data: object or null
+}
+```
+In your Editor.js file, game data is save as a json string in the database and must include a propety called 'name' for display purposes.
 The api call to save game data is (post: /api/story/gamedata) and the data should be formatted to include the following:
-    ```
-    {
-        id: the 
-    }
-    ```
-The api call to get game data is (get: api/game/data?id={the id of the game data})
+```
+{
+    id: the id of the game data found in the url
+    data: object that stores the game data
+}
+```
+If needed the the api call to get game data is (get: api/game/data?id={the id of the game data}).
+
+### Writing the Main.js file
+Just like in the editor, you will have access to a global 'game' object wit the same properties as described above. 
