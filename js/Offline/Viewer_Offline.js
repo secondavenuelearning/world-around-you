@@ -2998,7 +2998,7 @@ $__System.register('a', ['15', '16', '22', '25', '26', 'b', 'c', 'e', 'd', 'f', 
 
 		var AddToList = function AddToList(objOrString, currentList) {
 			if (typeof objOrString == 'string') {
-				if (currentList.indexOf(objOrString) == -1 && objOrString.match(/\.jpg|\.png|\.gif|\.mp4|\.wmv|\.mov/gi)) currentList.push(objOrString);
+				if (currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$/gi)) currentList.push(objOrString);
 
 				return currentList;
 			} else if (typeof objOrString == 'object') {
@@ -3010,7 +3010,6 @@ $__System.register('a', ['15', '16', '22', '25', '26', 'b', 'c', 'e', 'd', 'f', 
 			}
 		};
 		var assetList = AddToList(story, []);
-		console.log(assetList);
 		return assetList;
 	}
 
