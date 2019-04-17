@@ -188,19 +188,6 @@ var sess=null;
         res.send(folders);
     });
 
-    //remove later- will be using stans /games entry point
-    app.get('/Bus', (req, res) => {
-		res.send(PageTemplate({
-			Page: 'BusGame'
-		}));
-	});
-
-    app.get('/Worksheet', (req, res) => {
-            res.send(PageTemplate({
-                Page: 'Worksheet'
-            }));
-        });
-
 // ******************************************************
 // Get Requests
 // ******************************************************
