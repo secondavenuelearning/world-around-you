@@ -169,7 +169,7 @@ header #responseText
 
 #videos .media{
    position: relative;
-    width: calc((94% / 3) - 20px);
+    width: calc((92% / 3) - 20px);
     
     display: inline-block;
     margin: 1.5%;
