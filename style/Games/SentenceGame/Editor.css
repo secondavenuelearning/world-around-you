@@ -143,3 +143,7 @@
 .placeholder{
 	opacity: 0.5;
 }
+#term-select-container #term-select {
+	height: initial;
+	direction: initial;
+}
