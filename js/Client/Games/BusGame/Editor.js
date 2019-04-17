@@ -88,6 +88,8 @@ function Render() {
 	});
 
 	$('.save-button').on('click', (evt) => {
+		if(termList.length < 2) return;
+
 		$.ajax({
 			method: 'post',
 			url: '/api/story/gamedata',

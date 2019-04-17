@@ -84,8 +84,8 @@ function Render() {
 		term,
 		unsavedChanges
 	}));
-
-	$('#term-selection')[0].scrollTo(0, scroll);
+	if($('#term-selection')[0])
+		$('#term-selection')[0].scrollTo(0, scroll);
 
 	if($('.term-button.active')[0])
 		$('.term-button.active')[0].scrollIntoViewIfNeeded();
@@ -105,7 +105,7 @@ function Render() {
 	}
 
 	// Name input listeners
-	$('#name-input').on('keydown keyup', (evt) => {
+	$('#name-input').on('change keydown keyup', (evt) => {
 		name = $('#name-input').val();
 		unsavedChanges = true;
 		$('.save-button').prop('disabled', false);
@@ -133,7 +133,8 @@ function Render() {
 				}
 			}
 			else{
-				input.html('<span class="placeholder" contenteditable="true">Enter text</span>');
+				input.html('Enter Text');
+				input.addClass('placeholder')
 			}
 		}
 	});
@@ -141,7 +142,11 @@ function Render() {
 		let input = $(evt.currentTarget),
 			partNumber = input.attr('part-number');
 
-		sentences[sentenceId][`part${partNumber}`] = input.html();
+		let value = input.html();
+		if(value == 'Enter Text') return;
+
+		input.removeClass('placeholder')
+		sentences[sentenceId][`part${partNumber}`] = value;
 		unsavedChanges = true;
 		$('.save-button').prop('disabled', false);
 	});
@@ -189,6 +194,7 @@ function Render() {
 
 	// Save callback
 	$('.save-button').on('click', (evt) => {
+		if(termList.length < 3) return;
 		$.ajax({
 			method: 'post',
 			url: '/api/story/gamedata',

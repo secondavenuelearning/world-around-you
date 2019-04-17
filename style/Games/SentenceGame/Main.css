@@ -152,6 +152,8 @@ header #responseText
     top: 75px;
     display: block;
     width: 100%;
+    height: auto;
+    max-height: 300px;
    
     background-color:#00B092;
     vertical-align: middle;
@@ -167,7 +169,7 @@ header #responseText
 
 #videos .media{
    position: relative;
-    width: calc((94% / 3) - 20px);
+    width: calc((92% / 3) - 20px);
     
     display: inline-block;
     margin: 1.5%;
@@ -183,6 +185,7 @@ header #responseText
 {
     width: 100%;
     height: auto;
+    max-height: 240px;
     vertical-align: middle;
     pointer-events: none;
 }

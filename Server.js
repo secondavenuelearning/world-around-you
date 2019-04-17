@@ -88,39 +88,39 @@ function CreateSessions(_app, options){
 }
 
 
-var access_log = "access.log";
-var error_log = "error.log";
+var access_log = "access.log",
+	error_log = "error.log";
+
 const app = express();
 
-
+// Set the middleware for the app
 app.use(bodyParser.json({limit:"50mb"})); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended:true, limit:"50mb" })); // for parsing application/x-www-form-urlencoded
 app.use(express.static(__dirname));
 app.use('/static', express.static(__dirname + '/js'));
 
+// Create the session store
 CreateSessions(app, {});
 
-var sess=null;
-// ****************************************************************************
-// * CREATE SESSION STUFF - ABOVE THIS LINE                                   *
-// ****************************************************************************
-	app.use((req, res, next) => {		
-		// add to the access log
-		if(!req.url.match(/.js|.css|.html|.png|.jpg/)){
-			access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
-		}
+// Middleware for writing to the access log
+app.use((req, res, next) => { 
+	// add to the access log
+	if(!req.url.match(/.js|.css|.html|.png|.jpg/)){
+		access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
+	}
 
-		// set a browser cookie
-		if(req.session.user){
-			res.cookie('way.user', req.session.user, { maxAge: 60 * 60 * 1000, httpOnly: false});
-		}
-		else{
-			res.clearCookie('way.user');
-		}
+	// set a browser cookie
+	if(req.session.user){
+		res.cookie('way.user', req.session.user, { maxAge: 60 * 60 * 1000, httpOnly: false});
+	}
+	else{
+		res.clearCookie('way.user');
+	}
 
-		next();
-	});
+	next();
+});
 
+// Routes for the site
 	app.get('/', (req, res) => {
 		res.redirect('/Stories');
 	});
@@ -180,31 +180,17 @@ var sess=null;
 			Page: 'GameEditor'
 		}));
 	});
-
+	
+	// Route to get image list for the games
     app.get('/img/*', (req, res) => {
-        var imgPath = req.path;
-        var folders = fs.readdirSync(path.resolve(__dirname) + imgPath);
+        let imgPath = req.path,
+        	folders = fs.readdirSync(path.resolve(__dirname) + imgPath);
 
         res.send(folders);
     });
 
-    //remove later- will be using stans /games entry point
-    app.get('/Bus', (req, res) => {
-		res.send(PageTemplate({
-			Page: 'BusGame'
-		}));
-	});
-
-    app.get('/Worksheet', (req, res) => {
-            res.send(PageTemplate({
-                Page: 'Worksheet'
-            }));
-        });
-
-// ******************************************************
-// Get Requests
-// ******************************************************
-	ApiRoutes(app);
+// Adding the Api Routes to the site
+ApiRoutes(app);
 
 
 
@@ -350,105 +336,7 @@ function app_post_api_game_part2(req,res,name) {
 	});
 };
 
-// *****************
-// * GET GAME DATA *
-// *****************
-app.get('/api/gamedata', (req, res) => {
-	console.log("[GET /api/gamedata]");
-	console.log(req.query);
-	myid=req.query.id;
-	mygameid=req.query.gameId;
-
-	console.log("[GET api/gamedata][storyid]["+myid+"]");
-	console.log("[GET api/gamedata][gameId]["+mygameid+"]");
-
-	if((myid==null)||(myid==0)) {
-		console.log("[GET /api/gamedata][NO STORY ID]");
-		res.send('done');
-	}
-	if((mygameid==null)||(mygameid==0)) {
-		console.log("[GET /api/gamedata][NO GAME ID]");
-		res.send('done');
-	}
-	GamedataDB.getGamedata(myid,mygameid).then(function(result) {
-		console.log(result);
-		if(result=="[]") {
-			console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][result]["+result+"][NOT-FOUND]");
-			console.log(result);
-			res.send(result);
-		}
-		else {
-			console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][result]["+result+"][FOUND]");
-			console.log(result);
-			res.send(result);
-		}
-	}).catch(err => {
-		console.log("[GET /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
-		res.send(err);
-	});
-});
-
-// *****************
-// * ADD GAME DATA *
-// *****************
-app.post('/api/gamedata',function(req,res) {
-	console.log("[POST /api/gamedata]");
-	console.log(req.body);
-	myid=req.body.id;
-	mygameid=req.body.gameId;
-	mydata=req.body.gamedata;
-
-	console.log("[POST api/gamedata][storyid]["+myid+"]");
-	console.log("[POST api/gamedata][gameId]["+mygameid+"]");
-	console.log("[POST api/gamedata][gamedata]["+mydata+"]");
-
-	if((myid==null)||(myid==0)) {
-		console.log("[POST /api/gamedata][NO STORY ID]");
-		res.send('done');
-	}
-	if((mygameid==null)||(mygameid==0)) {
-		console.log("[POST /api/gamedata][NO GAME ID]");
-		res.send('done');
-	}
-	if((mydata==null)||(mydata=='')) {
-		console.log("[POST /api/gamedata][NO GAME DATA]");
-		res.send('done');
-	}
-	GamedataDB.getGamedata(myid,mygameid).then(function(result) {
-		console.log(result);
-		if(result=="[]") {
-			console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][result]["+result+"][NOT-FOUND-WILL-ADD]");
-			console.log(result);
-			app_post_api_gamedata_part2(req,res,myid,mygameid,mydata);
-		}
-		else {
-			console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][result]["+result+"][FOUND-ALREADY-ADDED]");
-			console.log(result);
-			res.send(result);
-		}
-	}).catch(err => {
-		console.log("[POST /api/gamedata][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
-		res.send(err);
-	});
-});
-function app_post_api_gamedata_part2(req,res,storyid,gameid,gamedata) {
-
-	console.log("[app_post_api_gamedata_part2][storyid]["+storyid+"]");
-	console.log("[app_post_api_gamedata_part2][gameId]["+gameid+"]");
-	console.log("[app_post_api_gamedata_part2][gamedata]["+gamedata+"]");
-
-	GamedataDB.addGamedata(storyid,gameid,gamedata).then(function(result) {
-		console.log("[app_post_api_gamedata_part2][storyid]["+storyid+"][gameid]["+gameid+"][gamedata]["+gamedata+"][result]["+result+"]");
-		console.log(result);
-		res.send(result);
-	}).catch(err => {
-		console.log("[app_post_api_gamedata_part2][storyid]["+myid+"][gameid]["+mygameid+"][gamedata]["+mydata+"][ERROR]["+err+"]");
-		res.send(err);
-	});
-};
-// ******************
-// * LISTEN TO PORT *
-// ******************
+// Start the server
 app.listen(Settings.port,function(){
 	console.log(`Listening on port ${Settings.port}`);
 });

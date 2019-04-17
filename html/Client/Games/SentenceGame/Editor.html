@@ -10,50 +10,54 @@
 			<span class="language sign-language"><%- game.signLanguage %></span>
 		</div>
 	</div>
-	<div id="name">
-		<div class="quarter"><span class="bold title">Game Name</span></div>
-		<div class="three-quarters">
-			<input id="name-input" type="text" value="<%- name %>"/>
-		</div>
-	</div>
-	<div id="terms">
-		<div class="quarter">
-			<div id="term-selection">
-				<% _.each(sentences, function(sentence, i){ %>
-					<div class="term-button-container">
-						<button class="term-button <%- i == sentenceId ? 'active' : '' %>" sentence-index="<%- i %>"><%- sentence.term %></button>
-						<button class="term-delete-button delete-button" sentence-index="<%- i %>"></button>
-					</div>
-				<% }) %>
-				<button class="add-text-button add-term"></button>
+	<% if(termList.length >= 3){ %>
+		<div id="name">
+			<div class="quarter"><span class="bold title">Game Name</span></div>
+			<div class="three-quarters">
+				<input id="name-input" type="text" value="<%- name %>"/>
 			</div>
 		</div>
-		<div class="three-quarters">
-			<% if(sentences[sentenceId]){ %>
-			<div id="edit-term">
-				<div id="term-select-container">
-					<select id="term-select">
-						<% _.each(termList, function(term){ %>
-							<option value="<%- term %>" <%- term == sentences[sentenceId].term ? 'selected' : '' %>><%- term %></option>
-						<% }) %>
-					</select>
-				</div>
-				<div id="sentence-container">
-					<span contenteditable="true" class="part-input" part-number="1"><%= sentences[sentenceId].part1 && sentences[sentenceId].part1 != '' ? sentences[sentenceId].part1 : '<span class="placeholder" contenteditable="false">Enter text</span>' %></span>
-					<span id="term-display" class="glossary-term"><%- sentences[sentenceId].term %></span>
-					<span contenteditable="true" class="part-input" part-number="2"><%= sentences[sentenceId].part2 && sentences[sentenceId].part2 != '' ? sentences[sentenceId].part2 : '<span class="placeholder" contenteditable="false">Enter text</span>' %></span>
-				</div>
-				<div id="term-container">
-					<div id="story-sentence">
-						<%= text %>
-					</div>
-					<div id="term-video">
-						<video src="<%- video %>" autoplay loop muted />
-					</div>
+		<div id="terms">
+			<div class="quarter">
+				<div id="term-selection">
+					<% _.each(sentences, function(sentence, i){ %>
+						<div class="term-button-container">
+							<button class="term-button <%- i == sentenceId ? 'active' : '' %>" sentence-index="<%- i %>"><%- sentence.term %></button>
+							<button class="term-delete-button delete-button" sentence-index="<%- i %>"></button>
+						</div>
+					<% }) %>
+					<button class="add-text-button add-term"></button>
 				</div>
 			</div>
-			<% } %>
+			<div class="three-quarters">
+				<% if(sentences[sentenceId]){ %>
+				<div id="edit-term">
+					<div id="term-select-container">
+						<select id="term-select">
+							<% _.each(termList, function(term){ %>
+								<option value="<%- term %>" <%- term == sentences[sentenceId].term ? 'selected' : '' %>><%- term %></option>
+							<% }) %>
+						</select>
+					</div>
+					<div id="sentence-container">
+						<span contenteditable="true" class="part-input <%= !sentences[sentenceId].part1 && sentences[sentenceId].part1 == '' ? 'placeholder' : '' %>" part-number="1"><%= sentences[sentenceId].part1 && sentences[sentenceId].part1 != '' ? sentences[sentenceId].part1 : 'Enter Text' %></span>
+						<span id="term-display" class="glossary-term"><%- sentences[sentenceId].term %></span>
+						<span contenteditable="true" class="part-input <%= !sentences[sentenceId].part2 && sentences[sentenceId].part2 == '' ? 'placeholder' : '' %>" part-number="2"><%= sentences[sentenceId].part2 && sentences[sentenceId].part2 != '' ? sentences[sentenceId].part2 : 'Enter Text' %></span>
+					</div>
+					<div id="term-container">
+						<div id="story-sentence">
+							<%= text %>
+						</div>
+						<div id="term-video">
+							<video src="<%- video %>" autoplay loop muted />
+						</div>
+					</div>
+				</div>
+				<% } %>
+			</div>
 		</div>
-	</div>
+	<% } else { %>
+		<div>At least 3 glossary terms are needed to publish this game.</div>
+	<% } %>
 </div>
 <button class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

@@ -4,7 +4,8 @@ import html from 'html/Client/StoryPreview.html!text';
 import LanguageSelector from 'js/Client/LanguageSelector';
 
 var index = 0,
-	template = _.template(html);
+	template = _.template(html),
+	online = !window.offline;
 
 var interval = 0;
 function resizePrviews(){
@@ -32,7 +33,8 @@ function StoryPreview(story, launchToEditor){
 	var element = template({
 		id: this.id,
 		story: this.story,
-		launchToEditor: this.launchToEditor
+		launchToEditor: this.launchToEditor,
+		online
 	});
 
 	// create the jquery element
