@@ -152,6 +152,8 @@ header #responseText
     top: 75px;
     display: block;
     width: 100%;
+    height: auto;
+    max-height: 300px;
    
     background-color:#00B092;
     vertical-align: middle;
@@ -183,6 +185,7 @@ header #responseText
 {
     width: 100%;
     height: auto;
+    max-height: 240px;
     vertical-align: middle;
     pointer-events: none;
 }
