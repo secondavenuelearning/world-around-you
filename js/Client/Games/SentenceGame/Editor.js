@@ -84,8 +84,8 @@ function Render() {
 		term,
 		unsavedChanges
 	}));
-
-	$('#term-selection')[0].scrollTo(0, scroll);
+	if($('#term-selection')[0])
+		$('#term-selection')[0].scrollTo(0, scroll);
 
 	if($('.term-button.active')[0])
 		$('.term-button.active')[0].scrollIntoViewIfNeeded();

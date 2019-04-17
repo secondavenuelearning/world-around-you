@@ -13,6 +13,8 @@
 				<div class="description" lang="<%- lang %>"><%- description %></div>
 			<% }) %>
 		</a>
-		<a class="story-game-button" href="./Games?storyId=<%- story.id %>"></a>
+		<% if(online){ %>
+			<a class="story-game-button" href="./Games?storyId=<%- story.id %>"></a>
+		<% } %>
 	</div>
 </div>

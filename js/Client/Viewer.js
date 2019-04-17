@@ -90,7 +90,7 @@ function getStoryAssetList(){
 
 	var AddToList = function(objOrString, currentList){
 		if(typeof objOrString == 'string'){
-			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.jpg|\.png|\.gif|\.mp4|\.wmv|\.mov/g))
+			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.jpg|\.png|\.gif|\.mp4|\.wmv|\.mov/gi))
 				currentList.push(objOrString);
 
 			return currentList;
@@ -103,7 +103,6 @@ function getStoryAssetList(){
 			return currentList;
 		}
 	}
-
 	let assetList = AddToList(story, []);
 	return assetList;
 }

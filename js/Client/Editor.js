@@ -66,6 +66,12 @@ $(window).resize(resizeCover);
 
 $(document).ready(function () {
 
+	if(navigator.serviceWorker){
+		navigator.serviceWorker.getRegistrations().then((reg) => {
+			if(reg[0]) reg[0].unregister();
+		});
+	}
+
 	new Promise((resolve, reject) => {
 		storyId = parseInt(urlParams.id);
 		editorPageIndex = EDITORPAGES.indexOf(urlParams.page || 'language');
@@ -322,7 +328,7 @@ function renderCoverPage(){
 			var uploadPromise = new Promise((resolve, reject) => {
 				if(newImageFile){
 					UploadFile(newImageFile, `ci-${storyId}`).then((path) => {
-						coverImage = path
+						coverImage = path + `?t=${new Date().getTime()}`;
 						resolve();
 					});
 				}
@@ -561,7 +567,7 @@ function renderPagesPage(renderData){
 				if(page.imageFile){
 					uploadPromises.push(new Promise((resolve, reject) => {
 						UploadFile(page.imageFile, `pi-${storyId}-${page.id}`).then((path) =>{
-							page.image = path;
+							page.image = path + `?t=${new Date().getTime()}`;;
 							delete page.imageFile;
 							resolve();
 						});
@@ -571,7 +577,7 @@ function renderPagesPage(renderData){
 					_.each(page.videoFile, (file, lang) => {
 						uploadPromises.push(new Promise((resolve, reject) => {
 							UploadFile(file, `pv-${storyId}-${page.id}-${lang}`).then((path) =>{
-								page.video[lang] = path;
+								page.video[lang] = path + `?t=${new Date().getTime()}`;;
 								delete page.videoFile[lang];
 								resolve();
 							});
@@ -585,7 +591,7 @@ function renderPagesPage(renderData){
 
 							uploadPromises.push(new Promise((resolve, reject) => {
 								UploadFile(termObj.imageFile, `pgi-${storyId}-${page.id}-${lang}-${term}`).then((path) => {
-									page.glossary[lang][term].image = path;
+									page.glossary[lang][term].image = path + `?t=${new Date().getTime()}`;;
 									delete page.glossary[lang][term].imageFile;
 									resolve();
 								});
