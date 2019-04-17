@@ -6,26 +6,30 @@
 		<span class="language written-language"><%- game.writtenLanguage %></span>
 		<span class="language sign-language"><%- game.signLanguage %></span>
 	</div>
-	<div id="name">
-		<div class="bold title">Game Name</div>
-		<div><input id="name-input" type="text" value="<%- name %>"/></div>
-	</div>
-	<div id="terms">
-		<div class="bold title">Glossary Terms</div>
-		<div class="half ">
-			<div class="half">
-				<% _.each(termList, function(term){ %>
-					<% if(selectedList.indexOf(term) != -1) return; %>
-					<div><button class="add-button term-button" term-name="<%- term %>" term-fnc="add"><%- term %></button></div>
-				<% }) %>
-			</div>
-			<div class="half selected-list">
-				<div class="selected-title">Selected</div>
-				<% _.each(selectedList, function(term){ %>
-					<div><button class="delete-button term-button" term-name="<%- term %>" term-fnc="remove"><%- term %></button></div>
-				<% }) %>
+	<% if(termList.length >= 3){ %>
+		<div id="name">
+			<div class="bold title">Game Name</div>
+			<div><input id="name-input" type="text" value="<%- name %>"/></div>
+		</div>
+		<div id="terms">
+			<div class="bold title">Glossary Terms</div>
+			<div class="half ">
+				<div class="half">
+					<% _.each(termList, function(term){ %>
+						<% if(selectedList.indexOf(term) != -1) return; %>
+						<div><button class="add-button term-button" term-name="<%- term %>" term-fnc="add"><%- term %></button></div>
+					<% }) %>
+				</div>
+				<div class="half selected-list">
+					<div class="selected-title">Selected</div>
+					<% _.each(selectedList, function(term){ %>
+						<div><button class="delete-button term-button" term-name="<%- term %>" term-fnc="remove"><%- term %></button></div>
+					<% }) %>
+				</div>
 			</div>
 		</div>
-	</div>
+	<% } else { %>
+		<div>At least 2 glossary terms are needed to publish this game.</div>
+	<% } %>
 </div>
 <button class="save-button" <%- unsavedChanges ? '' : 'disabled' %>>Save Changes</button>

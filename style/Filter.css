@@ -1,266 +1,273 @@
 /* Filter */
 .filters {
-    width: 80%;
-    height: 85px;
-    display: block; 
-    
-    color: white;
-    
-    padding: 10px;
-    
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 2;
+	width: 80%;
+	height: 85px;
+	display: block; 
+
+	color: white;
+
+	padding: 10px;
+
+	position: relative;
+	margin-left: auto;
+	margin-right: auto;
+	z-index: 2;
+	text-align: center;
 }
 
 .filter{
-    width: calc(94% / 3);
-    height: 100%;
-    display: inline-block;
-    vertical-align: top;
-    padding: 10px;
-    position: relative;
+	width: calc(94% / 3);
+	height: 100%;
+	display: inline-block;
+	vertical-align: top;
+	padding: 10px;
+	position: relative;
 }
 
 .filter button, .filter select{
-    border: none !important;
-    border-radius: 150px;
-    border-color: #004e74;
-    
-    text-align: center;
-    
-    background-color: #004e74;
-    color: white;
-    
-    width: 100%;
-    height: 100%;
-    
-    position: relative;
-    z-index: 1;
+	border: none !important;
+	border-radius: 150px;
+	border-color: #004e74;
+
+	text-align: center;
+
+	background-color: #004e74;
+	color: white;
+
+	width: 100%;
+	height: 100%;
+
+	position: relative;
+	z-index: 1;
+
+	margin: 0px;
+}
+.filter button:after{
+	height: 45px;
 }
 .filter .custom-select-options{
-  /* padding: 0px; */
+	/* padding: 0px; */
 }
 .filter .custom-select-options button{
-  border: none !important;
-  padding-top: 1px;
-  border-radius: 0px;
-}
-#written-language-select, #sort-by-select{
-  margin-left: 3%;
+	border: none !important;
+	padding-top: 1px;
+	border-radius: 0px;
 }
 .filter #options{
-  background-color: #A0EAF7;
-  color: #004E74;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 18px;
-  box-shadow: 0px 4px 7px rgba(0,0,0,.5), 4px 0px 7px rgba(0,0,0,.5);
+	background-color: #A0EAF7;
+	color: #004E74;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 18px;
+	box-shadow: 0px 4px 7px rgba(0,0,0,.5), 4px 0px 7px rgba(0,0,0,.5);
 }
 .filter #options option{
-  color: #004E74;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 18px;
+	color: #004E74;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 18px;
 }
 .filter #options option:hover{
-  background-color: #004E74;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  font-size: 18px;
+	background-color: #004E74;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 18px;
 }
 .filter button img, .filter select img
 {
-    height: 30px;
-    width: 45px;
-    margin-left: -15px;
-    bottom: 7px;
-    position: relative;
-    float: left;
-    vertical-align: middle;
+	height: 30px;
+	width: 45px;
+	margin-left: -15px;
+	bottom: 7px;
+	position: relative;
+	float: left;
+	vertical-align: middle;
 }
 /*@media (min-width:950px) {
-  .filter button, .filter select{
-      font-size: 1em;
-      padding-top: 5%;
-      text-align: center;
-  }
-  .filter button img, .filter select img{
-      bottom: 7px;
-      height: 36px;
-      width: 54px;
-  }
+	.filter button, .filter select{
+			font-size: 1em;
+			padding-top: 5%;
+			text-align: center;
+	}
+	.filter button img, .filter select img{
+			bottom: 7px;
+			height: 36px;
+			width: 54px;
+	}
 }
 @media (min-width:1050px) {
-  .filter button, .filter select{
-      font-size: .9em;
-      padding-top: 3.5%;
-      text-align: center;
-  }
-  .filter button img, .filter select img{
-      bottom: 5px;
-  }
+	.filter button, .filter select{
+			font-size: .9em;
+			padding-top: 3.5%;
+			text-align: center;
+	}
+	.filter button img, .filter select img{
+			bottom: 5px;
+	}
 }
 @media (min-width:1100px) {
-  .filter button, .filter select{
-      font-size: 1em;
-      text-align: center;
-  }
+	.filter button, .filter select{
+			font-size: 1em;
+			text-align: center;
+	}
 }
 @media (min-width:1250px) {
-  .filter button, .filter select{
-      font-size: 1.3em;
-      padding-top: 2%;
-      text-align: center;
-  }
-  .filter button img, .filter select img{
-      bottom: 2px;
-  }
-}*/
-.filter button img.dropdownIcon, .filter select img.dropdownIcon
-{
-    height: 18px;
-    width: 27px;
-    position: relative;
-    float: right;
-    padding-left: 5px;
-    padding-right: 0px;
-    margin-left: 0px;
-    margin-right: -5px;
-    bottom: 0px;
-}
-@media (min-width:900px) {
-  .filter button img.dropdownIcon, .filter select img.dropdownIcon{
-    height: 22px;
-    width: 33px;
-  }
-}
-.filter button:hover, .filter select:hover
-{
-    cursor: pointer;
-    border-color: white;
-    font-weight: bold;
-}
+	.filter button, .filter select{
+			font-size: 1.3em;
+			padding-top: 2%;
+			text-align: center;
+	}
+	.filter button img, .filter select img{
+			bottom: 2px;
+	}
+	}*/
+	.filter button img.dropdownIcon, .filter select img.dropdownIcon
+	{
+		height: 18px;
+		width: 27px;
+		position: relative;
+		float: right;
+		padding-left: 5px;
+		padding-right: 0px;
+		margin-left: 0px;
+		margin-right: -5px;
+		bottom: 0px;
+	}
+	@media (min-width:900px) {
+		.filter button img.dropdownIcon, .filter select img.dropdownIcon{
+			height: 22px;
+			width: 33px;
+		}
+	}
+	.filter button:hover, .filter select:hover
+	{
+		cursor: pointer;
+		border-color: white;
+		font-weight: bold;
+	}
 
-#options
-{
-    position: absolute;
-    display: none;
-    
-    width: calc(100% - 46px);
-    
-    background-color: #195f81;
-    
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border: none;
-    
-    padding: 5px;
-    padding-top: 30px;
-    top: 60%;
-    left: 24px;
-    
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
-}
+	#options
+	{
+		position: absolute;
+		display: none;
+		
+		width: calc(100% - 46px);
+		
+		background-color: #195f81;
+		
+		border-bottom-left-radius: 10px;
+		border-bottom-right-radius: 10px;
+		border: none;
+		
+		padding: 5px;
+		padding-top: 30px;
+		top: 60%;
+		left: 24px;
+		
+		margin-left: auto;
+		margin-right: auto;
+		text-align: left;
+	}
 
 /* Checkbox filters css 
 Thanks: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_custom_checkbox */
 .container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 18px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: 18px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 .container input /* Hide the browser's default checkbox */
 {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
 }
 
 .checkmark { /* Create a custom checkbox */
-    position: absolute;
-    top: 3px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #eee;
-    margin-left: 8px;
-    border-radius: 25%;
-    border: 1px solid #004e74;
+	position: absolute;
+	top: 3px;
+	left: 0;
+	height: 20px;
+	width: 20px;
+	background-color: #eee;
+	margin-left: 8px;
+	border-radius: 25%;
+	border: 1px solid #004e74;
 }
 
 
 .container:hover input ~ .checkmark { /* On mouse-over, add a grey background color */
-  background-color: #99b8c7;
+	background-color: #99b8c7;
 }
 
 .container input:checked ~ .checkmark { /* When the checkbox is checked, add a blue background */
-  background-color: white;
-  
+	background-color: white;
+	
 }
 
 .checkmark:after { /* Create the checkmark/indicator (hidden when not checked) */
-  content: "";
-  position: absolute;
-  display: none;
+	content: "";
+	position: absolute;
+	display: none;
 }
 
 .container input:checked ~ .checkmark:after { /* Show the checkmark when checked */
-  display: block;
+	display: block;
 }
 
 .container .checkmark:after { /* Show the checkmark when checked */
-  left: 5.5px;
-  top: 2.5px;
-  width: 5px;
-  height: 10px;
-  border: solid #004e74;
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
+	left: 5.5px;
+	top: 2.5px;
+	width: 5px;
+	height: 10px;
+	border: solid #004e74;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
 }
 
 /* Sorty By Filter css */
 select#options
 {
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
+	color: white;
+	font-size: 18px;
+	cursor: pointer;
 }
 
 select#options:focus-within
 {
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
+	border-bottom-left-radius: 0px;
+	border-bottom-right-radius: 0px;
 }
 
 select#options option
 {
-    cursor: pointer;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+	cursor: pointer;
+	border-bottom-left-radius: 10px;
+	border-bottom-right-radius: 10px;
 }
 
 select#options:hover
 {
-    border-bottom-left-radius: none;
-    border-bottom-right-radius: none;
+	border-bottom-left-radius: none;
+	border-bottom-right-radius: none;
 }
-
+@media screen and (max-width: 1024px), (max-height: 768px){
+	.filters{
+		width: 100%;
+	}
+}
 
 

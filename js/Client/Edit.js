@@ -15,8 +15,11 @@ $(document).ready(function () {
         method: 'get',
         url: './api/stories?unpublished=true'
     }).done((stories) => {
-        //console.log(stories);
-        //FiltersBar('filter-bar');
+        if(navigator.serviceWorker){
+            navigator.serviceWorker.getRegistrations().then((reg) => {
+                if(reg[0]) reg[0].unregister();
+            });
+        }
         
         var storyPreviews = [];
         if(stories.length > 0){

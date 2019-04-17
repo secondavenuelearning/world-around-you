@@ -74,7 +74,7 @@ function initializeTitle() {
       var backButton = document.getElementById("backBtn");
     backButton.onclick = function () {
         console.log("click");
-        initializeTitle();
+        window.location = "/stories";
     };
        var instruction = document.getElementById("instructionsButton");
     instruction.onclick = function () {
@@ -111,6 +111,12 @@ $(document).ready(function () {
     };
       var score = document.getElementById("score");
     score.style.display = "none";
+    
+      var backButton = document.getElementById("backBtn");
+    backButton.onclick = function () {
+        console.log("click");
+        window.location = "/stories";
+    };
     
     //prep and run animations
     $("#wall").addClass("titleWall");

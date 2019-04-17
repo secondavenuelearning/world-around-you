@@ -84,8 +84,8 @@ function Render() {
 		term,
 		unsavedChanges
 	}));
-
-	$('#term-selection')[0].scrollTo(0, scroll);
+	if($('#term-selection')[0])
+		$('#term-selection')[0].scrollTo(0, scroll);
 
 	if($('.term-button.active')[0])
 		$('.term-button.active')[0].scrollIntoViewIfNeeded();
@@ -189,6 +189,7 @@ function Render() {
 
 	// Save callback
 	$('.save-button').on('click', (evt) => {
+		if(termList.length < 3) return;
 		$.ajax({
 			method: 'post',
 			url: '/api/story/gamedata',
