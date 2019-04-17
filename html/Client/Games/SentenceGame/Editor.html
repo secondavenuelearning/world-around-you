@@ -40,9 +40,9 @@
 						</select>
 					</div>
 					<div id="sentence-container">
-						<span contenteditable="true" class="part-input" part-number="1"><%= sentences[sentenceId].part1 && sentences[sentenceId].part1 != '' ? sentences[sentenceId].part1 : '<span class="placeholder" contenteditable="false">Enter text</span>' %></span>
+						<span contenteditable="true" class="part-input <%= !sentences[sentenceId].part1 && sentences[sentenceId].part1 == '' ? 'placeholder' : '' %>" part-number="1"><%= sentences[sentenceId].part1 && sentences[sentenceId].part1 != '' ? sentences[sentenceId].part1 : 'Enter Text' %></span>
 						<span id="term-display" class="glossary-term"><%- sentences[sentenceId].term %></span>
-						<span contenteditable="true" class="part-input" part-number="2"><%= sentences[sentenceId].part2 && sentences[sentenceId].part2 != '' ? sentences[sentenceId].part2 : '<span class="placeholder" contenteditable="false">Enter text</span>' %></span>
+						<span contenteditable="true" class="part-input <%= !sentences[sentenceId].part2 && sentences[sentenceId].part2 == '' ? 'placeholder' : '' %>" part-number="2"><%= sentences[sentenceId].part2 && sentences[sentenceId].part2 != '' ? sentences[sentenceId].part2 : 'Enter Text' %></span>
 					</div>
 					<div id="term-container">
 						<div id="story-sentence">
