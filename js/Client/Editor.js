@@ -1052,6 +1052,7 @@ function renderPublishPage(){
 			if(_story){
 				story.visible = 1;
 				$('.save-button').remove();
+				$('#throbber').remove();
 				alert('Story Published')
 			}
 			else{

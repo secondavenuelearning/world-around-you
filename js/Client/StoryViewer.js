@@ -203,8 +203,6 @@ function GenerateGlossaryButtons(page){
 		let termName = $(evt.currentTarget).attr('glossary-term'),
 			term = glossaryTerms[termName];
 
-			console.log(termName, term, glossaryTerms)
-
 		$('#story-viewer').append(glossaryTemplate({
 			term,
 			page,
