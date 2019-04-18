@@ -697,8 +697,6 @@ function renderPagesPage(renderData){
 			// re-add the page preview callbacks
 			$('.page-preview').off();
 			$('.page-preview').on('click', (evt) => {
-				currentWrittenLanguage = story.metadata.writtenLanguages[0];
-				currentSignLanguage = story.metadata.signLanguages[0];
 				ActivatePage(evt.currentTarget);
 			});
 		}, 0);
