@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2019 at 07:12 PM
+-- Generation Time: Apr 18, 2019 at 04:51 PM
 -- Server version: 5.6.17
 -- PHP Version: 7.1.9
 
@@ -114,7 +114,7 @@ CREATE TABLE `story` (
   `author` varchar(256) DEFAULT NULL,
   `coverimage` varchar(512) DEFAULT NULL,
   `visible` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
-  `data` text,
+  `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
   `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
