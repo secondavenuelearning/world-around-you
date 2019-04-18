@@ -622,7 +622,8 @@ function renderPagesPage(renderData){
 						if(_story){
 							story = _story;
 							renderData = {
-								currentPageIndex: currentPageIndex
+								currentPageIndex: currentPageIndex,
+								scroll: $('#term-selection')[0] ? $('#term-selection')[0].scrollTop : 0;
 							}
 							$('#editor-content').html('');
 
@@ -654,6 +655,13 @@ function renderPagesPage(renderData){
 			if(typeof renderData.currentPageIndex == 'number')
 				ActivatePage($('.page-preview')[renderData.currentPageIndex]);
 		}
+
+
+		if($('#pages-preview')[0])
+			$('#pages-preview')[0].scrollTo(0, renderData && renderData.scroll ? renderData.scroll : 0);
+
+		if($('.page-preview.active')[0])
+			$('.page-preview.active')[0].scrollIntoViewIfNeeded();
 	}
 
 	// function to add a page an all the associated callbacks
@@ -665,6 +673,9 @@ function renderPagesPage(renderData){
 			};
 			index = data.length;
 			data.push(page);
+
+			currentWrittenLanguage = story.metadata.writtenLanguages[0];
+			currentSignLanguage = story.metadata.signLanguages[0];
 
 			$('.save-button').prop('disabled', false);
 			unsavedChanges = true;
@@ -685,8 +696,6 @@ function renderPagesPage(renderData){
 		$('.add-page-button').parent().before($el);
 
 		// activat the newly added page
-		currentWrittenLanguage = story.metadata.writtenLanguages[0];
-		currentSignLanguage = story.metadata.signLanguages[0];
 		ActivatePage($el.find('.page-preview')[0]);
 
 		// setting a timeout here to ensure the content is actually on the page
