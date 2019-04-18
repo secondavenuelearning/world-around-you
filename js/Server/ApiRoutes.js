@@ -1,5 +1,6 @@
 const path = require('path');
 const multer = require('multer');
+const crypto = require('crypto');
 
 const Settings = require('./Settings.js');
 const ValidateUser = require('./ValidateUser.js');
@@ -10,6 +11,67 @@ const SignLanguageDB = require('./SignLanguageDB');
 const GenreDB = require('./GenreDB');
 const TagDB = require('./TagDB');
 const GameDB = require('./GameDB');
+
+
+/**
+ * Create a random string at the desired length
+ * @param  {int} length         the desired length of the string
+ * @param  {boolean} useCapitals    flag to decide if the string should include capital letters
+ * @param  {boolean} useIntegers    flag to decide if the string should use integers
+ * @return {string}              the random string that is generated
+ */
+function createRandomString(length, useCapitals, useIntegers){
+	// the list of characters allowed in the string
+	var chars = "abcdefghijklmnopqrstuvwxyz";
+	if(useCapitals) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	if(useIntegers) chars += "0123456789";
+
+	var string = "";
+
+	// loop selecting random letters from the list of characters until the string is the correct length
+	for(var i=0; i<length; i++){
+		var index = Math.floor(Math.random() * chars.length);
+		string += chars.substring(index, index+1);
+	}
+
+	return string;
+}
+	
+/**
+ * Encrypt a given string
+ * @param  {strin} string the string to encrypt
+ * @param  {string} algo   the algorithm to use when encrypting the string
+ * @param  {string} key    the key to use when encrypting the string
+ * @return {string}        the encrypted string
+ */
+function encryptString(string, algo, key){
+	var iv = createRandomString(16, true, true);
+	var cipher = crypto.createCipheriv(algo, key, iv);
+	var salt = createRandomString(50, true, true);
+
+	let encrypted = cipher.update(salt + string, 'utf8', 'hex');
+	encrypted += cipher.final('hex');
+
+	return encrypted + iv;
+}
+
+/**
+ * Decrypt a given string
+ * @param  {string} encryptedString the string to be decrypted
+ * @param  {string} algo            the algorythm used to encrypt the string
+ * @param  {string} key             the key used to encrypt the string
+ * @return {string}                 the decrypted string
+ */
+function decryptString(encryptedString, algo, key){
+	var iv = encryptedString.substr(encryptedString.length - 16);
+	var encrypted = encryptedString.substr(0, encryptedString.length - 16);
+	var decipher = crypto.createDecipheriv(algo, key, iv);
+
+	let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+	decrypted += decipher.final('utf8');
+
+	return  decrypted.substr(50, decrypted.length -1);
+}
 
 
 let apiRoutes = function(app){
@@ -28,7 +90,7 @@ let apiRoutes = function(app){
 		}
 
 		UserDB.getUser(username).then(function(user) {
-			if(!user || user.password != password){
+			if(!user || decryptString(user.password, Settings.algo, Settings.key) != password){
 				return res.send(false);
 			}
 			else{
@@ -49,7 +111,7 @@ let apiRoutes = function(app){
 	app.post('/api/register', (req, res) => {
 		let username = req.body.username,
 			email = req.body.email,
-			password = req.body.password;
+			password = encryptString(req.body.password, Settings.algo, Settings.key);
 
 		if(!username || username == '') {
 			return res.send('Username Error');
