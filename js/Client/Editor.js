@@ -623,7 +623,7 @@ function renderPagesPage(renderData){
 							story = _story;
 							renderData = {
 								currentPageIndex: currentPageIndex,
-								scroll: $('#term-selection')[0] ? $('#term-selection')[0].scrollTop : 0;
+								scroll: $('#term-selection')[0] ? $('#term-selection')[0].scrollTop : 0
 							}
 							$('#editor-content').html('');
 
