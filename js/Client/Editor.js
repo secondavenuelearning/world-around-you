@@ -703,6 +703,9 @@ function renderPagesPage(renderData){
 			// scroll to the bottom of the page previews
 			$('.add-page-button')[0].scrollIntoView();
 
+			if($('.page-preview.active')[0])
+				$('.page-preview.active')[0].scrollIntoViewIfNeeded();
+
 			// re-add the page preview callbacks
 			$('.page-preview').off();
 			$('.page-preview').on('click', (evt) => {
