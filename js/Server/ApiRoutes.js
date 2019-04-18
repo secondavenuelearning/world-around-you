@@ -36,7 +36,7 @@ function createRandomString(length, useCapitals, useIntegers){
 
 	return string;
 }
-	
+
 /**
  * Encrypt a given string
  * @param  {strin} string the string to encrypt
@@ -110,7 +110,7 @@ let apiRoutes = function(app){
 
 	app.post('/api/register', (req, res) => {
 		let username = req.body.username,
-			email = req.body.email,
+			email = encryptString(req.body.email, Settings.algo, Settings.key),
 			password = encryptString(req.body.password, Settings.algo, Settings.key);
 
 		if(!username || username == '') {
