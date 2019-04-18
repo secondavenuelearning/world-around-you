@@ -667,6 +667,7 @@ function renderPagesPage(renderData){
 	// function to add a page an all the associated callbacks
 	var AddPage = function(page, index){
 		// set the page variables if there if none exist and we are creating a new page
+		let scrollToBottom;
 		if(!page){
 			page = {
 				id: pageId++
@@ -679,6 +680,7 @@ function renderPagesPage(renderData){
 
 			$('.save-button').prop('disabled', false);
 			unsavedChanges = true;
+			scrollToBottom = true;
 		}
 
 		// add the page preview button
@@ -701,7 +703,15 @@ function renderPagesPage(renderData){
 		// setting a timeout here to ensure the content is actually on the page
 		setTimeout(() => {
 			// scroll to the bottom of the page previews
-			$('.add-page-button')[0].scrollIntoView();
+			if(scrollToBottom){
+				if($('.add-page-button'))
+					$('.add-page-button')[0].scrollIntoView();
+			}
+			else{
+				if($('.page-preview.active')[0])
+					$('.page-preview.active')[0].scrollIntoViewIfNeeded();
+			}
+
 
 			// re-add the page preview callbacks
 			$('.page-preview').off();
@@ -1049,6 +1059,7 @@ function renderPublishPage(){
 			if(_story){
 				story.visible = 1;
 				$('.save-button').remove();
+				$('#throbber').remove();
 				alert('Story Published')
 			}
 			else{
