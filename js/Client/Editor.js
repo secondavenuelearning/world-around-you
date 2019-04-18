@@ -256,6 +256,7 @@ function renderLanguagePage(){
 			});
 
 			$('.save-button').on('click', (evt) => {
+				$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 				let data = {
 					id: storyId,
 					writtenLanguages: storyWrittenLanguages,
@@ -325,6 +326,8 @@ function renderCoverPage(){
 		});
 
 		$('.save-button').on('click', () => {
+			$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
+
 			var uploadPromise = new Promise((resolve, reject) => {
 				if(newImageFile){
 					UploadFile(newImageFile, `ci-${storyId}`).then((path) => {
@@ -490,6 +493,7 @@ function renderMetadataPage(){
 			});
 
 			$('.save-button').on('click', () => {
+				$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 				let data = {
 					id: storyId,
 					metadata
@@ -561,6 +565,7 @@ function renderPagesPage(renderData){
 		});
 
 		$('.save-button').on('click', () => {
+			$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 			var uploadPromises = [];
 
 			_.each(data, (page, index) => {
@@ -1016,6 +1021,7 @@ function renderPublishPage(){
 	});
 
 	$('.save-button').on('click', () => {
+		$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
 		let data = {
 			id: storyId
 		};
