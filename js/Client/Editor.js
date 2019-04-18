@@ -685,6 +685,8 @@ function renderPagesPage(renderData){
 		$('.add-page-button').parent().before($el);
 
 		// activat the newly added page
+		currentWrittenLanguage = story.metadata.writtenLanguages[0];
+		currentSignLanguage = story.metadata.signLanguages[0];
 		ActivatePage($el.find('.page-preview')[0]);
 
 		// setting a timeout here to ensure the content is actually on the page
@@ -695,6 +697,8 @@ function renderPagesPage(renderData){
 			// re-add the page preview callbacks
 			$('.page-preview').off();
 			$('.page-preview').on('click', (evt) => {
+				currentWrittenLanguage = story.metadata.writtenLanguages[0];
+				currentSignLanguage = story.metadata.signLanguages[0];
 				ActivatePage(evt.currentTarget);
 			});
 		}, 0);
@@ -722,8 +726,6 @@ function renderPagesPage(renderData){
 		$el.addClass('active');
 
 		currentPageIndex = parseInt($el.attr('page-index'));
-		currentWrittenLanguage = story.metadata.writtenLanguages[0];
-		currentSignLanguage = story.metadata.signLanguages[0];
 
 		$('.page-nav-button').removeClass('active');
 		$(`.page-nav-button[page-type=${currentPageContent}]`).addClass('active');
