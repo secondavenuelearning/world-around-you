@@ -399,6 +399,11 @@ function SetupWindowConnections() {
                     //roll up windows again
                     var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/").reverse();
                     Animate(firstSelected.children[0], rollWindow, null, true);
+                    Animate(secondSelected.children[0], rollWindow, null, true);
+                    
+                    //update window state
+                    $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                    $(secondSelected.children[0]).removeClass("Down").addClass("Up");
                 }
 
 
@@ -621,17 +626,25 @@ function HoverWindows() {
 
     $(".window .glass").hover(function(e)
     { 
-        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" && 
+        $(e.target).hasClass("Up"))
         {
             Animate(e.target, rollWindow, null, true);
+            
+            //update window state
+            $(e.target).removeClass("Up").addClass("Down");
         }
     },
     function(e)
     {   
         //check if target has been clicked
-        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none")
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" &&
+        $(e.target).hasClass("Down"))
         {
-           Animate(e.target, inverted, null, true); 
+            Animate(e.target, inverted, null, true); 
+            
+            //update window state
+            $(e.target).removeClass("Down").addClass("Up");
         }
     });
 
