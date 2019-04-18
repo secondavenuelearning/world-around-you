@@ -571,6 +571,7 @@ function renderPagesPage(renderData){
 			_.each(data, (page, index) => {
 				if(page.imageFile){
 					uploadPromises.push(new Promise((resolve, reject) => {
+						delete page.image;
 						UploadFile(page.imageFile, `pi-${storyId}-${page.id}`).then((path) =>{
 							page.image = path + `?t=${new Date().getTime()}`;;
 							delete page.imageFile;
@@ -581,6 +582,7 @@ function renderPagesPage(renderData){
 				if(page.videoFile){
 					_.each(page.videoFile, (file, lang) => {
 						uploadPromises.push(new Promise((resolve, reject) => {
+							delete page.video[lang];
 							UploadFile(file, `pv-${storyId}-${page.id}-${lang}`).then((path) =>{
 								page.video[lang] = path + `?t=${new Date().getTime()}`;;
 								delete page.videoFile[lang];
@@ -595,6 +597,7 @@ function renderPagesPage(renderData){
 							if(!termObj.imageFile) return;
 
 							uploadPromises.push(new Promise((resolve, reject) => {
+								delete page.glossary[lang][term].image;
 								UploadFile(termObj.imageFile, `pgi-${storyId}-${page.id}-${lang}-${term}`).then((path) => {
 									page.glossary[lang][term].image = path + `?t=${new Date().getTime()}`;;
 									delete page.glossary[lang][term].imageFile;
@@ -621,7 +624,10 @@ function renderPagesPage(renderData){
 							renderData = {
 								currentPageIndex: currentPageIndex
 							}
-							ReRender();
+							$('#editor-content').html('');
+
+							// setting this delay to unload the page of any videos or images
+							setTimeout(ReRender, 200);
 						}
 						else{
 							alert('[PH] something went wrong.')
