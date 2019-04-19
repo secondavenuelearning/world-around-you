@@ -353,7 +353,7 @@ function SetupWindowConnections() {
                 secondSelected = e.target.parentElement;
 
                 //check if the 2 selected match
-                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected) {
+                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected && secondSelected.children[1].id !== "none") {
                     //show 2nd selected
                     secondSelected.classList.remove("hidden");
                     
@@ -402,8 +402,19 @@ function SetupWindowConnections() {
                     //Animate(secondSelected.children[0], rollWindow, null, true);
                     
                     //update window state
-                    $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                    if(firstSelected.children[1].id == "none" || secondSelected.children[1].id == "none"){
+                        if(firstSelected.children[1].id !== "none"){
+                            $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                        }
+                        if(secondSelected.children[1].id !== "none"){
+                            $(secondSelected.children[0]).removeClass("Down").addClass("Up");
+                        }
+                    }
+                    else{
+                            $(firstSelected.children[0]).removeClass("Down").addClass("Up");
                     $(secondSelected.children[0]).removeClass("Down").addClass("Up");
+                           }
+                   
                 }
 
 
@@ -629,7 +640,7 @@ function HoverWindows() {
     { 
         console.log(e.target.parentElement.classList.contains("hidden"));
         if(e.target.parentElement.classList.contains("hidden") &&
-        $(e.target).siblings(".glass").hasClass("Up"))
+        $(e.target).siblings(".glass").hasClass("Up") && e.target.parentElement.children[1].id !== "none")
         {
             //Animate(e.target, rollWindow, null, true);
             
@@ -640,8 +651,8 @@ function HoverWindows() {
     function(e)
     {   
         //check if target has been clicked
-        if(e.target.parentElement.classList.contains("hidden") &&
-        $(e.target).siblings(".glass").hasClass("Down") ||  $(e.target).hasClass("Down"))
+        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" &&
+        ($(e.target).siblings(".glass").hasClass("Down") ||  $(e.target).hasClass("Down")))
         {
            // Animate(e.target, inverted, null, true); 
             
