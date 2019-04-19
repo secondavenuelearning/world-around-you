@@ -97,7 +97,6 @@ export function Start(game) {
         },
 
         Waving: [],
-        Star: [] //single array
     };
 
     roundorder = null;
@@ -156,9 +155,7 @@ export function Start(game) {
     //get waving animations
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation1/Frames/"));
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
-    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
-    
-    images.Star = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
+    //images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
    blank = new Image();
@@ -376,10 +373,11 @@ function SetupWindowConnections() {
                         document.getElementById("current").innerHTML = score;
                         
                         //add star
-                        Animate(firstSelected.children[2], images.Star, null, true);
-                        Animate(secondSelected.children[2], images.Star, null, true);
                         firstSelected.children[2].classList.remove("hidden");
                         secondSelected.children[2].classList.remove("hidden");
+                        $(firstSelected.children[2]).addClass("show");
+                        $(secondSelected.children[2]).addClass("show");
+                        
 
                         //check win state
                         if (score === totalMatches) {
@@ -583,7 +581,6 @@ function WinScreen() {
         },
 
         Waving: [],
-        Star: [] //single array
     };
 
     termList = []; //hard values for testing
