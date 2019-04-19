@@ -154,8 +154,11 @@ export function Start(game) {
     
     //get waving animations
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation1/Frames/"));
-    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
-    //images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
+    if(window.navigator.userAgent.indexOf("Edge") < 0) //only laod these other waving variants if not on edge
+    {
+       images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
+        images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
+    }
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
    blank = new Image();
