@@ -546,8 +546,8 @@ function RoundEndTransition() { console.log("round end transition");
 
 function RoundStartTransition() { console.log("round start transition");
     //move vehicles off screen on proper side so they can drive in
-    $('#bottom .vehicle').css('left', (screen.width * -1) + 'px');
-    $('#top .vehicle').css('left', screen.width + 'px');
+    $('#bottom .vehicle').css('left', (window.innerWidth * -1) + 'px');
+    $('#top .vehicle').css('left', window.innerWidth + 'px');
 
     //animate and move vehicles back on screen
     var animID = window.requestAnimationFrame(function (timestamp) {
