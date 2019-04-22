@@ -49,6 +49,7 @@ let uploadRoutes = function(app){
 					req.error('upload error', 405, 'no file selected.');
 				}
 				else {
+					console.log(req.file.mimetype);
 					if(req.file.mimetype.match(/video/gi)){
 						console.log('converting video 1...');
 						let originalPath = `${__dirname}/../../${req.file.path}`;
