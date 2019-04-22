@@ -312,7 +312,7 @@ header #score span {
     display: inline-block;
     height: 35%;
     width: 69.5%;
-
+    overflow: hidden;
     position: absolute;
     z-index: 10;
 }
@@ -370,7 +370,6 @@ header #score span {
     height: calc(100%);
     margin-right: 2.8%;
     z-index: 5;
-    transform: rotate(180deg);
 }
 
 .window .star
@@ -382,13 +381,23 @@ header #score span {
     
     background-color: #002f3a;
     border: 1px;
-    border-radius: 15px;
+    border-radius: 15px; 
 }
 
 .window .star.hidden
 {
-    display: none;
+    opacity: 0;
+    background-color: transparent;
+    
 }
+
+.star.show
+{
+    transform: rotate(360deg);
+    padding: 0;
+    transition: padding .3s ease-in-out, opacity .3s, background-color .5s ease-in, transform .3s;
+}
+
 
 .window span,
 .window video,
@@ -423,6 +432,17 @@ header #score span {
     width: auto;
 }
 
+.glass.Up{
+    transform: translateY(0%);
+    transition: transform 0.5s ease;
+}
+.glass.Down{
+     transform: translateY(100%);
+    transition: transform 0.5s ease;
+}
+.glass{
+     pointer-events: none;
+}
 @font-face {
 font-family: 'Arial Rounded MT Bold';
 font-style: normal;

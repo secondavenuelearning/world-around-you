@@ -97,7 +97,6 @@ export function Start(game) {
         },
 
         Waving: [],
-        Star: [] //single array
     };
 
     roundorder = null;
@@ -155,10 +154,11 @@ export function Start(game) {
     
     //get waving animations
     images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation1/Frames/"));
-    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
-    images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
-    
-    images.Star = GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/");
+    if(window.navigator.userAgent.indexOf("Edge") < 0) //only laod these other waving variants if not on edge
+    {
+       images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation2/Frames/"));
+        images.Waving.push(GetImagesFromFolder("/img/games/BusGame/Waving/Waving_Animation3/Frames/"));
+    }
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
    blank = new Image();
@@ -346,6 +346,7 @@ function SetupWindowConnections() {
                 if (firstSelected.children[1].id !== "none") {
                     firstClick = true;
                     firstSelected.classList.remove("hidden");
+                  $(firstSelected.children[0]).removeClass("Up").addClass("Down");
                 } else {
                     firstSelected = null;
                 }
@@ -355,10 +356,11 @@ function SetupWindowConnections() {
                 secondSelected = e.target.parentElement;
 
                 //check if the 2 selected match
-                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected) {
+                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected && secondSelected.children[1].id !== "none") {
                     //show 2nd selected
                     secondSelected.classList.remove("hidden");
-
+                    
+                    $(secondSelected.children[0]).removeClass("Up").addClass("Down");
                     //verify 
                     firstClick = false;
                     if (firstSelected.children[1].id != "none") {
@@ -374,10 +376,11 @@ function SetupWindowConnections() {
                         document.getElementById("current").innerHTML = score;
                         
                         //add star
-                        Animate(firstSelected.children[2], images.Star, null, true);
-                        Animate(secondSelected.children[2], images.Star, null, true);
                         firstSelected.children[2].classList.remove("hidden");
                         secondSelected.children[2].classList.remove("hidden");
+                        $(firstSelected.children[2]).addClass("show");
+                        $(secondSelected.children[2]).addClass("show");
+                        
 
                         //check win state
                         if (score === totalMatches) {
@@ -397,13 +400,24 @@ function SetupWindowConnections() {
                     firstClick = false;
 
                     //roll up windows again
-                    var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/").reverse();
-                    Animate(firstSelected.children[0], rollWindow, null, true);
-                    Animate(secondSelected.children[0], rollWindow, null, true);
+                    //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/").reverse();
+                    //Animate(firstSelected.children[0], rollWindow, null, true);
+                    //Animate(secondSelected.children[0], rollWindow, null, true);
                     
                     //update window state
-                    $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                    if(firstSelected.children[1].id == "none" || secondSelected.children[1].id == "none"){
+                        if(firstSelected.children[1].id !== "none"){
+                            $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                        }
+                        if(secondSelected.children[1].id !== "none"){
+                            $(secondSelected.children[0]).removeClass("Down").addClass("Up");
+                        }
+                    }
+                    else{
+                            $(firstSelected.children[0]).removeClass("Down").addClass("Up");
                     $(secondSelected.children[0]).removeClass("Down").addClass("Up");
+                           }
+                   
                 }
 
 
@@ -505,8 +519,10 @@ function NextRound(firstRun = false) {
             }
             
             //roll down window
-            var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
-            Animate(e.parentElement.parentElement.children[0], rollWindow, null, true);
+            //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
+            //Animate(e.parentElement.parentElement.children[0], rollWindow, null, true);
+            $(e.parentElement.children[0]).addClass("hidden");
+            $(e.parentElement.parentElement.children[0]).addClass("Down");
             
         });
                                   
@@ -533,8 +549,8 @@ function RoundEndTransition() { console.log("round end transition");
 
 function RoundStartTransition() { console.log("round start transition");
     //move vehicles off screen on proper side so they can drive in
-    $('#bottom .vehicle').css('left', (screen.width * -1) + 'px');
-    $('#top .vehicle').css('left', screen.width + 'px');
+    $('#bottom .vehicle').css('left', (window.innerWidth * -1) + 'px');
+    $('#top .vehicle').css('left', window.innerWidth + 'px');
 
     //animate and move vehicles back on screen
     var animID = window.requestAnimationFrame(function (timestamp) {
@@ -579,7 +595,6 @@ function WinScreen() {
         },
 
         Waving: [],
-        Star: [] //single array
     };
 
     termList = []; //hard values for testing
@@ -618,33 +633,34 @@ function FitText() {
 
 function HoverWindows() {
     //get window animation
-    var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
-    var inverted = rollWindow.slice(0).reverse();
+    //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
+   // var inverted = rollWindow.slice(0).reverse();
 
     //get all windows
 
 
-    $(".window .glass").hover(function(e)
+    $(".window").hover(function(e)
     { 
-        if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" && 
-        $(e.target).hasClass("Up"))
+        console.log(e.target.parentElement.classList.contains("hidden"));
+        if(e.target.parentElement.classList.contains("hidden") &&
+        $(e.target).siblings(".glass").hasClass("Up") && e.target.parentElement.children[1].id !== "none")
         {
-            Animate(e.target, rollWindow, null, true);
+            //Animate(e.target, rollWindow, null, true);
             
             //update window state
-            $(e.target).removeClass("Up").addClass("Down");
+            $(e.target).siblings(".glass").removeClass("Up").addClass("Down");
         }
     },
     function(e)
     {   
         //check if target has been clicked
         if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" &&
-        $(e.target).hasClass("Down"))
+        ($(e.target).siblings(".glass").hasClass("Down") ||  $(e.target).hasClass("Down")))
         {
-            Animate(e.target, inverted, null, true); 
+           // Animate(e.target, inverted, null, true); 
             
             //update window state
-            $(e.target).removeClass("Down").addClass("Up");
+            $(e.target).siblings(".glass").removeClass("Down").addClass("Up");
         }
     });
 
