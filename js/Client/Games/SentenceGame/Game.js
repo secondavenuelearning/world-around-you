@@ -1,9 +1,8 @@
 import _ from 'underscore';
-import gameHtml from 'html/Client/Games/SentenceGame/Game.html!text';
-import flowerbedHtml from 'html/Client/Games/SentenceGame/Footer.html!text';
-import winHtml from 'html/Client/Games/SentenceGame/Win.html!text';
-import ImageHoverSwap from 'js/Client/HelperFunctions.js';
-export default {
+import gameHtml from 'html/Client/Games/SentenceGame/Game.html!text'; //game page html
+import flowerbedHtml from 'html/Client/Games/SentenceGame/Footer.html!text'; //footer html
+import winHtml from 'html/Client/Games/SentenceGame/Win.html!text'; //win screen html
+export default { //export functions to be used by Main.js
     Start,
     GetImagesFromFolder,
     Animate
@@ -24,20 +23,21 @@ var storyData;
 //selected languages for this game
 var signLang;
 var writtenLang;
-var hintRun = 0;
+
 //game round data and varibales
-var rounds = [];
-var round = 0;
+var rounds = []; //data for each round (sentence part 1 and 2, and the term)
+var round = 0; //round index
 
 var termMap = {}; //where the terms used in the current round reside (page wise) int he sory data
 
 //scoring
-var score = 0;
-var maxScore = 0;
-var firstTry = true;
+var score = 0; //points
+var maxScore = 0; //max available (= total number of rounds)
+var firstTry = true; //did the player get the awnser on their first try?
+var hintRun = 0; //so hint func doesnt run indefinetly- safety net
 
 var flowers = 0; //will be a decimal but actual flowers shwon will be math.floor version
-var flowerPower = 0;
+var flowerPower = 0; //amount of a flower to be given by a correct awnser - set later on
 
 //tip strings up top
 var notif = {
@@ -78,7 +78,7 @@ var animations = {
     }
 };
 
-var untilWindy = 3000;
+var untilWindy = 3000; //time until the "wind" wnimation is run again- randomly reset after each run
 
 //gameplay vaibales
 var dragging = false;
@@ -97,16 +97,21 @@ var gameState = state.Playing;
 
 /* ----------------------- Constructor ----------------------- */
 export function Start(game) {
-    //resets all data
+    //resets all data - just in case returning tot he game from title after backing out of the game
     storyData = null;
     score = 0;
     signLang = null;
     writtenLang = null;
     round = 0;
-    //save story data to be globally acessable
+    
+    //save story to be globally accessible int hsi script
     storyData = game.story.data;
+    
+    //set languages
     signLang = game.signLanguage
     writtenLang = game.writtenLanguage;
+    
+    //setup round data
     rounds = game.data.sentences;
     maxScore = game.data.sentences.length;
 
@@ -116,11 +121,11 @@ export function Start(game) {
 
     //set header max score text
     $("#score #total").text("/ " + maxScore);
-    $("#score #current").text("0");
+    $("#score #current").text("0"); //no points yet
 
     //get animation images
     animations = {
-        Star: GetImagesFromFolder("/img/games/BusGame/StarAnimation/Frames/"), //single
+        Star: GetImagesFromFolder("/img/games/Worksheet/StarAnimation/Frames/"), //single
         Plants: GetImagesFromFolder("/img/games/Worksheet/WindyPlants_Animation/"), //single
         Bird: GetImagesFromFolder("/img/games/Worksheet/Bird_Animation/"), //single
         Flowers: {
@@ -155,7 +160,7 @@ export function Start(game) {
     //create a new round and update html
     NextRound();
 
-    //start off windy anim
+    //start off windy anim - will run recusively form here on out
     setTimeout(function () {
         WindyAnim();
         Animate("#bird", animations.Bird, null, true);
@@ -164,26 +169,39 @@ export function Start(game) {
 }
 
 /* ----------------------- Data parsing ----------------------- */
+/*
+Get all the image files names in the defined folder from the server, and returns them as Image Objects.
+(folder: path to the requested folder to get images)
+*/
 function GetImagesFromFolder(folder) {
-    var files = [];
-
+    var files = []; //array to save images
+    
+    //use ajax command to request file names from the server, and save as IMage objects
     $.ajax({
         url: folder,
         async: false, //to ensure all data points have been added before we continue
         success: function (data) {
 
-            data.forEach(function (datapoint) {
-                var path = "../.." + folder.toString() + "" + datapoint.toString();
+            data.forEach(function (datapoint) { //each returned file name is datapoint
+                var path = "../.." + folder.toString() + "" + datapoint.toString(); //build full string of the path to the image
+                
+                //create image object and ste its src tot eh apth
                 var img = new Image();
                 img.src = path;
+                
+                //save to out array
                 files.push(img);
             });
         }
     });
 
+    //give back allt he saved images
     return files;
 }
 
+/*
+Given a array of glossary terms (strings), returns an object that tells what page the term is from in the story data
+*/
 function MapTermsToPages(terms) {
     var mapped = {};
 
@@ -218,6 +236,11 @@ function MapTermsToPages(terms) {
     return mapped;
 }
 
+/*
+replaces file location of animatons with actual frames, in chunnks of defined size. Use for lessening intial page load
+(anims: object that holds animation frames folder locations/ actual frames array)
+(size: how many anims to load this pass)
+*/
 function PreLoadAnimChunk(anims, size) {
     //get images for deifned number of items to be loaded
     var start = 0;
@@ -234,6 +257,9 @@ function PreLoadAnimChunk(anims, size) {
     }
 }
 
+/*
+Loads flower "growing" animations for upcoming flower(s), and exchnages older "growing" animations for "windy" animations of bloomed flower(s)
+*/
 function LoadingFlowers() {
     //get array of flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
@@ -248,12 +274,14 @@ function LoadingFlowers() {
         } else {
             //unload old animations and repalce with new ones
             if (_.isArray(animations.Flowers.Growing[i])) {
-                //get new and set start frame
+                //load new "sindy" animation
                 animations.Flowers.Windy[i] = GetImagesFromFolder(animations.Flowers.Windy[i]);
+                
+                //updaet flowers class- used for checking flower state
                 $(bouquet[i]).removeClass("growing");
                 $(bouquet[i]).addClass("windy");
 
-                //unload old 
+                //unload old anim
                 animations.Flowers.Growing[i] = null;
             }
         }
@@ -261,6 +289,9 @@ function LoadingFlowers() {
 }
 
 /* ----------------------- Game Mechanics ----------------------- */
+/*
+Updates round related data, preps and laods new round. Sets functionality for game according to new round. 
+*/
 function NextRound() {
     //load animations as we need them
     LoadingFlowers();
@@ -268,6 +299,7 @@ function NextRound() {
     //reset some things
     firstTry = true;
     hintRun = 0;
+    
     //get random terms
     var options = [rounds[round].term]; //options includes the corrcet option first
 
@@ -304,16 +336,17 @@ function NextRound() {
     //build template
     var pages = [termMap[options[0]], termMap[options[1]], termMap[options[2]]];
     templateData = {
-        ID: options,
-        Media: [
+        ID: options, //templated html uses this to fill video IDs- this array is essentially just terms
+        Media: [ //video options for this round
             storyData[pages[0]].video[signLang],
             storyData[pages[1]].video[signLang],
             storyData[pages[2]].video[signLang]
         ],
-        Star: animations.Star[0].src,
-        Text: [rounds[round].part1, rounds[round].part2]
+        Star: animations.Star[0].src, //placeholder- actual anim is run later
+        Text: [rounds[round].part1, rounds[round].part2] //parts of sentence from round data
     };
-
+    
+    //turn template into proper html object and upadte the <main> tag with it
     var main = template(templateData);
     this.$main = $(main);
     $('main').html(this.$main);
@@ -324,11 +357,11 @@ function NextRound() {
     //add looping to the video
     var vids = $("#videos video").toArray();
     vids.forEach(function (vid) {
-        //get term
+        //get term - parse form vid ID
         var term = vid.id.toString();
         term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
 
-        //get term data
+        //get term data - broken into steps
         var termData = storyData[termMap[term]].glossary;
         termData = termData[writtenLang];
         termData = termData[term].video;
@@ -349,6 +382,9 @@ function NextRound() {
     });
 }
 
+/*
+Shows win screen
+*/
 function Win() {
     //load last of the flowers
     LoadingFlowers();
@@ -362,18 +398,21 @@ function Win() {
     var win = winTemplate(winTemplateData);
 
     //go to win screen
-
     $("main").html(win);
     $("#responseText").text("");
     var scoreTemp = document.getElementById("score");
     scoreTemp.style.display = "none";
 }
 
+/*
+Hides one of the three options for the user (chosen at random)
+*/
 function Hint() {
     //get incorrect options
     var options = [];
     templateData.ID.forEach(function (option) {
-        if (option != rounds[round].term) {
+        var optionClass = "#" + option + "Vid";
+        if (option != rounds[round].term && !$(optionClass).hasClass("hidden")) { //cant be the correct awnser or an already hidden option
             options.push(option);
         }
     });
@@ -381,23 +420,18 @@ function Hint() {
     //chose which of them to omit
     var omit = ChooseRandomArrayElement(options);
 
-    //hide the omited item
+    //hide the omited item- if already hidden then run this recursively to try again
     omit = "#" + omit + "Vid"; //expand to proper ID
-    if ($(omit).attr('class') == "hidden" && hintRun<10) {
-        hintRun++;
-        Hint();
+    $(omit).addClass("hidden");
 
-        
-    } else {
-        $(omit).addClass("hidden");
-    }
-    //$(omit).addClass("hidden");
-
-    //affect trys
+    //affect trys - user will no longer get a point
     firstTry = false;
     
 }
 
+/*
+Adds "Drag and Drop" functionality to the game.
+*/
 function DragAndDrop() {
     //make drag blurb follow mouse
     $(document).on('mousemove', function (e) {
@@ -427,11 +461,12 @@ function DragAndDrop() {
 
         //give drag its proper text
         var term = $(".selected video")[0].id.toString();
-        term = term.substring(0, term.length - 3);
+        term = term.substring(0, term.length - 3); //remove "Vid" portion at end of id
         $("#drag span").text(term);
 
     });
 
+    //add mosue release event, restetting video and drag blubr states- running correct/incorrect logic
     $(document).on('mouseup', function (e) {
         //check if we are dragging and mouseup is on the blank
         if (dragging && $(e.target)[0] == $("#blank")[0]) {
@@ -491,6 +526,9 @@ function DragAndDrop() {
     });
 }
 
+/*
+Runs "growing" animation for newly achieved flowers
+*/
 function UpdateFlowers() {
     //get array of flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
@@ -512,6 +550,9 @@ function UpdateFlowers() {
     }
 }
 
+/*
+updates notifcation (reponse text) area with randomly selected text from given array
+*/
 function RunNotif(notifs) {
     //chose random element
     var notif = ChooseRandomArrayElement(notifs);
@@ -520,9 +561,15 @@ function RunNotif(notifs) {
     $("#responseText").text(notif);
 }
 
-/* ----------------------- Building Objects ----------------------- */
-
 /* ----------------------- Animation ----------------------- */
+/*
+Simple animate function that repalces the src of a given <img> each draw to animate. **using extra bool paramerter can make round changing logic run at end of animation
+(id: html id of object to animate)
+(frames: array of image objects used as the image to replace the defined <img> src with)
+(frame: frame of animation this is on- SHOULD BE NULL INTIALLY)
+(noLoop: boolean checking if the animation should loop or not)
+(roundLogicActive: optional parameter that turns on round logic at end of animation run)
+*/
 function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     if (!noLoop || (frame < frames.length - 1)) {
         var anim = window.requestAnimationFrame(function (timestamp) {
@@ -553,6 +600,9 @@ function Animate(id, frames, frame, noLoop, roundLogicActive = false) {
     }
 }
 
+/*
+Runs the "windy" animation for the background, and all the current flowers. Also randomly sets time of next recursive run. 
+*/
 function WindyAnim() {
     //animate background
     Animate("#wall", animations.Plants, null, true);
@@ -560,8 +610,9 @@ function WindyAnim() {
     //animate all the flowers
     var bouquet = $(".flower").toArray(); //get it? its a bunch of flowers
     for (var i = 0; i < bouquet.length; i++) {
-        //exclude hidden flowers
+        //exclude hidden flowers and flowers that are still gorwing from being "windy"
         if (!$(bouquet[i]).hasClass("hidden") && (!$(bouquet[i]).hasClass("growing"))) {
+            //Run windy anim on flower!
             Animate($(bouquet[i]).children("img"), animations.Flowers.Windy[i], null, true);
         }
     }
@@ -574,47 +625,44 @@ function WindyAnim() {
 }
 
 /* ----------------------- Helper Functions ----------------------- */
+/*
+Returns random element from given array
+*/
 function ChooseRandomArrayElement(options) {
     //chose image to use for bus
     var selected = options[Math.floor(Math.random() * (options.length))];
     return selected;
 }
 
+/*
+Loops video clip
+(videoID: id of <video> html element to loop)
+(start: start of clip to loop)
+(end: end of clip to loop)
+*/
 function LoopVideoClip(videoID, start, end) {
-    var videoContainer = document.getElementById(videoID)
+    //get video
+    var videoContainer = document.getElementById(videoID); 
+    
+    //update src to have start/end clip time information
     videoContainer.src += "#t=" + start + "," + end;
+    
+    //after video has loaded- add listeners for time update so clip will loop through the given start/end
     videoContainer.addEventListener('loadedmetadata', function () {
+        //push video to "start" if  before begining of clip
         if (videoContainer.currentTime < start) {
             videoContainer.currentTime = start;
         }
+        
+        //listen for end of clip, and reset back to start and play if passed "end" time
         videoContainer.ontimeupdate = function () {
             if (videoContainer.currentTime >= end) {
                 videoContainer.currentTime = start;
-                videoContainer.play();
+                videoContainer.play(); //run clip again
 
             }
         }
     }, false);
-}
-
-function FitText() {
-    var windows = $(".window");
-    windows.toArray().forEach(function (element) {
-        let currentSize = 30;
-        if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
-            while (element.children[1].offsetWidth < element.children[1].scrollWidth) {
-                if (element.children[1].style.getPropertyValue('font-size') == "") {
-                    element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
-                }
-
-                currentSize = currentSize - 5;
-                element.children[1].style.setProperty('font-size', currentSize + "px");
-
-            }
-
-        }
-    });
-
 }
 
 /**
