@@ -15,6 +15,7 @@ All dependencies are included. This prototype can run offline.
 - nodejs (https://nodejs.org/en/)
 - mysql database
 - git (https://git-scm.com/downloads)
+- FFmpeg (https://www.ffmpeg.org/download.html)
 
 
 ## Repo architecture
@@ -51,16 +52,17 @@ All dependencies are included. This prototype can run offline.
 ## Starting the server
 1. Download and install nodejs
 2. Download and install git
-3. Setup a mysql server
-4. In a command line console navigate to the repository
-5. Install all the node dependencies by running the following commands:
+3. Download FFmpeg and add it to your path
+4. Setup a mysql server
+5. In a command line console navigate to the repository
+6. Install all the node dependencies by running the following commands:
     - npm install
     - npm install jspm -g
     - jspm install
-6. Create you database using the database.sql file
-7. Copy the file "js/Server/_Settings.js" file and name the new copy "js/Server/Settings.js"
-8. Edit the contents of the new Settings.js file to match the specifications of your server
-9. In the command line run node Server.js to start the server
+7. Create you database using the database.sql file
+8. Copy the file "js/Server/_Settings.js" file and name the new copy "js/Server/Settings.js"
+9. Edit the contents of the new Settings.js file to match the specifications of your server
+10. In the command line run node Server.js to start the server
 
 ## Adding a game
 1. Create a new folder for your game in the 'js/Client/Games/' directory.

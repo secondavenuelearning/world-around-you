@@ -854,10 +854,13 @@ function renderPagesPage(renderData){
 			// create a new file reader
 			var reader = new FileReader();
 
+			$('#video-player').remove();
+			$('#editor-content').append('<div id="throbber"><img src="./img/ajax-loader.gif"></div>');
+			
 			reader.onload = function(){
 				// $('#video-player').remove();
 				// $('#video-container').prepend(`<video id="video-player" controls autoplay muted loop src="${reader.result}"></video>`);
-				$('#video-player').attr('src', reader.result);
+				// $('#video-player').attr('src', reader.result);
 
 				if(!data[currentPageIndex].video) data[currentPageIndex].video = {};
 				data[currentPageIndex].video[currentSignLanguage] = reader.result;
@@ -867,6 +870,13 @@ function renderPagesPage(renderData){
 				
 				$('.save-button').prop('disabled', false);
 				unsavedChanges = true;
+
+				renderData = {
+					currentPageIndex: currentPageIndex,
+					scroll: $('#term-selection')[0] ? $('#term-selection')[0].scrollTop : 0
+				}
+
+				ReRender(true);
 			}
 			reader.readAsDataURL(file);
 		});

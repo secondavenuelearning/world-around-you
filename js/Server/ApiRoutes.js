@@ -1,7 +1,4 @@
-const path = require('path');
-const multer = require('multer');
 const crypto = require('crypto');
-
 const Settings = require('./Settings.js');
 const ValidateUser = require('./ValidateUser.js');
 const StoryDB = require('./StoryDB.js');
@@ -83,10 +80,10 @@ let apiRoutes = function(app){
 			password = req.body.password;
 
 		if(!username || username == '') {
-			return res.send('Username Error');
+			return res.status(400).send('Username Error');
 		}
 		if(!password || password == '') {
-			return res.send('Password Error');
+			return res.status(400).send('Password Error');
 		}
 
 		UserDB.getUser(username).then(function(user) {
@@ -98,13 +95,13 @@ let apiRoutes = function(app){
 				req.session.user = user;
 				req.session.save(err => {
 					if(err){
-						return res.status(500).send(err);
+						return req.error(err); // res.status(500).send(err);
 					}
 					return res.send(true);
 				});
 			}
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 
@@ -114,13 +111,13 @@ let apiRoutes = function(app){
 			password = encryptString(req.body.password, Settings.algo, Settings.key);
 
 		if(!username || username == '') {
-			return res.send('Username Error');
+			return res.status(400).send('Username Error');
 		}
 		if(!email || email == '') {
-			return res.send('Email Error');
+			return res.status(400).send('Email Error');
 		}
 		if(!password || password == '') {
-			return res.send('Password Error');
+			return res.status(400).send('Password Error');
 		}
 
 		UserDB.addUser(username, email, password).then(function(userId) {
@@ -129,15 +126,15 @@ let apiRoutes = function(app){
 				req.session.user = user;
 				req.session.save(err => {
 					if(err){
-						return res.status(500).send(err);
+						return req.error(err); // res.status(500).send(err);
 					}
 					res.redirect('/Stories');
 				});
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 
@@ -170,7 +167,7 @@ let apiRoutes = function(app){
 		let id = parseInt(req.body.id) || parseInt(req.query.id);
 
 		if(!id || id == '') {
-			return res.send('StoryId Error');
+			return res.status(400).send('StoryId Error');
 		}
 
 		StoryDB.get(id).then((story) => {
@@ -180,14 +177,14 @@ let apiRoutes = function(app){
 					req.story = story;
 					next();
 				}).catch((err) => {
-					return res.status(500).send(err);
+					return req.error(err); // res.status(500).send(err);
 				});
 			}
 			else{
-				return res.send('[PH] Invalid story id');
+				return res.status(400).send('[PH] Invalid story id');
 			}
 		}).catch((err) => {
-			res.send(err);
+			return req.error(err);
 		});
 	}
 
@@ -198,7 +195,7 @@ let apiRoutes = function(app){
 			StoryDB.getAll(unpublished).then((stories) => {
 				return res.send(stories);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.get('/api/story', (req, res) => {
@@ -209,14 +206,14 @@ let apiRoutes = function(app){
 						story.data = data;
 						return res.send(story);
 					}).catch((err) => {
-						return res.status(500).send(err);
+						return req.error(err); // res.status(500).send(err);
 					});
 				}
 				else{
 					return res.send(false);
 				}
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.get('/api/stories/:term', (req, res) => {
@@ -262,7 +259,7 @@ let apiRoutes = function(app){
 
 				return res.send(stories);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.get('/api/bookmarks', (req, res) => {
@@ -273,7 +270,7 @@ let apiRoutes = function(app){
 			StoryDB.getAll(false, req.session.user.id).then((stories) => {
 				return res.send(stories);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.get('/api/story/games', ValidateStory, (req, res) => {
@@ -282,7 +279,7 @@ let apiRoutes = function(app){
 			StoryDB.getGameData(id).then((games) => {
 				return res.send(games);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 
@@ -291,7 +288,7 @@ let apiRoutes = function(app){
 			StoryDB.add().then(function(storyId) {
 				return res.send(storyId + '');
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.post('/api/story/languages', ValidateUser, ValidateStory, (req, res) => {
@@ -411,7 +408,7 @@ let apiRoutes = function(app){
 			}).then(() => { // finish up
 				return res.send(story);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			})
 		});
 		app.post('/api/story/cover', ValidateUser, ValidateStory, (req, res) => {
@@ -426,7 +423,7 @@ let apiRoutes = function(app){
 
 				return res.send(story);
 			}).catch((err) =>{
-				res.send(err);
+				return req.error(err);
 			});
 		});
 		app.post('/api/story/metadata', ValidateUser, ValidateStory, (req, res) => {
@@ -639,7 +636,7 @@ let apiRoutes = function(app){
 			}).then(() => { // finish up
 				return res.send(story);
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 		app.post('/api/story/data', ValidateUser, ValidateStory, (req, res) => {
@@ -651,16 +648,16 @@ let apiRoutes = function(app){
 				story.data = data;
 				return res.send(story);
 			}).catch((err) =>{
-				res.send(err);
+				return req.error(err);
 			});
 		});	
 		app.post('/api/story/publish', ValidateUser, ValidateStory, (req, res) => {
 			let id = parseInt(req.body.id);
 
 			StoryDB.setVisible(id).then((result) => {
-				return res.send(story);
+				return res.send(req.story);
 			}).catch((err) =>{
-				res.send(err);
+				return req.error(err);
 			});
 		});
 		app.post('/api/story/view', ValidateStory, (req, res) => {
@@ -669,7 +666,7 @@ let apiRoutes = function(app){
 			StoryDB.addView(id).then((result) => {
 				return res.send(true);
 			}).catch((err) =>{
-				res.send(err);
+				return req.error(err);
 			});
 		});
 		app.post('/api/story/like', ValidateStory, (req, res) => {
@@ -678,7 +675,7 @@ let apiRoutes = function(app){
 			StoryDB.addLike(id).then((result) => {
 				return res.send(true);
 			}).catch((err) =>{
-				res.send(err);
+				return req.error(err);
 			});
 		});
 		app.post('/api/story/game', ValidateUser, ValidateStory, (req, res) => {
@@ -690,7 +687,7 @@ let apiRoutes = function(app){
 			StoryDB.addGamedata(id, gameId, writtenlanguageId, signlanguageId).then((gamedataId) => {
 				return res.send(gamedataId + '');
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});		
 		app.post('/api/story/gamedata', ValidateUser, (req, res) => {
@@ -704,7 +701,7 @@ let apiRoutes = function(app){
 			StoryDB.setGameData(id, data).then((gamedata) => {
 				return res.send(true);
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		});
 
@@ -715,35 +712,35 @@ let apiRoutes = function(app){
 		WrittenLanguageDB.getAll().then((languages) => {
 			return res.send(languages);
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.get('/api/signlanguages', (req, res) => {
 		SignLanguageDB.getAll().then((languages) => {
 			return res.send(languages);
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.get('/api/genres', (req, res) => {
 		GenreDB.getAll().then((genres) => {
 			return res.send(genres);
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.get('/api/tags', (req, res) => {
 		TagDB.getAll().then((tags) => {
 			return res.send(tags);
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.get('/api/games', (req, res) => {
 		GameDB.getAll().then((tags) => {
 			return res.send(tags);
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.get('/api/game/data', (req, res) => {
@@ -760,13 +757,13 @@ let apiRoutes = function(app){
 					if(gamedata.data) gamedata.data = JSON.parse(gamedata.data);
 					return res.send(gamedata);
 				}).catch((err) => {
-					return res.status(500).send(err);
+					return req.error(err); // res.status(500).send(err);
 				});
 			}).catch((err) => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch((err) => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 
@@ -788,10 +785,10 @@ let apiRoutes = function(app){
 			WrittenLanguageDB.add(language).then((languageId) => {
 				return res.send(languageId + '');
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.post('/api/signlanguage', ValidateUser, (req, res) => {
@@ -812,10 +809,10 @@ let apiRoutes = function(app){
 			SignLanguageDB.add(language).then((languageId) => {
 				return res.send(languageId + '');
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.post('/api/genre', ValidateUser, (req, res) => {
@@ -847,13 +844,13 @@ let apiRoutes = function(app){
 				GenreDB.add(name, _language.id).then((genreId) => {
 					return res.send(genreId + '');
 				}).catch(err => {
-					return res.status(500).send(err);
+					return req.error(err); // res.status(500).send(err);
 				});
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.post('/api/tag', ValidateUser, (req, res) => {
@@ -885,13 +882,13 @@ let apiRoutes = function(app){
 				TagDB.add(name, _language.id).then((tagId) => {
 					return res.send(tagId + '');
 				}).catch(err => {
-					return res.status(500).send(err);
+					return req.error(err); // res.status(500).send(err);
 				});
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
 	app.post('/api/game', ValidateUser, (req, res) => {
@@ -912,69 +909,12 @@ let apiRoutes = function(app){
 			GameDB.add(name).then((nameId) => {
 				return res.send(nameId + '');
 			}).catch(err => {
-				return res.status(500).send(err);
+				return req.error(err); // res.status(500).send(err);
 			});
 		}).catch(err => {
-			return res.status(500).send(err);
+			return req.error(err); // res.status(500).send(err);
 		});
 	});
-
-// ******************************************************
-// File Upload
-// ******************************************************
-	// Set Storage Engine
-	const storage = multer.diskStorage({
-		destination: 'uploads',
-		filename: function(req, file, cb) {
-			cb(null, req.params.fileName + path.extname(file.originalname));
-		}
-	});
-
-	// Init upload
-	const upload = multer({
-		storage: storage,
-		limits: {fileSize:10000000000}
-		// fileFilter: function(req, file, cb) {
-		// 	checkFileType(file, cb);
-		// }
-	}).single('file');
-
-	// Check File Type
-	function checkFileType(file, cb) {
-		// Allowed ext
-		const filetypes = /jpeg|jpg|png|gif|mp4|mp3/;
-		// Check ext
-		const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-		// Check mime
-		const mimetype = filetypes.test(file.mimetype); 
-
-		if(mimetype && extname) {
-			return cb(null, true);
-		}
-		else {
-			cb('Error: Videos and Images Only!');
-		}
-	}
-
-	app.post('/api/file/:fileName', ValidateUser, (req, res) => {
-		upload(req, res, (err) => {
-			if(err) {
-				res.send(err);
-			}
-			else {
-				console.log(req.file);
-				if(req.file == undefined) {
-					res.send({
-						msg: 'Error: No File Selected!'
-					});
-				}
-				else {
-					res.send(`${req.file.path}`);
-				}
-			}
-		});
-	});
-
 }
 
 module.exports = apiRoutes;

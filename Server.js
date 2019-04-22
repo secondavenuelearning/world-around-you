@@ -5,10 +5,12 @@ const session = require('express-session');
 const LokiStore = require('connect-loki')(session);
 const bodyParser = require('body-parser');
 const _ = require('underscore');
+const compression = require('compression');
 
 const Settings = require('./js/Server/Settings.js');
 const ValidateUser = require('./js/Server/ValidateUser.js');
 const ApiRoutes = require('./js/Server/ApiRoutes.js');
+const UploadRoutes = require('./js/Server/ApiRoutes_Upload.js');
 
 
 let PageHTML = fs.readFileSync('html/Server/Page.html', 'utf8');
@@ -96,8 +98,9 @@ const app = express();
 // Set the middleware for the app
 app.use(bodyParser.json({limit:"50mb"})); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended:true, limit:"50mb" })); // for parsing application/x-www-form-urlencoded
+app.use(compression());
 app.use(express.static(__dirname));
-app.use('/static', express.static(__dirname + '/js'));
+// app.use('/static', express.static(__dirname + '/js'));
 
 // Create the session store
 CreateSessions(app, {});
@@ -105,10 +108,29 @@ CreateSessions(app, {});
 // Middleware for writing to the access log
 app.use((req, res, next) => { 
 	// add to the access log
-	if(!req.url.match(/.js|.css|.html|.png|.jpg/)){
+	if(!req.url.match(/.js|.css|.html|.png|.jpg|.mp4/)){
 		access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
 	}
+	next();
+});
 
+// Middleware for logging and sending errors
+app.use((req, res, next) => { 
+	req.error = function(logMessage, status, message){
+		error_log = WriteLog(error_log, `Error Log (${new Date()}): ${req.method} | ${req.url}\n${logMessage || 'unspecified'}\n\n`);
+		if(status === false) return;
+		res.status(status || 500).send(message || 'Something went wrong. Please try again later.');
+	}
+	try{
+		next();
+	}
+	catch(err){
+		req.error(err);
+	}
+});
+
+// Middelware to set browser cookies
+app.use((req, res, next) => {
 	// set a browser cookie
 	if(req.session.user){
 		res.cookie('way.user', req.session.user, { maxAge: 60 * 60 * 1000, httpOnly: false});
@@ -116,7 +138,6 @@ app.use((req, res, next) => {
 	else{
 		res.clearCookie('way.user');
 	}
-
 	next();
 });
 
@@ -191,6 +212,7 @@ app.use((req, res, next) => {
 
 // Adding the Api Routes to the site
 ApiRoutes(app);
+UploadRoutes(app);
 
 
 
@@ -335,6 +357,7 @@ function app_post_api_game_part2(req,res,name) {
 		res.send(err);
 	});
 };
+
 
 // Start the server
 app.listen(Settings.port,function(){
