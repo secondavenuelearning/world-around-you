@@ -50,51 +50,22 @@ let uploadRoutes = function(app){
 					req.error('upload error', 405, 'no file selected.');
 				}
 				else {
-					console.log(req.file.mimetype);
 					if(req.file.mimetype.match(/video/gi)){
-						new Promise(function(resolve, reject){
-							console.log('converting video 1...');
+						// get the paths to the original file and the tempoary file
+						let originalPath = `${__dirname}/../../${req.file.path}`,
+							tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
 
-							let originalPath = `${__dirname}/../../${req.file.path}`;
-							let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
-
-							ffmpeg(originalPath).noAudio()
-							.on('error', function(err) {
-								console.log('An error occurred: ' + err.message);
-							})
-							.on('end', function() {
-								console.log('Processing finished !');
-								fs.copyFileSync(tempPath, originalPath);
-								fs.unlinkSync(tempPath);
-							})
-							.save(tempPath);
-
-							// new ffmpeg(originalPath, function (err, video) {
-							// 	if(err)	return req.error(err, false);
-
-							// 	console.log('converting video 2...');
-							// 	if(!fs.existsSync(`${__dirname}/../../uploads/temp`)){
-							// 		fs.mkdirSync(`${__dirname}/../../uploads/temp`);
-							// 	}
-
-							// 	let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
-							// 	if(fs.existsSync(tempPath)){
-							// 		console.log('deleteing old temp video');
-							// 		fs.unlinkSync(tempPath);
-							// 	}
-
-							// 	video.setDisableAudio()
-							// 	// .setVideoFormat('mpeg4')
-							// 	.save(tempPath, function (_err, file) {
-							// 		console.log('file saved', file)
-							// 		if(err)	return req.error(err, false);
-
-							// 		fs.copyFileSync(tempPath, originalPath);
-							// 		fs.unlinkSync(tempPath);
-							// 		resolve();
-							// 	});
-							// });
-						});
+						// begin converting the new file to an audio-less file
+						ffmpeg(originalPath).noAudio()
+						.on('error', function(err) {
+							req.error(err, false);
+						})
+						.on('end', function() {
+							// move the newly created file to the correct place and delete the temp file
+							fs.copyFileSync(tempPath, originalPath);
+							fs.unlinkSync(tempPath);
+						})
+						.save(tempPath);
 					}
 
 					return res.send(`${req.file.path}`);
