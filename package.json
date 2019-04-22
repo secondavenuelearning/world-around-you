@@ -18,16 +18,18 @@
   "homepage": "https://github.com/Slatterychase/world-around-you#readme",
   "dependencies": {
     "babel-core": "^6.26.3",
+    "compression": "^1.7.4",
     "connect-loki": "^1.1.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "ffmpeg": "0.0.4",
     "here": "0.0.2",
-    "jspm": "^0.16.53",
+    "jspm": "^0.16.54",
     "mariadb": "^2.0.3",
     "moment": "^2.24.0",
-    "systemjs-builder": "^0.16.13",
     "multer": "^1.4.1",
-    "tar": "^4.0.0",
+    "systemjs-builder": "^0.16.13",
+    "tar": "^4.4.8",
     "underscore": "^1.9.1",
     "urldecode": "^1.0.1",
     "urlencode": "^1.1.0"
@@ -35,6 +37,7 @@
   "jspm": {
     "dependencies": {
       "css": "github:systemjs/plugin-css@^0.1.37",
+      "tar": "npm:tar@4.4.2",
       "text": "github:systemjs/plugin-text@^0.0.11",
       "underscore": "npm:underscore@^1.9.1"
     },
