@@ -50,10 +50,12 @@ let uploadRoutes = function(app){
 				}
 				else {
 					if(req.file.mimetype.match(/video/gi)){
+						console.log('converting video 1...');
 						let originalPath = `${__dirname}/../../${req.file.path}`;
 						new ffmpeg(originalPath, function (err, video) {
 							if(err)	return req.error(err, false);
 
+							console.log('converting video 2...');
 							if(!fs.existsSync(`${__dirname}/../../uploads/temp`)){
 								fs.mkdirSync(`${__dirname}/../../uploads/temp`);
 							}
@@ -66,6 +68,7 @@ let uploadRoutes = function(app){
 							video.setDisableAudio()
 							// .setVideoFormat('mpeg4')
 							.save(tempPath, function (_err, file) {
+								console.log('file saved')
 								if(err)	return req.error(err, false);
 
 								fs.copyFileSync(tempPath, originalPath);
