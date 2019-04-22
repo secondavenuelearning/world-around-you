@@ -23,6 +23,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "ffmpeg": "0.0.4",
+    "fluent-ffmpeg": "^2.1.2",
     "here": "0.0.2",
     "jspm": "^0.16.54",
     "mariadb": "^2.0.3",

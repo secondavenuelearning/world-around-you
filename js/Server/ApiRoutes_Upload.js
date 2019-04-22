@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const ValidateUser = require('./ValidateUser.js');
-const ffmpeg = require('ffmpeg');
+// const ffmpeg = require('ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
 
 let uploadRoutes = function(app){
 	// Set Storage Engine
@@ -53,32 +54,46 @@ let uploadRoutes = function(app){
 					if(req.file.mimetype.match(/video/gi)){
 						new Promise(function(resolve, reject){
 							console.log('converting video 1...');
+
 							let originalPath = `${__dirname}/../../${req.file.path}`;
-							new ffmpeg(originalPath, function (err, video) {
-								if(err)	return req.error(err, false);
+							let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
 
-								console.log('converting video 2...');
-								if(!fs.existsSync(`${__dirname}/../../uploads/temp`)){
-									fs.mkdirSync(`${__dirname}/../../uploads/temp`);
-								}
+							ffmpeg(originalPath).noAudio()
+							.on('error', function(err) {
+								console.log('An error occurred: ' + err.message);
+							})
+							.on('end', function() {
+								console.log('Processing finished !');
+								fs.copyFileSync(tempPath, originalPath);
+								fs.unlinkSync(tempPath);
+							})
+							.save(tempPath);
 
-								let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
-								if(fs.existsSync(tempPath)){
-									console.log('deleteing old temp video');
-									fs.unlinkSync(tempPath);
-								}
+							// new ffmpeg(originalPath, function (err, video) {
+							// 	if(err)	return req.error(err, false);
 
-								video.setDisableAudio()
-								// .setVideoFormat('mpeg4')
-								.save(tempPath, function (_err, file) {
-									console.log('file saved', file)
-									if(err)	return req.error(err, false);
+							// 	console.log('converting video 2...');
+							// 	if(!fs.existsSync(`${__dirname}/../../uploads/temp`)){
+							// 		fs.mkdirSync(`${__dirname}/../../uploads/temp`);
+							// 	}
 
-									fs.copyFileSync(tempPath, originalPath);
-									fs.unlinkSync(tempPath);
-									resolve();
-								});
-							});
+							// 	let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
+							// 	if(fs.existsSync(tempPath)){
+							// 		console.log('deleteing old temp video');
+							// 		fs.unlinkSync(tempPath);
+							// 	}
+
+							// 	video.setDisableAudio()
+							// 	// .setVideoFormat('mpeg4')
+							// 	.save(tempPath, function (_err, file) {
+							// 		console.log('file saved', file)
+							// 		if(err)	return req.error(err, false);
+
+							// 		fs.copyFileSync(tempPath, originalPath);
+							// 		fs.unlinkSync(tempPath);
+							// 		resolve();
+							// 	});
+							// });
 						});
 					}
 
