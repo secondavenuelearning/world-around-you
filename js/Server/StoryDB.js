@@ -8,7 +8,7 @@ const pool = mdb.createPool({
 	host: Settings.dbHost,
 	user: Settings.dbUser, 
 	password: Settings.dbPassword, 
-	database: Settings.dbName ,
+	database: Settings.dbName,
 	connectionLimit: Settings.dbPoolConnectionLimit
 });
 
@@ -254,10 +254,10 @@ function AddStoriesMetadata (storyResults){
 					conn.end().then(() => {
 						let storiesArray = Object.values(stories);
 
-				        // sort stories by data created
-				        storiesArray = storiesArray.sort((a, b) => {
-				            return a.datecreated < b.datecreated ? 1 : a.datecreated > b.datecreated ? -1 : 0;
-				        });
+						// sort stories by data created
+						storiesArray = storiesArray.sort((a, b) => {
+							return a.datecreated < b.datecreated ? 1 : a.datecreated > b.datecreated ? -1 : 0;
+						});
 
 						return resolve(storiesArray);
 					});
@@ -277,51 +277,31 @@ function AddStoriesMetadata (storyResults){
 
 	});
 }
+
 function AddToAssociationTable(storyId, otherId, table, otherIdField){
 	return new Promise(function(resolve,reject) {
+		let query = `INSERT INTO ${table} (storyId, ${otherIdField}) VALUES (?, ?)`;
 
-		pool.getConnection().then(conn => {
-
-			let query = `INSERT INTO ${table} (storyId, ${otherIdField}) VALUES (?, ?)`;
-
-			conn.query(query, [storyId, otherId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch((err) => {
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
+		pool.query(query, [storyId, otherId]).then((result) => {
+			return resolve(result.insertId);
 		}).catch((err) => {
 			return reject(err);
 		});
-
 	});	
 }
+
 function DeleteFromAssociationTable(storyId, otherId, table, otherIdField){
 	return new Promise((resolve, reject) => {
+		let query = `DELETE FROM ${table} WHERE storyId = ? AND ${otherIdField} = ?`;
 
-		pool.getConnection().then(conn => {
-
-			let query = `DELETE FROM ${table} WHERE storyId = ? AND ${otherIdField} = ?`;
-
-			conn.query(query, [storyId, otherId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(true);
-				});
-			}).catch((err) => {
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
+		pool.query(query, [storyId, otherId]).then((result) => {
+			return resolve(true);
 		}).catch((err) => {
 			return reject(err);
 		});
 	});	
 }
+
 function SetTitleOrDescription(storyId, writtenlanguageId, name, table){
 	return new Promise((resolve, reject) => {
 
@@ -370,18 +350,10 @@ function SetTitleOrDescription(storyId, writtenlanguageId, name, table){
 
 function AddViewOrLike(storyId, table){
 	return new Promise((resolve, reject) => {
-		pool.getConnection().then(conn => {
-			let query = `INSERT INTO ${table} (storyId) VALUES (?)`;
+		let query = `INSERT INTO ${table} (storyId) VALUES (?)`;
 
-			conn.query(query, [storyId]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result.insertId);
-				});
-			}).catch((err) => {
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
+		pool.query(query, [storyId]).then((result) => {
+			return resolve(result.insertId);
 		}).catch((err) => {
 			return reject(err);
 		});
@@ -394,17 +366,8 @@ function StoryDB(){
 // Adds
 	StoryDB.prototype.add = function() {
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
-				conn.query('INSERT INTO story (id) VALUES (NULL)').then((result) => {
-					conn.end().then(() => {
-						return resolve(result.insertId);
-					});
-				}).catch((err) => {
-					//handle error
-					conn.end().then(() => {
-						return reject(err);
-					});
-				});
+			pool.query('INSERT INTO story (id) VALUES (NULL)').then((result) => {
+				return resolve(result.insertId);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -433,16 +396,10 @@ function StoryDB(){
 	}
 	StoryDB.prototype.addGamedata = function(storyId, gameId, writtenlanguageId, signlanguageId){
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
-				let query = `INSERT INTO gamedata (storyId, gameId, writtenlanguageId, signlanguageId) VALUES (?, ?, ?, ?)`;
-				
-				conn.query(query, [storyId, gameId, writtenlanguageId, signlanguageId]).then(result => {
-					conn.end().then(() => {
-						return resolve(result.insertId);
-					});
-				}).catch((err) => {
-					return reject(err);
-				});
+			let query = `INSERT INTO gamedata (storyId, gameId, writtenlanguageId, signlanguageId) VALUES (?, ?, ?, ?)`;
+
+			pool.query(query, [storyId, gameId, writtenlanguageId, signlanguageId]).then(result => {
+				return resolve(result.insertId);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -475,24 +432,15 @@ function StoryDB(){
 // Get
 	StoryDB.prototype.get = function(storyId, userId){
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
+			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
+			storyQuery += ' WHERE id = ?';
 
-				let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
-				if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
-				storyQuery += ' WHERE id = ?';
-
-				conn.query(storyQuery, userId ? [userId, storyId] : [storyId]).then(storyResults => {
-					conn.end().then(() => {
-						AddStoriesMetadata(storyResults).then((stories) => {
-							return resolve(stories[0]);
-						}).catch((err) => {
-							return reject(err);
-						});
-					});
+			pool.query(storyQuery, userId ? [userId, storyId] : [storyId]).then(storyResults => {
+				AddStoriesMetadata(storyResults).then((stories) => {
+					return resolve(stories[0]);
 				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
+					return reject(err);
 				});
 			}).catch((err) => {
 				return reject(err);
@@ -501,25 +449,16 @@ function StoryDB(){
 	}
 	StoryDB.prototype.getAll = function(includeUnpublished, userId){
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
+			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
+			if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
+			storyQuery += ' ORDER BY story.id DESC';
 
-				let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
-				if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
-				if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
-				storyQuery += ' ORDER BY story.id DESC';
-
-				conn.query(storyQuery, [userId]).then(storyResults => {
-					conn.end().then(() => {
-						AddStoriesMetadata(storyResults).then((stories) => {
-							return resolve(stories);
-						}).catch((err) => {
-							return reject(err);
-						});
-					});
+			pool.query(storyQuery, [userId]).then(storyResults => {
+				AddStoriesMetadata(storyResults).then((stories) => {
+					return resolve(stories);
 				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
+					return reject(err);
 				});
 			}).catch((err) => {
 				return reject(err);
@@ -528,15 +467,9 @@ function StoryDB(){
 	}
 	StoryDB.prototype.getData = function(storyId){
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
-				let query = "SELECT data from story WHERE id = ?";
-				conn.query(query, [storyId]).then(result => {
-					conn.end().then(() => {
-						return resolve(result[0] && result[0].data ? JSON.parse(result[0].data) : null);
-					});
-				}).catch((err) => {
-					return reject(err);
-				});
+			let query = "SELECT data from story WHERE id = ?";
+			pool.query(query, [storyId]).then(result => {
+				return resolve(result[0] && result[0].data ? JSON.parse(result[0].data) : null);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -544,23 +477,16 @@ function StoryDB(){
 	}
 	StoryDB.prototype.getGameData = function(storyId){
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
-				let query = "SELECT * from gamedata WHERE storyId = ?";
-
-				conn.query(query, [storyId]).then(result => {
-					conn.end().then(() => {
-						let games = [];
-						for(var i in result){
-							let game = result[i];
-							game.data = game.data ? JSON.parse(game.data) : null;
-							games.push(game);
-						}
-						
-						return resolve(games);
-					});
-				}).catch((err) => {
-					return reject(err);
-				});
+			let query = "SELECT * from gamedata WHERE storyId = ?";
+			pool.query(query, [storyId]).then(result => {
+				let games = [];
+				for(var i in result){
+					let game = result[i];
+					game.data = game.data ? JSON.parse(game.data) : null;
+					games.push(game);
+				}
+				
+				return resolve(games);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -572,20 +498,9 @@ function StoryDB(){
 		return new Promise((resolve, reject) => {
 			coverImage = coverImage || null;
 
-			pool.getConnection().then(conn => {
-
-				let query = 'UPDATE story SET author = ?, coverimage = ? WHERE id = ?';
-
-				conn.query(query, [author, coverImage, id]).then((result) => {
-					conn.end().then(() => {
-						return resolve(result.affectedRows);
-					});
-				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
-				});
-
+			let query = 'UPDATE story SET author = ?, coverimage = ? WHERE id = ?';
+			pool.query(query, [author, coverImage, id]).then((result) => {
+				return resolve(result.affectedRows);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -596,26 +511,14 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setData = function(id, data) {
 		return new Promise((resolve, reject) => {
+			data = typeof data == 'string' ? data : JSON.stringify(data);
 
-			pool.getConnection().then(conn => {
-				data = typeof data == 'string' ? data : JSON.stringify(data);
-
-				let query = 'UPDATE story SET data = ?, visible = 0 WHERE id = ?';
-
-				conn.query(query, [data, id]).then((result) => {
-					conn.end().then(() => {
-						return resolve(result.affectedRows);
-					});
-				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
-				});
-
+			let query = 'UPDATE story SET data = ?, visible = 0 WHERE id = ?';
+			pool.query(query, [data, id]).then((result) => {
+				return resolve(result.affectedRows);
 			}).catch((err) => {
 				return reject(err);
 			});
-
 		});
 	}
 	StoryDB.prototype.setTitle = function(storyId, writtenlanguageId, name) {
@@ -623,20 +526,9 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setVisible = function(storyId) {
 		return new Promise((resolve, reject) => {
-			pool.getConnection().then(conn => {
-
-				let query = 'UPDATE story SET visible = 1 WHERE id = ?';
-
-				conn.query(query, [storyId]).then((result) => {
-					conn.end().then(() => {
-						return resolve(result.affectedRows);
-					});
-				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
-				});
-
+			let query = 'UPDATE story SET visible = 1 WHERE id = ?';
+			pool.query(query, [storyId]).then((result) => {
+				return resolve(result.affectedRows);
 			}).catch((err) => {
 				return reject(err);
 			});
@@ -644,25 +536,12 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setGameData = function(gamedataId, data){
 		return new Promise((resolve, reject) => {
-
-			pool.getConnection().then(conn => {
-
-				let query = 'UPDATE gamedata SET data = ? WHERE id = ?';
-
-				conn.query(query, [data, gamedataId]).then((result) => {
-					conn.end().then(() => {
-						return resolve(result.affectedRows);
-					});
-				}).catch((err) => {
-					conn.end().then(() => {
-						return reject(err);
-					});
-				});
-
+			let query = 'UPDATE gamedata SET data = ? WHERE id = ?';
+			pool.query(query, [data, gamedataId]).then((result) => {
+				return resolve(result.affectedRows);
 			}).catch((err) => {
 				return reject(err);
 			});
-
 		});
 	}
 

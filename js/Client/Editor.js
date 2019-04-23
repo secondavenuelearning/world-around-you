@@ -1183,7 +1183,8 @@ function UploadFile(file, fileName){
 	        enctype: 'multipart/form-data',
 	        processData: false,  // Important!
 	        contentType: false,
-			data: fd
+			data: fd,
+			cache: false,
 		}).done((result) =>{
 			resolve(result.replace(/\\/, '/'));
 		}).fail((err) => {

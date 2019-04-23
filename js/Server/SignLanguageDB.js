@@ -5,7 +5,7 @@ const pool = mdb.createPool({
 	host: Settings.dbHost,
 	user: Settings.dbUser, 
 	password: Settings.dbPassword, 
-	database: Settings.dbName ,
+	database: Settings.dbName,
 	connectionLimit: Settings.dbPoolConnectionLimit
 });
 
@@ -13,45 +13,22 @@ function SignLanguageDB() {
 }
 
 SignLanguageDB.prototype.add = function(name) {
-    return new Promise(function(resolve, reject) {
+	return new Promise(function(resolve, reject) {
+		let query = 'INSERT INTO signlanguage (name) VALUES (?)';
 
-		pool.getConnection().then(conn => {
-
-			var query = 'INSERT INTO signlanguage (name) VALUES (?)';
-
-		    conn.query(query, [name.toLowerCase()]).then((result) => {
-				conn.end().then(() => {
-					resolve(result.insertId);
-					return;
-				});
-		    }).catch(err => {
-				conn.end().then(() => {
-					reject(err);
-					return;
-				});
-		    });
+		pool.query(query, [name.toLowerCase()]).then((result) => {
+			return resolve(result.insertId);
 		}).catch(err => {
-		    reject(err);
-		    return;
+			return reject(err);
 		});
-
-    });
+	});
 }
 SignLanguageDB.prototype.get = function(name) {
 	return new Promise((resolve, reject) => {
-		pool.getConnection().then(conn => {
-			var query = 'SELECT * FROM signlanguage WHERE name=?';
+		let query = 'SELECT * FROM signlanguage WHERE name=?';
 
-			conn.query(query, [name.toLowerCase()]).then((result) => {
-				conn.end().then(() => {
-					return resolve(result[0]);
-				});
-			}).catch(err => {
-				conn.end().then(() => {
-					return reject(err);
-				});
-			});
-
+		pool.query(query, [name.toLowerCase()]).then((result) => {
+			return resolve(result[0]);
 		}).catch(err => {
 			return reject(err);
 		});
@@ -59,31 +36,18 @@ SignLanguageDB.prototype.get = function(name) {
 }
 SignLanguageDB.prototype.getAll = function(){
 	return new Promise((resolve, reject) => {
-		pool.getConnection().then(conn => {
-			var query = 'SELECT * from signlanguage';
+		let query = 'SELECT * from signlanguage';
 
-			conn.query(query).then(result => {
-				var signlanguages = {};
-				for(var i = 0; i < result.length; i++){
-					signlanguages[result[i].id] = result[i];
-				}
-				conn.end().then(() => {
-					resolve(signlanguages);
-				});
-			}).catch(err => {
-				conn.end().then(() => {
-					reject(err);
-					return;
-				});
-			});
-
+		pool.query(query).then(result => {
+			var signlanguages = {};
+			for(var i = 0; i < result.length; i++){
+				signlanguages[result[i].id] = result[i];
+			}
+			
+			return resolve(signlanguages);
 		}).catch(err => {
-			conn.end().then(() => {
-				reject(err);
-				return;
-			});
+			return reject(err);
 		});
-
 	});
 }
 
