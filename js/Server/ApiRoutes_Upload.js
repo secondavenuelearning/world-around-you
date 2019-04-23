@@ -2,7 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const multer = require('multer');
 const ValidateUser = require('./ValidateUser.js');
-const ffmpeg = require('ffmpeg');
+// const ffmpeg = require('ffmpeg');
+const ffmpeg = require('fluent-ffmpeg');
 
 let uploadRoutes = function(app){
 	// Set Storage Engine
@@ -50,29 +51,21 @@ let uploadRoutes = function(app){
 				}
 				else {
 					if(req.file.mimetype.match(/video/gi)){
-						let originalPath = `${__dirname}/../../${req.file.path}`;
-						new ffmpeg(originalPath, function (err, video) {
-							if(err)	return req.error(err, false);
+						// get the paths to the original file and the tempoary file
+						let originalPath = `${__dirname}/../../${req.file.path}`,
+							tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
 
-							if(!fs.existsSync(`${__dirname}/../../uploads/temp`)){
-								fs.mkdirSync(`${__dirname}/../../uploads/temp`);
-							}
-
-							let tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
-							if(fs.existsSync(tempPath)){
-								fs.unlinkSync(tempPath);
-							}
-
-							video.setDisableAudio()
-							// .setVideoFormat('mpeg4')
-							.save(tempPath, function (_err, file) {
-								if(err)	return req.error(err, false);
-
-								fs.copyFileSync(tempPath, originalPath);
-								fs.unlinkSync(tempPath);
-
-							});
-						});
+						// begin converting the new file to an audio-less file
+						ffmpeg(originalPath).noAudio()
+						.on('error', function(err) {
+							req.error(err, false);
+						})
+						.on('end', function() {
+							// move the newly created file to the correct place and delete the temp file
+							fs.copyFileSync(tempPath, originalPath);
+							fs.unlinkSync(tempPath);
+						})
+						.save(tempPath);
 					}
 
 					return res.send(`${req.file.path}`);
