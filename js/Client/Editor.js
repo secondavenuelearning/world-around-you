@@ -628,7 +628,7 @@ function renderPagesPage(renderData){
 							$('#editor-content').html('');
 
 							// setting this delay to unload the page of any videos or images
-							setTimeout(ReRender, 200);
+							setTimeout(ReRender, 500);
 						}
 						else{
 							alert('[PH] something went wrong.')
@@ -708,6 +708,9 @@ function renderPagesPage(renderData){
 					$('.add-page-button')[0].scrollIntoView();
 			}
 			else{
+				if($('#pages-preview')[0])
+					$('#pages-preview')[0].scrollTo(0, renderData && renderData.scroll ? renderData.scroll : 0);
+
 				if($('.page-preview.active')[0])
 					$('.page-preview.active')[0].scrollIntoViewIfNeeded();
 			}
@@ -930,6 +933,21 @@ function renderPagesPage(renderData){
 				unsavedChanges = true;
 				RenderPageContent();
 			});
+		});
+
+
+		$('.term-delete-button').on('click', (evt) => {
+			let term = $(evt.currentTarget).attr('term-name');
+			delete data[currentPageIndex].glossary[currentWrittenLanguage][term];
+
+			if(currentGlossaryTerm == term){
+				_.each(data[currentPageIndex].glossary[currentWrittenLanguage], (_term, _termName) => {
+					currentGlossaryTerm = _termName;
+				});
+			}
+
+			unsavedChanges = true;
+			RenderPageContent();
 		});
 
 

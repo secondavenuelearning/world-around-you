@@ -7,7 +7,9 @@
 		</select>
 	</div>
 	<div id="video-container">
-		<video id="video-player" autoplay muted loop controls src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
+		<% if(page.video && page.video[currentSignLanguage]){ %>
+			<video id="video-player" autoplay muted loop controls src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
+		<% } %>
 		<div id="video-input-container" class="upload-input-container">
 			<input id="video-input" class="upload-input" type="file" name="coverimage" accept="video/*">
 			<button id="video-button" class="upload-button">Upload video</button>

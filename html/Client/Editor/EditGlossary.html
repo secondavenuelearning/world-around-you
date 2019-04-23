@@ -54,14 +54,16 @@
 				</div>
 				<div id="glossary-video-container" class="two-thirds">
 					<div id="glossary-video-player-container">
-						<video id="glossary-video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
-						<div id="glossary-video-controller">
-							<div id="track"></div>
-							<div id="selected-track"></div>
-							<% var termVideo = currentGlossaryTermData.video && currentGlossaryTermData.video[currentSignLanguage] ? currentGlossaryTermData.video[currentSignLanguage] : {}; %>
-							<div id="start-knob" class="video-knob" knob-type="start"><div class="knob-time" style="display: none;"><%- termVideo.start ? termVideo.start + 's' : 'n/a' %></div></div>
-							<div id="end-knob" class="video-knob" knob-type="end"><div class="knob-time" style="display: none;"><%- termVideo.end ? termVideo.end + 's' : 'n/a' %></div></div>
-						</div>
+						<% if(page.video && page.video[currentSignLanguage]){ %>
+							<video id="glossary-video-player" autoplay muted loop src="<%- page.video ? page.video[currentSignLanguage] : '' %>"></video>
+							<div id="glossary-video-controller">
+								<div id="track"></div>
+								<div id="selected-track"></div>
+								<% var termVideo = currentGlossaryTermData.video && currentGlossaryTermData.video[currentSignLanguage] ? currentGlossaryTermData.video[currentSignLanguage] : {}; %>
+								<div id="start-knob" class="video-knob" knob-type="start"><div class="knob-time" style="display: none;"><%- termVideo.start ? termVideo.start + 's' : 'n/a' %></div></div>
+								<div id="end-knob" class="video-knob" knob-type="end"><div class="knob-time" style="display: none;"><%- termVideo.end ? termVideo.end + 's' : 'n/a' %></div></div>
+							</div>
+						<% } %>
 					</div>
 				</div>
 			<% } %>
