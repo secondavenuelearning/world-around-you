@@ -655,6 +655,9 @@ function renderPagesPage(renderData){
 			if(typeof renderData.currentPageIndex == 'number')
 				ActivatePage($('.page-preview')[renderData.currentPageIndex]);
 		}
+		else{
+			ActivatePage($('.page-preview')[data.length - 1]);
+		}
 
 
 		if($('#pages-preview')[0])
