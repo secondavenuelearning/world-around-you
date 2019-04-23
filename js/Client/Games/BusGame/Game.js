@@ -1,31 +1,38 @@
 import _ from 'underscore';
-import html from 'html/Client/Games/BusGame/Win.html!text';
-import gameHtml from 'html/Client/Games/BusGame/Game.html!text';
+import html from 'html/Client/Games/BusGame/Win.html!text'; //win screen html
+import gameHtml from 'html/Client/Games/BusGame/Game.html!text'; //game itself html
 
-export default { Start, GetImagesFromFolder, Animate}
+export default { Start, GetImagesFromFolder, Animate} //export functions for use outside of this script
 
 /* ----------------------- Global Variables ----------------------- */
+//html template and its data object
 var template = _.template(gameHtml);
 var templateData = {};
 
+//global story data accessor
 var storyData;
-var score = 0;
-var lastRoundScore = 0;
-var firstClick = false;
 
-var firstSelected;
-var secondSelected;
-var totalMatches;
-var checkImages;
-var blank;
-var termList = []; //hard values for testing
-var termMap = {};
+//language info
 var signLang;
 var writtenLang;
 
-var roundOrder;
+//scoring
+var score = 0;
+var lastRoundScore = 0;
+
+var totalMatches;
 var roundTotalMatches = 0;
 
+//clicking window mechanic
+var firstClick = false;
+var firstSelected; //first object lcicked that is proper
+var secondSelected; //second object clicke dthat is proper
+
+//round information
+var termList = []; //list of terms
+var termMap = {}; //terms mapped to the pages they are from in the story data
+
+var roundOrder; //order in which terms will be broken up every round (ie 3, 3, 2, 2 if we have 10 terms)
 var round = [
     //round data will be structured as such:
 
@@ -34,19 +41,13 @@ var round = [
     //  },
     // --repeats 2x per term
     // --once for each mediaType ("vid" or "txt")
+    
     // >>>Data removed from this array once parsed into html objects
 ];
 
-var activeAnimations = [];
-var animTags = [
-    //anim tags structure:
-
-    //  {
-    //     [id]:framesArray,
-    //     [id]:framesArray
-    //  }
-    // --repeats
-];
+//animation
+var checkImages;
+var activeAnimations = []; //used for moving anims in confjunction with round change logic
 var images = {
     Cars: {
         FacingRight: [],
@@ -75,8 +76,7 @@ var gameState = state.Playing;
 
 /* ----------------------- Constructor ----------------------- */
 export function Start(game) {
-    //resets all data
-        //clear data of this script
+    //resets all data - just in case returning tot he game from title after backing out of the game
     storyData = null;
     score = 0;
     firstClick = false;
@@ -102,15 +102,17 @@ export function Start(game) {
     roundorder = null;
     round = [];
     
-    console.log(game);
-    
     //save story data to be globally acessable
     storyData = game.story.data;
-    console.log(storyData);
+    
+    //get selected languages
     signLang = game.signLanguage;
     writtenLang = game.writtenLanguage;
+    
+    //get list of terms
     termList = game.data.terms.slice(0);
-
+    
+    //minor cleanup
     if (!('remove' in Element.prototype)) {
         Element.prototype.remove = function () {
             if (this.parentNode) {
@@ -119,16 +121,13 @@ export function Start(game) {
         };
     }
 
-    
-    roundTotalMatches = 0;
 
-
-    //define how many matches the user will each round
-    roundOrder = createCountList(termList);
+    //define how many matches the user will need each round
+    roundOrder = createCountList(termList.length);
     totalMatches = (termList.length); //number between 0 and 10
 
-    //figure out hwre each term is in the story data
-    let terms = JSON.parse(JSON.stringify(game.data.terms));
+    //figure out where each term is in the story data
+    let terms = JSON.parse(JSON.stringify(game.data.terms)); //list of terms
     termMap = MapTermsToPages(terms);
 
     //add score area to header
@@ -139,7 +138,7 @@ export function Start(game) {
     $('main').css("background-image", "url(../img/games/BusGame/background_BusGame-03.png)");
 
 
-    //get all car and bus images
+    //get animations
     images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Blue_Animation_Left/Frames/"));
     images.Buses.FacingLeft.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Red_Animation_Left/Frames/"));
     images.Buses.FacingRight.push(GetImagesFromFolder("/img/games/BusGame/Buses/Bus_Green_Animation_Right/Frames/"));
@@ -161,48 +160,61 @@ export function Start(game) {
     }
 
    checkImages = GetImagesFromFolder("/img/games/BusGame/CheckmarkAnimation/Frames/");
-   blank = new Image();
-    NextRound(true);
+   checkImages.push(new Image()); //extra blank frame so check images diapears after run
+    
+    //prep next round and run 
+    NextRound();
 }
 
 /* ----------------------- Data parsing ----------------------- */
+/*
+Get all the image files names in the defined folder from the server, and returns them as Image Objects.
+(folder: path to the requested folder to get images)
+*/
 function GetImagesFromFolder(folder) {
-    var files = [];
-
+    var files = []; //array to save images
+    
+    //use ajax command to request file names from the server, and save as IMage objects
     $.ajax({
         url: folder,
         async: false, //to ensure all data points have been added before we continue
         success: function (data) {
 
-            data.forEach(function (datapoint) {
-                var path = "../.." + folder.toString() + "" + datapoint.toString();
+            data.forEach(function (datapoint) { //each returned file name is datapoint
+                var path = "../.." + folder.toString() + "" + datapoint.toString(); //build full string of the path to the image
+                
+                //create image object and ste its src tot eh apth
                 var img = new Image();
                 img.src = path;
+                
+                //save to out array
                 files.push(img);
             });
         }
     });
 
+    //give back allt he saved images
     return files;
 }
 
-
-function createCountList(terms) {
-    var values = terms.length;
+/*
+Returns an array of number of terms per round based on the total number of items (ie, 10 total items returns [3, 3, 2, 2])
+*/
+function createCountList(totalItems) {
     var order = [];
-    if ((values % 3) == 2) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
+    if ((totalItems % 3) == 2) {
+        for (var x = 0; x < Math.floor(totalItems / 3); x++) {
             order.push(3);
         }
         order.push(2);
-    } else if ((values % 3) == 1) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
+    } else if ((totalItems % 3) == 1) {
+        for (var x = 0; x < Math.floor(totalItems / 3); x++) {
             order.push(3);
         }
         order[order.length - 1] = 2;
         order.push(2);
-    } else if ((values % 3) == 0) {
-        for (var x = 0; x < Math.floor(values / 3); x++) {
+    } else if ((totalItems % 3) == 0) {
+        for (var x = 0; x < Math.floor(totalItems / 3); x++) {
             order.push(3);
         }
     }
@@ -210,6 +222,9 @@ function createCountList(terms) {
     return order;
 }
 
+/*
+Given a number of terms, fills "round" varible with IDs of videos and terms in a round. 
+*/
 function DefineRound(numTerms) {
     //grab random terms from term list until we get the num needed this round
     for (var i = 0; i < numTerms; i++) {
@@ -225,6 +240,7 @@ function DefineRound(numTerms) {
             [term]: "txt"
         };
 
+        //add vid/text combos to round array
         round.push(vid);
         round.push(txt);
 
@@ -244,6 +260,9 @@ function DefineRound(numTerms) {
     }
 }
 
+/*
+Given a array of glossary terms (strings), returns an object that tells what page the term is from in the story data
+*/
 function MapTermsToPages(terms) {
     var mapped = {};
 
@@ -279,6 +298,9 @@ function MapTermsToPages(terms) {
 }
 
 /* ----------------------- Building Objects ----------------------- */
+/*
+appends <header> with score elements, and sets inital values
+*/
 function ExtendHeader() {
     //create html for score area
     var scoreHTML = "<button id = \"score\">";
@@ -294,6 +316,9 @@ function ExtendHeader() {
     $('header #total').text("/" + totalMatches);
 }
 
+/*
+Returns array of html builds for each piece of media inside a window. What each window media piece (vid, text, none) holds is selected at random from round array
+*/
 function BuildWindows() {
     var windowsHTML = [];
 
@@ -305,6 +330,7 @@ function BuildWindows() {
         var term = Object.keys(roundItem); //should only be one so key is the term
         var mediaType = roundItem[term]; //media is value of the key(term)
 
+        //based on selected medaitype and relevatn data build proper html
         var windowHTML = "";
         switch (mediaType) {
 
@@ -328,54 +354,73 @@ function BuildWindows() {
 
         //remove used term from roundlist
         round.splice(randIndex, 1);
-
+        
+        //push built html element to array of windows
         windowsHTML.push(windowHTML);
     }
 
     return windowsHTML;
 }
 
+/*
+Creates matching functionality and handles relevant logics like score, window css transitions, and kicking off round transiton/win logic
+*/
 function SetupWindowConnections() {
+    //loop through windows adding onclick functionality that contains core game mechanics
     var windows = document.getElementsByClassName("window");
-    for (var x = 0; x < windows.length; x++) {
-        windows[x].onclick = function (e) {
-            if (firstClick == false) {
+    for (var x = 0; x < windows.length; x++) 
+    {
+        windows[x].onclick = function (e) //e is window element
+        {
+            //check which click this si and act accordingly
+            if (!firstClick)
+            { //have not clicked yet- this si the first click
+                //save what we clicked on
                 firstSelected = e.target.parentElement;
 
-
-                if (firstSelected.children[1].id !== "none") {
-                    firstClick = true;
-                    firstSelected.classList.remove("hidden");
-                  $(firstSelected.children[0]).removeClass("Up").addClass("Down");
-                } else {
+                //check if we are clicking a valid window
+                if (firstSelected.children[1].id !== "none") 
+                {
+                    //it is a valid window! - set class values according
+                    firstClick = true; //we ahve clicked once
+                    firstSelected.classList.remove("hidden"); //class used for overriding hover functionality for a clicked window
+                  $(firstSelected.children[0]).removeClass("Up").addClass("Down"); //roll down window
+                } 
+                else 
+                {
+                    //invalid window, dont hold onto what firstSelected was as it doesnt matter
                     firstSelected = null;
                 }
-            } else if (firstClick == true) {
+            } 
+            //we have clicked soemthing, so run logic for second click
+            else if (firstClick) 
+            {
 
                 //get second selected
                 secondSelected = e.target.parentElement;
 
-                //check if the 2 selected match
-                if (firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3) == secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3) && firstSelected != secondSelected && secondSelected.children[1].id !== "none") {
+                //check if the 2 selected matches the first, user isnt clicking the same thing, and is a valid window
+                var firstTerm = firstSelected.children[1].id.substr(0, firstSelected.children[1].id.length - 3); //cut out the media type identified from id
+                var secondTerm = secondSelected.children[1].id.substr(0, secondSelected.children[1].id.length - 3);
+                if ( firstTerm == secondTerm //compare terms
+                    && firstSelected != secondSelected // make sure both selected arent the same
+                    && secondSelected.children[1].id !== "none") //make sure the second selected isnt a blank window
+                {
                     //show 2nd selected
                     secondSelected.classList.remove("hidden");
                     
+                    //roll donw window
                     $(secondSelected.children[0]).removeClass("Up").addClass("Down");
+                    
                     //verify 
-                    firstClick = false;
-                    if (firstSelected.children[1].id != "none") {
-
-
-
-                        checkImages.push(blank);
-                        var animID = window.requestAnimationFrame(function (timestamp) {
-                            
-                        });
-
+                    firstClick = false; //intial value- will be ste to tru if valid
+                    if (firstSelected.children[1].id != "none") 
+                    {
+                        //up score and show ths update on the page
                         score++;
                         document.getElementById("current").innerHTML = score;
                         
-                        //add star
+                        //show star by exchanging class tags from "hidden" to "show"
                         firstSelected.children[2].classList.remove("hidden");
                         secondSelected.children[2].classList.remove("hidden");
                         $(firstSelected.children[2]).addClass("show");
@@ -383,64 +428,76 @@ function SetupWindowConnections() {
                         
 
                         //check win state
-                        if (score === totalMatches) {
+                        if (score === totalMatches) 
+                        {
+                            //set game state to wind and run end transition
                             gameState = state.Win;
                             RoundEndTransition()
-                        } else if (score === roundTotalMatches + lastRoundScore) {
+                        } 
+                        //not a win? check if the round has been completed
+                        else if (score === roundTotalMatches + lastRoundScore) 
+                        {
                             //goto next round
                             RoundEndTransition();
                         }
 
                     }
+                    
+                    //end of run- clear sleected items
                     secondSelected = null;
                     firstSelected = null;
 
-                } else {
+                } 
+                //second click was not a match or invalid - clear everything and reset windows
+                else 
+                {
+                    //reset first click
                     firstSelected.classList.add("hidden");
                     firstClick = false;
 
-                    //roll up windows again
-                    //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/").reverse();
-                    //Animate(firstSelected.children[0], rollWindow, null, true);
-                    //Animate(secondSelected.children[0], rollWindow, null, true);
-                    
-                    //update window state
-                    if(firstSelected.children[1].id == "none" || secondSelected.children[1].id == "none"){
-                        if(firstSelected.children[1].id !== "none"){
+                    //update window state for non blank windows
+                    if(firstSelected.children[1].id == "none" || secondSelected.children[1].id == "none") //one is a blank
+                    {
+                        //roll up windows, if they arent a blank window w/ no media
+                        if(firstSelected.children[1].id !== "none")
+                        {
                             $(firstSelected.children[0]).removeClass("Down").addClass("Up");
                         }
-                        if(secondSelected.children[1].id !== "none"){
+                        if(secondSelected.children[1].id !== "none")
+                        {
                             $(secondSelected.children[0]).removeClass("Down").addClass("Up");
                         }
                     }
-                    else{
-                            $(firstSelected.children[0]).removeClass("Down").addClass("Up");
-                    $(secondSelected.children[0]).removeClass("Down").addClass("Up");
-                           }
+                    //neither are blank windows
+                    else
+                    {
+                        //roll up both windows
+                        $(firstSelected.children[0]).removeClass("Down").addClass("Up");
+                        $(secondSelected.children[0]).removeClass("Down").addClass("Up");
+                    }
                    
                 }
-
-
             }
-
         }
     }
 }
 
 /* ----------------------- Game Loop ----------------------- */
-function NextRound(firstRun = false) {
+/*
+Updates data to reflect a new round, and updates page html
+*/
+function NextRound() {
     //check fi this has already been doen this round
     if (roundTotalMatches === 0) { console.log("Loading next round");
         //generate round data
-        var randIndex = Math.floor(Math.random() * roundOrder.length);
+        var randIndex = Math.floor(Math.random() * roundOrder.length); //select random 
         var roundLength = roundOrder[randIndex];
         roundTotalMatches = roundLength;
         lastRoundScore = score;
         DefineRound(roundLength);
         roundOrder.splice(randIndex, 1);
 
-        //update html of page form template
-        //templateData = null;
+        //update html of page form template (chose random vehicles, and build out windows)
         templateData = {
             Top: {
                 Bus: {
@@ -451,7 +508,7 @@ function NextRound(firstRun = false) {
                     Frames: ChooseRandomArrayElement(images.Cars.FacingLeft),
                     Current: 0
                 },
-                Windows: BuildWindows()
+                Windows: BuildWindows() //array of window html objects, template handles where each goes
             },
             Bottom: {
                 Bus: {
@@ -466,14 +523,10 @@ function NextRound(firstRun = false) {
             }
         };
         var main = template(templateData);
+        this.$main = $(main);
+        $('main').html(this.$main);
 
-        if (firstRun) {
-            console.log("first run");
-            this.$main = $(main);
-            $('main').html(this.$main);
-        }
-
-
+        //adjust text size inside windows to fit
         FitText();
 
         //specialcase check- green bus doesnt have rack ontop thus is a different height than the rest
@@ -481,8 +534,8 @@ function NextRound(firstRun = false) {
             $('#bottom .bus').attr('id', 'green');
         }
 
+        //make windows roll up and down when hovering
         HoverWindows();
-
 
         //add clicking mechnaic functionality to windows
         SetupWindowConnections();
@@ -519,8 +572,6 @@ function NextRound(firstRun = false) {
             }
             
             //roll down window
-            //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
-            //Animate(e.parentElement.parentElement.children[0], rollWindow, null, true);
             $(e.parentElement.children[0]).addClass("hidden");
             $(e.parentElement.parentElement.children[0]).addClass("Down");
             
@@ -530,10 +581,13 @@ function NextRound(firstRun = false) {
     }
 }
 
+/*
+Animate vehicles off screen
+*/
 function RoundEndTransition() { console.log("round end transition");
     var animID = window.requestAnimationFrame(function (timestamp) {
         //animate cars
-        Animate("#checkMarkImage", checkImages, null, true);
+        Animate("#checkMarkImage", checkImages, null, true); //run check mark anim
         AnimateMoving("#bottom .bus .vImg", templateData.Bottom.Bus.Frames, null);
         AnimateMoving("#top .bus .vImg", templateData.Top.Bus.Frames, null);
         AnimateMoving("#bottom .car .vImg", templateData.Bottom.Car.Frames, null);
@@ -547,6 +601,9 @@ function RoundEndTransition() { console.log("round end transition");
     activeAnimations.push(animID);
 }
 
+/*
+Move vehicles just off left side, and Animate vehicles back on screen
+*/
 function RoundStartTransition() { console.log("round start transition");
     //move vehicles off screen on proper side so they can drive in
     $('#bottom .vehicle').css('left', (window.innerWidth * -1) + 'px');
@@ -568,6 +625,9 @@ function RoundStartTransition() { console.log("round start transition");
     activeAnimations.push(animID);
 }
 
+/*
+Clear data at end of game, and make html reflect the win screen
+*/
 function WinScreen() {
     //change to win screen
     $('main').html(html);
@@ -606,21 +666,21 @@ function WinScreen() {
 
 }
 
-
+/*
+Shrinks text inside windows
+*/
 function FitText() {
+    //get widnow
     var windows = $(".window");
     windows.toArray().forEach(function (element) {
-        let currentSize = 30;
+        let currentSize = 30; //base size
+        //make sure window is a text media type
         if (element.children[1].id.substr(element.children[1].id.length - 3, element.children[1].id.length) == "Txt") {
+            //loop and shrink until text fits
             while (element.children[1].offsetWidth < element.children[1].scrollWidth) {
                 if (element.children[1].style.getPropertyValue('font-size') == "") {
                     element.children[1].style.setProperty('font-size', currentSize.toString() + "px");
                 }
-                // console.log("Start: " + element.children[1].style.setProperty('font-size', '20px'));
-                // console.log("Start: " + element.children[1].style.getPropertyValue('font-size'));
-
-
-
                 currentSize = currentSize - 5;
                 element.children[1].style.setProperty('font-size', currentSize + "px");
 
@@ -631,34 +691,26 @@ function FitText() {
 
 }
 
+/*
+Adds hover fucntionality to windows to roll up/donw the glass using css transitions
+*/
 function HoverWindows() {
-    //get window animation
-    //var rollWindow = GetImagesFromFolder("/img/games/BusGame/WindowAnimation/Frames/");
-   // var inverted = rollWindow.slice(0).reverse();
-
     //get all windows
-
-
-    $(".window").hover(function(e)
-    { 
-        console.log(e.target.parentElement.classList.contains("hidden"));
+    $(".window").hover(function(e) //e is window element, e.target is the actually clicked piece (media)
+    { //roll down
         if(e.target.parentElement.classList.contains("hidden") &&
         $(e.target).siblings(".glass").hasClass("Up") && e.target.parentElement.children[1].id !== "none")
-        {
-            //Animate(e.target, rollWindow, null, true);
-            
+        {   
             //update window state
             $(e.target).siblings(".glass").removeClass("Up").addClass("Down");
         }
     },
-    function(e)
+    function(e) //roll up - e is window elelemnt, e.target is media or glass
     {   
         //check if target has been clicked
         if(e.target.parentElement.classList.contains("hidden") && e.target.parentElement.children[1].id !== "none" &&
         ($(e.target).siblings(".glass").hasClass("Down") ||  $(e.target).hasClass("Down")))
         {
-           // Animate(e.target, inverted, null, true); 
-            
             //update window state
             $(e.target).siblings(".glass").removeClass("Down").addClass("Up");
         }
@@ -670,14 +722,25 @@ function HoverWindows() {
 
 
 /* ----------------------- Animation ----------------------- */
+/*
+Moves specificed element from the start positiont to the end position (moving horizontally), at end of its movement attempts to update game state do round logic.
+(timestamp: gotten from window.requestanimationframe())
+(id: html id of elemnt that you want to move)
+(start: starting timestamp of movement, set by script. SHOULD BE NULL INTIALLY)
+(dir: string of direction to move ie Left or Right)
+(startPos: intial position of moving object)
+(endPos: end position after move has concluded)
+*/
 function Move(timestamp, id, start, dir, startPos, endPos) {
     //get all vehciles of this type
     var vehicles = $(id).toArray();
 
-    vehicles.forEach(function (vehicle) {
-        if (!start && vehicle.style.left != "") {
-            startPos = vehicle.style.left;
-            startPos = parseFloat(startPos);
+    //set startPos for each vehicle
+    vehicles.forEach(function (vehicle) 
+    {
+        if (!start && vehicle.style.left != "") { //first run and style.left isnt blank
+            startPos = vehicle.style.left; //save style.left
+            startPos = parseFloat(startPos); //remove "px" from string so its just numbers
         }
     });
 
@@ -686,41 +749,48 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
         //save start time
         start = timestamp;
     }
-    var pos = timestamp - start;
+    var pos = timestamp - start; //get difference betwen this step and start time
 
-    var atEnd = pos > endPos; //check for end of movement path
+    var atEnd = pos > endPos; //check for end of movement path - used in if statement a few lines down
 
-    //alter for left
+    //alter pos and redefine end if for left
     if (dir === "Left") {
         pos = pos * -1; //invert pos for moving left instead of right
-        atEnd = pos < endPos;
+        atEnd = pos < endPos; //end pos logic is diffeent in this direction
     }
 
-    if (!atEnd) {
+    //check for end of moevment path, if so run round logic, if not move again
+    if (!atEnd) 
+    {
+        //move each vehicle
         vehicles.forEach(function (vehicle) {
             vehicle.style.left = startPos + pos + 'px';
         });
 
+        //set next recursive movement run
         window.requestAnimationFrame(function (timestamp) {
             Move(timestamp, id, start, dir, startPos, endPos);
         });
-    } else {
+    } 
+    //at end of movement- run round logic
+    else 
+    {
+        //use active anims ot check if the round logic has already been updated
         if (activeAnimations.length > 0) {
             console.log("move end");
             
+            //clear running animations
             for(var i = 0; i < activeAnimations.length; i++)
             {
                 cancelAnimationFrame(activeAnimations[i]);
             }
             activeAnimations = [];
 
+            //based on gaem state, update state and goto next phase
             switch (gameState) {
                 case state.Start:
                     //chnage state for next run
                     gameState = state.Playing;
-
-                    //run code
-                    //RoundStartTransition();
 
                     break
 
@@ -728,7 +798,7 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
                     //change state
                     gameState = state.End;
 
-                    //run script
+                    //move vehicles off screen
                     RoundEndTransition();
                     break;
 
@@ -740,8 +810,8 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
                     roundTotalMatches = 0;
 
 
-                    //run code
-                    NextRound(true);
+                    //start next round and move vehicles back on screen
+                    NextRound();
                     RoundStartTransition();
                     break;
 
@@ -757,27 +827,37 @@ function Move(timestamp, id, start, dir, startPos, endPos) {
 
 }
 
+/*
+Runs animation of defined <img> element
+(id: html id of <img> elemnt you wish to animate)
+(frames: array of Image() objects used for each frame of the animation)
+(frame: fraemt he animation is one. SHOULD BE NULL INITIALLY)
+(noLoop: boolean that defines if this animation loops or only runs once)
+*/
 function Animate(id, frames, frame, noLoop) {
+    //check if we are looping, or have not reached finish of animation
     if (!noLoop || (frame < frames.length - 1)) 
     {
+        //set next recursive run of animation
         window.requestAnimationFrame(function (timestamp) {
             Animate(id, frames, frame, noLoop);
         });
 
+        //set frame if first run
         if (!frame) frame = 0;
 
+        //get img(s) hat are being animated
         var vImgs = $(id).toArray();
-        frame = (frame + 1) % frames.length;
-        //update animation
-
+        
+        //loop through all lements being animated and update animation
+        frame = (frame + 1) % frames.length; //up frame w/ wrapping
         vImgs.forEach(function (img) {
-
-            img.src = frames[frame].src;
+            img.src = frames[frame].src; //set src to that of the new frame
         });
     }
 }
 
-/* Nimate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
+/* Animate function that ends when the activeAnimations array for moving animations (vehciles) has been cleared*/
 function AnimateMoving(id, frames, frame, finishRun = false) {
     if ((activeAnimations.length > 0) || (finishRun && (frame != 0)))
     {
@@ -788,9 +868,9 @@ function AnimateMoving(id, frames, frame, finishRun = false) {
         if (!frame) frame = 0;
 
         var vImgs = $(id).toArray();
-        frame = (frame + 1) % frames.length;
+        
         //update animation
-
+        frame = (frame + 1) % frames.length;
         vImgs.forEach(function (img) {
 
             img.src = frames[frame].src;
@@ -800,23 +880,38 @@ function AnimateMoving(id, frames, frame, finishRun = false) {
 
 
 /* ----------------------- Helper Functions ----------------------- */
+/*
+Retuns random element form a given array
+*/
 function ChooseRandomArrayElement(options) {
     //chose image to use for bus
     var selected = options[Math.floor(Math.random() * (options.length))];
     return selected;
 }
 
+/*
+makes given <video> elemnt loop from noted start time to end time
+*/
 function LoopVideoClip(videoID, start, end) {
-    var videoContainer = document.getElementById(videoID)
+    //get <video> elment
+    var videoContainer = document.getElementById(videoID);
+    
+    //modify vidoe src to have start and end timestamps
     videoContainer.src += "#t=" + start + "," + end;
+    
+    //after vidoe has loaded, add listeners on its timestamp and make it loop between start and end
     videoContainer.addEventListener('loadedmetadata', function () {
+        //push vidoe to "start" if before it
         if (videoContainer.currentTime < start) {
             videoContainer.currentTime = start;
         }
+        
+        //listener on each timestamp change to reset to "start" if over "end" time
         videoContainer.ontimeupdate = function () {
+            //check over end time
             if (videoContainer.currentTime >= end) {
-                videoContainer.currentTime = start;
-                videoContainer.play();
+                videoContainer.currentTime = start; //set back to start
+                videoContainer.play(); //play video again
 
             }
         }
