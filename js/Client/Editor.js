@@ -667,7 +667,8 @@ function renderPagesPage(renderData){
 	// function to add a page an all the associated callbacks
 	var AddPage = function(page, index){
 		// set the page variables if there if none exist and we are creating a new page
-		let scrollToBottom;
+		let scrollToBottom,
+			activatePage;
 		if(!page){
 			page = {
 				id: pageId++
@@ -681,6 +682,7 @@ function renderPagesPage(renderData){
 			$('.save-button').prop('disabled', false);
 			unsavedChanges = true;
 			scrollToBottom = true;
+			activatePage = true;
 		}
 
 		// add the page preview button
@@ -698,7 +700,9 @@ function renderPagesPage(renderData){
 		$('.add-page-button').parent().before($el);
 
 		// activat the newly added page
-		ActivatePage($el.find('.page-preview')[0]);
+		if(activatePage){
+			ActivatePage($el.find('.page-preview')[0]);
+		}
 
 		// setting a timeout here to ensure the content is actually on the page
 		setTimeout(() => {
