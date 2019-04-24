@@ -18,8 +18,8 @@ const OFFLINEPAGEASSETS = [
 	'/upup.min.js',
 	'/upup.sw.min.js',
 
-	'/static/jquery-min.js',
-	'/static/jquery-ui.min.js',
+	'/js/jquery-min.js',
+	'/js/jquery-ui.min.js',
 
 	'/js/Offline/Header_Offline.js',
 	'/js/Offline/Viewer_Offline.js',
@@ -90,19 +90,22 @@ function getStoryAssetList(){
 
 	var AddToList = function(objOrString, currentList){
 		if(typeof objOrString == 'string'){
-			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$/gi))
+			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?.*$/gi)){
 				currentList.push(objOrString);
+			}
 
 			return currentList;
 		}
 		else if(typeof objOrString == 'object'){
-			_.each(objOrString, (obj) => {
-				let newList = AddToList(obj, currentList);
+			_.each(objOrString, (obj, fieldName) => {
+				if(fieldName == 'datecreated' || fieldName == 'datemodified') return;
+				AddToList(obj, currentList);
 			});
 
 			return currentList;
 		}
 	}
+
 	let assetList = AddToList(story, []);
 	return assetList;
 }
@@ -182,7 +185,22 @@ function showStory(){
 		OfflineWorker.SetStorage(storyId, story);
 
 		// Save the story assets with the service worker
-		let assetList = OfflineWorker.AddToAssetList('Viewer', getStoryAssetList());
+		let storyAssets = getStoryAssetList(),
+			originalList = OfflineWorker.GetStorage('Viewer'),
+			itemsToRemove = [];
+
+		// Remove old assets from the list
+		_.each(storyAssets, (assetName) => {
+			assetName = assetName.replace(/\?t=.*/gi, '');
+			_.each(originalList, (_assetName, i) => {
+				if(assetName == _assetName.replace(/\?t=.*/gi, ''))
+					itemsToRemove.push(_assetName);
+			});
+		});
+		OfflineWorker.RemoveFromAssetList('Viewer', itemsToRemove);
+
+		// Add new story items to list
+		let assetList = OfflineWorker.AddToAssetList('Viewer', storyAssets);
 		OfflineWorker.SaveServiceWorker('/html/Client/ViewerOffline.html', assetList);
 
 		if(offlineIds.indexOf(storyId) == -1){
