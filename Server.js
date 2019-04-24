@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const http = require("http");
+const https = require('https');
 const express = require('express');
 const session = require('express-session');
 const LokiStore = require('connect-loki')(session);
@@ -103,6 +105,16 @@ app.use(express.static(__dirname));
 
 // Create the session store
 CreateSessions(app, {});
+
+// Reroute all insecure reqests to the secure server if on exists
+app.use((req, res, next) =>{
+	if(Settings.sslKey && Settings.sslCert && !req.socket.server._connectionKey.match("443")){
+		res.redirect('https://' + req.headers.host + req.url);
+	}
+	else{
+		next();
+	}
+});
 
 // Middleware for writing to the access log
 app.use((req, res, next) => { 
@@ -359,6 +371,16 @@ function app_post_api_game_part2(req,res,name) {
 
 
 // Start the server
-app.listen(Settings.port,function(){
+app.listen(Settings.port, function(){
 	console.log(`Listening on port ${Settings.port}`);
 });
+
+// Start secure server
+if(Settings.sslKey && Settings.sslCert){
+	https.createServer({
+		key: fs.readFileSync(Settings.sslKey),
+		cert: fs.readFileSync(Settings.sslCert)
+	}, app).listen(443, function(){
+		console.log(`Listening on port 443`);
+	});
+}
