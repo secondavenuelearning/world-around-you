@@ -119,7 +119,7 @@ app.use((req, res, next) =>{
 // Middleware for writing to the access log
 app.use((req, res, next) => { 
 	// add to the access log
-	if(!req.url.match(/\.[a-z0-9]{0,4}$|\.[a-z0-9]{0,4}?.*$/gi)){
+	if(!req.url.match(/\.[a-z0-9]{0,4}$|\.[a-z0-9]{0,4}\?.*$/gi)){
 		access_log = WriteLog(access_log, `Log (${new Date()}): ${req.method} | ${req.url}`);
 	}
 	next();

@@ -90,7 +90,7 @@ function getStoryAssetList(){
 
 	var AddToList = function(objOrString, currentList){
 		if(typeof objOrString == 'string'){
-			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?[0-9]*$/gi)){
+			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}\?t=[0-9]*$/gi)){
 				currentList.push(objOrString);
 			}
 
