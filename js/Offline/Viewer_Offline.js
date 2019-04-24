@@ -2996,7 +2996,7 @@ $__System.register('a', ['15', '16', '22', '25', '26', 'b', 'c', 'e', 'd', 'f', 
 
 		var AddToList = function AddToList(objOrString, currentList) {
 			if (typeof objOrString == 'string') {
-				if (currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?.*$/gi)) {
+				if (currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?[0-9]*$/gi)) {
 					currentList.push(objOrString);
 				}
 
@@ -3096,9 +3096,9 @@ $__System.register('a', ['15', '16', '22', '25', '26', 'b', 'c', 'e', 'd', 'f', 
 
 			// Remove old assets from the list
 			_.each(storyAssets, function (assetName) {
-				assetName = assetName.replace(/\?t=.*/gi, '');
+				assetName = assetName.replace(/\?t=[0-9]*/gi, '');
 				_.each(originalList, function (_assetName, i) {
-					if (assetName == _assetName.replace(/\?t=.*/gi, '')) itemsToRemove.push(_assetName);
+					if (assetName == _assetName.replace(/\?t=[0-9]*/gi, '')) itemsToRemove.push(_assetName);
 				});
 			});
 			OfflineWorker.RemoveFromAssetList('Viewer', itemsToRemove);

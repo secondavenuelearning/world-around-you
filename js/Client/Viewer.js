@@ -90,7 +90,7 @@ function getStoryAssetList(){
 
 	var AddToList = function(objOrString, currentList){
 		if(typeof objOrString == 'string'){
-			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?.*$/gi)){
+			if(currentList.indexOf(objOrString) == -1 && objOrString.match(/\.[a-z0-9]{3,4}$|\.[a-z0-9]{3,4}?[0-9]*$/gi)){
 				currentList.push(objOrString);
 			}
 
@@ -191,9 +191,9 @@ function showStory(){
 
 		// Remove old assets from the list
 		_.each(storyAssets, (assetName) => {
-			assetName = assetName.replace(/\?t=.*/gi, '');
+			assetName = assetName.replace(/\?t=[0-9]*/gi, '');
 			_.each(originalList, (_assetName, i) => {
-				if(assetName == _assetName.replace(/\?t=.*/gi, ''))
+				if(assetName == _assetName.replace(/\?t=[0-9]*/gi, ''))
 					itemsToRemove.push(_assetName);
 			});
 		});
