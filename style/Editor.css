@@ -721,7 +721,7 @@ body.dragging{
 		cursor: -moz-grab;
 		cursor: -webkit-grab;
 	}
-	#glossary-video-controller .video-knob:hover, #glossary-video-controller .video-knob.dragging{
+	#glossary-video-controller .video-knob:hover, #glossary-video-controller .video-knob.dragging, #glossary-video-controller .video-knob.active{
 		background-color: #FFFFFF;
 		border-color: #004E74;
 	}

@@ -30,6 +30,7 @@ const OFFLINEPAGEASSETS = [
 	'/img/icons/General/icon_Page_Back.svg',
 	'/img/icons/General/icon_Page_Next.svg',
 	'/img/icons/General/icon_Close.svg',
+	'/img/icons/General/icon_Close_hoverDown.svg',
 	'/img/icons/General/icon_WrittenLang_White.svg',
 	'/img/icons/General/icon_SignLang_White.svg',
 	'/img/icons/General/icon_DropDnArrow.svg',

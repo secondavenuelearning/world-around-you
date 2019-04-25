@@ -960,7 +960,6 @@ function renderPagesPage(renderData){
 
 		$('.video-knob').on('mousedown', (evt) => {
 			if(!currentGlossaryTerm || currentGlossaryTerm == '') return;
-
 			let knob = $(evt.currentTarget),
 				knobType = knob.attr('knob-type'),
 				maxDelta = parseInt($('#glossary-video-controller').width());
@@ -968,37 +967,116 @@ function renderPagesPage(renderData){
 				startX = evt.pageX,
 				video = $('#glossary-video-player')[0];
 
-			$('#glossary-video-controller').append(knob);
-			knob.addClass('dragging');
-			$('body').addClass('dragging');
-			$('.knob-time').fadeIn(500);
+			// this timeout is here so that if the user just intends to click the knob does not start dragging
+			setTimeout(() => {
 
-			$(document).on('mousemove.drag', (evt) => {
-				let delta = evt.pageX - startX + startPosition,
-					skPos = parseInt($('#start-knob').css('left')),
-					ekPos = parseInt($('#end-knob').css('left'));
+				if(knob.hasClass('active')) return;
 
-				if(knobType == 'start'){
-					delta = delta > 0 ? delta : 0;
-					delta = delta < ekPos ? delta : ekPos - 1;
+				$('#glossary-video-controller').append(knob);
+				knob.addClass('dragging');
+				$('body').addClass('dragging');
+				$('.knob-time').fadeIn(500);
+
+				$(document).on('mousemove.drag', (evt) => {
+					let delta = evt.pageX - startX + startPosition,
+						skPos = parseInt($('#start-knob').css('left')),
+						ekPos = parseInt($('#end-knob').css('left'));
+
+					if(knobType == 'start'){
+						delta = delta > 0 ? delta : 0;
+						delta = delta < ekPos ? delta : ekPos - 1;
+					}
+					else{
+						delta = delta > skPos ? delta : skPos + 1;
+						delta = delta < maxDelta ? delta : maxDelta;
+					}
+
+					let deltaPercent = delta / maxDelta;
+
+					let time = Math.round(video.duration * deltaPercent * 10) / 10;
+
+					if(isNaN(time)) return;
+
+					if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
+						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
+
+					if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
+						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
+
+					if(knobType == 'start')
+						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start = time;
+					else
+						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end = time;
+
+					let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0;
+					video.currentTime = startTime;
+
+					$('.save-button').prop('disabled', false);
+					unsavedChanges = true;
+
+					UpdateVideoKnobs();
+
+				});
+
+				$(document).on('mouseup.drag', (evt) => {
+					$(document).off('.drag');
+					knob.removeClass('dragging');
+					$('body').removeClass('dragging');
+					$('.knob-time').fadeOut(500);
+				});
+
+			}, 100);
+		});
+		$('.video-knob').on('click', (evt) => {
+			let knob = $(evt.currentTarget),
+				knobType = knob.attr('knob-type'),
+				video = $('#glossary-video-player')[0],
+				time = 0,
+				minTime = 0,
+				maxTime = video.duration;
+
+			$(evt.currentTarget).addClass('active');
+			$(evt.currentTarget).find('.knob-time').fadeIn(500);
+
+
+			if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
+				data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
+
+			if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
+				data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
+
+			if(knobType == 'start'){
+				time = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || minTime;
+				maxTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end || maxTime;
+			}
+			else{
+				time = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end || maxTime;
+				minTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || minTime;
+			}
+
+			let Exit = function(){
+				$(document).off('.video-knob');
+				$(evt.currentTarget).removeClass('active');
+				$('.knob-time').fadeOut(500);
+			}
+
+			$(document).on('keydown.video-knob', (evt) => {
+				if(evt.key == 'Enter'){
+					Exit();
+					return;
 				}
-				else{
-					delta = delta > skPos ? delta : skPos + 1;
-					delta = delta < maxDelta ? delta : maxDelta;
+
+				if(evt.key == 'ArrowUp' || evt.key == 'ArrowRight'){
+					time += .1;
+					time = time > maxTime ? maxTime : time;
 				}
 
-				let deltaPercent = delta / maxDelta;
+				if(evt.key == 'ArrowDown' || evt.key == 'ArrowLeft'){
+					time -= .1;
+					time = time < minTime ? minTime : time;
+				}
 
-				let time = Math.round(video.duration * deltaPercent * 10) / 10;
-
-				if(isNaN(time)) return;
-
-				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
-					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
-
-				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
-					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
-
+				time = Math.round(time * 10) / 10;
 				if(knobType == 'start')
 					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start = time;
 				else
@@ -1011,17 +1089,11 @@ function renderPagesPage(renderData){
 				unsavedChanges = true;
 
 				UpdateVideoKnobs();
-
 			});
-
-			$(document).on('mouseup.drag', (evt) => {
-				$(document).off('.drag');
-				knob.removeClass('dragging');
-				$('body').removeClass('dragging');
-				$('.knob-time').fadeOut(500);
+			$(document).on('mousedown.video-knob', (evt) => {
+				Exit();
 			});
 		});
-
 		$('#term-definition-input').on('change keydown keyup', (evt) => {
 			data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].definition = $(evt.currentTarget).val();
 
