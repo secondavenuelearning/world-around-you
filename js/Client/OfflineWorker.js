@@ -1,3 +1,4 @@
+// TODO: Write our own service worker to properly manage file instead of using UpUp...
 import _ from 'underscore';
 
 let online = !window.offline;

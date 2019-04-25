@@ -231,9 +231,9 @@ function Carousel(id, imageList, showing, justimage, isOverlay, titleText) {
     }
     
     //add hover functionality to icons
-    ImageHoverSwap(id + " .carousel-nav.left", id + " .carousel-nav.left .carousel-nav-img", "../../img/icons/General/icon_Page_Back.svg", "../../img/icons/General/icon_Page_Back_HoverDown.svg");
+    ImageHoverSwap(id + " .carousel-nav.left", id + " .carousel-nav.left .carousel-nav-img", "../../img/icons/General/icon_Page_Back.svg", "../../img/icons/General/icon_Page_Back_hoverDown.svg");
     
-    ImageHoverSwap(id + " .carousel-nav.right", id + " .carousel-nav.right .carousel-nav-img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_HoverDown.svg");
+    ImageHoverSwap(id + " .carousel-nav.right", id + " .carousel-nav.right .carousel-nav-img", "../../img/icons/General/icon_Page_Next.svg", "../../img/icons/General/icon_Page_Next_hoverDown.svg");
 
 }
 
