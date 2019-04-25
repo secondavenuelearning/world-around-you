@@ -1066,13 +1066,15 @@ function renderPagesPage(renderData){
 					return;
 				}
 
+				let delta = evt.shiftKey ? 1 : 0.1;
+
 				if(evt.key == 'ArrowUp' || evt.key == 'ArrowRight'){
-					time += .1;
+					time += delta;
 					time = time > maxTime ? maxTime : time;
 				}
 
 				if(evt.key == 'ArrowDown' || evt.key == 'ArrowLeft'){
-					time -= .1;
+					time -= delta;
 					time = time < minTime ? minTime : time;
 				}
 
