@@ -967,67 +967,64 @@ function renderPagesPage(renderData){
 				startX = evt.pageX,
 				video = $('#glossary-video-player')[0];
 
-			// this timeout is here so that if the user just intends to click the knob does not start dragging
-			setTimeout(() => {
+			if(knob.hasClass('active')) return;
 
-				if(knob.hasClass('active')) return;
+			$('#glossary-video-controller').append(knob);
+			knob.addClass('dragging');
+			$('body').addClass('dragging');
+			$('.knob-time').show();
 
-				$('#glossary-video-controller').append(knob);
-				knob.addClass('dragging');
-				$('body').addClass('dragging');
-				$('.knob-time').fadeIn(500);
+			$(document).on('mousemove.drag', (evt) => {
+				$('.knob-time').show();
+				let delta = evt.pageX - startX + startPosition,
+					skPos = parseInt($('#start-knob').css('left')),
+					ekPos = parseInt($('#end-knob').css('left'));
 
-				$(document).on('mousemove.drag', (evt) => {
-					let delta = evt.pageX - startX + startPosition,
-						skPos = parseInt($('#start-knob').css('left')),
-						ekPos = parseInt($('#end-knob').css('left'));
+				if(knobType == 'start'){
+					delta = delta > 0 ? delta : 0;
+					delta = delta < ekPos ? delta : ekPos - 1;
+				}
+				else{
+					delta = delta > skPos ? delta : skPos + 1;
+					delta = delta < maxDelta ? delta : maxDelta;
+				}
 
-					if(knobType == 'start'){
-						delta = delta > 0 ? delta : 0;
-						delta = delta < ekPos ? delta : ekPos - 1;
-					}
-					else{
-						delta = delta > skPos ? delta : skPos + 1;
-						delta = delta < maxDelta ? delta : maxDelta;
-					}
+				let deltaPercent = delta / maxDelta;
 
-					let deltaPercent = delta / maxDelta;
+				let time = Math.round(video.duration * deltaPercent * 10) / 10;
 
-					let time = Math.round(video.duration * deltaPercent * 10) / 10;
+				if(isNaN(time)) return;
 
-					if(isNaN(time)) return;
+				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
 
-					if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
-						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video = {};
+				if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
 
-					if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage])
-						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage] = {};
+				if(knobType == 'start')
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start = time;
+				else
+					data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end = time;
 
-					if(knobType == 'start')
-						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start = time;
-					else
-						data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].end = time;
+				let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0;
+				video.currentTime = startTime;
 
-					let startTime = data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video[currentSignLanguage].start || 0;
-					video.currentTime = startTime;
+				$('.save-button').prop('disabled', false);
+				unsavedChanges = true;
 
-					$('.save-button').prop('disabled', false);
-					unsavedChanges = true;
+				UpdateVideoKnobs();
 
-					UpdateVideoKnobs();
+			});
 
-				});
-
-				$(document).on('mouseup.drag', (evt) => {
-					$(document).off('.drag');
-					knob.removeClass('dragging');
-					$('body').removeClass('dragging');
-					$('.knob-time').fadeOut(500);
-				});
-
-			}, 100);
+			$(document).on('mouseup.drag', (evt) => {
+				$(document).off('.drag');
+				knob.removeClass('dragging');
+				$('body').removeClass('dragging');
+				$('.knob-time').hide();
+				knob.trigger('adjust');
+			});
 		});
-		$('.video-knob').on('click', (evt) => {
+		$('.video-knob').on('adjust', (evt) => {
 			let knob = $(evt.currentTarget),
 				knobType = knob.attr('knob-type'),
 				video = $('#glossary-video-player')[0],
@@ -1036,7 +1033,7 @@ function renderPagesPage(renderData){
 				maxTime = video.duration;
 
 			$(evt.currentTarget).addClass('active');
-			$(evt.currentTarget).find('.knob-time').fadeIn(500);
+			$(evt.currentTarget).find('.knob-time').show();
 
 
 			if(!data[currentPageIndex].glossary[currentWrittenLanguage][currentGlossaryTerm].video)
@@ -1057,7 +1054,7 @@ function renderPagesPage(renderData){
 			let Exit = function(){
 				$(document).off('.video-knob');
 				$(evt.currentTarget).removeClass('active');
-				$('.knob-time').fadeOut(500);
+				$('.knob-time').hide();
 			}
 
 			$(document).on('keydown.video-knob', (evt) => {

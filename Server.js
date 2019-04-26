@@ -75,7 +75,7 @@ function WriteLog(log, text, dir){
 function CreateSessions(_app, options){
     var options = typeof options == "object" ? options : {};
     options.secret = options.secret || "worldAroundYou"; // the secret is used as the id for the session cookie
-    options.resave = options.resave || false;     // automatically save sessions whenever they are grabbed even if they arent modified
+    options.resave = options.resave || true;     // automatically save sessions whenever they are grabbed even if they arent modified
     options.rolling = typeof options.rolling == "boolean" ? options.resave : true;     // automatically update the session time unless asked to do otherwise
     options.saveUninitialized = options.saveUninitialized || false; // automatically save new sessions that have not been modified
     options.cookie = {};
