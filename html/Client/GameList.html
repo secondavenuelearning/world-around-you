@@ -5,6 +5,9 @@
 				<a href="./Game?id=<%- game.id %>" class="game-link play-link"></a>
 			<% } %>
 			<span class="bold name"><%- game.data && game.data.name ? game.data.name : 'No Name' %></span>
+			<% if(user){ %>
+				<button class="game-delete-button" gameId="<%- game.id %>" onclick="return confirm('Are you sure you want to delete this game?');"></button>
+			<% } %>
 		</div>
 		<div>
 			<% if(user){ %>

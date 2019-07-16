@@ -21,6 +21,14 @@
 				<div class="three-quarters"><textarea id="description-input" data-type="description"><%- metadata.description[currentWrittenLanguage] %></textarea></div>
 			</div>
 			<div>
+				<div class="quarter"><label>Signer</label></div>
+				<div class="three-quarters"><input id="signer-input" data-type="signer" value="<%- metadata.signer[currentWrittenLanguage] %>"></input></div>
+			</div>
+			<div>
+				<div class="quarter"><label>Translator</label></div>
+				<div class="three-quarters"><input id="translator-input" data-type="translator" value="<%- metadata.translator[currentWrittenLanguage] %>"></input></div>
+			</div>
+			<div>
 				<div class="quarter"><label>Genres</label></div>
 				<div class="three-quarters">
 					<% _.each(metadata.genres[currentWrittenLanguage], function(genre){ %>

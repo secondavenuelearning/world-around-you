@@ -832,7 +832,19 @@ $__System.register('22', ['20', '21', '1b', 'e', '1e', '1f'], function (_export)
 		$('#' + id).html(template({
 			story: story
 		}));
+		document.addEventListener('fullscreenchange', exitFullScreenHandle);
+		document.addEventListener('webkitfullscreenchange', exitFullScreenHandle);
+		document.addEventListener('mozfullscreenchange', exitFullScreenHandle);
+		document.addEventListener('MSFullscreenChange', exitFullScreenHandle);
 
+		function exitFullScreenHandle(){
+			if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+		        $('#page-content').css({'height': 'calc(100% - 60px)'});
+				$('#fullscreen-toggle').css({'bottom': '-35px'});
+				$('#page-controller').css({'margin-top': '5px'});
+				$('a.story-game-button').css({'bottom': '10px'});
+		    }
+		}
 		$('#fullscreen-toggle').on('click', function (evt) {
 			if (document.fullscreen || document.msFullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement) {
 				if (document.exitFullscreen) {
@@ -847,6 +859,9 @@ $__System.register('22', ['20', '21', '1b', 'e', '1e', '1f'], function (_export)
 					/* IE/Edge */
 					document.msExitFullscreen();
 				}
+				$('#page-content').css({'height': 'calc(100% - 60px)'});
+				$('#fullscreen-toggle').css({'bottom': '-35px'});
+				$('#page-controller').css({'margin-top': '5px'});
 			} else {
 				var viewer = $('#story-viewer')[0];
 				if (viewer.requestFullscreen) {
@@ -861,6 +876,10 @@ $__System.register('22', ['20', '21', '1b', 'e', '1e', '1f'], function (_export)
 					/* IE/Edge */
 					viewer.msRequestFullscreen();
 				}
+				$('#page-content').css({'height': 'calc(100% - 120px)'});
+				$('#fullscreen-toggle').css({'bottom': '10px'});
+				$('#page-controller').css({'margin-top': '19px'});
+
 			}
 		});
 

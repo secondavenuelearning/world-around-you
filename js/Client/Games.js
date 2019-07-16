@@ -13,14 +13,14 @@ const gameListTemplate = _.template(gameListHtml);
 
 const storyId = urlParams.storyId;
 let currentGameId,
-	currentWrittenLanguageId,
-	currentSignLanguageId,
-	currentSort,
-	games,
-	writtenLanguages,
-	signLanguages,
-	story,
-	storyGames;
+currentWrittenLanguageId,
+currentSignLanguageId,
+currentSort,
+games,
+writtenLanguages,
+signLanguages,
+story,
+storyGames;
 
 $(document).ready(() => {
 
@@ -45,35 +45,35 @@ $(document).ready(() => {
 		storyGames = args[4];
 
 		let gameOptions = [],
-			writtenOptions = [],
-			signOptions = [];
+		writtenOptions = [],
+		signOptions = [];
 
 		_.each(games, (game) => {
-    		gameOptions.push({
-    			value: game.id,
-    			label: game.name
-    		});
-    	});
+			gameOptions.push({
+				value: game.id,
+				label: game.name
+			});
+		});
 
 		_.each(writtenLanguages, (lang) => {
 			if(!story.metadata || !story.metadata.writtenLanguages || story.metadata.writtenLanguages.indexOf(lang.name) == -1)
 				return;
 
-    		writtenOptions.push({
-    			value: lang.id,
-    			label: lang.name
-    		});
-    	});
+			writtenOptions.push({
+				value: lang.id,
+				label: lang.name
+			});
+		});
 
 		_.each(signLanguages, (lang) => {
 			if(!story.metadata || !story.metadata.signLanguages || story.metadata.signLanguages.indexOf(lang.name) == -1)
 				return;
 
-    		signOptions.push({
-    			value: lang.id,
-    			label: lang.name
-    		});
-    	});
+			signOptions.push({
+				value: lang.id,
+				label: lang.name
+			});
+		});
 
 		const gameSelect = new CustomSelect('game-search-filters', {
 			id: 'game-select',
@@ -106,15 +106,18 @@ $(document).ready(() => {
 			id: 'sort-select',
 			defaultText: 'Sort By',
 			options: [
-				{value: 'name', label: 'Name'},
-				{value: 'datecreated', label: 'Date Published'},
-				{value: 'datemodified', label: 'Last Updated'},
+			{value: 'name', label: 'Name'},
+			{value: 'datecreated', label: 'Date Published'},
+			{value: 'datemodified', label: 'Last Updated'},
 			]
 		});
 		$(gameSort).on('change', (evt, value) => {
 			currentSort = value;
 			RenderGameList();
 		});
+
+		
+
 
 		currentGameId = gameOptions[0].value;
 		currentWrittenLanguageId = writtenOptions[0].value;
@@ -126,7 +129,6 @@ $(document).ready(() => {
 
 function RenderGameList(){
 	let gameData = [];
-
 	_.each(storyGames, (game) => {
 		if(game.gameId != currentGameId 
 			|| game.writtenlanguageId != currentWrittenLanguageId 
@@ -156,15 +158,23 @@ function RenderGameList(){
 
 	let newLink = `./GameEditor?storyId=${storyId}&gameId=${currentGameId}&writtenlanguageId=${currentWrittenLanguageId}&signlanguageId=${currentSignLanguageId}`;
 	$('#new-game-link').attr('href', newLink);
+
+	$('.game-delete-button').on('click', (evt, value) => {
+		MakeGetRequest('./GameDelete?gameId=' + evt.currentTarget.getAttribute("gameId")).then((result) => {
+			location.reload(); 
+		}).catch((err) => {
+			return res.redirect('back');
+		});
+	});
 }
 
 function MakeGetRequest(url){
 	return new Promise((resolve, reject) => {
 		$.ajax({
-	        method: 'get',
-	        url
+			method: 'get',
+			url
 		}).done((result) => {
-        	resolve(result);
+			resolve(result);
 		}).fail((err) => {
 			console.error(err);
 		});

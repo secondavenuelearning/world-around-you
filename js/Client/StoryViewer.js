@@ -43,7 +43,19 @@ function Render(id){
 	$(`#${id}`).html(template({
 		story
 	}));
+	document.addEventListener('fullscreenchange', exitFullScreenHandle);
+	document.addEventListener('webkitfullscreenchange', exitFullScreenHandle);
+	document.addEventListener('mozfullscreenchange', exitFullScreenHandle);
+	document.addEventListener('MSFullscreenChange', exitFullScreenHandle);
 
+	function exitFullScreenHandle(){
+		if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+	        $('#page-content').css({'height': 'calc(100% - 60px)'});
+			$('#fullscreen-toggle').css({'bottom': '-35px'});
+			$('#page-controller').css({'margin-top': '5px'});
+			$('a.story-game-button').css({'bottom': '-35px'});
+	    }
+	}
 	$('#fullscreen-toggle').on('click', (evt) => {
 		if (document.fullscreen || document.msFullscreenElement || document.webkitFullscreenElement || document.mozFullscreenElement) {
 			if (document.exitFullscreen) {
@@ -55,6 +67,10 @@ function Render(id){
 			} else if (document.msExitFullscreen) { /* IE/Edge */
 				document.msExitFullscreen();
 			}
+			$('#page-content').css({'height': 'calc(100% - 60px)'});
+			$('#fullscreen-toggle').css({'bottom': '-35px'});
+			$('#page-controller').css({'margin-top': '5px'});
+			$('a.story-game-button').css({'bottom': '-35px'});
 		}
 		else {
 			let viewer = $('#story-viewer')[0];
@@ -67,6 +83,10 @@ function Render(id){
 			} else if (viewer.msRequestFullscreen) { /* IE/Edge */
 				viewer.msRequestFullscreen();
 			}
+			$('#page-content').css({'height': 'calc(100% - 120px)'});
+			$('#fullscreen-toggle').css({'bottom': '10px'});
+			$('#page-controller').css({'margin-top': '19px'});
+			$('a.story-game-button').css({'bottom': '10px'});
 		}
 	});
 

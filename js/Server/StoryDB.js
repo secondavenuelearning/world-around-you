@@ -28,6 +28,8 @@ function AddStoriesMetadata (storyResults){
 					description: {},
 					writtenLanguages: [],
 					signLanguages: [],
+					signer: {},
+					translator: {},
 					genres: {},
 					tags: {},
 					views: 0,
@@ -114,6 +116,56 @@ function AddStoriesMetadata (storyResults){
 								lang = writtenLanguages[result[i].writtenlanguageId].name;
 
 							stories[storyId].metadata.writtenLanguages.push(lang);
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
+						}
+
+						return _resolve();
+					}).catch((err) => {
+						return _reject(err);
+					});
+				}));
+
+				// Load the signers
+				dataPromises.push(new Promise((_resolve, _reject) => {
+					let query = 'SELECT * from signer',
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
+
+							stories[storyId].metadata.signer[lang] = result[i].name;
+							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
+						}
+
+						return _resolve();
+					}).catch((err) => {
+						return _reject(err);
+					});
+				}));
+
+				// Load the translator
+				dataPromises.push(new Promise((_resolve, _reject) => {
+					let query = 'SELECT * from translator',
+						where = '';
+
+					for(let id in stories){
+						if(where == '') where += ` WHERE storyId = ${id}`;
+						else where += ` OR storyId = ${id}`;
+					}
+
+					conn.query(query + where).then(result => {
+						for(let i = 0; i < result.length; i++){
+							let storyId = result[i].storyId,
+								lang = writtenLanguages[result[i].writtenlanguageId].name;
+
+							stories[storyId].metadata.translator[lang] = result[i].name;
 							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
 
@@ -302,7 +354,79 @@ function DeleteFromAssociationTable(storyId, otherId, table, otherIdField){
 	});	
 }
 
+function DeleteStoryFromAssociationTable(storyId, table){
+	return new Promise((resolve, reject) => {
+		let query = `DELETE FROM ${table} WHERE storyId = ?`;
+
+		if(table == "story"){
+			query = `DELETE FROM ${table} WHERE id = ?`;
+		}
+
+		pool.query(query, [storyId]).then((result) => {
+			return resolve(true);
+		}).catch((err) => {
+			return reject(err);
+		});
+	});	
+}
+
+function DeleteGameFromAssociationTable(gameId, table){
+	return new Promise((resolve, reject) => {
+		let query = `DELETE FROM ${table} WHERE id = ?`;
+		pool.query(query, [gameId]).then((result) => {
+			return resolve(true);
+		}).catch((err) => {
+			return reject(err);
+		});
+	});	
+}
 function SetTitleOrDescription(storyId, writtenlanguageId, name, table){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			new Promise((_resolve, _reject) => {
+
+				let query = `SELECT * from ${table} WHERE storyId = ? AND writtenlanguageId = ?`;
+
+				conn.query(query, [storyId, writtenlanguageId]).then((result) => {
+					_resolve(result[0]);
+				}).catch((err) => {
+					_reject(err);
+				})
+
+			}).then((entry) => {
+				let query = `INSERT INTO ${table} (storyId, writtenlanguageId, name) VALUES (?, ?, ?)`,
+					queryVars = [storyId, writtenlanguageId, name];
+
+				if(entry){
+					query = `UPDATE ${table} SET name = ? WHERE id = ?`;
+					queryVars = [name, entry.id];
+				}
+
+				conn.query(query, queryVars).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.insertId);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
+				});
+			}).catch((err) => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch((err) => {
+			return reject(err);
+		});
+
+	});	
+}
+
+function SetSignerorTranslator(storyId, writtenlanguageId, name, table){
 	return new Promise((resolve, reject) => {
 
 		pool.getConnection().then(conn => {
@@ -429,10 +553,36 @@ function StoryDB(){
 		return DeleteFromAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
 	}
 
+	StoryDB.prototype.deleteStory = function(storyId){
+		return new Promise((resolve, reject) => {
+			DeleteStoryFromAssociationTable(storyId,'description');
+			DeleteStoryFromAssociationTable(storyId,'story_to_genre');
+			DeleteStoryFromAssociationTable(storyId,'story_to_signlanguage');
+			DeleteStoryFromAssociationTable(storyId,'story_to_writtenlanguage');
+			DeleteStoryFromAssociationTable(storyId,'story_to_user');
+			DeleteStoryFromAssociationTable(storyId,'story_to_tag');
+			DeleteStoryFromAssociationTable(storyId,'title');
+			DeleteStoryFromAssociationTable(storyId,'view');
+			DeleteStoryFromAssociationTable(storyId,'story');
+			return resolve(true);
+		}).catch((err) => {
+			return reject(err);
+		});
+	}
+	StoryDB.prototype.deleteGame = function(gameId){
+		return new Promise((resolve, reject) => {
+			DeleteGameFromAssociationTable(gameId,'gamedata');
+			return resolve(true);
+		}).catch((err) => {
+			return reject(err);
+		});
+	}
+
+
 // Get
 	StoryDB.prototype.get = function(storyId, userId){
 		return new Promise((resolve, reject) => {
-			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+			let storyQuery = 'SELECT story.id, story.author, story.artist, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
 			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
 			storyQuery += ' WHERE id = ?';
 
@@ -449,7 +599,7 @@ function StoryDB(){
 	}
 	StoryDB.prototype.getAll = function(includeUnpublished, userId){
 		return new Promise((resolve, reject) => {
-			let storyQuery = 'SELECT story.id, story.author, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
+			let storyQuery = 'SELECT story.id, story.author, story.artist, story.coverimage, story.visible, story.datemodified, story.datecreated from story';
 			if(userId) storyQuery += ' JOIN  story_to_user ON story_to_user.storyId = story.id AND story_to_user.userId = ?';
 			if(!includeUnpublished) storyQuery += ' WHERE visible = 1';
 			storyQuery += ' ORDER BY story.id DESC';
@@ -494,12 +644,12 @@ function StoryDB(){
 	}
 
 // Updates
-	StoryDB.prototype.setCover = function(id, author, coverImage) {
+	StoryDB.prototype.setCover = function(id, author, artist, coverImage) {
 		return new Promise((resolve, reject) => {
 			coverImage = coverImage || null;
 
-			let query = 'UPDATE story SET author = ?, coverimage = ? WHERE id = ?';
-			pool.query(query, [author, coverImage, id]).then((result) => {
+			let query = 'UPDATE story SET author = ?, artist = ?, coverimage = ?  WHERE id = ?';
+			pool.query(query, [author, artist, coverImage, id]).then((result) => {
 				return resolve(result.affectedRows);
 			}).catch((err) => {
 				return reject(err);
@@ -523,6 +673,12 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setTitle = function(storyId, writtenlanguageId, name) {
 		return SetTitleOrDescription(storyId, writtenlanguageId, name, 'title');
+	}
+	StoryDB.prototype.setSigner = function(storyId, writtenlanguageId, name) {
+		return SetSignerorTranslator(storyId, writtenlanguageId, name, 'signer');
+	}
+	StoryDB.prototype.setTranslator = function(storyId, writtenlanguageId, name) {
+		return SetSignerorTranslator(storyId, writtenlanguageId, name, 'translator');
 	}
 	StoryDB.prototype.setVisible = function(storyId) {
 		return new Promise((resolve, reject) => {

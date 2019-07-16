@@ -291,6 +291,22 @@ let apiRoutes = function(app){
 				return req.error(err); // res.status(500).send(err);
 			});
 		});
+		app.get('/StoryDelete', ValidateUser, (req, res) => {
+			let storyId = req.query.storyId;			
+			StoryDB.deleteStory(storyId).then(function() {
+				return res.redirect('back');
+			}).catch(err => {
+				return req.error(err); // res.status(500).send(err);
+			});
+		});
+		app.get('/GameDelete', ValidateUser, (req, res) => {			
+			let gameId = req.query.gameId;	
+			StoryDB.deleteGame(gameId).then(function() {
+				return res.redirect('back');
+			}).catch(err => {
+				return req.error(err); // res.status(500).send(err);
+			});
+		});
 		app.post('/api/story/languages', ValidateUser, ValidateStory, (req, res) => {
 			let id = parseInt(req.body.id),
 				storyWrittenLanguages = req.body.writtenLanguages || [],
@@ -414,13 +430,13 @@ let apiRoutes = function(app){
 		app.post('/api/story/cover', ValidateUser, ValidateStory, (req, res) => {
 			let id = parseInt(req.body.id),
 				author = req.body.author || '',
+				artist = req.body.artist || '',
 				coverImage = req.body.coverImage,
 				story = req.story;
-
-			StoryDB.setCover(id, author, coverImage).then(function(result) {
+			StoryDB.setCover(id, author, artist, coverImage).then(function(result) {
 				story.author = author;
+				story.artist = artist;
 				story.coverimage = coverImage;
-
 				return res.send(story);
 			}).catch((err) =>{
 				return req.error(err);
@@ -493,6 +509,28 @@ let apiRoutes = function(app){
 						promises.push(new Promise((_resolve, _reject) => {
 							StoryDB.setDescription(story.id, languages[lang].id, metadata.description[lang]).then(() => {
 								story.metadata.description[lang] = metadata.description[lang];
+								_resolve();
+							}).catch((err) => {
+								_reject(err);
+							});
+						}));
+					}
+					// add or update signer
+					for(let lang in metadata.signer){
+						promises.push(new Promise((_resolve, _reject) => {
+							StoryDB.setSigner(story.id, languages[lang].id, metadata.signer[lang]).then(() => {
+								story.metadata.signer[lang] = metadata.signer[lang];
+								_resolve();
+							}).catch((err) => {
+								_reject(err);
+							});
+						}));
+					}
+					// add or update translator
+					for(let lang in metadata.translator){
+						promises.push(new Promise((_resolve, _reject) => {
+							StoryDB.setTranslator(story.id, languages[lang].id, metadata.translator[lang]).then(() => {
+								story.metadata.translator[lang] = metadata.translator[lang];
 								_resolve();
 							}).catch((err) => {
 								_reject(err);

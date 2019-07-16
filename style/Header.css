@@ -18,14 +18,14 @@ nav{
 	bottom: 0px;
 	width: 80%;
 	left: 20%;
-	padding: 3px 15px;
+	padding: 3px 25px;
 }
 nav > div{
 	position: relative;
 	float: right;
 	margin-left: 15px;
-	height: 48px;
-	width: 48px;
+	height: 40px;
+	width: 40px;
 }
 .nav-icon{
 	display: block;
@@ -52,13 +52,15 @@ nav > div:not(#nav-search):not(.active):hover #nav-games-icon{
 }
 #nav-user-icon{
 	background-image: url('../../img/icons/NavBar/nav_acct.svg');
+	right: 5px;
 }
 nav > div:not(#nav-search):not(.active):hover #nav-user-icon, #nav-user-icon:focus{
 	background-image: url('../../img/icons/NavBar/nav_acct_hoverDown.svg');
 }
 #nav-edit-icon{
 	background-image: url('../../img/icons/NavBar/nav_SB.svg');
-	height: 110%;
+	height: 100%;
+	right: 5px;
 }
 nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 	background-image: url('../../img/icons/NavBar/nav_SB_hover_selected.svg');
@@ -95,10 +97,11 @@ nav > div:not(#nav-search):not(.active):hover #nav-edit-icon{
 }
 #nav-search #nav-serach-input, #nav-search #nav-submit-input{
 	position: absolute;
-	bottom: 0px;
+	bottom: 2px;
 	right: 0px;
 	height: 30px;
 	width: 35px;
+	margin-right: 10px;
 }
 #nav-search #nav-serach-input{
 	width: 250px;

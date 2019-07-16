@@ -2,18 +2,82 @@
 <html lang="en">
 <head>
 	<title>World Around You</title>
+	<link rel="prefetch" href="../img/ajax-loader.gif">
 	<link rel="stylesheet" href="style/Main.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script type="text/javascript" src="./jspm_packages/system.js"></script>
 	<script type="text/javascript" src="./config.js"></script>
 	<script type="text/javascript">
 		System.import('./js/Client/Header.js');
-		System.import('./js/Client/<%- Page %>.js');
-	</script>
-</head>
-<body>
-	<header></header>
-	<main></main>
-	<footer></footer>
-</body>
-</html>
+		System.import('./js/Client/<%- Page %>.js');		
+
+		$(document).ready(function() {
+			var img1 = new Image();
+			img1.src = "../img/ajax-loader.gif";
+			var fileURL = "../img/555kbFile.jpg";
+			var netSpeed = 0;
+
+			var request = new XMLHttpRequest();
+			var avoidCache = "?avoidcache=" + (new Date()).getTime();;
+			request.open('GET', fileURL + avoidCache, true);
+			var startTime = (new Date()).getTime();
+			var endTime = startTime;
+			request.onreadystatechange = function () {
+				if (request.readyState == 2){
+			        //ready state 2 is when the request is sent
+			        startTime = (new Date().getTime());
+			    }
+			    if (request.readyState == 4){
+			    	endTime = (new Date()).getTime();
+			    	var downloadSize = request.responseText.length;
+			    	var time = (endTime - startTime) / 1000;
+			    	var sizeInBits = downloadSize * 8;
+			    	netSpeed = ((sizeInBits / time) / (1024 * 1024)).toFixed(2);
+			    	//console.log(downloadSize, time, netSpeed);
+			    	startLoadCheck();
+				}
+			}
+				request.send();
+				var requestCount = performance.getEntriesByType("resource").length;
+				var speedMod = 0;
+				function startLoadCheck(){
+					var resources = performance.getEntriesByType("resource");
+					if(netSpeed <= .05){
+						speedMod = 180;
+					}else if(netSpeed <= .1){
+						speedMod = 120;
+					}else if(netSpeed <= .25){
+						speedMod = 80;
+					}else if(netSpeed <= .5){
+						speedMod = 60;
+					}else if(netSpeed <= 1){
+						speedMod = 45;
+					}else if(netSpeed <= 3){
+						speedMod = 30;
+					}else if(netSpeed <= 5){
+						speedMod = 15;
+					}else if(netSpeed <= 10){
+						speedMod = 10;
+					}
+					speedMod *= 1000;
+					setTimeout(checkRequests, speedMod);
+				}
+				function checkRequests(){
+					if(performance.getEntriesByType("resource").length > requestCount){
+						requestCount = performance.getEntriesByType("resource").length;
+						setTimeout(checkRequests, speedMod);
+					}else{
+						$(".loading-icon").fadeOut("slow");
+					}
+				}
+			});
+		</script>
+	</head>
+	<div class="loading-icon" rel="preload" style="background: url('../img/ajax-loader.gif') center no-repeat #fff;"></div>
+	<body>
+		<header></header>
+		<main></main>
+		<footer>World Around You is a publishing platform and does not own any of the content on the platform. It is up to the authors to make sure all content rights are cleared for educational use.</footer>
+	</body>
+
+	</html>

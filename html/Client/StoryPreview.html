@@ -13,6 +13,13 @@
 				<div class="description" lang="<%- lang %>"><%- description %></div>
 			<% }) %>
 		</a>
+		<div id="social">
+			<button id="social-views" class="social">Views: <span id="views"><%- story.metadata.views %></span></button>
+			<button id="social-likes" class="social">Likes: <span id="likes"><%- story.metadata.likes %></span></button>
+		</div>
+		<% if(user){ %>
+			<a class="story-delete-button" href="./StoryDelete?storyId=<%- story.id %>" onclick="return confirm('Are you sure you want to delete this Story?')"></a>
+		<% }%>
 		<% if(online){ %>
 			<a class="story-game-button" href="./Games?storyId=<%- story.id %>"></a>
 		<% } %>

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2019 at 04:51 PM
--- Server version: 5.6.17
--- PHP Version: 7.1.9
+-- Generation Time: Jul 16, 2019 at 06:32 PM
+-- Server version: 5.7.14
+-- PHP Version: 5.6.25
 
 SET FOREIGN_KEY_CHECKS=0;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -93,6 +93,21 @@ CREATE TABLE `liked` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `signer`
+--
+
+CREATE TABLE `signer` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `writtenlanguageId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `storyId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `signlanguage`
 --
 
@@ -112,6 +127,7 @@ CREATE TABLE `signlanguage` (
 CREATE TABLE `story` (
   `id` int(11) UNSIGNED NOT NULL,
   `author` varchar(256) DEFAULT NULL,
+  `artist` varchar(256) CHARACTER SET latin1 COLLATE latin1_spanish_ci DEFAULT NULL,
   `coverimage` varchar(512) DEFAULT NULL,
   `visible` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
   `data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
@@ -210,6 +226,21 @@ CREATE TABLE `tag` (
 --
 
 CREATE TABLE `title` (
+  `id` int(11) UNSIGNED NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `writtenlanguageId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `storyId` int(11) UNSIGNED NOT NULL DEFAULT '0',
+  `datemodified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `datecreated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `translator`
+--
+
+CREATE TABLE `translator` (
   `id` int(11) UNSIGNED NOT NULL,
   `name` varchar(256) DEFAULT NULL,
   `writtenlanguageId` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -322,6 +353,15 @@ ALTER TABLE `liked`
   ADD KEY `storyId` (`storyId`);
 
 --
+-- Indexes for table `signer`
+--
+ALTER TABLE `signer`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `name` (`name`),
+  ADD KEY `writtenlanguageId` (`writtenlanguageId`),
+  ADD KEY `storyId` (`storyId`);
+
+--
 -- Indexes for table `signlanguage`
 --
 ALTER TABLE `signlanguage`
@@ -393,6 +433,15 @@ ALTER TABLE `title`
   ADD KEY `storyId` (`storyId`);
 
 --
+-- Indexes for table `translator`
+--
+ALTER TABLE `translator`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `name` (`name`),
+  ADD KEY `writtenlanguageId` (`writtenlanguageId`),
+  ADD KEY `storyId` (`storyId`);
+
+--
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
@@ -434,109 +483,101 @@ ALTER TABLE `writtenlanguage`
 --
 ALTER TABLE `description`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `game`
 --
 ALTER TABLE `game`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `gamedata`
 --
 ALTER TABLE `gamedata`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `genre`
 --
 ALTER TABLE `genre`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `liked`
 --
 ALTER TABLE `liked`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
+--
+-- AUTO_INCREMENT for table `signer`
+--
+ALTER TABLE `signer`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `signlanguage`
 --
 ALTER TABLE `signlanguage`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story`
 --
 ALTER TABLE `story`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story_to_genre`
 --
 ALTER TABLE `story_to_genre`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story_to_signlanguage`
 --
 ALTER TABLE `story_to_signlanguage`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story_to_tag`
 --
 ALTER TABLE `story_to_tag`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story_to_user`
 --
 ALTER TABLE `story_to_user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `story_to_writtenlanguage`
 --
 ALTER TABLE `story_to_writtenlanguage`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `tag`
 --
 ALTER TABLE `tag`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `title`
 --
 ALTER TABLE `title`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
+--
+-- AUTO_INCREMENT for table `translator`
+--
+ALTER TABLE `translator`
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `usertype`
 --
 ALTER TABLE `usertype`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `view`
 --
 ALTER TABLE `view`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `writtenlanguage`
 --
 ALTER TABLE `writtenlanguage`
   MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
-
 --
 -- Constraints for dumped tables
 --

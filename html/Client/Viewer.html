@@ -7,7 +7,14 @@
 				<span lang="<%- lang %>"><%- title %></span>
 			<% }) %>
 		</div>
-		<div id="author"><%- story.author %></div>
+		<div id="storyCredits">
+			<span id="author" class="storyCredits">Author: <%- story.author %></span>
+			<span id="artist" class="storyCredits">Artist: <%- story.artist %></span>
+			<% _.each(story.metadata.description, function(description, lang){ %>
+			<span id="signer" lang="<%- lang %>"class="storyCredits">Signer: <%- story.metadata.signer[lang] %></span>
+			<span id="translator" lang="<%- lang %>" class="storyCredits">Translator: <%- story.metadata.translator[lang] %></span>
+			<% }) %>
+		</div>
 		<% if(online){ %>
 			<div id="social">
 				<button id="social-views" class="social">Views <span id="views"><%- story.metadata.views %></span></button>

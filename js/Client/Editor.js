@@ -227,7 +227,15 @@ function renderLanguagePage(){
 			});
 
 			$('.add-language').on('click', (evt) => {
-				let type = $(evt.currentTarget).attr('lang-type');
+				let type = $(evt.currentTarget).attr('lang-type'),
+					autoComplete = [];
+					/*
+				var	typeList = type == 'written' ? storyWrittenLanguages : storySignLanguages;
+
+					_.each(typeList, (acObj) => {
+							autoComplete.push(acObj.name);
+					});
+					*/
 				RenderAddText($(evt.currentTarget).parent(), type, null, () => {
 					var language = $('.add-text-input').val();
 					if(language == '') {
@@ -287,11 +295,12 @@ function renderLanguagePage(){
 function renderCoverPage(){
 	let coverImage = story.coverimage,
 		author = story.author,
+		artist = story.artist,
 		newImageFile;
-
 	var ReRender = function(unsavedChanges){
 		$('#editor-content').html(coverTemplate({
 			author,
+			artist,
 			coverImage,
 			unsavedChanges
 		}));
@@ -314,11 +323,13 @@ function renderCoverPage(){
 			reader.readAsDataURL(file);
 		});
 
-		$('#author-input').on('change keydown keyup', (evt) => {
+		$('#author-input, #artist-input').on('change keydown keyup', (evt) => {
 			var _author = $('#author-input').val();
-			if(author == _author) return;
+			var _artist = $('#artist-input').val();
+			//if(author == _author) return;
 
 			author = _author;
+			artist = _artist;
 
 			// not calling ReRender here so that the user does not lose focus
 			$('#save-cover').prop('disabled', false);
@@ -344,6 +355,7 @@ function renderCoverPage(){
 				let data = {
 					id: storyId,
 					author,
+					artist,
 					coverImage
 				};
 
@@ -414,6 +426,8 @@ function renderMetadataPage(){
 		// setting properties as empty object if they don't exist so we don't have to check for their existance later
 		metadata.title = metadata.title || {};
 		metadata.description = metadata.description || {};
+		metadata.signer = metadata.signer || {};
+		metadata.translator = metadata.translator || {};
 		metadata.genres = metadata.genres || {};
 		metadata.tags = metadata.tags || {};
 
@@ -431,7 +445,7 @@ function renderMetadataPage(){
 				ReRender(unsavedChanges);
 			});
 
-			$('#title-input, #description-input').on('change keydown keyup', (evt) => {
+			$('#title-input, #description-input, #signer-input, #translator-input').on('change keydown keyup', (evt) => {
 				let $el = $(evt.currentTarget);
 				metadata[$el.attr('data-type')][currentWrittenLanguage] = $el.val();
 
@@ -466,7 +480,7 @@ function renderMetadataPage(){
 				RenderAddText($(evt.currentTarget).parent(), type, autoComplete, (el) => {
 					let value = $('.add-text-input').val();
 
-					if(value == '') return;
+					//if(value == '') return;
 
 					let data = {
 						name: value,
@@ -872,6 +886,10 @@ function renderPagesPage(renderData){
 				// $('#video-container').prepend(`<video id="video-player" controls autoplay muted loop src="${reader.result}"></video>`);
 				// $('#video-player').attr('src', reader.result);
 
+				var isMov = file.name.match(/mov$/gi);
+				if(isMov){
+					alert('Files of this type must be converted by the server before they can be previewed. Saving this page will begin the conversion.');
+				}
 				if(!data[currentPageIndex].video) data[currentPageIndex].video = {};
 				data[currentPageIndex].video[currentSignLanguage] = reader.result;
 
@@ -1180,8 +1198,7 @@ function renderPublishPage(){
 }
 
 function RenderAddText(beforeElement, dataType, autocompleteValues, saveCallback){
-	$('.add-text-container').remove();
-
+	$('.add-text-container').remove();	
 	var $el = $(addTextTemplate({
 		autocompleteValues,
 		dataType
@@ -1199,33 +1216,60 @@ function RenderAddText(beforeElement, dataType, autocompleteValues, saveCallback
 	});
 
 	if(autocompleteValues){
+		var closeAutoComplete = function(){
+			$('.autocomplete-container').hide();
+			document.removeEventListener("click", closeAutoComplete);
+		};
 		$('.autocomplete-button').on('click', (evt) => {
 			let value = $(evt.currentTarget).html();
 			$('.add-text-input').val(value);
 			$('.save-text').trigger('click');
 		});
 		$('.autocomplete-container').hide();
+		$('.autocomplete-button').each((i, el) => {
+			$('.autocomplete-button').prop('disabled', false);
+			$(el).prop('disabled', false);
+			$('.autocomplete-container').show();
+		});
+
 		$('.add-text-input').on('change keydown keyup', () => {
 			$('.autocomplete-container').hide();
-
 			let value = $('.add-text-input').val();
-			if(value == '')
-				return;
+			//if(value == '')
+				//return;
 
 			let match = false;
 			$('.autocomplete-button').prop('disabled', true);
 			$('.autocomplete-button').each((i, el) => {
 				let _value = $(el).html();
-				var regExp = new RegExp(`^${value}`, 'i');
-				if(_value.match(regExp)) {
+				if(value == ''){
 					match = true;
 					$(el).prop('disabled', false);
+				}else{
+					var regExp = new RegExp(`^${value}`, 'i');
+
+					if(_value.match(regExp)) {
+						match = true;
+						$(el).prop('disabled', false);
+					} 
 				}
 			});
-
 			if(match) 
 				$('.autocomplete-container').show();
+			setTimeout(function(){
+				document.addEventListener("click", closeAutoComplete);	
+			}, 50);
 		});
+		$('.add-text-input').on('focus', () =>{
+			event.preventDefault();
+			event.stopPropagation();
+			event.stopImmediatePropagation();
+			$('.autocomplete-container').show();
+			setTimeout(function(){
+				document.addEventListener("click", closeAutoComplete);	
+			}, 500);
+		});
+				
 	}
 
 	$('.add-text-input').focus();
