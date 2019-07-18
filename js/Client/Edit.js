@@ -20,7 +20,7 @@ $(document).ready(function () {
                 if(reg[0]) reg[0].unregister();
             });
         }
-        alert('World Around You is a publishing platform and does not own any of the content on the platform. It is up to the authors to make sure all content rights are cleared for educational use.');
+        alert('World Around You is used by people of all ages. Please make sure any content you share on the site is appropriate for everyone to see.');
         var storyPreviews = [];
         if(stories.length > 0){
             for (var i = 0; i < stories.length; i++) {

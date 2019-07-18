@@ -11,6 +11,13 @@
 		System.import('./js/Client/Header.js');
 		System.import('./js/Client/<%- Page %>.js');		
 
+		/* In bad internet locations, espcially locations of our target audience, the internet is so slow that it will take minutes to load some pages.
+		   There is not a good way to reliably check if the page is done loading that works across browsers.
+		   This function does a rough estimate of the internet speed of the user, and uses that to set a timeout (X) on when it checks the page for loaded assets.
+		   Every X seconds, if there are more images on the page then there was X seconds ago, the page is still loading. Repeat every X seconds until no new loaded
+		   image is found. 
+		   This is not perfect and should be considered a rough estimate.
+		*/
 		$(document).ready(function() {
 			var img1 = new Image();
 			img1.src = "../img/ajax-loader.gif";
@@ -77,7 +84,7 @@
 	<body>
 		<header></header>
 		<main></main>
-		<footer>World Around You is a publishing platform and does not own any of the content on the platform. It is up to the authors to make sure all content rights are cleared for educational use.</footer>
+		<footer>World Around You is a publishing platform and does not own any of the content authors upload to the site. Authors must ensure they have the rights to all content before sharing it on the platform.</footer>
 	</body>
 
 	</html>
