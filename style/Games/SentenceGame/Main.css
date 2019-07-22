@@ -307,6 +307,7 @@ header #responseText
 }
 footer{
       z-index: -10;
+      text-align: unset;
 }
 
 #wall, #bird
