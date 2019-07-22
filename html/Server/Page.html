@@ -56,15 +56,15 @@
 					}else if(netSpeed <= .25){
 						speedMod = 80;
 					}else if(netSpeed <= .5){
-						speedMod = 60;
-					}else if(netSpeed <= 1){
 						speedMod = 45;
-					}else if(netSpeed <= 3){
+					}else if(netSpeed <= 1){
 						speedMod = 30;
+					}else if(netSpeed <= 3){
+						speedMod = 20;
 					}else if(netSpeed <= 5){
-						speedMod = 15;
+						speedMod = 5;
 					}else if(netSpeed <= 10){
-						speedMod = 10;
+						speedMod = 3;
 					}
 					speedMod *= 1000;
 					setTimeout(checkRequests, speedMod);
