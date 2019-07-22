@@ -563,6 +563,8 @@ function StoryDB(){
 			DeleteStoryFromAssociationTable(storyId,'story_to_tag');
 			DeleteStoryFromAssociationTable(storyId,'title');
 			DeleteStoryFromAssociationTable(storyId,'view');
+			DeleteStoryFromAssociationTable(storyId,'signer');
+			DeleteStoryFromAssociationTable(storyId,'translator');
 			DeleteStoryFromAssociationTable(storyId,'story');
 			return resolve(true);
 		}).catch((err) => {
