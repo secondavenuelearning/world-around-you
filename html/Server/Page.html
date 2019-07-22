@@ -63,14 +63,15 @@
 						speedMod = 20;
 					}else if(netSpeed <= 5){
 						speedMod = 5;
-					}else if(netSpeed <= 10){
-						speedMod = 3;
 					}
 					speedMod *= 1000;
 					setTimeout(checkRequests, speedMod);
 				}
 				function checkRequests(){
 					if(performance.getEntriesByType("resource").length > requestCount){
+						if(speedMod == 0){
+							$(".loading-icon").fadeOut("slow");
+						}
 						requestCount = performance.getEntriesByType("resource").length;
 						setTimeout(checkRequests, speedMod);
 					}else{
