@@ -16,6 +16,8 @@ h2{
     text-align: center;
     padding: 15px;
     background-color: #0098BA;
+    z-index: 2;
+    position: relative;
 }
 #game-select .custom-select-value{
 	background-size: 40px;

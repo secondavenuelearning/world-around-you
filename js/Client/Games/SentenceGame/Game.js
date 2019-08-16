@@ -62,6 +62,7 @@ var notif = {
         "oof",
         "Give it another shot",
         "Thats not it",
+
         "Return to sender",
         ":("
     ]
@@ -303,28 +304,24 @@ function NextRound() {
     //get random terms
     var options = [rounds[round].term]; //options includes the corrcet option first
 
-    for (var i = 0; i < 2; i++) {
+    while (options.length < 3) {
         var page = Math.floor(Math.random() * (storyData.length));
         //check if page has a glossary
         if(storyData[page].hasOwnProperty('glossary'))
         {
-            var terms = Object.keys(storyData[page].glossary[writtenLang]);
+            var terms = [];
+
+            _.each(storyData[page].glossary[writtenLang], (termData, termName) => {
+                if(!termData.video[signLang]) return;
+                terms.push(termName)
+            });
             var term = ChooseRandomArrayElement(terms);
 
             //check if we ahve already used this term
             if (!options.includes(term)) { //we havent- add it to options
                 options.push(term);
-            } else //we have :( try again
-            {
-                i--;
             }
         }
-        else
-        {
-            //try again for a page with glossary terms
-            i--;
-        }
-
     }
 
     //map the terms to where they are in the story data- this is mainly for the correct option
@@ -362,10 +359,9 @@ function NextRound() {
         term = term.substring(0, term.length - 3); //remove "Vid" from id to just get term
 
         //get term data - broken into steps
-        var termData = storyData[termMap[term]].glossary;
-        termData = termData[writtenLang];
-        termData = termData[term].video;
-        termData = termData[signLang];
+        let glossary = storyData[termMap[term]].glossary[writtenLang];
+        let video = glossary[term].video;
+        let termData = video[signLang];
 
 
         //add looping
@@ -642,13 +638,15 @@ Loops video clip
 */
 function LoopVideoClip(videoID, start, end) {
     //get video
-    var videoContainer = document.getElementById(videoID); 
+    var videoContainer = document.getElementById(videoID);
     
     //update src to have start/end clip time information
-    videoContainer.src += "#t=" + start + "," + end;
+    // videoContainer.src += "#t=" + start + "," + end;
     
     //after video has loaded- add listeners for time update so clip will loop through the given start/end
     videoContainer.addEventListener('loadedmetadata', function () {
+        start = start || 0;
+        end = end || videoContainer.duration;
         //push video to "start" if  before begining of clip
         if (videoContainer.currentTime < start) {
             videoContainer.currentTime = start;
