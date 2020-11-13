@@ -165,6 +165,28 @@ function showStory(){
 		});
 	});
 
+	// Export button function
+	$('#social-export').on('click', () => {
+		//let curWrittenLang = StoryViewer.GetCurrentWrittenLanguage(),
+			//curSignLang = StoryViewer.GetCurrentSignLanguage();
+		$.ajax({
+			method: 'post',
+			url: '/api/story/export',//`/api/story/export?writtenlang=${curWrittenLang}&signLang=${curSignLang}`,'/api/story/export?lang=${storyId}',
+			data: {
+				id: story.id,
+				curWrittenLang: StoryViewer.GetCurrentWrittenLanguage(),
+				curSignLang : StoryViewer.GetCurrentSignLanguage()
+			}
+		}).done((stories) => {
+			console.log("work");
+			console.log(stories);
+			setTimeout(() => {window.location.href = stories}, 20000);
+			//window.location.href = stories;
+		}).fail((err) => {
+			console.error(err);
+		});
+	});
+
 	// Share button function
 	$('#social-share').on('click', (evt) => {
 		let copyInput = $(`<input type="text" style="position: absolute; z-index: -1" value="${window.location.href}" />`);

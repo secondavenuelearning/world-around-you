@@ -20,6 +20,7 @@
     "babel-core": "^6.26.3",
     "compression": "^1.7.4",
     "connect-loki": "^1.1.0",
+    "epub-gen": "^0.1.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "ffmpeg": "0.0.4",

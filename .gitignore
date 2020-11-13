@@ -1,4 +1,6 @@
-node_modules/
+node_modules/*
+!node_modules/epub-gen/
+node_modules/epub-gen/tempDir
 jspm_packages/
 js/Server/Settings.js
 session-store.db

@@ -64,7 +64,7 @@ function AddStoriesMetadata (storyResults){
 						for(let i = 0; i < result.length; i++){
 							let storyId = result[i].storyId,
 								lang = writtenLanguages[result[i].writtenlanguageId].name;
-
+								
 							stories[storyId].metadata.title[lang] = result[i].name;
 							if(result[i].datemodified > stories[storyId].datemodified) stories[storyId].datemodified = result[i].datemodified;
 						}
@@ -472,6 +472,52 @@ function SetSignerorTranslator(storyId, writtenlanguageId, name, table){
 	});	
 }
 
+function SetAuthor(storyId, writtenlanguageId, name, table){
+	return new Promise((resolve, reject) => {
+
+		pool.getConnection().then(conn => {
+
+			new Promise((_resolve, _reject) => {
+
+				let query = `SELECT * from ${table} WHERE storyId = ? AND writtenlanguageId = ?`;
+
+				conn.query(query, [storyId, writtenlanguageId]).then((result) => {
+					_resolve(result[0]);
+				}).catch((err) => {
+					_reject(err);
+				})
+
+			}).then((entry) => {
+				let query = `INSERT INTO ${table} (storyId, writtenlanguageId, name) VALUES (?, ?, ?)`,
+					queryVars = [storyId, writtenlanguageId, name];
+
+				if(entry){
+					query = `UPDATE ${table} SET name = ? WHERE id = ?`;
+					queryVars = [name, entry.id];
+				}
+
+				conn.query(query, queryVars).then((result) => {
+					conn.end().then(() => {
+						return resolve(result.insertId);
+					});
+				}).catch((err) => {
+					conn.end().then(() => {
+						return reject(err);
+					});
+				});
+			}).catch((err) => {
+				conn.end().then(() => {
+					return reject(err);
+				});
+			});
+
+		}).catch((err) => {
+			return reject(err);
+		});
+
+	});	
+}
+
 function AddViewOrLike(storyId, table){
 	return new Promise((resolve, reject) => {
 		let query = `INSERT INTO ${table} (storyId) VALUES (?)`;
@@ -508,6 +554,9 @@ function StoryDB(){
 	}
 	StoryDB.prototype.addUser = function(storyId, userId) {
 		return AddToAssociationTable(storyId, userId, 'story_to_user', 'userId');
+	}
+	StoryDB.prototype.addAuthor = function(storyId, authorId) {
+		return AddToAssociationTable(storyId, userId, 'story_to_author', 'authorId');
 	}
 	StoryDB.prototype.addWrittenLanguage = function(storyId, writtenlanguageId) {
 		return AddToAssociationTable(storyId, writtenlanguageId, 'story_to_writtenlanguage', 'writtenlanguageId');
@@ -675,6 +724,9 @@ function StoryDB(){
 	}
 	StoryDB.prototype.setTitle = function(storyId, writtenlanguageId, name) {
 		return SetTitleOrDescription(storyId, writtenlanguageId, name, 'title');
+	}
+	StoryDB.prototype.setAuthor = function(storyId, writtenlanguageId, name) {
+		return SetAuthor(storyId, writtenlanguageId, name, 'author');
 	}
 	StoryDB.prototype.setSigner = function(storyId, writtenlanguageId, name) {
 		return SetSignerorTranslator(storyId, writtenlanguageId, name, 'signer');

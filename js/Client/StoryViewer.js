@@ -249,7 +249,16 @@ function GenerateGlossaryButtons(page){
 	});
 }
 
+function GetCurrentWrittenLanguage(){
+	return currentWrittenLanguage;
+}
+function GetCurrentSignLanguage(){
+	return currentSignLanguage;
+}
+
 export default {
 	SetStory,
-	Render
+	Render,
+	GetCurrentWrittenLanguage,
+	GetCurrentSignLanguage
 }

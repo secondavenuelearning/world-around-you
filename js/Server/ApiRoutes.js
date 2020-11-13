@@ -8,8 +8,7 @@ const SignLanguageDB = require('./SignLanguageDB');
 const GenreDB = require('./GenreDB');
 const TagDB = require('./TagDB');
 const GameDB = require('./GameDB');
-
-
+const ExportEPub = require('./ExportEPub.js');
 /**
  * Create a random string at the desired length
  * @param  {int} length         the desired length of the string
@@ -713,6 +712,22 @@ let apiRoutes = function(app){
 			StoryDB.addLike(id).then((result) => {
 				return res.send(true);
 			}).catch((err) =>{
+				return req.error(err);
+			});
+		});
+		//app.post('/api/story/export', ValidateUser, ValidateStory, (req, res) => {
+		app.post('/api/story/export', ValidateStory, (req, res) => {
+			let story = req.story,
+			    data = req.story.data,
+			    url = "http://" + req.headers.host,
+			    writtenlanguageId = req.body.curWrittenLang,
+				signlanguageId = req.body.curSignLang;
+				//console.log(story.metadata);
+			ExportEPub.generateContent(story, data, url, writtenlanguageId, signlanguageId).then((result) =>{
+				console.log("result: " + result);
+				res.send(result);
+			}).catch((err) =>{
+				console.log("error: " + err);
 				return req.error(err);
 			});
 		});
