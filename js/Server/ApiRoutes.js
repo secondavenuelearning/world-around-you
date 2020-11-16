@@ -722,7 +722,6 @@ let apiRoutes = function(app){
 			    url = "http://" + req.headers.host,
 			    writtenlanguageId = req.body.curWrittenLang,
 				signlanguageId = req.body.curSignLang;
-				//console.log(story.metadata);
 			ExportEPub.generateContent(story, data, url, writtenlanguageId, signlanguageId).then((result) =>{
 				console.log("result: " + result);
 				res.send(result);

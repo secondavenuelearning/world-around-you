@@ -116,16 +116,36 @@ function GenerateEPubContent(story, data, url, writtenLang, signLang){
             }
             //console.log(data);
             //console.log(option);
-            new Epub(option, "epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub");
-            resolve("epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub");
+            let filename = "epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub";
+            new Epub(option, filename);
+            
+            if(FileCheck(filename)){
+                resolve(filename);
+            }
             /*new Epub(option, "epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub").promise.then((option, resolve) => {
                 console.log("wait");
                 resolve("epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub");
             });*/
         }).catch((err) => {
+            console.log("[Error]: " + err);
             return reject(err);
         });
     });
+}
+
+function FileCheck(filename){
+    console.log("hello");
+    fs.access(filename, fs.constants.F_OK, (err) =>{
+        if(err){
+            console.log("here");
+            setTimeout(() => FileCheck(filename), 200);
+            return false;
+        }
+        else{
+            return true;
+        }
+    });
+    //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 }
 
 function SetCurrentWrittenLanguage(language){
