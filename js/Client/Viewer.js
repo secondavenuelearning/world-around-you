@@ -176,9 +176,6 @@ function showStory(){
 				curSignLang : StoryViewer.GetCurrentSignLanguage()
 			}
 		}).done((stories) => {
-			console.log("work");
-			console.log(stories);
-			//setTimeout(() => {window.location.href = stories}, 18000);
 			window.location.href = stories;
 		}).fail((err) => {
 			console.error(err);

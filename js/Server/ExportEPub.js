@@ -43,7 +43,7 @@ const StoryDB = require('./StoryDB.js');
             lang: findLangCode(lang),
             url: _url + "/View?id=" + story.id,
             signer: story.metadata.signer[lang],
-            translator: story.metadata.translator[lang],
+            translator: 'translator' in story.metadata.translator? story.metadata.translator[lang] : "",
             content:[],
             verbose: true
         };
@@ -88,7 +88,7 @@ function GenerateEPubContent(story, data, url, writtenLang, signLang){
                     content.data += "<p>" + data[i].text[writtenLang] + "</p>";
                 }
                 if(data[i].video[signLang]){
-                    content.data += "<video width='320' height='240' controls='controls' preload='auto' poster='"+ option.cover +"'> <source src='" + url + "/" + data[i].video[signLang] + "#t=0"; 
+                    content.data += "<video width='320' height='240' controls='controls' preload='auto' poster='"+ option.cover +"'> <source src='" + url + "/" + data[i].video[signLang]; 
                     content.data += "' type='video/mp4'><p>Sorry, it appears you system does not support video playback.</p></video>";
                 }
                 option.content.push(content);
@@ -99,6 +99,7 @@ function GenerateEPubContent(story, data, url, writtenLang, signLang){
                 };
                 content.title = "Glossary";
                 content.data = "<p>Glossary</p>";
+
                 for(const property in data[0].glossary[writtenLang]){
                     if(data[0].glossary[writtenLang][property].image){
                         content.data += "<img src='" + EditImageString(data[0].glossary[writtenLang][property].image, url) + "''>";
@@ -114,38 +115,22 @@ function GenerateEPubContent(story, data, url, writtenLang, signLang){
                 }
                 option.content.push(content);
             }
-            //console.log(data);
-            //console.log(option);
-            let filename = "epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub";
-            new Epub(option, filename);
-            
-            if(FileCheck(filename)){
-                resolve(filename);
-            }
-            /*new Epub(option, "epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub").promise.then((option, resolve) => {
-                console.log("wait");
-                resolve("epub/" + option.title + " - " + option.author + " - " + option.lang + " - " + signLang +".epub");
-            });*/
+            console.log(option);
+            let path = "epub/" + option.title + "-" + option.lang + "-" + signLang +".epub";
+            path = path.split(' ').join('');
+            path = path.split(/[,\#!$?%\^&\*;:{}=\'"`~()]/g).join('');
+            new Epub(option, path).promise.then((option, _resolve) => {
+                resolve(path.toString());
+            }).catch((_err) => {
+                console.log("[Error]: " + _err);
+                return reject(_err);
+            });
+
         }).catch((err) => {
             console.log("[Error]: " + err);
             return reject(err);
         });
     });
-}
-
-function FileCheck(filename){
-    console.log("hello");
-    fs.access(filename, fs.constants.F_OK, (err) =>{
-        if(err){
-            console.log("here");
-            setTimeout(() => FileCheck(filename), 200);
-            return false;
-        }
-        else{
-            return true;
-        }
-    });
-    //console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 }
 
 function SetCurrentWrittenLanguage(language){
@@ -336,6 +321,7 @@ let langCodes = {
     "Swati": "ss",
     "Swedish": "sv",
     "Tagalog": "sv",
+    "Filipino": "sv",
     "Tahitian": "sv",
     "Tajik": "sv",
     "Tamil": "sv",
@@ -375,7 +361,6 @@ function findLangCode(storyLang){
         temp = property.toLowerCase();
         if(temp == storyLang || storyLang.indexOf(temp) != -1)
         {
-            console.log(code);
             code = langCodes[property];
             break;
         }    
