@@ -40,7 +40,7 @@
 			    	var time = (endTime - startTime) / 1000;
 			    	var sizeInBits = downloadSize * 8;
 			    	netSpeed = ((sizeInBits / time) / (1024 * 1024)).toFixed(2);
-			    	//console.log(downloadSize, time, netSpeed);
+			    	console.log(downloadSize, time, netSpeed);
 			    	startLoadCheck();
 				}
 			}
@@ -76,6 +76,10 @@
 						setTimeout(checkRequests, speedMod);
 					}else{
 						$(".loading-icon").fadeOut("slow");
+						if(netSpeed >= 35){
+							$("body").attr('id', 'videoSpeed');
+							console.log("loaded");
+						}
 					}
 				}
 			});

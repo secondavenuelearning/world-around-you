@@ -9,6 +9,10 @@ const GenreDB = require('./GenreDB');
 const TagDB = require('./TagDB');
 const GameDB = require('./GameDB');
 const ExportEPub = require('./ExportEPub.js');
+const request = require('request');
+const fs  = require('fs');
+const http = require('http');
+const path = require('path');
 /**
  * Create a random string at the desired length
  * @param  {int} length         the desired length of the string
@@ -16,7 +20,7 @@ const ExportEPub = require('./ExportEPub.js');
  * @param  {boolean} useIntegers    flag to decide if the string should use integers
  * @return {string}              the random string that is generated
  */
-function createRandomString(length, useCapitals, useIntegers){
+ function createRandomString(length, useCapitals, useIntegers){
 	// the list of characters allowed in the string
 	var chars = "abcdefghijklmnopqrstuvwxyz";
 	if(useCapitals) chars += "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -40,16 +44,16 @@ function createRandomString(length, useCapitals, useIntegers){
  * @param  {string} key    the key to use when encrypting the string
  * @return {string}        the encrypted string
  */
-function encryptString(string, algo, key){
-	var iv = createRandomString(16, true, true);
-	var cipher = crypto.createCipheriv(algo, key, iv);
-	var salt = createRandomString(50, true, true);
+ function encryptString(string, algo, key){
+ 	var iv = createRandomString(16, true, true);
+ 	var cipher = crypto.createCipheriv(algo, key, iv);
+ 	var salt = createRandomString(50, true, true);
 
-	let encrypted = cipher.update(salt + string, 'utf8', 'hex');
-	encrypted += cipher.final('hex');
+ 	let encrypted = cipher.update(salt + string, 'utf8', 'hex');
+ 	encrypted += cipher.final('hex');
 
-	return encrypted + iv;
-}
+ 	return encrypted + iv;
+ }
 
 /**
  * Decrypt a given string
@@ -58,170 +62,170 @@ function encryptString(string, algo, key){
  * @param  {string} key             the key used to encrypt the string
  * @return {string}                 the decrypted string
  */
-function decryptString(encryptedString, algo, key){
-	var iv = encryptedString.substr(encryptedString.length - 16);
-	var encrypted = encryptedString.substr(0, encryptedString.length - 16);
-	var decipher = crypto.createDecipheriv(algo, key, iv);
+ function decryptString(encryptedString, algo, key){
+ 	var iv = encryptedString.substr(encryptedString.length - 16);
+ 	var encrypted = encryptedString.substr(0, encryptedString.length - 16);
+ 	var decipher = crypto.createDecipheriv(algo, key, iv);
 
-	let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-	decrypted += decipher.final('utf8');
+ 	let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+ 	decrypted += decipher.final('utf8');
 
-	return  decrypted.substr(50, decrypted.length -1);
-}
+ 	return  decrypted.substr(50, decrypted.length -1);
+ }
 
 
-let apiRoutes = function(app){
+ let apiRoutes = function(app){
 // ******************************************************
 // User Routes
 // ******************************************************
-	app.post('/api/login', (req, res) => {
-		let username = req.body.username,
-			password = req.body.password;
+app.post('/api/login', (req, res) => {
+	let username = req.body.username,
+	password = req.body.password;
 
-		if(!username || username == '') {
-			return res.status(400).send('Username Error');
-		}
-		if(!password || password == '') {
-			return res.status(400).send('Password Error');
-		}
+	if(!username || username == '') {
+		return res.status(400).send('Username Error');
+	}
+	if(!password || password == '') {
+		return res.status(400).send('Password Error');
+	}
 
-		UserDB.getUser(username).then(function(user) {
-			if(!user || decryptString(user.password, Settings.algo, Settings.key) != password){
-				return res.send(false);
-			}
-			else{
-				delete user.password;
-				req.session.user = user;
-				req.session.save(err => {
-					if(err){
+	UserDB.getUser(username).then(function(user) {
+		if(!user || decryptString(user.password, Settings.algo, Settings.key) != password){
+			return res.send(false);
+		}
+		else{
+			delete user.password;
+			req.session.user = user;
+			req.session.save(err => {
+				if(err){
 						return req.error(err); // res.status(500).send(err);
 					}
 					return res.send(true);
 				});
-			}
-		}).catch(err => {
+		}
+	}).catch(err => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
+});
 
-	app.post('/api/register', (req, res) => {
-		let username = req.body.username,
-			email = encryptString(req.body.email, Settings.algo, Settings.key),
-			password = encryptString(req.body.password, Settings.algo, Settings.key);
+app.post('/api/register', (req, res) => {
+	let username = req.body.username,
+	email = encryptString(req.body.email, Settings.algo, Settings.key),
+	password = encryptString(req.body.password, Settings.algo, Settings.key);
 
-		if(!username || username == '') {
-			return res.status(400).send('Username Error');
-		}
-		if(!email || email == '') {
-			return res.status(400).send('Email Error');
-		}
-		if(!password || password == '') {
-			return res.status(400).send('Password Error');
-		}
+	if(!username || username == '') {
+		return res.status(400).send('Username Error');
+	}
+	if(!email || email == '') {
+		return res.status(400).send('Email Error');
+	}
+	if(!password || password == '') {
+		return res.status(400).send('Password Error');
+	}
 
-		UserDB.addUser(username, email, password).then(function(userId) {
-			UserDB.getUser(username).then(function(user) {
-				delete user.password;
-				req.session.user = user;
-				req.session.save(err => {
-					if(err){
+	UserDB.addUser(username, email, password).then(function(userId) {
+		UserDB.getUser(username).then(function(user) {
+			delete user.password;
+			req.session.user = user;
+			req.session.save(err => {
+				if(err){
 						return req.error(err); // res.status(500).send(err);
 					}
 					res.redirect('/Stories');
 				});
-			}).catch(err => {
+		}).catch(err => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		}).catch(err => {
+	}).catch(err => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
+});
 
 // ******************************************************
 // Story Routes
 // ******************************************************
-	function SearchForMatch(term, comparingTerm, exactMatch){
-		if(typeof comparingTerm == 'object'){
-			let match = false;
-			for(let i in comparingTerm){
-				if(SearchForMatch(term, comparingTerm[i], exactMatch))
-					match = true;
-			}
-			return match;
+function SearchForMatch(term, comparingTerm, exactMatch){
+	if(typeof comparingTerm == 'object'){
+		let match = false;
+		for(let i in comparingTerm){
+			if(SearchForMatch(term, comparingTerm[i], exactMatch))
+				match = true;
 		}
-		else if(typeof comparingTerm == 'string'){
-			if(exactMatch){
-				return term.toLowerCase() == comparingTerm.toLowerCase();
-			}
-			else{
-				let reg = new RegExp(term, 'gi');
-				return comparingTerm.match(reg) ? true : false;
-			}
+		return match;
+	}
+	else if(typeof comparingTerm == 'string'){
+		if(exactMatch){
+			return term.toLowerCase() == comparingTerm.toLowerCase();
 		}
 		else{
-			return false;
+			let reg = new RegExp(term, 'gi');
+			return comparingTerm.match(reg) ? true : false;
 		}
 	}
-	function ValidateStory(req, res, next) {
-		let id = parseInt(req.body.id) || parseInt(req.query.id);
+	else{
+		return false;
+	}
+}
+function ValidateStory(req, res, next) {
+	let id = parseInt(req.body.id) || parseInt(req.query.id);
 
-		if(!id || id == '') {
-			return res.status(400).send('StoryId Error');
+	if(!id || id == '') {
+		return res.status(400).send('StoryId Error');
+	}
+
+	StoryDB.get(id).then((story) => {
+		if(story){
+			StoryDB.getData(id).then((data) => {
+				story.data = data;
+				req.story = story;
+				next();
+			}).catch((err) => {
+					return req.error(err); // res.status(500).send(err);
+				});
 		}
+		else{
+			return res.status(400).send('[PH] Invalid story id');
+		}
+	}).catch((err) => {
+		return req.error(err);
+	});
+}
 
+	// get rountes
+	app.get('/api/stories', (req, res) => {
+		let unpublished = req.query.unpublished;
+
+		StoryDB.getAll(unpublished).then((stories) => {
+			return res.send(stories);
+		}).catch((err) => {
+				return req.error(err); // res.status(500).send(err);
+			});
+	});
+	app.get('/api/story', (req, res) => {
+		let id = req.query.id;		
 		StoryDB.get(id).then((story) => {
 			if(story){
 				StoryDB.getData(id).then((data) => {
 					story.data = data;
-					req.story = story;
-					next();
+					return res.send(story);
 				}).catch((err) => {
-					return req.error(err); // res.status(500).send(err);
-				});
-			}
-			else{
-				return res.status(400).send('[PH] Invalid story id');
-			}
-		}).catch((err) => {
-			return req.error(err);
-		});
-	}
-
-	// get rountes
-		app.get('/api/stories', (req, res) => {
-			let unpublished = req.query.unpublished;
-
-			StoryDB.getAll(unpublished).then((stories) => {
-				return res.send(stories);
-			}).catch((err) => {
-				return req.error(err); // res.status(500).send(err);
-			});
-		});
-		app.get('/api/story', (req, res) => {
-			let id = req.query.id;		
-			StoryDB.get(id).then((story) => {
-				if(story){
-					StoryDB.getData(id).then((data) => {
-						story.data = data;
-						return res.send(story);
-					}).catch((err) => {
 						return req.error(err); // res.status(500).send(err);
 					});
-				}
-				else{
-					return res.send(false);
-				}
-			}).catch((err) => {
+			}
+			else{
+				return res.send(false);
+			}
+		}).catch((err) => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
-		app.get('/api/stories/:term', (req, res) => {
-			let term = req.params.term;
-			StoryDB.getAll(false).then((_stories) => {
-				let stories = [];
+	});
+	app.get('/api/stories/:term', (req, res) => {
+		let term = req.params.term;
+		StoryDB.getAll(false).then((_stories) => {
+			let stories = [];
 
-				for(let i=0; i<_stories.length; i++){
-					let story = _stories[i];
+			for(let i=0; i<_stories.length; i++){
+				let story = _stories[i];
 
 					// Check for an exact match of the title 
 					if(SearchForMatch(term, story.metadata.title, true))
@@ -261,56 +265,56 @@ let apiRoutes = function(app){
 				return req.error(err); // res.status(500).send(err);
 			});
 		});
-		app.get('/api/bookmarks', (req, res) => {
-			if(!req.session.user){
-				return res.send([]);
-			}
+	app.get('/api/bookmarks', (req, res) => {
+		if(!req.session.user){
+			return res.send([]);
+		}
 
-			StoryDB.getAll(false, req.session.user.id).then((stories) => {
-				return res.send(stories);
-			}).catch((err) => {
+		StoryDB.getAll(false, req.session.user.id).then((stories) => {
+			return res.send(stories);
+		}).catch((err) => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
-		app.get('/api/story/games', ValidateStory, (req, res) => {
-			let id = parseInt(req.query.id);
+	});
+	app.get('/api/story/games', ValidateStory, (req, res) => {
+		let id = parseInt(req.query.id);
 
-			StoryDB.getGameData(id).then((games) => {
-				return res.send(games);
-			}).catch((err) => {
+		StoryDB.getGameData(id).then((games) => {
+			return res.send(games);
+		}).catch((err) => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
+	});
 
 	// post routes
-		app.post('/api/story', ValidateUser, (req, res) => {
-			StoryDB.add().then(function(storyId) {
-				return res.send(storyId + '');
-			}).catch(err => {
+	app.post('/api/story', ValidateUser, (req, res) => {
+		StoryDB.add().then(function(storyId) {
+			return res.send(storyId + '');
+		}).catch(err => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
-		app.get('/StoryDelete', ValidateUser, (req, res) => {
-			let storyId = req.query.storyId;			
-			StoryDB.deleteStory(storyId).then(function() {
-				return res.redirect('back');
-			}).catch(err => {
+	});
+	app.get('/StoryDelete', ValidateUser, (req, res) => {
+		let storyId = req.query.storyId;			
+		StoryDB.deleteStory(storyId).then(function() {
+			return res.redirect('back');
+		}).catch(err => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
-		app.get('/GameDelete', ValidateUser, (req, res) => {			
-			let gameId = req.query.gameId;	
-			StoryDB.deleteGame(gameId).then(function() {
-				return res.redirect('back');
-			}).catch(err => {
+	});
+	app.get('/GameDelete', ValidateUser, (req, res) => {			
+		let gameId = req.query.gameId;	
+		StoryDB.deleteGame(gameId).then(function() {
+			return res.redirect('back');
+		}).catch(err => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		});
-		app.post('/api/story/languages', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id),
-				storyWrittenLanguages = req.body.writtenLanguages || [],
-				storySignLanguages = req.body.signLanguages || [],
-				story = req.story;
+	});
+	app.post('/api/story/languages', ValidateUser, ValidateStory, (req, res) => {
+		let id = parseInt(req.body.id),
+		storyWrittenLanguages = req.body.writtenLanguages || [],
+		storySignLanguages = req.body.signLanguages || [],
+		story = req.story;
 
 			new Promise((resolve, reject) => { // add or remove written languages
 				WrittenLanguageDB.getAll().then((writtenLanguages) => { // get all written languages
@@ -323,69 +327,15 @@ let apiRoutes = function(app){
 					}
 
 						// add new languages to the story
-					for(let i in storyWrittenLanguages){
-						let language = storyWrittenLanguages[i];
-						if(!story.metadata || !story.metadata.writtenLanguages || story.metadata.writtenLanguages.indexOf(language) == -1){
-							promises.push(new Promise((_resolve, _reject) => {
-								let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
-								StoryDB.addWrittenLanguage(story.id, writtenlanguageId).then(() => {
-									if(!story.metadata) story.metadata = {};
-									if(!story.metadata.writtenLanguages) story.metadata.writtenLanguages = [];
-									story.metadata.writtenLanguages.push(language);
-									return _resolve();
-								}).catch((err) => {
-									return _reject(err);
-								});
-							}))
-						}
-					}
-
-						// remove old languages to the story
-					if(story.metadata && story.metadata.writtenLanguages){
-						for(let i in story.metadata.writtenLanguages){
-							let language = story.metadata.writtenLanguages[i];
-							if(storyWrittenLanguages.indexOf(language) != -1) continue;
-
-							promises.push(new Promise((_resolve, _reject) => {
-								let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
-								StoryDB.deleteWrittenLanguage(story.id, writtenlanguageId).then(() => {
-									let index = story.metadata.writtenLanguages.indexOf(language);
-									story.metadata.writtenLanguages.splice(index, 1);
-									return _resolve();
-								}).catch((err) => {
-									return _reject(err);
-								});
-							}));
-						}
-					}
-
-					Promise.all(promises).then(() => {
-						return resolve();
-					}).catch((err) => {
-						return reject(err);
-					});
-				});
-			}).then(() => { // add or remove sign langugaes 
-				return new Promise((resolve, reject) => {
-					SignLanguageDB.getAll().then((signLanguages) => { // get all sign languages
-						let promises = [];
-
-						let nameBasedSignLanguages = {};
-						for(let i in signLanguages){
-							let language = signLanguages[i];
-							nameBasedSignLanguages[language.name.toLowerCase()] = language;
-						}
-	 					
-	 					// add new languages to the story
-						for(let i in storySignLanguages){
-							let language = storySignLanguages[i];
-							if(!story.metadata || !story.metadata.signLanguages || story.metadata.signLanguages.indexOf(language) == -1){
+						for(let i in storyWrittenLanguages){
+							let language = storyWrittenLanguages[i];
+							if(!story.metadata || !story.metadata.writtenLanguages || story.metadata.writtenLanguages.indexOf(language) == -1){
 								promises.push(new Promise((_resolve, _reject) => {
-									let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
-									StoryDB.addSignLanguage(story.id, signlanguageId).then(() => {
+									let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
+									StoryDB.addWrittenLanguage(story.id, writtenlanguageId).then(() => {
 										if(!story.metadata) story.metadata = {};
-										if(!story.metadata.signLanguages) story.metadata.signLanguages = [];
-										story.metadata.signLanguages.push(language);
+										if(!story.metadata.writtenLanguages) story.metadata.writtenLanguages = [];
+										story.metadata.writtenLanguages.push(language);
 										return _resolve();
 									}).catch((err) => {
 										return _reject(err);
@@ -394,17 +344,17 @@ let apiRoutes = function(app){
 							}
 						}
 
-	 					// remove old languages to the story
-						if(story.metadata && story.metadata.signLanguages){
-							for(let i in story.metadata.signLanguages){
-								let language = story.metadata.signLanguages[i];
-								if(storySignLanguages.indexOf(language) != -1) continue;
+						// remove old languages to the story
+						if(story.metadata && story.metadata.writtenLanguages){
+							for(let i in story.metadata.writtenLanguages){
+								let language = story.metadata.writtenLanguages[i];
+								if(storyWrittenLanguages.indexOf(language) != -1) continue;
 
 								promises.push(new Promise((_resolve, _reject) => {
-									let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
-									StoryDB.deleteSignLanguage(story.id, signlanguageId).then(() => {
-										let index = story.metadata.signLanguages.indexOf(language);
-										story.metadata.signLanguages.splice(index, 1);
+									let writtenlanguageId = nameBasedWrittenLanguages[language.toLowerCase()].id;
+									StoryDB.deleteWrittenLanguage(story.id, writtenlanguageId).then(() => {
+										let index = story.metadata.writtenLanguages.indexOf(language);
+										story.metadata.writtenLanguages.splice(index, 1);
 										return _resolve();
 									}).catch((err) => {
 										return _reject(err);
@@ -419,6 +369,60 @@ let apiRoutes = function(app){
 							return reject(err);
 						});
 					});
+			}).then(() => { // add or remove sign langugaes 
+				return new Promise((resolve, reject) => {
+					SignLanguageDB.getAll().then((signLanguages) => { // get all sign languages
+						let promises = [];
+
+						let nameBasedSignLanguages = {};
+						for(let i in signLanguages){
+							let language = signLanguages[i];
+							nameBasedSignLanguages[language.name.toLowerCase()] = language;
+						}
+
+	 					// add new languages to the story
+	 					for(let i in storySignLanguages){
+	 						let language = storySignLanguages[i];
+	 						if(!story.metadata || !story.metadata.signLanguages || story.metadata.signLanguages.indexOf(language) == -1){
+	 							promises.push(new Promise((_resolve, _reject) => {
+	 								let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
+	 								StoryDB.addSignLanguage(story.id, signlanguageId).then(() => {
+	 									if(!story.metadata) story.metadata = {};
+	 									if(!story.metadata.signLanguages) story.metadata.signLanguages = [];
+	 									story.metadata.signLanguages.push(language);
+	 									return _resolve();
+	 								}).catch((err) => {
+	 									return _reject(err);
+	 								});
+	 							}))
+	 						}
+	 					}
+
+	 					// remove old languages to the story
+	 					if(story.metadata && story.metadata.signLanguages){
+	 						for(let i in story.metadata.signLanguages){
+	 							let language = story.metadata.signLanguages[i];
+	 							if(storySignLanguages.indexOf(language) != -1) continue;
+
+	 							promises.push(new Promise((_resolve, _reject) => {
+	 								let signlanguageId = nameBasedSignLanguages[language.toLowerCase()].id;
+	 								StoryDB.deleteSignLanguage(story.id, signlanguageId).then(() => {
+	 									let index = story.metadata.signLanguages.indexOf(language);
+	 									story.metadata.signLanguages.splice(index, 1);
+	 									return _resolve();
+	 								}).catch((err) => {
+	 									return _reject(err);
+	 								});
+	 							}));
+	 						}
+	 					}
+
+	 					Promise.all(promises).then(() => {
+	 						return resolve();
+	 					}).catch((err) => {
+	 						return reject(err);
+	 					});
+	 				});
 				});
 			}).then(() => { // finish up
 				return res.send(story);
@@ -426,26 +430,26 @@ let apiRoutes = function(app){
 				return req.error(err); // res.status(500).send(err);
 			})
 		});
-		app.post('/api/story/cover', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id),
-				author = req.body.author || '',
-				artist = req.body.artist || '',
-				coverImage = req.body.coverImage,
-				story = req.story;
-			StoryDB.setCover(id, author, artist, coverImage).then(function(result) {
-				story.author = author;
-				story.artist = artist;
-				story.coverimage = coverImage;
-				return res.send(story);
-			}).catch((err) =>{
-				return req.error(err);
-			});
-		});
-		app.post('/api/story/metadata', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id),
-				metadata = req.body.metadata,
-				story = req.story,
-				languages = {};
+app.post('/api/story/cover', ValidateUser, ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id),
+	author = req.body.author || '',
+	artist = req.body.artist || '',
+	coverImage = req.body.coverImage,
+	story = req.story;
+	StoryDB.setCover(id, author, artist, coverImage).then(function(result) {
+		story.author = author;
+		story.artist = artist;
+		story.coverimage = coverImage;
+		return res.send(story);
+	}).catch((err) =>{
+		return req.error(err);
+	});
+});
+app.post('/api/story/metadata', ValidateUser, ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id),
+	metadata = req.body.metadata,
+	story = req.story,
+	languages = {};
 
 			new Promise((resolve, reject) => { // get all written languages
 				WrittenLanguageDB.getAll().then((_languages) => {
@@ -676,155 +680,184 @@ let apiRoutes = function(app){
 				return req.error(err); // res.status(500).send(err);
 			});
 		});
-		app.post('/api/story/data', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id),
-				data = req.body.data,
-				story = req.story;
+app.post('/api/story/data', ValidateUser, ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id),
+	data = req.body.data,
+	story = req.story;
 
-			StoryDB.setData(id, data).then(function(result) {
-				story.data = data;
-				return res.send(story);
-			}).catch((err) =>{
-				return req.error(err);
-			});
-		});	
-		app.post('/api/story/publish', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id);
+	StoryDB.setData(id, data).then(function(result) {
+		story.data = data;
+		return res.send(story);
+	}).catch((err) =>{
+		return req.error(err);
+	});
+});	
+app.post('/api/story/publish', ValidateUser, ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id);
 
-			StoryDB.setVisible(id).then((result) => {
-				return res.send(req.story);
-			}).catch((err) =>{
-				return req.error(err);
-			});
-		});
-		app.post('/api/story/view', ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id);
+	StoryDB.setVisible(id).then((result) => {
+		return res.send(req.story);
+	}).catch((err) =>{
+		return req.error(err);
+	});
+});
+app.post('/api/story/view', ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id);
 
-			StoryDB.addView(id).then((result) => {
-				return res.send(true);
-			}).catch((err) =>{
-				return req.error(err);
-			});
-		});
-		app.post('/api/story/like', ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id);
+	StoryDB.addView(id).then((result) => {
+		return res.send(true);
+	}).catch((err) =>{
+		return req.error(err);
+	});
+});
+app.post('/api/story/like', ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id);
 
-			StoryDB.addLike(id).then((result) => {
-				return res.send(true);
-			}).catch((err) =>{
-				return req.error(err);
-			});
-		});
-		//app.post('/api/story/export', ValidateUser, ValidateStory, (req, res) => {
-		app.post('/api/story/export', ValidateStory, (req, res) => {
-			let story = req.story,
-			    data = req.story.data,
-			    url = "http://" + req.headers.host,
-			    writtenlanguageId = req.body.curWrittenLang,
-				signlanguageId = req.body.curSignLang;
-			ExportEPub.generateContent(story, data, url, writtenlanguageId, signlanguageId).then((result) =>{
-				console.log("result: " + result);
-				res.send(result);
-			}).catch((err) =>{
-				console.log("error: " + err);
-				return req.error(err);
-			});
-		});
-		app.post('/api/story/game', ValidateUser, ValidateStory, (req, res) => {
-			let id = parseInt(req.body.id),
-				gameId = parseInt(req.body.gameId),
-				writtenlanguageId = parseInt(req.body.writtenlanguageId),
-				signlanguageId = parseInt(req.body.signlanguageId);
+	StoryDB.addLike(id).then((result) => {
+		return res.send(true);
+	}).catch((err) =>{
+		return req.error(err);
+	});
+});
+//app.post('/api/story/export', ValidateUser, ValidateStory, (req, res) => {
+app.post('/api/story/export', ValidateStory, (req, res) => {
+	let story = req.story,
+	data = req.story.data,
+	url = "http://" + req.headers.host,
+	writtenlanguageId = req.body.curWrittenLang,
+	signlanguageId = req.body.curSignLang;
 
-			StoryDB.addGamedata(id, gameId, writtenlanguageId, signlanguageId).then((gamedataId) => {
-				return res.send(gamedataId + '');
-			}).catch((err) => {
-				return req.error(err); // res.status(500).send(err);
-			});
-		});		
-		app.post('/api/story/gamedata', ValidateUser, (req, res) => {
-			let id = parseInt(req.body.id),
-				data = req.body.data;
+	ExportEPub.generateContent(story, data, url, writtenlanguageId, signlanguageId).then((result) =>{
+		console.log("result: " + result);
+		
+		return res.send(result);
+	}).catch((err) =>{
+		console.log("error: " + err);
+		return req.error(err);
+	});
+});
 
-			if(!id || id == '') {
-				return res.send('Id Error');
-			}
 
-			StoryDB.setGameData(id, data).then((gamedata) => {
-				return res.send(true);
-			}).catch(err => {
-				return req.error(err); // res.status(500).send(err);
-			});
-		});
+app.get('/download',(req,res) =>{
+	//console.log(req._parsedOriginalUrl.query);
+	//let fileName = req.body.fileName;
+	
+	console.log("in /download");
+	let fileName;
+	if(req.body.fileName != undefined){fileName = req.body.fileName;}
+	else{fileName = req._parsedOriginalUrl.query;}
+	
+	if(fileName.indexOf('epub%2F') != -1)
+		fileName= fileName.substring(fileName.indexOf('epub%2F') + 'epub%2F'.length, fileName.length);
+	else
+		fileName = fileName.substring(fileName.indexOf('epub/') + 'epub/'.length, fileName.length);
+	/*
+	var url = 'http://' + req.headers.host + '/epub/' + fileName;
+
+	let path = 'C:/Users/akarwacki/Documents/world-around-you/epub/' + fileName;
+	*/
+	
+	var fileLocation = path.join('./epub',fileName);
+	console.log(fileLocation);
+	res.download(fileLocation, fileName);
+});
+
+
+app.post('/api/story/game', ValidateUser, ValidateStory, (req, res) => {
+	let id = parseInt(req.body.id),
+	gameId = parseInt(req.body.gameId),
+	writtenlanguageId = parseInt(req.body.writtenlanguageId),
+	signlanguageId = parseInt(req.body.signlanguageId);
+
+	StoryDB.addGamedata(id, gameId, writtenlanguageId, signlanguageId).then((gamedataId) => {
+		return res.send(gamedataId + '');
+	}).catch((err) => {
+	return req.error(err); // res.status(500).send(err);
+});
+});		
+app.post('/api/story/gamedata', ValidateUser, (req, res) => {
+	let id = parseInt(req.body.id),
+	data = req.body.data;
+
+	if(!id || id == '') {
+		return res.send('Id Error');
+	}
+
+	StoryDB.setGameData(id, data).then((gamedata) => {
+		return res.send(true);
+	}).catch(err => {
+	return req.error(err); // res.status(500).send(err);
+});
+});
 
 // ******************************************************
 // Other Routes
 // ******************************************************
-	app.get('/api/writtenlanguages', (req, res) => {
-		WrittenLanguageDB.getAll().then((languages) => {
-			return res.send(languages);
-		}).catch((err) => {
+app.get('/api/writtenlanguages', (req, res) => {
+	WrittenLanguageDB.getAll().then((languages) => {
+		return res.send(languages);
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
-	app.get('/api/signlanguages', (req, res) => {
-		SignLanguageDB.getAll().then((languages) => {
-			return res.send(languages);
-		}).catch((err) => {
+});
+app.get('/api/signlanguages', (req, res) => {
+	SignLanguageDB.getAll().then((languages) => {
+		return res.send(languages);
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
-	app.get('/api/genres', (req, res) => {
-		GenreDB.getAll().then((genres) => {
-			return res.send(genres);
-		}).catch((err) => {
+});
+app.get('/api/genres', (req, res) => {
+	GenreDB.getAll().then((genres) => {
+		return res.send(genres);
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
-	app.get('/api/tags', (req, res) => {
-		TagDB.getAll().then((tags) => {
-			return res.send(tags);
-		}).catch((err) => {
+});
+app.get('/api/tags', (req, res) => {
+	TagDB.getAll().then((tags) => {
+		return res.send(tags);
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
-	app.get('/api/games', (req, res) => {
-		GameDB.getAll().then((tags) => {
-			return res.send(tags);
-		}).catch((err) => {
+});
+app.get('/api/games', (req, res) => {
+	GameDB.getAll().then((tags) => {
+		return res.send(tags);
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
-	app.get('/api/game/data', (req, res) => {
-		let id = parseInt(req.query.id);
+});
+app.get('/api/game/data', (req, res) => {
+	let id = parseInt(req.query.id);
 
-		GameDB.getGameData(id).then((gamedata) => {
-			if(!gamedata) return res.send({});
+	GameDB.getGameData(id).then((gamedata) => {
+		if(!gamedata) return res.send({});
 
-			StoryDB.get(gamedata.storyId).then((story) => {
-				gamedata.story = story;
+		StoryDB.get(gamedata.storyId).then((story) => {
+			gamedata.story = story;
 
-				StoryDB.getData(gamedata.storyId).then((data) => {
-					gamedata.story.data = data;
-					if(gamedata.data) gamedata.data = JSON.parse(gamedata.data);
-					return res.send(gamedata);
-				}).catch((err) => {
+			StoryDB.getData(gamedata.storyId).then((data) => {
+				gamedata.story.data = data;
+				if(gamedata.data) gamedata.data = JSON.parse(gamedata.data);
+				return res.send(gamedata);
+			}).catch((err) => {
 					return req.error(err); // res.status(500).send(err);
 				});
-			}).catch((err) => {
+		}).catch((err) => {
 				return req.error(err); // res.status(500).send(err);
 			});
-		}).catch((err) => {
+	}).catch((err) => {
 			return req.error(err); // res.status(500).send(err);
 		});
-	});
+});
 
-	app.post('/api/writtenlanguage', ValidateUser, (req, res) => {
-		let language = req.body.language;
+app.post('/api/writtenlanguage', ValidateUser, (req, res) => {
+	let language = req.body.language;
 
-		if(!language || language == '') {
-			return res.send('Language Error');
-		}
+	if(!language || language == '') {
+		return res.send('Language Error');
+	}
 
 		// try to get any existing language
 		WrittenLanguageDB.get(language).then((_language) =>{
@@ -843,12 +876,12 @@ let apiRoutes = function(app){
 			return req.error(err); // res.status(500).send(err);
 		});
 	});
-	app.post('/api/signlanguage', ValidateUser, (req, res) => {
-		let language = req.body.language;
+app.post('/api/signlanguage', ValidateUser, (req, res) => {
+	let language = req.body.language;
 
-		if(!language || language == '') {
-			return res.send('Language Error');
-		}
+	if(!language || language == '') {
+		return res.send('Language Error');
+	}
 
 		// try to get any existing language
 		SignLanguageDB.get(language).then((_language) =>{
@@ -867,17 +900,17 @@ let apiRoutes = function(app){
 			return req.error(err); // res.status(500).send(err);
 		});
 	});
-	app.post('/api/genre', ValidateUser, (req, res) => {
-		let name = req.body.name,
-			language = req.body.language;
+app.post('/api/genre', ValidateUser, (req, res) => {
+	let name = req.body.name,
+	language = req.body.language;
 
-		if(!name || name == '') {
-			return res.send('Name Error');
-		}
+	if(!name || name == '') {
+		return res.send('Name Error');
+	}
 
-		if(!language || language == '') {
-			return res.send('Language Error');
-		}
+	if(!language || language == '') {
+		return res.send('Language Error');
+	}
 
 		// get the language from the database
 		WrittenLanguageDB.get(language).then((_language) =>{
@@ -905,17 +938,17 @@ let apiRoutes = function(app){
 			return req.error(err); // res.status(500).send(err);
 		});
 	});
-	app.post('/api/tag', ValidateUser, (req, res) => {
-		let name = req.body.name,
-			language = req.body.language;
+app.post('/api/tag', ValidateUser, (req, res) => {
+	let name = req.body.name,
+	language = req.body.language;
 
-		if(!name || name == '') {
-			return res.send('Name Error');
-		}
+	if(!name || name == '') {
+		return res.send('Name Error');
+	}
 
-		if(!language || language == '') {
-			return res.send('Language Error');
-		}
+	if(!language || language == '') {
+		return res.send('Language Error');
+	}
 
 		// get the language from the database
 		WrittenLanguageDB.get(language).then((_language) =>{
@@ -943,12 +976,12 @@ let apiRoutes = function(app){
 			return req.error(err); // res.status(500).send(err);
 		});
 	});
-	app.post('/api/game', ValidateUser, (req, res) => {
-		let name = req.body.name;
+app.post('/api/game', ValidateUser, (req, res) => {
+	let name = req.body.name;
 
-		if(!name || name == '') {
-			return res.send('Name Error');
-		}
+	if(!name || name == '') {
+		return res.send('Name Error');
+	}
 
 		// try to get any existing language
 		GameDB.get(name).then((game) =>{

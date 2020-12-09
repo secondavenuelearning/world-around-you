@@ -120,7 +120,7 @@ function RenderPage(){
 		previousPage = pageIndex == 0 ? {image: story.coverimage} : story.data[pageIndex - 1],
 		nextPage = story.data[pageIndex + 1];
 
-	let currentIcon, previousIcon, previousPageNumber, nextIcon, nextPageNumber;
+	let currentIcon, previousIcon, previousPageNumber, nextIcon, nextPageNumber, videoSaver, videoSaverSrc;
 
 	if(pageIndex == -1){
 		currentIcon = 'image';
@@ -159,7 +159,9 @@ function RenderPage(){
 		nextIcon,
 		nextPageNumber,
 		currentWrittenLanguage,
-		currentSignLanguage
+		currentSignLanguage,
+		videoSaver,
+		videoSaverSrc
 	}));
 
 	$('#page-counter #current').html(currentPageNumber);
@@ -193,6 +195,12 @@ function RenderPage(){
 		$('#text-toggle-container').toggleClass('text-open');
 		$('#text-container').toggleClass('text-open');
 	});
+
+
+	if($('#videoSpeed')) { videoSaver = true; }
+	else if(!$('#videoSpeed')) { videoSaver = false;}
+
+	console.log("video saver: " + videoSaver);
 
 	GenerateGlossaryButtons(page);
 }

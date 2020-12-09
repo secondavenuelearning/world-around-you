@@ -599,10 +599,18 @@ function renderPagesPage(renderData){
 							delete page.video[lang];
 							UploadFile(file, `pv-${storyId}-${page.id}-${lang}`).then((path) =>{
 								page.video[lang] = path + `?t=${new Date().getTime()}`;;
-								delete page.videoFile[lang];
+								//delete page.videoFile[lang];
 								resolve();
 							});
 						}));
+						uploadPromises.push(new Promise((resolve, reject) => {
+							UploadFile(file, `pv-${storyId}-${page.id}-${lang}-comp`).then((path) =>{
+								
+								resolve();
+							});
+						}));
+						delete page.videoFile[lang];
+						console.log(page.video);
 					});
 				}
 				if(page.glossary){

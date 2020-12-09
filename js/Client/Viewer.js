@@ -14,6 +14,7 @@ import StoryGrid from 'js/Client/StoryGrid.js';
 import html from 'html/Client/Viewer.html!text';
 const template = _.template(html);
 
+
 const OFFLINEPAGEASSETS = [
 	'/upup.min.js',
 	'/upup.sw.min.js',
@@ -58,7 +59,8 @@ const OFFLINEPAGEASSETS = [
 let storyId,
 	story,
 	liked = false,
-	offlineIds = [];
+	offlineIds = [],
+	exportStart = false;
 
 function displaySimilarGenres(stories){
 	let similarGenreStories = [],
@@ -167,6 +169,12 @@ function showStory(){
 
 	// Export button function
 	$('#social-export').on('click', () => {
+		$('#displayExportLoader').html("<img src='../img/ajax-loader.gif' alt='Export Loading' id='displayExportLoader'>");
+		if(exportStart){
+			$('#social-export').setAttribute("disabled", true);
+		}
+		exportStart = true;
+		
 		$.ajax({
 			method: 'post',
 			url: '/api/story/export',
@@ -176,12 +184,53 @@ function showStory(){
 				curSignLang : StoryViewer.GetCurrentSignLanguage()
 			}
 		}).done((stories) => {
-			window.location.href = stories;
+			exportStart = false;
+			//window.location.href = stories;
+			//window.open('/download?fileName=' + stories);
+			DownloadFile(stories);
+			$('#displayExportLoader').html("");
+			$('#social-export').disabled = false;
+
 		}).fail((err) => {
+			$('#displayExportLoader').html("");
+			$('#social-export').disabled = false;
 			console.error(err);
 		});
+
 	});
 
+	function DownloadFile(stories){
+	
+		$.ajax({
+			method: 'get',
+			url: '/download',
+			data: {
+				fileName: stories
+			}
+		}).done((_stories) => {
+			console.log("Success");
+			const saveData = (function () {
+    		const a = document.createElement("a");
+    		document.body.appendChild(a);
+    		a.style = "display: none";
+		    return function (url, fileName) {
+		        a.href = url;
+		        a.download = fileName;
+		        a.click();
+		    };
+		}());
+
+		//const url = 'http://localhost:3000/' + stories,
+		const url = 'http://deafworldaroundyou.secondavesoftware.com/' + stories,
+    		  fileName = stories.substring(stories.indexOf('epub/') + 'epub/'.length, stories.length);
+
+		saveData(url, fileName);
+
+		}).fail((err) => {
+			console.error(err);
+		}); 
+	}
+	
 	// Share button function
 	$('#social-share').on('click', (evt) => {
 		let copyInput = $(`<input type="text" style="position: absolute; z-index: -1" value="${window.location.href}" />`);
