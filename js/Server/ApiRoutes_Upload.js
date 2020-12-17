@@ -53,24 +53,9 @@ let uploadRoutes = function(app){
 					if(req.file.mimetype.match(/video/gi)){
 						// get the paths to the original file and the tempoary file
 						let originalPath = `${__dirname}/../../${req.file.path}`,
-						compPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`,
 						tempPath = `${__dirname}/../../uploads/temp/${req.params.fileName}.mp4`;
 
-						if((req.params.fileName.toString()).includes("comp")){
-							// begin converting the new file to an audio-less file
-							ffmpeg(originalPath).noAudio().addOptions(['-crf 32'])
-							.on('error', function(err) {
-								req.error(err, false);
-							})
-							.on('end', function() {
-							// move the newly created file to the correct place and delete the temp file
-							fs.copyFileSync(compPath,originalPath);
-							fs.unlinkSync(compPath);
-						})
-							.save(compPath);
-						}
-						else{
-							// begin converting the new file to an audio-less file
+						// begin converting the new file to an audio-less file
 							ffmpeg(originalPath).noAudio()
 							.on('error', function(err) {
 								req.error(err, false);
@@ -82,8 +67,6 @@ let uploadRoutes = function(app){
 						})
 							.save(tempPath);
 						}
-					}
-					console.log(req.file.path);
 					return res.send(`${req.file.path}`);
 				}
 			}

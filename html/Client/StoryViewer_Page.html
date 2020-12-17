@@ -17,11 +17,7 @@
 		</div>
 	<% } else { %>
 		<div class="video-container text-open">
-			<% if(videoSaver == true){ %>
-				<video src="<%- page.video[currentSignLanguage] %>" controls loop autoplay muted id="low-quailty"></video>
-			<% } else{ %>
-				<video src="<%- page.video[currentSignLanguage] %>" controls loop autoplay muted id="high-quailty"></video>
-			<% } %>
+			<video src="<%- page.video[currentSignLanguage] %>" controls loop autoplay muted></video>
 		</div>
 		<div id="text-toggle-container" class="text-open">
 			<button id="text-toggle"></button>
