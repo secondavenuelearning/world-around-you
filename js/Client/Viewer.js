@@ -188,7 +188,7 @@ function showStory(){
 			//window.location.href = stories;
 			//window.open('/download?fileName=' + stories);
 			DownloadFile(stories);
-			$('#displayExportLoader').html("");
+			//$('#displayExportLoader').html("");
 			$('#social-export').disabled = false;
 
 		}).fail((err) => {
@@ -213,6 +213,7 @@ function showStory(){
     		const a = document.createElement("a");
     		document.body.appendChild(a);
     		a.style = "display: none";
+			$('#displayExportLoader').html("");
 		    return function (url, fileName) {
 		        a.href = url;
 		        a.download = fileName;
@@ -221,7 +222,7 @@ function showStory(){
 		}());
 
 		//const url = 'http://localhost:3000/' + stories,
-		const url = 'http://deafworldaroundyou.secondavesoftware.com/' + stories,
+		const url = 'https://deafworldaroundyou.org/' + stories,
     		  fileName = stories.substring(stories.indexOf('epub/') + 'epub/'.length, stories.length);
 
 		saveData(url, fileName);
